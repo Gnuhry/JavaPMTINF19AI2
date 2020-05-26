@@ -72,5 +72,4 @@ fabric.properties
 *.lst
 .idea/vcs.xml
 .idea/misc.xml
-.idea/compiler.xml
-*.lst
+
