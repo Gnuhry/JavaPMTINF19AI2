@@ -7,18 +7,26 @@ import java.util.List;
 
 public class Databank {
 
-    public static Object[] GetFromDatabank(String command, int column) {
+    public static Object[][] getFromDatabank(String command) {
         try {
             Connection con = getConnection();
             Statement statement = con.createStatement();
             ResultSet resultSet = statement.executeQuery(command);
-            List o = new ArrayList();
+            int count = resultSet.getMetaData().getColumnCount();
+            int rowCount = 0;
+            if (resultSet.last()) {
+                rowCount = resultSet.getRow();
+                resultSet.beforeFirst();
+            }
+            Object [][] o = new Object[rowCount][count];
+
             while (resultSet.next())
-                o.add(resultSet.getObject(column));
+                for(int i = 1; i <= count; i++)
+                    o[resultSet.getRow()-1][i-1] = resultSet.getObject(i);
             resultSet.close();
             statement.close();
             con.close();
-            return o.toArray();
+            return o;
         } catch (SQLException | ClassNotFoundException throwable) {
             throwable.printStackTrace();
         }
@@ -26,7 +34,7 @@ public class Databank {
     }
 
 
-    public static void SetToDatabank(String command, Object[] objects, SQLType[] set) {
+    public static void setToDatabank(String command, Object[] objects, SQLType[] set) {
         if (objects == null) objects = new Object[0];
         if (set == null) set = new SQLType[0];
         try {
