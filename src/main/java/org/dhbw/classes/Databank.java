@@ -7,31 +7,26 @@ import java.util.List;
 
 public class Databank {
 
-    public static Object[][] GetFromDatabank(String command) {
+    public static Object[][] getFromDatabank(String command) {
         try {
             Connection con = getConnection();
             Statement statement = con.createStatement();
             ResultSet resultSet = statement.executeQuery(command);
-
-            int columnsNumber = resultSet.getMetaData().getColumnCount();
-            List<Object[]> o = new ArrayList<>();
-            Object[] oo = new Object[columnsNumber];
-            while (resultSet.next()) {
-                for (int i = 1; i < columnsNumber; i++)
-                    oo[i-1]=resultSet.getObject(i);
-                o.add(oo);
+            int count = resultSet.getMetaData().getColumnCount();
+            int rowCount = 0;
+            if (resultSet.last()) {
+                rowCount = resultSet.getRow();
+                resultSet.beforeFirst();
             }
+            Object [][] o = new Object[rowCount][count];
+
+            while (resultSet.next())
+                for(int i = 1; i <= count; i++)
+                    o[resultSet.getRow()-1][i-1] = resultSet.getObject(i);
             resultSet.close();
             statement.close();
             con.close();
-
-            Object[][]erg=new Object[o.size()][o.get(0).length];
-            for(int f=0; f<erg.length;f++){
-                for(int g=0; g<erg[f].length;g++){
-                    erg[f][g]= o.get(f)[g];
-                }
-            }
-            return erg;
+            return o;
         } catch (SQLException | ClassNotFoundException throwable) {
             throwable.printStackTrace();
         }
@@ -39,7 +34,7 @@ public class Databank {
     }
 
 
-    public static void SetToDatabank(String command, Object[] objects, int[] set) {
+    public static void setToDatabank(String command, Object[] objects, int[] set) {
         if (objects == null) objects = new Object[0];
         if (set == null) set = new int[0];
         try {
