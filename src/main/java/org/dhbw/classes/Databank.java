@@ -7,18 +7,30 @@ import java.util.List;
 
 public class Databank {
 
-    public static Object[] GetFromDatabank(String command, int column) {
+    public static Object[][] GetFromDatabank(String command) {
         try {
             Connection con = getConnection();
             Statement statement = con.createStatement();
             ResultSet resultSet = statement.executeQuery(command);
-            List o = new ArrayList();
-            while (resultSet.next())
-                o.add(resultSet.getObject(column));
+            List<Object[]> o = new ArrayList<>();
+            List oo = new ArrayList();
+            int columnsNumber = resultSet.getMetaData().getColumnCount();
+            while (resultSet.next()) {
+                oo.clear();
+                for (int i = 1; i < columnsNumber; i++)
+                    oo.add(resultSet.getObject(i));
+                o.add(oo.toArray());
+            }
             resultSet.close();
             statement.close();
             con.close();
-            return o.toArray();
+            Object[][]erg=new Object[o.size()][((Object[])o.get(0)).length];
+            for(int f=0; f<erg.length;f++){
+                for(int g=0; g<erg[f].length;g++){
+                    erg[f][g]=((Object[])o.get(f))[g];
+                }
+            }
+            return erg;
         } catch (SQLException | ClassNotFoundException throwable) {
             throwable.printStackTrace();
         }
