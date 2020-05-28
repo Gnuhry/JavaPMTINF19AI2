@@ -34,9 +34,9 @@ public class Databank {
     }
 
 
-    public static void setToDatabank(String command, Object[] objects, SQLType[] set) {
+    public static void setToDatabank(String command, Object[] objects, int[] set) {
         if (objects == null) objects = new Object[0];
-        if (set == null) set = new SQLType[0];
+        if (set == null) set = new int[0];
         try {
             Connection con = getConnection();
             PreparedStatement preparedStatement = con.prepareStatement(command);
