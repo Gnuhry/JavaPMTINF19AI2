@@ -12,22 +12,23 @@ public class Databank {
             Connection con = getConnection();
             Statement statement = con.createStatement();
             ResultSet resultSet = statement.executeQuery(command);
-            List<Object[]> o = new ArrayList<>();
-            List oo = new ArrayList();
+
             int columnsNumber = resultSet.getMetaData().getColumnCount();
+            List<Object[]> o = new ArrayList<>();
+            Object[] oo = new Object[columnsNumber];
             while (resultSet.next()) {
-                oo.clear();
                 for (int i = 1; i < columnsNumber; i++)
-                    oo.add(resultSet.getObject(i));
-                o.add(oo.toArray());
+                    oo[i-1]=resultSet.getObject(i);
+                o.add(oo);
             }
             resultSet.close();
             statement.close();
             con.close();
-            Object[][]erg=new Object[o.size()][((Object[])o.get(0)).length];
+
+            Object[][]erg=new Object[o.size()][o.get(0).length];
             for(int f=0; f<erg.length;f++){
                 for(int g=0; g<erg[f].length;g++){
-                    erg[f][g]=((Object[])o.get(f))[g];
+                    erg[f][g]= o.get(f)[g];
                 }
             }
             return erg;
@@ -38,9 +39,9 @@ public class Databank {
     }
 
 
-    public static void SetToDatabank(String command, Object[] objects, SQLType[] set) {
+    public static void SetToDatabank(String command, Object[] objects, int[] set) {
         if (objects == null) objects = new Object[0];
-        if (set == null) set = new SQLType[0];
+        if (set == null) set = new int[0];
         try {
             Connection con = getConnection();
             PreparedStatement preparedStatement = con.prepareStatement(command);
