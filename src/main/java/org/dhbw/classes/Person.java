@@ -1,13 +1,19 @@
 package org.dhbw.classes;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
 public class Person {
 
-    private final Date birthday;
+    private Date birthday;
     private String name, forename, email;
     private Address address;
+
+    public Person (String name, String forename) {
+        this.name = name;
+        this.forename = forename;
+    }
 
     public Person(String name, String forename, Date birthday, Address address) {
         this.name = name;
@@ -81,5 +87,16 @@ public class Person {
     @Override
     public int hashCode() {
         return Objects.hash(birthday, name, forename, address);
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "birthday=" + birthday +
+                ", name='" + name + '\'' +
+                ", forename='" + forename + '\'' +
+                ", email='" + email + '\'' +
+                ", address=" + address +
+                '}';
     }
 }
