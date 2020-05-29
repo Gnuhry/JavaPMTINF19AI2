@@ -4,13 +4,11 @@ import java.util.Date;
 import java.util.List;
 
 public class Course {
-    private List<Student> students;
+    private final Date registrationDate;
+    private final StudyCourse studyCourse;
     private String name;
-    private StudyCourse studyCourse;
-    private LecturePlan lecturePlan;
     private Docent studyDirector;
-    private Student courseSpeaker;
-    private Date registrationDate;
+    private int courseSpeakerID;
     private CourseRoom room;
 
 
@@ -20,25 +18,26 @@ public class Course {
         this.registrationDate = registrationDate;
     }
 
+    public Course(String name, StudyCourse studyCourse, Docent studyDirector, int courseSpeakerID, Date registrationDate, CourseRoom room) {
+        this.name = name;
+        this.studyCourse = studyCourse;
+        this.studyDirector = studyDirector;
+        this.courseSpeakerID = courseSpeakerID;
+        this.registrationDate = registrationDate;
+        this.room = room;
+    }
+
     //-------------------------------Setter----------------------------------------------
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setLecturePlan(LecturePlan lecturePlan) {
-        this.lecturePlan = lecturePlan;
     }
 
     public void setStudyDirector(Docent studyDirector) {
         this.studyDirector = studyDirector;
     }
 
-    public void setCourseSpeaker(Student courseSpeaker) {
-        this.courseSpeaker = courseSpeaker;
-    }
-
-    public void setStudents(List<Student> students) {
-        this.students = students;
+    public void setCourseSpeakerID(int courseSpeakerID) {
+        this.courseSpeakerID = courseSpeakerID;
     }
 
     public void setRoom(CourseRoom room) {
@@ -46,10 +45,6 @@ public class Course {
     }
 
     //-------------------------------Getter----------------------------------------------
-    public List<Student> getStudents() {
-        return students;
-    }
-
     public String getName() {
         return name;
     }
@@ -58,16 +53,12 @@ public class Course {
         return studyCourse;
     }
 
-    public LecturePlan getLecturePlan() {
-        return lecturePlan;
-    }
-
     public Docent getStudyDirector() {
         return studyDirector;
     }
 
-    public Student getCourseSpeaker() {
-        return courseSpeaker;
+    public int getCourseSpeaker() {
+        return courseSpeakerID;
     }
 
     public Date getRegistrationDate() {
@@ -76,14 +67,5 @@ public class Course {
 
     public CourseRoom getRoom() {
         return room;
-    }
-
-    /**
-     * Adding only one student
-     *
-     * @param student student who is a part of this course
-     */
-    public void addStudent(Student student) {
-        this.students.add(student);
     }
 }

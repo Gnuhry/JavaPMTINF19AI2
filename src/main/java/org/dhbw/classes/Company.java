@@ -2,13 +2,11 @@ package org.dhbw.classes;
 
 public class Company {
     private String name;
-    private Person owner;
     private Address address;
     private Person contactPerson;
 
-    public Company(String name, Person owner, Address address, Person contactPerson) {
+    public Company(String name, Address address, Person contactPerson) {
         this.name = name;
-        this.owner = owner;
         this.address = address;
         this.contactPerson = contactPerson;
     }
@@ -16,10 +14,6 @@ public class Company {
     //-----------------------Getter-------------------------------
     public String getName() {
         return name;
-    }
-
-    public Person getOwner() {
-        return owner;
     }
 
     public Address getAddress() {
@@ -34,10 +28,6 @@ public class Company {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setOwner(Person owner) {
-        this.owner = owner;
     }
 
     public void setAddress(Address address) {

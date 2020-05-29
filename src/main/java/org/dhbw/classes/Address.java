@@ -16,6 +16,7 @@ public class Address {
         this.country = country;
     }
 
+    //-----------------------------------------Getter------------------------------------------------
     public String getStreet() {
         return street;
     }
@@ -36,8 +37,33 @@ public class Address {
         return country;
     }
 
+    //-----------------------------------Setter-----------------------------------------------
+
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+
+    //-------------------------------------Override Methods-------------------------------------
     @Override
     public String toString() {
-        return street+" "+number+", "+postcode+" "+city+", "+country;
+        return street + " " + number + ", " + postcode + " " + city + ", " + country;
     }
 }

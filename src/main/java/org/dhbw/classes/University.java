@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class University {
-    private List<Docent> docents;
-    private List<DualStudent> student;
-    private List<Course> courses;
+    private final List<Docent> docents;
+    private final List<DualStudent> student;
+    private final List<Course> courses;
     private String name;
     private Docent director;
 
     public University(String name) {
-        docents=new ArrayList<>();
-        student=new ArrayList<>();
-        courses=new ArrayList<>();
+        docents = new ArrayList<>();
+        student = new ArrayList<>();
+        courses = new ArrayList<>();
         this.name = name;
     }
 
@@ -51,40 +51,46 @@ public class University {
 
     //-------------------------------Add------------------------
 
-    public void addDocent(Docent d){
+    public void addDocent(Docent d) {
         docents.add(d);
     }
-    public void addStudent(DualStudent s){
+
+    public void addStudent(DualStudent s) {
         student.add(s);
     }
-    public void addCourse(Course c){
+
+    public void addCourse(Course c) {
         courses.add(c);
     }
 
     //-------------------------------IS-------------------------
-    public boolean isDocent(Docent d){
+    public boolean isDocent(Docent d) {
         return docents.contains(d);
     }
-    public boolean isStudent(DualStudent s){
+
+    public boolean isStudent(DualStudent s) {
         return student.contains(s);
     }
-    public boolean isCourse(Course c){
+
+    public boolean isCourse(Course c) {
         return courses.contains(c);
     }
 
     //-----------------------------Remove----------------------
-    public void removeDocent(Docent d){
+    public void removeDocent(Docent d) {
         docents.remove(d);
     }
-    public void removeStudent(DualStudent s){
+
+    public void removeStudent(DualStudent s) {
         student.remove(s);
     }
-    public void removeCourse(Course c){
+
+    public void removeCourse(Course c) {
         courses.remove(c);
     }
 
 
-    public void exmatriculation(DualStudent s){
+    public void exmatriculation(DualStudent s) {
         removeStudent(s);
     }
 }
