@@ -85,8 +85,14 @@
             </HBox>
             <HBox spacing="150.0">
                <children>
-                  <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@css/application.css" text="Kurssprecher" />
+                  <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@css/application.css" text="Kurssprecher*in" />
                   <ComboBox prefHeight="26.0" prefWidth="173.0" promptText="Kurssprecher auswählen" stylesheets="@css/application.css" />
+               </children>
+            </HBox>
+            <HBox spacing="150.0">
+               <children>
+                  <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@css/application.css" text="Studiengangsleitung" />
+                  <ComboBox prefHeight="26.0" prefWidth="224.0" promptText="Studiengangsleitung auswählen" stylesheets="@css/application.css" />
                </children>
             </HBox>
          </children>
