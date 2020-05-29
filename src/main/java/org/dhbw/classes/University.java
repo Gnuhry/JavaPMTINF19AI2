@@ -1,31 +1,33 @@
 package org.dhbw.classes;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class University {
     private final List<Docent> docents;
     private final List<DualStudent> student;
     private final List<Course> courses;
-    private String name;
-    private Docent director;
 
-    public University(String name) {
-        docents = new ArrayList<>();
-        student = new ArrayList<>();
-        courses = new ArrayList<>();
-        this.name = name;
+    public University() {
+        DualStudent[] student_array = Database.loadAllStudents();
+        if (student_array != null)
+            student = Arrays.asList(student_array);
+        else
+            student = new ArrayList<>();
+        Docent[] docent_array = Database.loadAllDocents();
+        if (docent_array != null)
+            docents = Arrays.asList(docent_array);
+        else
+            docents = new ArrayList<>();
+        Course[] course_array = Database.loadAllCourses(docent_array);
+        if (course_array != null)
+            courses = Arrays.asList(course_array);
+        else
+            courses = new ArrayList<>();
     }
 
-    //--------------------------------Setter---------------------
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDirector(Docent director) {
-        this.director = director;
-    }
 
     //-----------------------------Getter---------------------
 
@@ -41,26 +43,22 @@ public class University {
         return courses;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public Docent getDirector() {
-        return director;
-    }
 
     //-------------------------------Add------------------------
 
     public void addDocent(Docent d) {
         docents.add(d);
+        Database.setDocentsToDatabase(new Docent[]{d});
     }
 
     public void addStudent(DualStudent s) {
         student.add(s);
+        Database.setStudentsToDatabase(new DualStudent[]{s});
     }
 
     public void addCourse(Course c) {
         courses.add(c);
+        Database.setCoursesToDatabase(new Course[]{c});
     }
 
     //-------------------------------IS-------------------------

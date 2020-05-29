@@ -4,7 +4,7 @@ import java.util.Calendar;
 
 public class Main {
     public static void main(String[] args) {
-        University DHBW = new University("Duale Hochschule Baden-Wüttenberg Mannheim");
+        University DHBW = new University();
         Calendar c = Calendar.getInstance();
         c.set(2000, Calendar.NOVEMBER, 1);
         DHBW.addDocent(new Docent("Kruse", "Eckhard", c.getTime(), new Address("hh", "34", "2343", "Hung", "33")));

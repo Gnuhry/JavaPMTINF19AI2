@@ -50,7 +50,7 @@ public class Database {
     /**
      * To send a insert command to database
      *
-     * @param command the sql insert command to set the values with ? in the value brackets for example: INSERT INTO table (x,y) VALUES (?, ?)
+     * @param command the sql insert, update, delete command to set the values with ? in the value brackets for example: INSERT INTO table (x,y) VALUES (?, ?)
      * @param objects the values
      * @param set     the sql types of the values
      */
@@ -158,6 +158,16 @@ public class Database {
             erg[f] = new Course((String) help[f][2], StudyCourse.AInformatik.getDeclaringClass().getEnumConstants()[(int) help[f][4]], director, (int) help[f][6], new java.util.Date(((Timestamp) help[f][3]).getTime()), CourseRoom.A222.getDeclaringClass().getEnumConstants()[(int) help[f][1]]);
         }
         return erg;
+    }
+
+    public static void updateStudent(DualStudent student, int student_id){
+        setToDatabase("UPDATE student WHERE student.student_id = '"+student_id+"' SET (java_knolage) VALUES (?)", new Object[]{student.getJavaKnowledge()}, new int[]{Types.INTEGER});
+    }
+    public static void updatePerson(Person person, int person_id){
+        setToDatabase("UPDATE person WHERE person.persion_id = '"+person_id+"' SET (first_name, last_name, birthdate, email, adress_id) VALUES (?, ?, ?, ?, ?)", new Object[]{person.getForeName(), person.getName(), person.getBirthday(), person.getEmail(),}, new int[]{Types.VARCHAR, Types.VARCHAR, Types.DATE, Types.VARCHAR, Types.INTEGER});
+    }
+    public static void updateAddress(Address address, int address_id){
+        //check in person/company ob doppelte belegung
     }
 
     //----------------------private-------------------------------------------
