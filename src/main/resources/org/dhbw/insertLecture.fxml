@@ -18,9 +18,19 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="600.0" maxWidth="1080.0" minHeight="600.0" minWidth="1080.0" prefHeight="600.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.InsertLectureController">
    <children>
+      <ImageView fitHeight="600.0" fitWidth="1080.0" focusTraversable="true" layoutX="10.0" layoutY="10.0" opacity="0.28" pickOnBounds="true" smooth="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <image>
+            <Image url="@images/DHBW_Verwaltungsgebäude.jpg" />
+         </image>
+         <effect>
+            <BoxBlur height="3.0" width="3.0" />
+         </effect>
+         <viewport>
+            <Rectangle2D />
+         </viewport>
+      </ImageView>
       <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" opacity="0.05" prefHeight="600.0" prefWidth="1080.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
             <ImageView fitHeight="600.0" fitWidth="1080.0" opacity="0.75" pickOnBounds="true" smooth="false">
@@ -36,17 +46,6 @@
             </ImageView>
          </children>
       </VBox>
-      <ImageView fitHeight="600.0" fitWidth="1080.0" layoutX="10.0" layoutY="10.0" opacity="0.28" pickOnBounds="true" smooth="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <image>
-            <Image url="@images/DHBW_Verwaltungsgebäude.jpg" />
-         </image>
-         <effect>
-            <BoxBlur height="3.0" width="3.0" />
-         </effect>
-         <viewport>
-            <Rectangle2D />
-         </viewport>
-      </ImageView>
       <Circle fill="#aebcca" layoutX="88.0" layoutY="123.0" radius="58.0" stroke="BLACK" strokeType="INSIDE" />
       <Button id="backToOverview" fx:id="backToOverview" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Zurück zur Übersicht" />
       <ImageView fitHeight="67.0" fitWidth="82.0" layoutX="54.0" layoutY="90.0" pickOnBounds="true" preserveRatio="true">
@@ -61,43 +60,43 @@
       </Label>
       <VBox layoutX="197.0" layoutY="142.0" prefHeight="429.0" prefWidth="751.0" spacing="20.0" AnchorPane.bottomAnchor="748.0" AnchorPane.leftAnchor="197.0" AnchorPane.rightAnchor="165.0" AnchorPane.topAnchor="142.0">
          <children>
-            <HBox spacing="170.0">
+            <HBox focusTraversable="true" spacing="170.0">
                <children>
                   <Label alignment="BASELINE_LEFT" prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="Vorname" />
-                  <TextField prefWidth="250.0" stylesheets="@css/application.css" />
+                  <TextField fx:id="lectureFirstName" prefWidth="250.0" stylesheets="@css/application.css" />
                </children>
             </HBox>
             <HBox spacing="170.0">
                <children>
                   <Label prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="Nachname" />
-                  <TextField prefWidth="250.0" stylesheets="@css/application.css" />
+                  <TextField fx:id="lectureLastName" prefWidth="250.0" stylesheets="@css/application.css" />
                </children>
             </HBox>
             <HBox spacing="170.0">
                <children>
                   <Label prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="Geburtstag" />
-                  <DatePicker promptText="dd.mm.yyyy" stylesheets="@css/application.css" />
+                  <DatePicker fx:id="lectureBirthday" promptText="dd.mm.yyyy" stylesheets="@css/application.css" />
                </children>
             </HBox>
             <HBox spacing="170.0">
                <children>
                   <Label prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="E-Mail-Adresse" />
-                  <TextField prefWidth="250.0" stylesheets="@css/application.css" />
+                  <TextField fx:id="lectureEmail" prefWidth="250.0" stylesheets="@css/application.css" />
                </children>
             </HBox>
             <HBox spacing="30.0">
                <children>
                   <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="Straße, Hausnummer" />
-                  <TextField prefWidth="250.0" stylesheets="@css/application.css" translateX="125.0" />
-                  <TextField prefWidth="50.0" stylesheets="@css/application.css" translateX="125.0" />
+                  <TextField fx:id="lectureStreet" prefWidth="250.0" stylesheets="@css/application.css" translateX="125.0" />
+                  <TextField fx:id="lectureHomeNumber" prefWidth="50.0" stylesheets="@css/application.css" translateX="125.0" />
                </children>
             </HBox>
             <HBox prefHeight="26.0" prefWidth="746.0" spacing="30.0">
                <children>
                   <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="PLZ, Wohnort, Land" />
-                  <TextField prefWidth="100.0" stylesheets="@css/application.css" translateX="126.0" />
-                  <TextField prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
-                  <TextField prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
+                  <TextField fx:id="lecturePostalCode" prefWidth="100.0" stylesheets="@css/application.css" translateX="126.0" />
+                  <TextField fx:id="lectureCity" prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
+                  <TextField fx:id="lectureCountry" prefWidth="200.0" stylesheets="@css/application.css" text="Deutschland" translateX="125.0" />
                </children>
             </HBox>
             <HBox spacing="100.0">
@@ -123,12 +122,13 @@
       </Label>
       <ButtonBar layoutX="-32.0" layoutY="553.0" prefHeight="50.0" prefWidth="1113.0" AnchorPane.leftAnchor="-32.0" AnchorPane.rightAnchor="32.0">
         <buttons>
-          <Button alignment="CENTER" mnemonicParsing="false" stylesheets="@css/application.css" text="Eintragen" />
+          <Button alignment="CENTER" mnemonicParsing="false" onAction="#submit" stylesheets="@css/application.css" text="Eintragen" />
             <Button alignment="CENTER" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Abbrechen" />
         </buttons>
          <padding>
             <Insets right="50.0" />
          </padding>
       </ButtonBar>
+      <Label fx:id="errorMessage" layoutX="197.0" layoutY="81.0" text="Bitte korregieren Sie die Fehler in folgenden Feldern: " textFill="#870606" visible="false" />
    </children>
 </AnchorPane>
