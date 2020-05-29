@@ -17,7 +17,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="600.0" maxWidth="1080.0" minHeight="600.0" minWidth="1080.0" prefHeight="600.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.InsertStudentController">
+<AnchorPane maxHeight="600.0" maxWidth="1080.0" minHeight="600.0" minWidth="1080.0" prefHeight="600.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.InsertCoursController">
    <children>
       <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" opacity="0.05" prefHeight="600.0" prefWidth="1080.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
@@ -104,7 +104,7 @@
       </Label>
       <ButtonBar layoutX="-28.0" layoutY="530.0" prefHeight="52.0" prefWidth="1080.0" AnchorPane.leftAnchor="-28.0" AnchorPane.rightAnchor="28.0">
         <buttons>
-          <Button alignment="CENTER" mnemonicParsing="false" stylesheets="@css/application.css" text="Eintragen" />
+          <Button alignment="CENTER" mnemonicParsing="false" onAction="#submit" stylesheets="@css/application.css" text="Eintragen" />
             <Button alignment="CENTER" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Abbrechen" />
         </buttons>
          <padding>
