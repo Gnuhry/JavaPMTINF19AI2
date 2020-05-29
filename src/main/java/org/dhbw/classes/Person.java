@@ -4,8 +4,8 @@ import java.util.Date;
 
 public class Person {
 
+    private final Date birthday;
     private String name, forename, email;
-    private Date birthday;
     private Address address;
 
     public Person(String name, String forename, Date birthday, Address address) {
