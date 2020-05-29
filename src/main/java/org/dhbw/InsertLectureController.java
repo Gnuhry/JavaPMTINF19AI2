@@ -14,7 +14,7 @@ public class InsertLectureController {
 
     @FXML
     private TextField lectureNumberField;
-gi
+
     @FXML
     private void generateLN() throws IOException {
         String lectureNumber = "d" + (100000+(int)(Math.random()*999999));
