@@ -1,6 +1,7 @@
 package org.dhbw.classes;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class DualStudent extends Person {
     private final Company company;
@@ -53,5 +54,20 @@ public class DualStudent extends Person {
 
     public Company getCompany() {
         return company;
+    }
+
+    //-------------------Overrides--------------
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DualStudent that = (DualStudent) o;
+        return studentNumber == that.studentNumber;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(studentNumber);
     }
 }

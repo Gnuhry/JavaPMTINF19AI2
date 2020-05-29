@@ -2,6 +2,7 @@ package org.dhbw.classes;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class Course {
     private final Date registrationDate;
@@ -67,5 +68,24 @@ public class Course {
 
     public CourseRoom getRoom() {
         return room;
+    }
+
+    //----------------------------Override--------------------------
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return Objects.equals(registrationDate, course.registrationDate) &&
+                studyCourse == course.studyCourse &&
+                Objects.equals(name, course.name) &&
+                room == course.room;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(registrationDate, studyCourse, name, room);
     }
 }

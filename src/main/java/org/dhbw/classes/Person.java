@@ -1,6 +1,7 @@
 package org.dhbw.classes;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Person {
 
@@ -62,5 +63,23 @@ public class Person {
     public void rename(String name, String forename) {
         this.name = name;
         this.forename = forename;
+    }
+
+    //-----------------------------------Overrides--------------------
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return Objects.equals(birthday, person.birthday) &&
+                Objects.equals(name, person.name) &&
+                Objects.equals(forename, person.forename) &&
+                Objects.equals(address, person.address);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(birthday, name, forename, address);
     }
 }
