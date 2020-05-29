@@ -1,0 +1,49 @@
+.button:hover, .button:focused {
+    -fx-background-color: -fx-shadow-highlight-color, -fx-body-color;
+    -fx-border-radius: 5px;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-background-radius: 5px;
+}
+
+.button:hover,
+.combo-box:hover
+{
+    -fx-background-color: rgba(0,0,0,0.1);
+}
+
+#gui_button:hover, #gui_button:focused {
+    -fx-scale-x: 1.08;
+    -fx-scale-y: 1.08;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
+    -fx-border-color: black;
+}
+
+#gui_button:hover {
+    -fx-background-color: rgba(81, 96, 136, 0.534);
+}
+
+#backToOverview {
+    -fx-border-radius: 40px 5px 5px 40px;
+    -fx-background-radius: 40px 5px 5px 40px;
+}
+
+.text-field
+{
+    -fx-background-color: rgba(0,0,0,0.2);
+    -fx-background-radius: 2px 2px 0px 0px;
+    -fx-padding: 0.166667em;
+    -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) black rgba(0,0,0,0);
+}
+ 
+.text-field:focused
+{
+    -fx-background-color: rgba(0,0,0,0.1);
+    -fx-border-width: 2px;
+    -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgba(43, 56, 112, 0.9) rgba(0,0,0,0);
+}
+
+.date-picker:focused
+{
+    -fx-background-color: -fx-shadow-highlight-color, -fx-body-color;
+    -fx-text-fill: -fx-text-base-color;
+}
