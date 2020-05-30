@@ -4,9 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import org.dhbw.classes.Course;
-import org.dhbw.classes.CourseRoom;
-import org.dhbw.classes.StudyCourse;
+import org.dhbw.classes.*;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -45,8 +43,8 @@ public class InsertCourseController {
         Course course = new Course(
                 courseName.getText(),
                 (StudyCourse)courseType.getValue(),
-                courseDirector.getAccessibleText(),             //Combobox -> Dozent
-                courseRepresent.getAccessibleText(),            // Combodbox -> KurssprecherID (int)
+                new Docent("Dozentname", "Dozentvorname", new Date(2000, 05,27), new Address("s", "2", "2", "s", "s")),//courseDirector.getAccessibleText(),             Combobox -> Dozent
+                10,//courseRepresent.getAccessibleText(),            Combodbox -> KurssprecherID (int)
                 courseRDate,
                 (CourseRoom)courseRoom.getValue()
         );

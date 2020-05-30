@@ -20,199 +20,189 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.InsertStudentController">
-   <content>
-      <AnchorPane prefHeight="1500.0" prefWidth="1080.0">
-         <children>
-            <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" opacity="0.05" prefHeight="600.0" prefWidth="1080.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+
+<AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.InsertStudentController">
+   <children>
+      <ImageView fitHeight="600.0" fitWidth="1080.0" opacity="0.28" pickOnBounds="true" smooth="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <image>
+            <Image url="@images/DHBW_Verwaltungsgebäude.jpg" />
+         </image>
+         <effect>
+            <BoxBlur height="3.0" width="3.0" />
+         </effect>
+         <viewport>
+            <Rectangle2D />
+         </viewport>
+      </ImageView>
+      <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" layoutX="0.6000000238418579">
+         <content>
+            <AnchorPane prefHeight="1500.0" prefWidth="1080.0">
                <children>
-                  <ImageView fitHeight="600.0" fitWidth="1080.0" opacity="0.75" pickOnBounds="true" smooth="false">
+                  <Circle fill="#aebcca" layoutX="88.0" layoutY="123.0" radius="58.0" stroke="BLACK" strokeType="INSIDE" />
+                  <ImageView fitHeight="67.0" fitWidth="82.0" layoutX="54.0" layoutY="90.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@images/DHBW_Verwaltungsgebäude.jpg" />
+                        <Image url="@images/addStudent.png" />
                      </image>
-                     <effect>
-                        <BoxBlur height="3.0" width="3.0" />
-                     </effect>
-                     <viewport>
-                        <Rectangle2D />
-                     </viewport>
                   </ImageView>
+                  <Label ellipsisString="200" layoutX="383.0" layoutY="34.0" text="Neuen Studendierenden anlegen" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" underline="true">
+                     <font>
+                        <Font name="Comic Sans MS" size="24.0" />
+                     </font>
+                  </Label>
+                  <VBox layoutX="197.0" layoutY="142.0" prefHeight="329.0" prefWidth="823.0" spacing="20.0" AnchorPane.bottomAnchor="598.0" AnchorPane.leftAnchor="197.0" AnchorPane.rightAnchor="165.39999999999986" AnchorPane.topAnchor="142.0">
+                     <children>
+                        <HBox spacing="170.0">
+                           <children>
+                              <Label alignment="BASELINE_LEFT" prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="Vorname" />
+                              <TextField fx:id="studentFirstName" prefWidth="250.0" stylesheets="@css/application.css" />
+                           </children>
+                        </HBox>
+                        <HBox spacing="170.0">
+                           <children>
+                              <Label prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="Nachname" />
+                              <TextField fx:id="studentLastName" prefWidth="250.0" stylesheets="@css/application.css" />
+                           </children>
+                        </HBox>
+                        <HBox spacing="170.0">
+                           <children>
+                              <Label prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="Geburtstag" />
+                              <DatePicker fx:id="studentBirth" onKeyPressed="#acceptTab" promptText="dd.mm.yyyy" stylesheets="@css/application.css" />
+                           </children>
+                        </HBox>
+                        <HBox spacing="170.0">
+                           <children>
+                              <Label prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="E-Mail-Adresse" />
+                              <TextField fx:id="studentEmail" prefWidth="250.0" stylesheets="@css/application.css" />
+                           </children>
+                        </HBox>
+                        <HBox spacing="30.0">
+                           <children>
+                              <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="Straße, Hausnummer" />
+                              <TextField fx:id="studentStreet" prefWidth="250.0" stylesheets="@css/application.css" translateX="125.0" />
+                              <TextField fx:id="studentHomeNumber" prefWidth="50.0" stylesheets="@css/application.css" translateX="125.0" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="26.0" prefWidth="746.0" spacing="30.0">
+                           <children>
+                              <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="PLZ, Wohnort, Land" />
+                              <TextField fx:id="studentPostalCode" prefWidth="100.0" stylesheets="@css/application.css" translateX="126.0" />
+                              <TextField fx:id="studentCity" prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
+                              <TextField fx:id="studentCountry" prefWidth="200.0" stylesheets="@css/application.css" text="Deutschland" translateX="125.0" />
+                           </children>
+                        </HBox>
+                        <HBox spacing="100.0">
+                           <children>
+                              <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@css/application.css" text="Studenten-Nummer" />
+                              <TextField fx:id="studentNumberField" editable="false" prefWidth="250.0" stylesheets="@css/application.css" translateX="50.0" />
+                              <Button mnemonicParsing="false" onAction="#generateSN" stylesheets="@css/application.css" text="generieren" />
+                           </children>
+                        </HBox>
+                        <HBox spacing="100.0">
+                           <children>
+                              <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@css/application.css" text="Matrikel-Nummer" />
+                              <TextField fx:id="matriculationNumberField" editable="false" prefWidth="250.0" stylesheets="@css/application.css" translateX="50.0" />
+                              <Button mnemonicParsing="false" onAction="#generateMN" stylesheets="@css/application.css" text="generieren" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <HBox layoutX="188.0" layoutY="587.0" prefHeight="26.0" prefWidth="508.0" spacing="50.0" AnchorPane.leftAnchor="188.0" AnchorPane.rightAnchor="384.0">
+                     <children>
+                        <ComboBox fx:id="companyChoose" prefHeight="26.0" prefWidth="177.0" promptText="Unternehmen auswählen" stylesheets="@css/application.css" />
+                        <Button mnemonicParsing="false" onAction="#createCompany" prefHeight="26.0" prefWidth="179.0" stylesheets="@css/application.css" text="neues Unternehmen anlegen" />
+                     </children>
+                  </HBox>
+                  <VBox fx:id="cCompany" layoutX="195.0" layoutY="643.0" prefHeight="214.0" prefWidth="990.0" spacing="20.0" visible="false" AnchorPane.leftAnchor="195.0" AnchorPane.rightAnchor="0.1999999999999318">
+                     <children>
+                        <HBox spacing="170.0">
+                           <children>
+                              <Label prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="Name" />
+                              <TextField fx:id="companyName" prefWidth="350.0" stylesheets="@css/application.css" />
+                           </children>
+                        </HBox>
+                        <HBox spacing="30.0">
+                           <children>
+                              <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="Straße, Hausnummer" />
+                              <TextField fx:id="companyStreet" prefWidth="250.0" stylesheets="@css/application.css" translateX="125.0" />
+                              <TextField fx:id="companyHomeNumber" prefWidth="50.0" stylesheets="@css/application.css" translateX="125.0" />
+                           </children>
+                        </HBox>
+                        <HBox spacing="30.0">
+                           <children>
+                              <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="PLZ, Ort, Land" />
+                              <TextField fx:id="companyPostalCode" prefWidth="100.0" stylesheets="@css/application.css" translateX="125.0" />
+                              <TextField fx:id="companyCity" prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
+                              <TextField fx:id="compaynyCountry" prefWidth="200.0" stylesheets="@css/application.css" text="Deutschland" translateX="125.0" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="26.0" prefWidth="508.0" spacing="50.0">
+                           <children>
+                              <ComboBox fx:id="companyPersonChoose" prefHeight="26.0" prefWidth="199.0" promptText="Ansprechperson auswählen" stylesheets="@css/application.css" />
+                              <Button mnemonicParsing="false" onAction="#createCompanyPerson" prefHeight="26.0" prefWidth="179.0" stylesheets="@css/application.css" text="neue Ansprechperson anlegen" />
+                           </children>
+                        </HBox>
+                        <HBox fx:id="companyPerson" spacing="30.0" visible="false">
+                           <children>
+                              <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="Ansprechperson" />
+                              <TextField fx:id="companyPersonFirstName" prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
+                              <TextField fx:id="companyPersonLastName" prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <Label ellipsisString="200" layoutX="197.0" layoutY="110.0" text="Persönliche Informationen" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" AnchorPane.leftAnchor="197.0" AnchorPane.rightAnchor="656.6">
+                     <font>
+                        <Font name="Comic Sans MS Bold Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label ellipsisString="" layoutX="195.0" layoutY="542.0" prefHeight="26.0" prefWidth="262.0" text="Unternehmensinformationen" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" AnchorPane.leftAnchor="197.0" AnchorPane.rightAnchor="622.0">
+                     <font>
+                        <Font name="Comic Sans MS Bold Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label ellipsisString="" layoutX="197.0" layoutY="1035.0" text="Vorkenntnisse" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" AnchorPane.leftAnchor="197.0" AnchorPane.rightAnchor="656.6">
+                     <font>
+                        <Font name="Comic Sans MS Bold Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <Line endX="650.0" fill="#817f7fd9" layoutX="296.0" layoutY="513.0" startX="-100.0" stroke="#817f7f" AnchorPane.bottomAnchor="571.3" AnchorPane.leftAnchor="195.5" AnchorPane.rightAnchor="133.5" AnchorPane.topAnchor="512.5" />
+                  <Line endX="650.0" fill="#817f7fd9" layoutX="295.0" layoutY="1016.0" startX="-100.0" stroke="#817f7f" AnchorPane.leftAnchor="194.5" AnchorPane.rightAnchor="135.29999999999995" />
+                  <HBox layoutX="197.0" layoutY="1074.0" prefHeight="26.0" prefWidth="592.0" spacing="20.0" AnchorPane.leftAnchor="197.0" AnchorPane.rightAnchor="291.0">
+                     <children>
+                        <Label prefHeight="26.0" prefWidth="110.0" stylesheets="@css/application.css" text="Java-Kenntnisse" />
+                        <Label prefHeight="25.0" text="0" translateX="135.0" />
+                        <Slider fx:id="javaKnowledgeSlider" onMouseClicked="#showSlider" onMouseDragged="#showSlider" prefHeight="25.0" translateX="135.0" />
+                        <Label prefHeight="25.0" text="100" translateX="135.0" />
+                        <Label fx:id="javaKnowledgeLabel" prefHeight="25.6" text="0" translateX="155.0" />
+                     </children>
+                  </HBox>
+                  <ButtonBar layoutY="1267.0" prefHeight="52.0" prefWidth="1080.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                    <buttons>
+                      <Button alignment="CENTER" mnemonicParsing="false" onAction="#submit" stylesheets="@css/application.css" text="Eintragen" />
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Abbrechen" />
+                    </buttons>
+                     <padding>
+                        <Insets right="50.0" />
+                     </padding>
+                  </ButtonBar>
+                  <Label ellipsisString="" layoutX="197.0" layoutY="899.0" text="Kursinformationen" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS">
+                     <font>
+                        <Font name="Comic Sans MS Bold Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <HBox layoutX="197.0" layoutY="943.0" spacing="30.0">
+                     <children>
+                        <ComboBox fx:id="courseName" onAction="#showCourse" prefHeight="26.0" prefWidth="177.0" promptText="Kurs auswählen" stylesheets="@css/application.css" />
+                        <TextField fx:id="courseType" editable="false" promptText="Fachbereich" stylesheets="@css/application.css" />
+                        <DatePicker fx:id="courseDate" editable="false" promptText="Registrierungsdatum" stylesheets="@css/application.css" />
+                     </children>
+                  </HBox>
+                  <Button id="backToOverview" fx:id="backToOverview" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Zurück zur Übersicht" />
+                  <Line endX="650.0" fill="#817f7fd9" layoutX="296.0" layoutY="889.0" startX="-100.0" stroke="#817f7f" />
+                  <Label fx:id="errorMessage" layoutX="197.0" layoutY="81.0" text="Bitte korrigieren Sie die Fehler in folgenden Feldern: " textFill="#870606" visible="false" />
                </children>
-            </VBox>
-            <ImageView fitHeight="600.0" fitWidth="1080.0" layoutX="10.0" layoutY="10.0" opacity="0.28" pickOnBounds="true" smooth="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <image>
-                  <Image url="@images/DHBW_Verwaltungsgebäude.jpg" />
-               </image>
-               <effect>
-                  <BoxBlur height="3.0" width="3.0" />
-               </effect>
-               <viewport>
-                  <Rectangle2D />
-               </viewport>
-            </ImageView>
-            <Circle fill="#aebcca" layoutX="88.0" layoutY="123.0" radius="58.0" stroke="BLACK" strokeType="INSIDE" />
-            <ImageView fitHeight="67.0" fitWidth="82.0" layoutX="54.0" layoutY="90.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@images/addStudent.png" />
-               </image>
-            </ImageView>
-            <Label ellipsisString="200" layoutX="383.0" layoutY="34.0" text="Neuen Studendierenden anlegen" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" underline="true">
-               <font>
-                  <Font name="Comic Sans MS" size="24.0" />
-               </font>
-            </Label>
-            <VBox layoutX="197.0" layoutY="142.0" prefHeight="329.0" prefWidth="823.0" spacing="20.0" AnchorPane.bottomAnchor="598.0" AnchorPane.leftAnchor="197.0" AnchorPane.rightAnchor="165.39999999999986" AnchorPane.topAnchor="142.0">
-               <children>
-                  <HBox spacing="170.0">
-                     <children>
-                        <Label alignment="BASELINE_LEFT" prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="Vorname" />
-                        <TextField fx:id="studentFirstName" prefWidth="250.0" stylesheets="@css/application.css" />
-                     </children>
-                  </HBox>
-                  <HBox spacing="170.0">
-                     <children>
-                        <Label prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="Nachname" />
-                        <TextField fx:id="studentLastName" prefWidth="250.0" stylesheets="@css/application.css" />
-                     </children>
-                  </HBox>
-                  <HBox spacing="170.0">
-                     <children>
-                        <Label prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="Geburtstag" />
-                        <DatePicker fx:id="studentBirth" promptText="dd.mm.yyyy" stylesheets="@css/application.css" />
-                     </children>
-                  </HBox>
-                  <HBox spacing="170.0">
-                     <children>
-                        <Label prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="E-Mail-Adresse" />
-                        <TextField fx:id="studentEmail" prefWidth="250.0" stylesheets="@css/application.css" />
-                     </children>
-                  </HBox>
-                  <HBox spacing="30.0">
-                     <children>
-                        <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="Straße, Hausnummer" />
-                        <TextField fx:id="studentStreet" prefWidth="250.0" stylesheets="@css/application.css" translateX="125.0" />
-                        <TextField fx:id="studentHomeNumber" prefWidth="50.0" stylesheets="@css/application.css" translateX="125.0" />
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="26.0" prefWidth="746.0" spacing="30.0">
-                     <children>
-                        <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="PLZ, Wohnort, Land" />
-                        <TextField fx:id="studentPostalCode" prefWidth="100.0" stylesheets="@css/application.css" translateX="126.0" />
-                        <TextField fx:id="studentCity" prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
-                        <TextField fx:id="studentCountry" prefWidth="200.0" stylesheets="@css/application.css" text="Deutschland" translateX="125.0" />
-                     </children>
-                  </HBox>
-                  <HBox spacing="100.0">
-                     <children>
-                        <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@css/application.css" text="Studenten-Nummer" />
-                        <TextField fx:id="studentNumberField" editable="false" prefWidth="250.0" stylesheets="@css/application.css" translateX="50.0" />
-                        <Button mnemonicParsing="false" onAction="#generateSN" stylesheets="@css/application.css" text="generieren" />
-                     </children>
-                  </HBox>
-                  <HBox spacing="100.0">
-                     <children>
-                        <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@css/application.css" text="Matrikel-Nummer" />
-                        <TextField fx:id="matriculationNumberField" editable="false" prefWidth="250.0" stylesheets="@css/application.css" translateX="50.0" />
-                        <Button mnemonicParsing="false" onAction="#generateMN" stylesheets="@css/application.css" text="generieren" />
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-            <HBox layoutX="188.0" layoutY="587.0" prefHeight="26.0" prefWidth="508.0" spacing="50.0" AnchorPane.leftAnchor="188.0" AnchorPane.rightAnchor="384.0">
-               <children>
-                  <ComboBox fx:id="companyChoose" prefHeight="26.0" prefWidth="177.0" promptText="Unternehmen auswählen" stylesheets="@css/application.css" />
-                  <Button mnemonicParsing="false" onAction="#createCompany" prefHeight="26.0" prefWidth="179.0" stylesheets="@css/application.css" text="neues Unternehmen anlegen" />
-               </children>
-            </HBox>
-            <VBox fx:id="cCompany" layoutX="195.0" layoutY="643.0" prefHeight="214.0" prefWidth="990.0" spacing="20.0" visible="false" AnchorPane.leftAnchor="195.0" AnchorPane.rightAnchor="0.1999999999999318">
-               <children>
-                  <HBox spacing="170.0">
-                     <children>
-                        <Label prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="Name" />
-                        <TextField fx:id="companyName" prefWidth="350.0" stylesheets="@css/application.css" />
-                     </children>
-                  </HBox>
-                  <HBox spacing="30.0">
-                     <children>
-                        <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="Straße, Hausnummer" />
-                        <TextField fx:id="companyStreet" prefWidth="250.0" stylesheets="@css/application.css" translateX="125.0" />
-                        <TextField fx:id="companyHomeNumber" prefWidth="50.0" stylesheets="@css/application.css" translateX="125.0" />
-                     </children>
-                  </HBox>
-                  <HBox spacing="30.0">
-                     <children>
-                        <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="PLZ, Ort, Land" />
-                        <TextField fx:id="companyPostalCode" prefWidth="100.0" stylesheets="@css/application.css" translateX="125.0" />
-                        <TextField fx:id="companyCity" prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
-                        <TextField fx:id="compaynyCountry" prefWidth="200.0" stylesheets="@css/application.css" text="Deutschland" translateX="125.0" />
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="26.0" prefWidth="508.0" spacing="50.0">
-                     <children>
-                        <ComboBox fx:id="companyPersonChoose" prefHeight="26.0" prefWidth="199.0" promptText="Ansprechperson auswählen" stylesheets="@css/application.css" />
-                        <Button mnemonicParsing="false" onAction="#createCompanyPerson" prefHeight="26.0" prefWidth="179.0" stylesheets="@css/application.css" text="neue Ansprechperson anlegen" />
-                     </children>
-                  </HBox>
-                  <HBox fx:id="companyPerson" spacing="30.0" visible="false">
-                     <children>
-                        <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="Ansprechperson" />
-                        <TextField fx:id="companyPersonFirstName" prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
-                        <TextField fx:id="companyPersonLastName" prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-            <Label ellipsisString="200" layoutX="197.0" layoutY="110.0" text="Persönliche Informationen" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" AnchorPane.leftAnchor="197.0" AnchorPane.rightAnchor="656.6">
-               <font>
-                  <Font name="Comic Sans MS Bold Italic" size="18.0" />
-               </font>
-            </Label>
-            <Label ellipsisString="" layoutX="195.0" layoutY="542.0" prefHeight="26.0" prefWidth="262.0" text="Unternehmensinformationen" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" AnchorPane.leftAnchor="197.0" AnchorPane.rightAnchor="622.0">
-               <font>
-                  <Font name="Comic Sans MS Bold Italic" size="18.0" />
-               </font>
-            </Label>
-            <Label ellipsisString="" layoutX="197.0" layoutY="1035.0" text="Vorkenntnisse" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" AnchorPane.leftAnchor="197.0" AnchorPane.rightAnchor="656.6">
-               <font>
-                  <Font name="Comic Sans MS Bold Italic" size="18.0" />
-               </font>
-            </Label>
-            <Line endX="650.0" fill="#817f7fd9" layoutX="296.0" layoutY="513.0" startX="-100.0" stroke="#817f7f" AnchorPane.bottomAnchor="571.3" AnchorPane.leftAnchor="195.5" AnchorPane.rightAnchor="133.5" AnchorPane.topAnchor="512.5" />
-            <Line endX="650.0" fill="#817f7fd9" layoutX="295.0" layoutY="1016.0" startX="-100.0" stroke="#817f7f" AnchorPane.leftAnchor="194.5" AnchorPane.rightAnchor="135.29999999999995" />
-            <HBox layoutX="197.0" layoutY="1074.0" prefHeight="26.0" prefWidth="592.0" spacing="20.0" AnchorPane.leftAnchor="197.0" AnchorPane.rightAnchor="291.0">
-               <children>
-                  <Label prefHeight="26.0" prefWidth="110.0" stylesheets="@css/application.css" text="Java-Kenntnisse" />
-                  <Label prefHeight="25.0" text="0" translateX="135.0" />
-                  <Slider fx:id="javaKnowledgeSlider" onMouseDragged="#showSlider" prefHeight="25.0" translateX="135.0" />
-                  <Label prefHeight="25.0" text="100" translateX="135.0" />
-                  <Label fx:id="javaKnowledgeLabel" prefHeight="25.6" text="0" translateX="155.0" />
-               </children>
-            </HBox>
-            <ButtonBar layoutY="1267.0" prefHeight="52.0" prefWidth="1080.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-              <buttons>
-                <Button alignment="CENTER" mnemonicParsing="false" onAction="#submit" stylesheets="@css/application.css" text="Eintragen" />
-                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Abbrechen" />
-              </buttons>
-               <padding>
-                  <Insets right="50.0" />
-               </padding>
-            </ButtonBar>
-            <Label ellipsisString="" layoutX="197.0" layoutY="899.0" text="Kursinformationen" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS">
-               <font>
-                  <Font name="Comic Sans MS Bold Italic" size="18.0" />
-               </font>
-            </Label>
-            <HBox layoutX="197.0" layoutY="943.0" spacing="30.0">
-               <children>
-                  <ComboBox fx:id="courseName" onAction="#showCourse" prefHeight="26.0" prefWidth="177.0" promptText="Kurs auswählen" stylesheets="@css/application.css" />
-                  <TextField fx:id="courseType" editable="false" promptText="Fachbereich" stylesheets="@css/application.css" />
-                  <DatePicker fx:id="courseDate" editable="false" promptText="Registrierungsdatum" stylesheets="@css/application.css" />
-               </children>
-            </HBox>
-            <Button id="backToOverview" fx:id="backToOverview" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Zurück zur Übersicht" />
-            <Line endX="650.0" fill="#817f7fd9" layoutX="296.0" layoutY="889.0" startX="-100.0" stroke="#817f7f" />
-            <Label fx:id="errorMessage" layoutX="197.0" layoutY="81.0" text="Bitte korrigieren Sie die Fehler in folgenden Feldern: " textFill="#870606" visible="false" />
-         </children>
-      </AnchorPane>
-   </content>
-</ScrollPane>
+            </AnchorPane>
+         </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>

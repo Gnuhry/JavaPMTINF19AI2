@@ -1,7 +1,10 @@
 package org.dhbw;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.dhbw.classes.*;
@@ -22,7 +25,7 @@ public class InsertStudentController {
     @FXML
     private TextField studentLastName;
     @FXML
-    private DatePicker studentBirth;
+    private DatePicker studentBirth = new DatePicker();
     @FXML
     private TextField studentEmail;
     @FXML
@@ -74,7 +77,6 @@ public class InsertStudentController {
     @FXML
     private Slider javaKnowledgeSlider;
 
-
     @FXML
     private void backToOverview() throws IOException {
         App.setRoot("primary");
@@ -82,13 +84,13 @@ public class InsertStudentController {
 
     @FXML
     private void generateSN() throws IOException {
-        String studentNumber = "s" + (100000+(int)(Math.random()*999999));
+        String studentNumber = "s" + (100000+(int)(Math.random()*900000));
         studentNumberField.setText(studentNumber);
     }
 
     @FXML
     private void generateMN() throws IOException {
-        String matriculationNumber = "" + (1000000+(int)(Math.random()*9999999));
+        String matriculationNumber = "" + (1000000+(int)(Math.random()*9000000));
         matriculationNumberField.setText(matriculationNumber);
     }
 
@@ -113,10 +115,17 @@ public class InsertStudentController {
 
     @FXML
     private void showCourse() throws IOException {
-        //Access the StudyCourse and Date of the Course
         Course course = (Course)courseName.getValue();
         courseType.setText("" + course.getStudyCourse());
         courseDate.setValue(convertToLocalDateViaSqlDate(course.getRegistrationDate()));
+    }
+
+    @FXML
+    private void acceptTab(KeyEvent keyEvent) {
+            System.out.println("test");
+            if (keyEvent.getCode() == KeyCode.TAB) {
+                System.out.println("Hallo" + studentBirth.getEditor().getText());
+            }
     }
 
 
@@ -144,17 +153,17 @@ public class InsertStudentController {
             studentEmail.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
             focusStage = 1;
             errorMessage.setText(errorMessage.getText() + " E-Mail-Adresse ");
-        } else studentEmail.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgba(0, 0, 0, 0.1) rgba(0,0,0,0)");
+        } else studentEmail.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
         if (!Person.validatePostalCode(studentPostalCode.getText())) {
             studentPostalCode.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
             if (focusStage != 1) focusStage = 2;
             errorMessage.setText(errorMessage.getText() + " Student-Postleitzahl ");
-        } else studentPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgba(0, 0, 0, 0.1) rgba(0,0,0,0)");
+        } else studentPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
         if (!Person.validatePostalCode(companyPostalCode.getText())) {
             companyPostalCode.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
             if (!(focusStage == 1 || focusStage == 2)) focusStage = 3;
             errorMessage.setText(errorMessage.getText() + " Unternehmen-Postleitzahl ");
-        } else companyPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgba(0, 0, 0, 0.1) rgba(0,0,0,0)");
+        } else companyPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
 
         if (focusStage == 1) {
             studentEmail.requestFocus();
