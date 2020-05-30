@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.dhbw.classes.Address;
+import org.dhbw.classes.Check;
 import org.dhbw.classes.Company;
 import org.dhbw.classes.Person;
 
@@ -40,7 +41,7 @@ public class InsertCompanyController {
     private void submit() {
         Person contactPerson = new Person(companyContactPersonLastName.getText(), companyContactPersonFirstName.getText());
         errorMessage.setText("Bitte korrigieren Sie die Fehler in folgenden Feldern");
-        if (!Person.validatePostalCode(companyPostalCode.getText())) {
+        if (!Check.validatePostalCode(companyPostalCode.getText())) {
             companyPostalCode.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
             companyPostalCode.requestFocus();
             errorMessage.setText(errorMessage.getText() + " Student-Postleitzahl ");
