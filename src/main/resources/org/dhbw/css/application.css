@@ -33,6 +33,7 @@
     -fx-background-radius: 2px 2px 0px 0px;
     -fx-padding: 0.166667em;
     -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) black rgba(0,0,0,0);
+    -fx-prompt-text-fill: rgba(0,0,0,0.8);
 }
  
 .text-field:focused
@@ -46,4 +47,5 @@
 {
     -fx-background-color: -fx-shadow-highlight-color, -fx-body-color;
     -fx-text-fill: -fx-text-base-color;
+    -fx-prompt-text-fill: rgba(0,0,0,0.8);
 }

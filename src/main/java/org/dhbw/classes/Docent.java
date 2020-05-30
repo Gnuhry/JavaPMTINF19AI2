@@ -34,4 +34,12 @@ public class Docent extends Person{
     public int hashCode() {
         return Objects.hash(docentNumber);
     }
+
+    @Override
+    public String toString() {
+        return "Docent{" +
+                "person=" + super.toString() +
+                "docentNumber='" + docentNumber + '\'' +
+                '}';
+    }
 }

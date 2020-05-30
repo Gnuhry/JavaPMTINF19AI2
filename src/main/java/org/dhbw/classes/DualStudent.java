@@ -1,12 +1,13 @@
 package org.dhbw.classes;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
 public class DualStudent extends Person {
     private final Company company;
     private int matriculationNumber; //TODO automatic? or manuel with constructer?
-    private int studentNumber;
+    private String studentNumber;
     private Course course;
     private int javaKnowledge;
 
@@ -17,7 +18,7 @@ public class DualStudent extends Person {
         javaKnowledge = 0;
     }
 
-    public DualStudent(int matriculationNumber, int studentNumber, String name, String forename, Date birthday, Address address, String email, Course course, int javaKnowledge, Company company) {
+    public DualStudent(int matriculationNumber, String studentNumber, String name, String forename, Date birthday, Address address, String email, Course course, int javaKnowledge, Company company) {
         super(name, forename, birthday, address, email);
         this.matriculationNumber = matriculationNumber;
         this.studentNumber = studentNumber;
@@ -40,7 +41,7 @@ public class DualStudent extends Person {
         return matriculationNumber;
     }
 
-    public int getStudentNumber() {
+    public String getStudentNumber() {
         return studentNumber;
     }
 
@@ -69,5 +70,17 @@ public class DualStudent extends Person {
     @Override
     public int hashCode() {
         return Objects.hash(studentNumber);
+    }
+
+    @Override
+    public String toString() {
+        return "DualStudent{" +
+                "Student" + super.toString() +
+                "company=" + company +
+                ", matriculationNumber=" + matriculationNumber +
+                ", studentNumber='" + studentNumber + '\'' +
+                ", course=" + course +
+                ", javaKnowledge=" + javaKnowledge +
+                '}';
     }
 }

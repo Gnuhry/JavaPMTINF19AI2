@@ -56,4 +56,13 @@ public class Company {
     public int hashCode() {
         return Objects.hash(name, address);
     }
+
+    @Override
+    public String toString() {
+        return "Company{" +
+                "name='" + name + '\'' +
+                ", address=" + address +
+                ", contactPerson=" + contactPerson +
+                '}';
+    }
 }

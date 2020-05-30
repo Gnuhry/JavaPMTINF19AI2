@@ -1,7 +1,7 @@
 package org.dhbw.classes;
 
+import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 public class Course {
@@ -86,5 +86,17 @@ public class Course {
     @Override
     public int hashCode() {
         return Objects.hash(registrationDate, studyCourse, name, room);
+    }
+
+    @Override
+    public String toString() {
+        return "Course{" +
+                "registrationDate=" + registrationDate +
+                ", studyCourse=" + studyCourse +
+                ", name='" + name + '\'' +
+                ", studyDirector=" + studyDirector +
+                ", courseSpeakerID=" + courseSpeakerID +
+                ", room=" + room +
+                '}';
     }
 }
