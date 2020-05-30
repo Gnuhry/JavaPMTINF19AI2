@@ -6,15 +6,15 @@ import java.util.List;
 
 public class University {
     private final List<Docent> docents;
-    private final List<DualStudent> student;
+    private final List<DualStudent> students;
     private final List<Course> courses;
 
     public University() {
         DualStudent[] student_array = Database.loadAllStudents();
         if (student_array != null)
-            student = Arrays.asList(student_array);
+            students = Arrays.asList(student_array);
         else
-            student = new ArrayList<>();
+            students = new ArrayList<>();
         Docent[] docent_array = Database.loadAllDocents();
         if (docent_array != null)
             docents = Arrays.asList(docent_array);
@@ -34,8 +34,8 @@ public class University {
         return docents;
     }
 
-    public List<DualStudent> getStudent() {
-        return student;
+    public List<DualStudent> getStudents() {
+        return students;
     }
 
     public List<Course> getCourses() {
@@ -51,7 +51,7 @@ public class University {
     }
 
     public void addStudent(DualStudent s) {
-        student.add(s);
+        students.add(s);
         Database.setStudentsToDatabase(new DualStudent[]{s});
     }
 
@@ -66,7 +66,7 @@ public class University {
     }
 
     public boolean isStudent(DualStudent s) {
-        return student.contains(s);
+        return students.contains(s);
     }
 
     public boolean isCourse(Course c) {
@@ -80,7 +80,7 @@ public class University {
     }
 
     public void removeStudent(DualStudent s) {
-        student.remove(s);
+        students.remove(s);
         Database.deleteStudent(s, s.getStudentNumber());
     }
 
