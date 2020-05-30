@@ -58,7 +58,7 @@ public class Course {
         return studyDirector;
     }
 
-    public int getCourseSpeaker() {
+    public int getCourseSpeakerID() {
         return courseSpeakerID;
     }
 
@@ -71,7 +71,6 @@ public class Course {
     }
 
     //----------------------------Override--------------------------
-
 
     @Override
     public boolean equals(Object o) {

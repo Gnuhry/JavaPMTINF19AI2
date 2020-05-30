@@ -1,6 +1,5 @@
 package org.dhbw.classes;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -77,14 +76,30 @@ public class University {
     //-----------------------------Remove----------------------
     public void removeDocent(Docent d) {
         docents.remove(d);
+        Database.deleteDocent(d, d.getDocentNumber());
     }
 
     public void removeStudent(DualStudent s) {
         student.remove(s);
+        Database.deleteStudent(s, s.getStudentNumber());
     }
 
     public void removeCourse(Course c) {
         courses.remove(c);
+        Database.deleteCourse(c);
+    }
+
+    //------------------------------Update-----------------
+    public void updateDocent(Docent d) {
+        Database.updateDocent(d, d.getDocentNumber());
+    }
+
+    public void updateStudent(DualStudent s) {
+        Database.updateStudent(s, s.getStudentNumber());
+    }
+
+    public void updateCourse(Course c) {
+        Database.updateCourse(c);
     }
 
 

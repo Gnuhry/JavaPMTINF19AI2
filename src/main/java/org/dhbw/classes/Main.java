@@ -4,10 +4,10 @@ import java.util.Calendar;
 
 public class Main {
     public static void main(String[] args) {
-        University DHBW = new University();
+       // University DHBW = new University();
         Calendar c = Calendar.getInstance();
         c.set(2000, Calendar.NOVEMBER, 1);
-        DHBW.addDocent(new Docent("Kruse", "Eckhard", c.getTime(), new Address("hh", "34", "2343", "Hung", "33")));
+        //DHBW.addDocent(new Docent("Kruse", "Eckhard", c.getTime(), new Address("hh", "34", "2343", "Hung", "33")));
         System.out.println("TEST");
 //        Database.setToDatabank("ALTER TABLE docent CHANGE perosn_id person_id int(11)", null, null);
 //        Database.setToDatabank("INSERT INTO student (`student_id`, `matriculation_number`, `person_id`, `java_knowlage`, `course_id`, `company_id`) VALUES (?, ?, '1', '12', '1', '1');", new Object[]{6, 1234567890}, new int[]{Types.INTEGER, Types.INTEGER});

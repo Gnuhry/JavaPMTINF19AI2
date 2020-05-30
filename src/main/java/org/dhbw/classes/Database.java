@@ -4,6 +4,8 @@ import java.sql.*;
 
 public class Database {
 
+    //----------------------------------------General----------------------------
+
     /**
      * Create a connection to the database
      *
@@ -70,6 +72,8 @@ public class Database {
         }
     }
 
+    //--------------------------------SetObjectToDatabase-----------------------
+
     /**
      * To send all students to the database
      *
@@ -80,7 +84,7 @@ public class Database {
         for (DualStudent student : students) {
             Object[][] help = getFromDatabase("SELECT * FROM student WHERE student.student_id = '" + student.getStudentNumber() + "'");
             if (help != null && help.length > 0) return;
-            setToDatabase("INSERT INTO STUDENT (student_id, matriculation_number, person_id, java_knolage, course_id, company_id) VALUES (?, ?, ?, ?, ?, ?)", new Object[]{student.getStudentNumber(), student.getMatriculationNumber(), setPersonToDatabase(student), student.getJavaKnowledge(), setCourseToDatabase(student.getCourse()), setCompanyToDatabase(student.getCompany())}, new int[]{Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER});
+            setToDatabase("INSERT INTO STUDENT (student_id, matriculation_number, person_id, java_knowledge, course_id, company_id) VALUES (?, ?, ?, ?, ?, ?)", new Object[]{student.getStudentNumber(), student.getMatriculationNumber(), setPersonToDatabase(student), student.getJavaKnowledge(), setCourseToDatabase(student.getCourse()), setCompanyToDatabase(student.getCompany())}, new int[]{Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER});
         }
     }
 
@@ -94,7 +98,7 @@ public class Database {
         for (Docent docent : docents) {
             Object[][] help = getFromDatabase("SELECT * FROM docent WHERE docent.docent_id = '" + docent.getDocentNumber() + "'");
             if (help != null && help.length > 0) return;
-            setToDatabase("INSERT INTO docent (docent_id, perosn_id) VALUES (?, ?)", new Object[]{docent.getDocentNumber(), setPersonToDatabase(docent)}, new int[]{Types.INTEGER, Types.INTEGER});
+            setToDatabase("INSERT INTO docent (docent_id, person_id) VALUES (?, ?)", new Object[]{docent.getDocentNumber(), setPersonToDatabase(docent)}, new int[]{Types.INTEGER, Types.INTEGER});
         }
     }
 
@@ -108,6 +112,8 @@ public class Database {
         for (Course course : courses)
             setCourseToDatabase(course);
     }
+
+    //----------------------------------LoadObjectFromDatabase---------------
 
     /**
      * To get all students from the database
@@ -132,11 +138,11 @@ public class Database {
      * @return the docents
      */
     public static Docent[] loadAllDocents() {
-        Object[][] help = getFromDatabase("SELECT * FROM docent LEFT JOIN person ON docent.perosn_id = person.person_id");
+        Object[][] help = getFromDatabase("SELECT * FROM docent LEFT JOIN person ON docent.person_id = person.person_id");
         if (help == null) return null;
         Docent[] erg = new Docent[help.length];
         for (int f = 0; f < erg.length; f++)
-            erg[f] = new Docent((String) help[f][4], (String) help[f][3], new java.util.Date(((Timestamp) help[f][5]).getTime()), getAddressByID((int) help[f][7]), (String) help[f][6], (String) help[f][0]);
+            erg[f] = new Docent((String) help[f][4], (String) help[f][3], new java.util.Date(((Timestamp) help[f][5]).getTime()), getAddressByID((int) help[f][7]), (String) help[f][6], (int) help[f][0]);
         return erg;
     }
 
@@ -153,21 +159,89 @@ public class Database {
         for (int f = 0; f < erg.length; f++) {
             director = null;
             for (int g = 0; g < docents.length && director == null; g++)
-                if (docents[g].getDocentNumber() == help[f][5])
+                if (docents[g].getDocentNumber() == (int) help[f][5])
                     director = docents[g];
             erg[f] = new Course((String) help[f][2], StudyCourse.AInformatik.getDeclaringClass().getEnumConstants()[(int) help[f][4]], director, (int) help[f][6], new java.util.Date(((Timestamp) help[f][3]).getTime()), CourseRoom.A222.getDeclaringClass().getEnumConstants()[(int) help[f][1]]);
         }
         return erg;
     }
 
-    public static void updateStudent(DualStudent student, int student_id){
-        setToDatabase("UPDATE student WHERE student.student_id = '"+student_id+"' SET (java_knolage) VALUES (?)", new Object[]{student.getJavaKnowledge()}, new int[]{Types.INTEGER});
+    //-----------------------------UpdateObjectInDatabase-----------------
+
+    /**
+     * To update the values of the student in the database
+     *
+     * @param student    new student values
+     * @param student_id student identification
+     */
+    public static void updateStudent(DualStudent student, int student_id) {
+        setToDatabase("UPDATE student SET java_knowledge = ?, person_id = ?, course_id = ?, company_id = ? WHERE student.student_id = '" + student_id + "'", new Object[]{student.getJavaKnowledge(), updatePerson(student), updateCourse(student.getCourse()), updateCompany(student.getCompany())}, new int[]{Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER});
     }
-    public static void updatePerson(Person person, int person_id){
-        setToDatabase("UPDATE person WHERE person.persion_id = '"+person_id+"' SET (first_name, last_name, birthdate, email, adress_id) VALUES (?, ?, ?, ?, ?)", new Object[]{person.getForeName(), person.getName(), person.getBirthday(), person.getEmail(),}, new int[]{Types.VARCHAR, Types.VARCHAR, Types.DATE, Types.VARCHAR, Types.INTEGER});
+
+    /**
+     * To update the values of the docent in the database
+     *
+     * @param docent    new docent values
+     * @param docent_id docent identification
+     */
+    public static void updateDocent(Docent docent, int docent_id) {
+        setToDatabase("UPDATE docent SET person_id = ? WHERE docent_id = '" + docent_id + "'", new Object[]{updatePerson(docent)}, new int[]{Types.INTEGER});
     }
-    public static void updateAddress(Address address, int address_id){
-        //check in person/company ob doppelte belegung
+
+    /**
+     * To update the values of the course in the database
+     *
+     * @param course new course values
+     * @return course identification
+     */
+    public static int updateCourse(Course course) {
+        setToDatabase("UPDATE course SET room = ?, name = ?, registry_date = ?, course_type = ?, study_director_id = ?, representative_student_id = ? WHERE course.course_id = '" + getCourseID(course) + "'", new Object[]{getRoomID(course.getRoom()), course.getName(), (new Timestamp(course.getRegistrationDate().getTime())), getCourseTypeID(course.getStudyCourse()), course.getStudyDirector().getDocentNumber(), course.getCourseSpeakerID()}, new int[]{Types.INTEGER, Types.VARCHAR, Types.DATE, Types.INTEGER, Types.INTEGER, Types.INTEGER});
+        return getCourseID(course);
+    }
+
+    //---------------------------DeleteObjectInDatabase---------------------
+
+    /**
+     * To delete a student in the database
+     *
+     * @param student   studetn to delete
+     * @param studentID student identification to delete
+     */
+    public static void deleteStudent(DualStudent student, int studentID) {
+        setToDatabase("DELETE FROM student WHERE student.student_id = '" + studentID + "'", null, null);
+
+        int person_id = getPersonID(student);
+        Object[][] help = getFromDatabase("SELECT * FROM student WHERE student.person_id = '" + person_id + "' UNION SELECT * FROM docent WHERE docent.person_id '" + person_id + "'");
+        if (help != null && help.length == 1)
+            deletePerson(student);
+
+        deleteCourse(student.getCourse());
+
+        deleteCompany(student.getCompany());
+    }
+
+    /**
+     * To delete a docent in the database
+     *
+     * @param docent   docent to delete
+     * @param docentID docent identification to delete
+     */
+    public static void deleteDocent(Docent docent, int docentID) {
+        setToDatabase("DELETE FROM docent WHERE docent.docent_id = '" + docentID + "'", null, null);
+
+        int person_id = getPersonID(docent);
+        Object[][] help = getFromDatabase("SELECT * FROM student WHERE student.person_id = '" + person_id + "' UNION SELECT * FROM docent WHERE docent.person_id '" + person_id + "'");
+        if (help != null && help.length == 1)
+            deletePerson(docent);
+    }
+
+    /**
+     * To delete a course in the database
+     *
+     * @param course course to delete
+     */
+    public static void deleteCourse(Course course) {
+        setToDatabase("DELETE FROM course WHERE course.course_id = '" + getCourseID(course) + "'", null, null);
     }
 
     //----------------------private-------------------------------------------
@@ -188,66 +262,82 @@ public class Database {
         return Integer.MIN_VALUE;
     }
 
-    private static int setCompanyToDatabase(Company company) {
-        int address_id = setAddressToDatabase(company.getAddress());
-        int contact_id = setPersonToDatabase(company.getContactPerson());
-        Object[][] help = getFromDatabase("SELECT * FROM company WHERE name = '" + company.getName() + "' AND adress_id = '" + address_id + "' AND contact_person_id = '" + contact_id + "'");
-        if (help != null && help.length > 0) return Integer.MIN_VALUE;
-        setToDatabase("INSERT INTO company (name, adress_id, contact_person_id) VALUES (?, ?, ?)", new Object[]{company.getName(), address_id, contact_id}, new int[]{Types.VARCHAR, Types.INTEGER, Types.INTEGER});
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException ignored) {
-        }
-        Object[][] erg = getFromDatabase("SELECT * FROM company WHERE company.name = '" + company.getName() + "'");
+    private static int getPersonID(Person person) {
+        Object[][] erg = getFromDatabase("SELECT * FROM person WHERE person.last_name = '" + person.getName() + "' AND person.first_name = '" + person.getForeName() + "' AND person.birthdate = '" + (new Timestamp(person.getBirthday().getTime())) + "' AND person.email = '" + person.getEmail() + "' AND person.address_id = '" + getAddressID(person.getAddress()) + "'");
         if (erg != null)
             return (int) erg[erg.length - 1][0];
         return Integer.MIN_VALUE;
     }
 
-    private static int setPersonToDatabase(Person person) {
-        int address_id = setAddressToDatabase(person.getAddress());
-        Object[][] help = getFromDatabase("SELECT * FROM person WHERE person.last_name = '" + person.getName() + "' AND person.firts_name = '" + person.getForeName() + "' AND person.birthdate = '" + (new Timestamp(person.getBirthday().getTime())) + "' AND person.email = '" + person.getEmail() + "' AND person.adress_id = '" + address_id + "'");
-        if (help != null && help.length > 0) return (int) help[0][0];
-        setToDatabase("INSERT INTO person (first_name, last_name, birthdate, email, adress_id) VALUES (?, ?, ?, ?, ?)", new Object[]{person.getForeName(), person.getName(), person.getBirthday(), person.getEmail(), address_id}, new int[]{Types.VARCHAR, Types.VARCHAR, Types.DATE, Types.VARCHAR, Types.INTEGER});
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException ignored) {
-        }
-        Object[][] erg = getFromDatabase("SELECT * FROM person WHERE person.last_name = '" + person.getName() + "'");
+    private static int getAddressID(Address address) {
+        Object[][] erg = getFromDatabase("SELECT * FROM address WHERE street = '" + address.getStreet() + "' AND number = '" + address.getNumber() + "' AND postal_code = '" + address.getPostcode() + "' AND city = '" + address.getCity() + "' AND country = '" + address.getCountry() + "'");
         if (erg != null)
             return (int) erg[erg.length - 1][0];
         return Integer.MIN_VALUE;
+    }
+
+    private static int getCourseID(Course course) {
+        Object[][] erg = getFromDatabase("SELECT * FROM course WHERE room = '" + getRoomID(course.getRoom()) + "' AND name = '" + course.getName() + "' AND registry_date = '" + (new Timestamp(course.getRegistrationDate().getTime())) + "' AND course_type = '" + getCourseTypeID(course.getStudyCourse()) + "' AND study_director_id = '" + course.getStudyDirector().getDocentNumber() + "' AND representative_student_id = '" + course.getCourseSpeakerID() + "'");
+        if (erg != null)
+            return (int) erg[erg.length - 1][0];
+        return Integer.MIN_VALUE;
+    }
+
+    private static int getCompanyID(Company company) {
+        Object[][] erg = getFromDatabase("SELECT * FROM company WHERE name = '" + company.getName() + "' AND address_id = '" + getAddressID(company.getAddress()) + "' AND contact_person_id = '" + getPersonID(company.getContactPerson()) + "'");
+        if (erg != null)
+            return (int) erg[erg.length - 1][0];
+        return Integer.MIN_VALUE;
+    }
+
+
+    private static int setPersonToDatabase(Person person) {
+        int personID = getPersonID(person);
+        if (personID == Integer.MIN_VALUE) {
+            setToDatabase("INSERT INTO person (first_name, last_name, birthdate, email, address_id) VALUES (?, ?, ?, ?, ?)", new Object[]{person.getForeName(), person.getName(), person.getBirthday(), person.getEmail(), setAddressToDatabase(person.getAddress())}, new int[]{Types.VARCHAR, Types.VARCHAR, Types.DATE, Types.VARCHAR, Types.INTEGER});
+            sleep100();
+        }
+        return personID == Integer.MIN_VALUE ? getPersonID(person) : personID;
     }
 
     private static int setAddressToDatabase(Address address) {
-        Object[][] help = getFromDatabase("SELECT * FROM adress WHERE street = '" + address.getStreet() + "' AND number = '" + address.getNumber() + "' AND postal_code = '" + address.getPostcode() + "' AND city = '" + address.getCity() + "' AND country = '" + address.getCountry() + "'");
-        if (help != null && help.length > 0) return (int) help[0][0];
-        setToDatabase("INSERT INTO adress (street, number, postal_code, city, country) VALUES (?, ?, ?, ?, ?)", new Object[]{address.getStreet(), address.getNumber(), address.getPostcode(), address.getCity(), address.getCity()}, new int[]{Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR});
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException ignored) {
+        int addressID = getAddressID(address);
+        if (addressID == Integer.MIN_VALUE) {
+            setToDatabase("INSERT INTO address (street, number, postal_code, city, country) VALUES (?, ?, ?, ?, ?)", new Object[]{address.getStreet(), address.getNumber(), address.getPostcode(), address.getCity(), address.getCity()}, new int[]{Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR});
+            sleep100();
         }
-        Object[][] erg = getFromDatabase("SELECT * FROM adress WHERE adress.street = '" + address.getStreet() + "'");
-        if (erg != null)
-            return (int) erg[erg.length - 1][0];
-        return Integer.MIN_VALUE;
+        return addressID == Integer.MIN_VALUE ? getAddressID(address) : addressID;
     }
 
     private static int setCourseToDatabase(Course course) {
-        int roomID = getRoomID(course.getRoom());
-        int courseTypeID = getCourseTypeID(course.getStudyCourse());
-        Timestamp registry = new Timestamp(course.getRegistrationDate().getTime());
-        Object[][] help = getFromDatabase("SELECT * FROM course WHERE room = '" + roomID + "' AND name = '" + course.getName() + "' AND registry_date = '" + registry + "' AND course_type = '" + courseTypeID + "' AND study_director_id = '" + course.getStudyDirector().getDocentNumber() + "' AND representative_student_id = '" + course.getCourseSpeaker() + "'");
-        if (help != null && help.length > 0) return (int) help[0][0];
-        setToDatabase("INSERT INTO course (room, name, registry_date, course_type, study_director_id, representative_student_id) VALUES (?, ?, ?, ?, ?, ?)", new Object[]{roomID, course.getName(), registry, courseTypeID, course.getStudyDirector().getDocentNumber(), course.getCourseSpeaker()}, new int[]{Types.INTEGER, Types.VARCHAR, Types.DATE, Types.INTEGER, Types.INTEGER, Types.INTEGER});
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException ignored) {
+        int courseID = getCourseID(course);
+        if (courseID == Integer.MIN_VALUE) {
+            setToDatabase("INSERT INTO course (room, name, registry_date, course_type, study_director_id, representative_student_id) VALUES (?, ?, ?, ?, ?, ?)", new Object[]{getRoomID(course.getRoom()), course.getName(), (new Timestamp(course.getRegistrationDate().getTime())), getCourseTypeID(course.getStudyCourse()), course.getStudyDirector().getDocentNumber(), course.getCourseSpeakerID()}, new int[]{Types.INTEGER, Types.VARCHAR, Types.DATE, Types.INTEGER, Types.INTEGER, Types.INTEGER});
+            sleep100();
         }
-        Object[][] erg = getFromDatabase("SELECT * FROM adress WHERE course.name = '" + course.getName() + "'");
-        if (erg != null)
-            return (int) erg[erg.length - 1][0];
-        return Integer.MIN_VALUE;
+        return courseID == Integer.MIN_VALUE ? getCourseID(course) : courseID;
+    }
+
+    private static int setCompanyToDatabase(Company company) {
+        int companyID = getCompanyID(company);
+        if (companyID == Integer.MIN_VALUE) {
+            setToDatabase("INSERT INTO company (name, address_id, contact_person_id) VALUES (?, ?, ?)", new Object[]{company.getName(), setAddressToDatabase(company.getAddress()), setPersonToDatabase(company.getContactPerson())}, new int[]{Types.VARCHAR, Types.INTEGER, Types.INTEGER});
+            sleep100();
+        }
+        return companyID == Integer.MIN_VALUE ? getCompanyID(company) : companyID;
+    }
+
+
+    private static Address getAddressByID(int id) {
+        Object[][] address = getFromDatabase("SELECT * FROM address WHERE address_id = '" + id + "'");
+        if (address == null) return null;
+        return new Address((String) address[0][1], (String) address[0][2], (String) address[0][3], (String) address[0][4], (String) address[0][5]);
+    }
+
+    private static Course getCourseByID(int id) {
+        Object[][] courses = getFromDatabase("SELECT * FROM course WHERE course_id = '" + id + "' LEFT JOIN student on course.representative_student_id = student.student_id LEFT JOIN person ON student.person_id = person.person_id");
+        if (courses == null) return null;
+        return new Course((String) courses[0][2], StudyCourse.BWL.getDeclaringClass().getEnumConstants()[(int) courses[0][4]], getDocentByID((int) courses[0][5]), (int) courses[0][7], new Date(((Timestamp) courses[0][3]).getTime()), CourseRoom.A222.getDeclaringClass().getEnumConstants()[(int) courses[0][1]]);
     }
 
     private static Company getCompanyByID(int id) {
@@ -259,18 +349,63 @@ public class Database {
     private static Docent getDocentByID(int id) {
         Object[][] docent = getFromDatabase("SELECT * FROM docent WHERE docent_id = '" + id + "' LEFT JOIN person ON docent.person_id = person.person_id");
         if (docent == null) return null;
-        return new Docent((String) docent[0][4], (String) docent[0][3], new Date(((Timestamp) docent[0][5]).getTime()), getAddressByID((int) docent[0][7]), (String) docent[0][6], (String) docent[0][0]);
+        return new Docent((String) docent[0][4], (String) docent[0][3], new Date(((Timestamp) docent[0][5]).getTime()), getAddressByID((int) docent[0][7]), (String) docent[0][6], (int) docent[0][0]);
     }
 
-    private static Address getAddressByID(int id) {
-        Object[][] address = getFromDatabase("SELECT * FROM adress WHERE address_id = '" + id + "'");
-        if (address == null) return null;
-        return new Address((String) address[0][1], (String) address[0][2], (String) address[0][3], (String) address[0][4], (String) address[0][5]);
+
+    private static int updatePerson(Person person) {
+        setToDatabase("UPDATE person SET first_name = ?, last_name = ?, birthdate = ?, email = ?, address_id = ? WHERE person.person_id = '" + getPersonID(person) + "'", new Object[]{person.getForeName(), person.getName(), person.getBirthday(), person.getEmail(), updateAddress(person.getAddress())}, new int[]{Types.VARCHAR, Types.VARCHAR, Types.DATE, Types.VARCHAR, Types.INTEGER});
+        return getPersonID(person);
     }
 
-    private static Course getCourseByID(int id) {
-        Object[][] courses = getFromDatabase("SELECT * FROM course WHERE course_id = '" + id + "' LEFT JOIN student on course.representative_student_id = student.student_id LEFT JOIN person ON student.person_id = person.person_id");
-        if (courses == null) return null;
-        return new Course((String) courses[0][2], StudyCourse.BWL.getDeclaringClass().getEnumConstants()[(int) courses[0][4]], getDocentByID((int) courses[0][5]), (int) courses[0][7], new Date(((Timestamp) courses[0][3]).getTime()), CourseRoom.A222.getDeclaringClass().getEnumConstants()[(int) courses[0][1]]);
+    private static int updateAddress(Address address) {
+        int address_id = getAddressID(address);
+        Object[][] help = getFromDatabase("SELECT * FROM person WHERE person.address_id = '" + address_id + "' UNION SELECT * FROM company WHERE company.address_id = '" + address_id + "'");
+        if (help != null && help.length > 0)
+            return setAddressToDatabase(address);
+        setToDatabase("UPDATE address SET street = ?, number = ?, postal_code = ?, city = ?, country = ? WHERE address.address_id = '" + address_id + "'", new Object[]{address.getStreet(), address.getNumber(), address.getPostcode(), address.getCity(), address.getCity()}, new int[]{Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR});
+        return getAddressID(address);
+    }
+
+    private static int updateCompany(Company company) {
+        setToDatabase("UPDATE company SET name = ?. address_id = ?, contact_person_id = ? WHERE company.company_id = '" + getCompanyID(company) + "'", new Object[]{company.getName(), setAddressToDatabase(company.getAddress()), setPersonToDatabase(company.getContactPerson())}, new int[]{Types.VARCHAR, Types.INTEGER, Types.INTEGER});
+        return getCompanyID(company);
+    }
+
+
+    private static void deletePerson(Person person) {
+        setToDatabase("DELETE FROM person WHERE person.person_id = '" + getPersonID(person) + "'", null, null);
+        int address_id = getAddressID(person.getAddress());
+        Object[][] help = getFromDatabase("SELECT * FROM person WHERE person.address_id = '" + address_id + "' UNION SELECT * FROM company WHERE company.address_id = '" + address_id + "'");
+        if (help == null) return;
+        if (help.length == 1)
+            deleteAddress(address_id);
+    }
+
+    private static void deleteAddress(int addressID) {
+        setToDatabase("DELETE FROM address WHERE address.address_id = '" + addressID + "'", null, null);
+    }
+
+    private static void deleteCompany(Company company) {
+        setToDatabase("DELETE FROM company WHERE company.company_id = '" + getCompanyID(company) + "'", null, null);
+
+        int address_id = getAddressID(company.getAddress());
+        Object[][] help = getFromDatabase("SELECT * FROM person WHERE person.address_id = '" + address_id + "' UNION SELECT * FROM company WHERE company.address_id = '" + address_id + "'");
+        if (help != null && help.length == 1)
+            deleteAddress(address_id);
+
+        int person_id = getPersonID(company.getContactPerson());
+        help = getFromDatabase("SELECT * FROM student WHERE student.person_id = '" + person_id + "' UNION SELECT * FROM docent WHERE docent.person_id '" + person_id + "'");
+        if (help == null || help.length == 0)
+            deletePerson(company.getContactPerson());
+    }
+
+
+    private static void sleep100() {
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
