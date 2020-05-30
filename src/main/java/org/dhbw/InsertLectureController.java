@@ -5,6 +5,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.dhbw.classes.Address;
+import org.dhbw.classes.Check;
 import org.dhbw.classes.Docent;
 import org.dhbw.classes.Person;
 
@@ -64,13 +65,13 @@ public class InsertLectureController {
         int focusStage = 0;
         errorMessage.setText("Bitte korrigieren Sie die Fehler in folgenden Feldern");
 
-        if (!Person.validateEmail(lectureEmail.getText())) {
+        if (!Check.validateEmail(lectureEmail.getText())) {
             lectureEmail.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
             focusStage = 1;
             errorMessage.setText(errorMessage.getText() + " E-mail-Adresse ");
 
         } else lectureEmail.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgba(43, 56, 112, 0.9) rgba(0,0,0,0)");
-        if (!Person.validatePostalCode(lecturePostalCode.getText())) {
+        if (!Check.validatePostalCode(lecturePostalCode.getText())) {
             lecturePostalCode.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
             if (focusStage != 1) focusStage = 2;
             errorMessage.setText(errorMessage.getText() + " Postleitzahl ");

@@ -149,17 +149,17 @@ public class InsertStudentController {
                 company = new Company(companyName.getText(), companyAddress, contactPerson);
             }
         }
-        if (!Person.validateEmail(studentEmail.getText())) {
+        if (!Check.validateEmail(studentEmail.getText())) {
             studentEmail.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
             focusStage = 1;
             errorMessage.setText(errorMessage.getText() + " E-Mail-Adresse ");
         } else studentEmail.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
-        if (!Person.validatePostalCode(studentPostalCode.getText())) {
+        if (!Check.validatePostalCode(studentPostalCode.getText())) {
             studentPostalCode.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
             if (focusStage != 1) focusStage = 2;
             errorMessage.setText(errorMessage.getText() + " Student-Postleitzahl ");
         } else studentPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
-        if (!Person.validatePostalCode(companyPostalCode.getText())) {
+        if (!Check.validatePostalCode(companyPostalCode.getText())) {
             companyPostalCode.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
             if (!(focusStage == 1 || focusStage == 2)) focusStage = 3;
             errorMessage.setText(errorMessage.getText() + " Unternehmen-Postleitzahl ");

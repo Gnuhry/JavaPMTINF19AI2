@@ -128,7 +128,7 @@ public class Database {
         if (help == null) return null;
         DualStudent[] erg = new DualStudent[help.length];
         for (int f = 0; f < erg.length; f++)
-            erg[f] = new DualStudent((int) help[f][1], "" + help[f][0], (String) help[f][8], (String) help[f][7], new Date(((Timestamp) help[f][9]).getTime()), getAddressByID((int) help[f][11]), (String) help[f][10], getCourseByID((int) help[f][4]), (int) help[f][3], getCompanyByID((int) help[f][5]));
+            erg[f] = new DualStudent((int) help[f][1], (int) help[f][0], (String) help[f][8], (String) help[f][7], new Date(((Timestamp) help[f][9]).getTime()), getAddressByID((int) help[f][11]), (String) help[f][10], getCourseByID((int) help[f][4]), (int) help[f][3], getCompanyByID((int) help[f][5]));
         return erg;
     }
 

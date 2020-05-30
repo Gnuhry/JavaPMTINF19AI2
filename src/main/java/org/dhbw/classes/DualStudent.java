@@ -7,7 +7,7 @@ import java.util.Objects;
 public class DualStudent extends Person {
     private final Company company;
     private int matriculationNumber; //TODO automatic? or manuel with constructer?
-    private String studentNumber;
+    private int studentNumber;
     private Course course;
     private int javaKnowledge;
 
@@ -18,7 +18,7 @@ public class DualStudent extends Person {
         javaKnowledge = 0;
     }
 
-    public DualStudent(int matriculationNumber, String studentNumber, String name, String forename, Date birthday, Address address, String email, Course course, int javaKnowledge, Company company) {
+    public DualStudent(int matriculationNumber, int studentNumber, String name, String forename, Date birthday, Address address, String email, Course course, int javaKnowledge, Company company) {
         super(name, forename, birthday, address, email);
         this.matriculationNumber = matriculationNumber;
         this.studentNumber = studentNumber;
@@ -41,7 +41,7 @@ public class DualStudent extends Person {
         return matriculationNumber;
     }
 
-    public String getStudentNumber() {
+    public int getStudentNumber() {
         return studentNumber;
     }
 
