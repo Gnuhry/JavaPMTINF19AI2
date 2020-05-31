@@ -17,7 +17,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="600.0" maxWidth="1080.0" minHeight="600.0" minWidth="1080.0" prefHeight="600.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.InsertCoursController">
+<AnchorPane maxHeight="600.0" maxWidth="1080.0" minHeight="600.0" minWidth="1080.0" prefHeight="600.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.InsertCourseController">
    <children>
       <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" opacity="0.05" prefHeight="600.0" prefWidth="1080.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
@@ -62,37 +62,37 @@
             <HBox spacing="170.0">
                <children>
                   <Label alignment="BASELINE_LEFT" prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="Bezeichnung" />
-                  <TextField prefWidth="250.0" stylesheets="@css/application.css" />
+                  <TextField fx:id="courseName" prefWidth="250.0" stylesheets="@css/application.css" />
                </children>
             </HBox>
             <HBox spacing="170.0">
                <children>
                   <Label prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="Kursart" />
-                  <ComboBox prefWidth="150.0" promptText="Kursart auswählen" stylesheets="@css/application.css" />
+                  <ComboBox fx:id="courseType" prefWidth="150.0" promptText="Kursart auswählen" stylesheets="@css/application.css" />
                </children>
             </HBox>
             <HBox prefHeight="26.0" prefWidth="746.0" spacing="170.0">
                <children>
                   <Label prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="Raum" />
-                  <ComboBox prefWidth="150.0" promptText="Raum auswählen" stylesheets="@css/application.css" />
+                  <ComboBox fx:id="courseRoom" prefWidth="150.0" promptText="Raum auswählen" stylesheets="@css/application.css" />
                </children>
             </HBox>
             <HBox spacing="150.0">
                <children>
                   <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@css/application.css" text="Registrierungsdatum" />
-                  <DatePicker promptText="dd.mm.yyyy" stylesheets="@css/application.css" />
+                  <DatePicker fx:id="courseDate" editable="false" promptText="dd.mm.yyyy" stylesheets="@css/application.css" />
                </children>
             </HBox>
             <HBox spacing="150.0">
                <children>
                   <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@css/application.css" text="Kurssprecher*in" />
-                  <ComboBox prefHeight="26.0" prefWidth="173.0" promptText="Kurssprecher auswählen" stylesheets="@css/application.css" />
+                  <ComboBox fx:id="courseRepresent" prefHeight="26.0" prefWidth="173.0" promptText="Kurssprecher auswählen" stylesheets="@css/application.css" />
                </children>
             </HBox>
             <HBox spacing="150.0">
                <children>
                   <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@css/application.css" text="Studiengangsleitung" />
-                  <ComboBox prefHeight="26.0" prefWidth="224.0" promptText="Studiengangsleitung auswählen" stylesheets="@css/application.css" />
+                  <ComboBox fx:id="courseDirector" prefHeight="26.0" prefWidth="224.0" promptText="Studiengangsleitung auswählen" stylesheets="@css/application.css" />
                </children>
             </HBox>
          </children>
