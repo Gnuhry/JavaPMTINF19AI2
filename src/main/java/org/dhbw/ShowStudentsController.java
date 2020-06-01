@@ -13,12 +13,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import org.dhbw.classes.*;
 
 public class ShowStudentsController {
-
-    University dhbw = new University();
-
     private ObservableList<DualStudent> data = FXCollections.observableArrayList(
-            dhbw.getStudents()
-            //new DualStudent(1234567, 123456, "Wessely", "Silas", new Date(2000, 5,27), new Address("Oestricher Straße", "42", "65719", "Hofheim", "Deutschland"), "silas.wessely@gmx.de", new Course("TINF19AI2", StudyCourse.AInformatik, new Date(1965, 1,1)), 75, new Company("Alnatura", new Address("Test", "1", "12345", "Test", "Test"), new Person("Janina", "Hofmann")))
+            University.getStudents()
     );
     private ObservableList<Course> filterCourseOptions = FXCollections.observableArrayList(
             new Course("TINF19AI2", StudyCourse.AInformatik, new Date(119, Calendar.OCTOBER, 1))
@@ -86,8 +82,6 @@ public class ShowStudentsController {
 
     @FXML
     private void initialize() {
-
-
         studentNumber.setCellValueFactory(new PropertyValueFactory<>("studentNumber"));
         studentName.setCellValueFactory(new PropertyValueFactory<>("name"));
         studentForename.setCellValueFactory(new PropertyValueFactory<>("forename"));
@@ -106,6 +100,16 @@ public class ShowStudentsController {
         courseFilterBox.getItems().setAll(filterCourseOptions);
         companyFilterBox.getItems().setAll(filterCompanyOptions);
         groupFilterBox.getItems().setAll("Studierende", "Dozenten", "Kurse", "Unternehmen");
+    }
+
+    @FXML
+    private void change() {
+        System.out.println("hallo");
+    }
+
+    @FXML
+    private void delete() {
+        System.out.println("tschüss");
     }
 
 }

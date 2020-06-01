@@ -15,11 +15,14 @@ import java.io.IOException;
 public class App extends Application {
 
     private static Scene scene;
+    private static University dhbw = new University();
+
 
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("primary"));
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 
