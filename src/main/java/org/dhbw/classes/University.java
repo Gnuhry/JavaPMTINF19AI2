@@ -1,5 +1,6 @@
 package org.dhbw.classes;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,24 +13,39 @@ public class University {
 
     //-----------------------------Getter---------------------
 
-    public List<Docent> getDocents() {
-        Docent[] docent_array = Database.loadAllDocents();
+    public static List<Docent> getDocents() {
+        Docent[] docent_array = new Docent[0];
+        try {
+            docent_array = Database.getAllDocent();
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
         if (docent_array != null)
             return Arrays.asList(docent_array);
         else
             return new ArrayList<>();
     }
 
-    public List<DualStudent> getStudents() {
-        DualStudent[] student_array = Database.loadAllStudents();
+    public static List<DualStudent> getStudents() {
+        DualStudent[] student_array = new DualStudent[0];
+        try {
+            student_array = Database.getAllStudent();
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
         if (student_array != null)
             return Arrays.asList(student_array);
         else
             return new ArrayList<>();
     }
 
-    public List<Course> getCourses() {
-        Course[] course_array = Database.loadAllCourses(Database.loadAllDocents());
+    public static List<Course> getCourses() {
+        Course[] course_array = new Course[0];
+        try {
+            course_array = Database.getAllCourse();
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
         if (course_array != null)
             return Arrays.asList(course_array);
         else
@@ -39,62 +55,110 @@ public class University {
 
     //-------------------------------Add------------------------
 
-    public void addDocent(Docent d) {
-        Database.setDocentsToDatabase(new Docent[]{d});
+    public static void addDocent(Docent d) {
+        try {
+            Database.setDocent(d);
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
-    public void addStudent(DualStudent s) {
-        Database.setStudentsToDatabase(new DualStudent[]{s});
+    public static void addStudent(DualStudent s) {
+        try {
+            Database.setStudent(s);
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
-    public void addCourse(Course c) {
-        Database.setCoursesToDatabase(new Course[]{c});
+    public static void addCourse(Course c) {
+        try {
+            Database.setCourse(c);
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
     //-------------------------------IS-------------------------
-    public boolean isDocent(Docent d) {
-        int d2 = Database.getDocentID(d);
-        return d2 != Integer.MIN_VALUE;
+    public static boolean isDocent(Docent d) {
+        try {
+            return Database.hasDocent(d);
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
     }
 
-    public boolean isStudent(DualStudent s) {
-        int s2 = Database.getStudentID(s);
-        return s2 != Integer.MIN_VALUE;
+    public static boolean isStudent(DualStudent s) {
+        try {
+            return Database.hasStudent(s);
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
     }
 
-    public boolean isCourse(Course c) {
-        int c2 = Database.getCourseID(c);
-        return c2 != Integer.MIN_VALUE;
+    public static boolean isCourse(Course c) {
+        try {
+            return Database.hasCourse(c);
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
     }
 
     //-----------------------------Remove----------------------
-    public void removeDocent(Docent d) {
-        Database.deleteDocent(d, d.getDocentNumber());
+    public static void removeDocent(Docent d) {
+        try {
+            Database.deleteDocent(d);
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
-    public void removeStudent(DualStudent s) {
-        Database.deleteStudent(s, s.getStudentNumber());
+    public static void removeStudent(DualStudent s) {
+        try {
+            Database.deleteStudent(s);
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
-    public void removeCourse(Course c) {
-        Database.deleteCourse(c);
+    public static void removeCourse(Course c) {
+        try {
+            Database.deleteCourse(c);
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
     //------------------------------Update-----------------
-    public void updateDocent(Docent d) {
-        Database.updateDocent(d, d.getDocentNumber());
+    public static void updateDocent(Docent d) {
+        try {
+            Database.updateDocent(d, d.getDocentNumber());
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
-    public void updateStudent(DualStudent s) {
-        Database.updateStudent(s, s.getStudentNumber());
+    public static void updateStudent(DualStudent s) {
+        try {
+            Database.updateStudent(s, s.getStudentNumber());
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
-    public void updateCourse(Course c) {
-        Database.updateCourse(c);
+    public static void updateCourse(Course c) {
+        try {
+            Database.updateCourse(c, Database.getCourseID(c));
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
 
-    public void exmatriculation(DualStudent s) {
+    public static void exmatriculation(DualStudent s) {
         removeStudent(s);
     }
 }

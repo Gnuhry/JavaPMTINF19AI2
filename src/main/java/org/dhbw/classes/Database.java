@@ -1,8 +1,11 @@
 package org.dhbw.classes;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Database {
+    private static Connection connection;
 
     //----------------------------------------General----------------------------
 
@@ -12,9 +15,13 @@ public class Database {
      * @return the open connection
      */
     public static Connection getConnection() throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.jdbc.Driver");
-        return DriverManager.getConnection(
-                "jdbc:mysql://85.214.247.101:3306/dhbw", "mlg_dhbw", "Reisebus1!");
+        if (connection == null) {
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection(
+                    "jdbc:mysql://85.214.247.101:3306/dhbw", "mlg_dhbw", "Reisebus1!");
+        }
+        return connection;
+
     }
 
     /**
@@ -23,266 +30,414 @@ public class Database {
      * @param command the sql select command to get the values
      * @return all the values from the commands. [row][column]. if no value return null
      */
-    public static Object[][] getFromDatabase(String command) {
-        try {
-            Connection con = getConnection();
-            Statement statement = con.createStatement();
-            ResultSet resultSet = statement.executeQuery(command);
-            int count = resultSet.getMetaData().getColumnCount();
-            int rowCount = 0;
-            if (resultSet.last()) {
-                rowCount = resultSet.getRow();
-                resultSet.beforeFirst();
-            }
-            Object[][] o = new Object[rowCount][count];
-
-            while (resultSet.next())
-                for (int i = 1; i <= count; i++)
-                    o[resultSet.getRow() - 1][i - 1] = resultSet.getObject(i);
-            resultSet.close();
-            statement.close();
-            con.close();
-            return o;
-        } catch (SQLException | ClassNotFoundException throwable) {
-            throwable.printStackTrace();
-        }
-        return null;
+    public static ResultSet getFromDatabase(String command) throws SQLException, ClassNotFoundException {
+        Connection con = getConnection();
+        Statement statement = con.createStatement();
+        ResultSet resultSet = statement.executeQuery(command);
+        return resultSet;
     }
 
     /**
      * To send a insert command to database
      *
-     * @param command the sql insert, update, delete command to set the values with ? in the value brackets for example: INSERT INTO table (x,y) VALUES (?, ?)
-     * @param objects the values
-     * @param set     the sql types of the values
+     * @param preparedStatement
      */
-    public static void setToDatabase(String command, Object[] objects, int[] set) {
-        if (objects == null) objects = new Object[0];
-        if (set == null) set = new int[0];
+    public static void setToDatabase(PreparedStatement preparedStatement) {
         try {
             Connection con = getConnection();
-            PreparedStatement preparedStatement = con.prepareStatement(command);
-            for (int f = 0; f < objects.length && f < set.length; f++)
-                preparedStatement.setObject(f + 1, objects[f], set[f]);
             preparedStatement.executeUpdate();
-            preparedStatement.close();
-            con.close();
         } catch (SQLException | ClassNotFoundException throwable) {
             throwable.printStackTrace();
         }
     }
 
-    //--------------------------------SetObjectToDatabase-----------------------
+    //--------------------------------hasObject-----------------------
+    public static boolean hasStudent(DualStudent student) throws SQLException, ClassNotFoundException {
+        return !getFromDatabase("SELECT student_id FROM student WHERE student_id = " + student.getStudentNumber()).next();
+    }
 
-    /**
-     * To send all students to the database
-     *
-     * @param students the students
-     */
-    public static void setStudentsToDatabase(DualStudent[] students) {
-        if (students == null) return;
-        for (DualStudent student : students) {
-            Object[][] help = getFromDatabase("SELECT * FROM student WHERE student.student_id = " + student.getStudentNumber());
-            if (help != null && help.length > 0) return;
-            setToDatabase("INSERT INTO STUDENT (student_id, matriculation_number, person_id, java_knowledge, course_id, company_id) VALUES (?, ?, ?, ?, ?, ?)", new Object[]{student.getStudentNumber(), student.getMatriculationNumber(), setPersonToDatabase(student), student.getJavaKnowledge(), setCourseToDatabase(student.getCourse()), setCompanyToDatabase(student.getCompany())}, new int[]{Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER});
+    public static boolean hasDocent(Docent docent) throws SQLException, ClassNotFoundException {
+        return !getFromDatabase("SELECT docent_id FROM docent WHERE docent_id = " + docent.getDocentNumber()).next();
+    }
+
+    public static boolean hasCourse(Course course) throws SQLException, ClassNotFoundException {
+        return getCourseID(course) != Integer.MIN_VALUE;
+    }
+
+    private static boolean hasAddress(Address address) throws SQLException, ClassNotFoundException {
+        return getAddressID(address) != Integer.MIN_VALUE;
+    }
+
+    private static boolean hasPerson(Person person) throws SQLException, ClassNotFoundException {
+        return getPersonID(person) != Integer.MIN_VALUE;
+    }
+
+    private static boolean hasCompany(Company company) throws SQLException, ClassNotFoundException {
+        return getCompanyID(company) != Integer.MIN_VALUE;
+    }
+
+
+    //--------------------------------getObjectID-----------------------
+    public static int getCourseID(Course course) throws SQLException, ClassNotFoundException {
+        ResultSet resultSet = getFromDatabase("SELECT course_id FROM course WHERE room = " + getRoomID(course.getRoom()) + " AND name = " + course.getName() + " AND registry_date = " + (new Timestamp(course.getRegistrationDate().getTime())) + " AND course_type = " + getCourseTypeID(course.getStudyCourse()) + " AND study_director_id = " + course.getStudyDirector().getDocentNumber() + " AND representative_student_id = " + course.getCourseSpeakerID());
+        return resultSet == null ? Integer.MIN_VALUE : resultSet.getInt(1);
+    }
+
+    private static int getAddressID(Address address) throws SQLException, ClassNotFoundException {
+        ResultSet resultSet = getFromDatabase("SELECT * FROM address WHERE street = " + address.getStreet() + " AND number = " + address.getNumber() + " AND postal_code = " + address.getPostcode() + " AND city = " + address.getCity() + " AND country = " + address.getCountry());
+        return resultSet == null ? Integer.MIN_VALUE : resultSet.getInt(1);
+    }
+
+    private static int getPersonID(Person person) throws SQLException, ClassNotFoundException {
+        ResultSet resultSet = getFromDatabase("SELECT * FROM person WHERE person.last_name = " + person.getName() + " AND person.first_name = " + person.getForeName() + " AND person.birthdate = " + (new Timestamp(person.getBirthday().getTime())) + " AND person.email = " + person.getEmail() + " AND person.address_id = " + getAddressID(person.getAddress()));
+        return resultSet == null ? Integer.MIN_VALUE : resultSet.getInt(1);
+    }
+
+    private static int getCompanyID(Company company) throws SQLException, ClassNotFoundException {
+        ResultSet resultSet = getFromDatabase("SELECT * FROM company WHERE name = " + company.getName() + " AND address_id = " + getAddressID(company.getAddress()) + " AND contact_person_id = " + getPersonID(company.getContactPerson()));
+        return resultSet == null ? Integer.MIN_VALUE : resultSet.getInt(1);
+    }
+
+    //--------------------------------setObject-----------------------
+    public static void setStudent(DualStudent student) throws SQLException, ClassNotFoundException {
+        if (!hasStudent(student)) {
+            PreparedStatement preparedStatement = getConnection().prepareStatement("INSERT INTO STUDENT (student_id, matriculation_number, person_id, java_knowledge, course_id, company_id) VALUES (?, ?, ?, ?, ?, ?)");
+            preparedStatement.setInt(1, student.getStudentNumber());
+            preparedStatement.setInt(2, student.getMatriculationNumber());
+            preparedStatement.setInt(3, setPerson(student));
+            preparedStatement.setInt(4, student.getJavaKnowledge());
+            preparedStatement.setInt(5, setCourse(student.getCourse()));
+            preparedStatement.setInt(6, setCompany(student.getCompany()));
+            setToDatabase(preparedStatement);
         }
     }
 
-    /**
-     * To send all docents to the database
-     *
-     * @param docents the docents
-     */
-    public static void setDocentsToDatabase(Docent[] docents) {
-        if (docents == null) return;
-        for (Docent docent : docents) {
-            Object[][] help = getFromDatabase("SELECT * FROM docent WHERE docent.docent_id = " + docent.getDocentNumber());
-            if (help != null && help.length > 0) return;
-            setToDatabase("INSERT INTO docent (docent_id, person_id) VALUES (?, ?)", new Object[]{docent.getDocentNumber(), setPersonToDatabase(docent)}, new int[]{Types.INTEGER, Types.INTEGER});
+    public static void setDocent(Docent docent) throws SQLException, ClassNotFoundException {
+        if (!hasDocent(docent)) {
+            PreparedStatement preparedStatement = getConnection().prepareStatement("INSERT INTO docent (docent_id, person_id) VALUES (?, ?)");
+            preparedStatement.setInt(1, docent.getDocentNumber());
+            preparedStatement.setInt(2, setPerson(docent));
+            setToDatabase(preparedStatement);
         }
     }
 
-    /**
-     * To send all courses to the database
-     *
-     * @param courses the courses
-     */
-    public static void setCoursesToDatabase(Course[] courses) {
-        if (courses == null) return;
-        for (Course course : courses)
-            setCourseToDatabase(course);
-    }
-
-    //----------------------------------LoadObjectFromDatabase---------------
-
-    /**
-     * To get all students from the database
-     *
-     * @return the students
-     */
-    public static DualStudent[] loadAllStudents() {
-        //        Object[][] help = getFromDatabank("SELECT * FROM student LEFT JOIN person ON student.person_id = person.person_id LEFT JOIN adress ON person.adress_id=adress.adress_id LEFT JOIN course ON student.course_id = course.course_id LEFT JOIN company ON person.company_id = company.company_id LEFT JOIN docent ON course.study_director_id");
-        //            erg[f] = new DualStudent((int) help[f][1], (int) help[f][0], (String) help[f][8], (String) help[f][7], new Date(((Timestamp) help[f][9]).getTime()), new Address((String) help[f][13], (String) help[f][14], (String) help[f][15], (String) help[f][16], (String) help[f][17]), (String) help[f][10], new Course((String) help[f][20], null, null, null, new Date(((Timestamp) help[f][21]).getTime()), null), (int) help[f][3], new Company((String) help[f][26], null, null));
-        //student id - marticelnr - personid - java - courseid - companyid - personid - firstname - secondname - birthday - email *-* adressid - adressid - street - number - postralcode - city - country - courseid - room - name *-* registrdate - coursetyp - studydirector - represanticeStudentID - Companyid - name - adressid - contactpersonid - docent_id - personid *-*
-        Object[][] help = getFromDatabase("SELECT * FROM student LEFT JOIN person ON student.person_id = person.person_id");
-        if (help == null) return null;
-        DualStudent[] erg = new DualStudent[help.length];
-        for (int f = 0; f < erg.length; f++)
-            erg[f] = new DualStudent((int) help[f][1], (int) help[f][0], (String) help[f][8], (String) help[f][7], new Date(((Timestamp) help[f][9]).getTime()), getAddressByID((int) help[f][11]), (String) help[f][10], getCourseByID((int) help[f][4]), (int) help[f][3], getCompanyByID((int) help[f][5]));
-        return erg;
-    }
-
-    /**
-     * To get all docents from the database
-     *
-     * @return the docents
-     */
-    public static Docent[] loadAllDocents() {
-        Object[][] help = getFromDatabase("SELECT * FROM docent LEFT JOIN person ON docent.person_id = person.person_id");
-        if (help == null) return null;
-        Docent[] erg = new Docent[help.length];
-        for (int f = 0; f < erg.length; f++)
-            erg[f] = new Docent((String) help[f][4], (String) help[f][3], new java.util.Date(((Timestamp) help[f][5]).getTime()), getAddressByID((int) help[f][7]), (String) help[f][6], (int) help[f][0]);
-        return erg;
-    }
-
-    /**
-     * To get all courses from the database
-     *
-     * @return the courses
-     */
-    public static Course[] loadAllCourses(Docent[] docents) {
-        Object[][] help = getFromDatabase("SELECT * FROM course");
-        if (help == null) return null;
-        Course[] erg = new Course[help.length];
-        Docent director;
-        for (int f = 0; f < erg.length; f++) {
-            director = null;
-            for (int g = 0; g < docents.length && director == null; g++)
-                if (docents[g].getDocentNumber() == (int) help[f][5])
-                    director = docents[g];
-            erg[f] = new Course((String) help[f][2], StudyCourse.AInformatik.getDeclaringClass().getEnumConstants()[(int) help[f][4]], director, (int) help[f][6], new java.util.Date(((Timestamp) help[f][3]).getTime()), CourseRoom.A222.getDeclaringClass().getEnumConstants()[(int) help[f][1]]);
+    public static int setCourse(Course course) throws SQLException, ClassNotFoundException {
+        if (!hasCourse(course)) {
+            PreparedStatement preparedStatement = getConnection().prepareStatement("INSERT INTO course (room, name, registry_date, course_type, study_director_id, representative_student_id) VALUES (?, ?, ?, ?, ?, ?)");
+            preparedStatement.setInt(1, getRoomID(course.getRoom()));
+            preparedStatement.setString(2, course.getName());
+            preparedStatement.setDate(3, new Date(course.getRegistrationDate().getTime()));
+            preparedStatement.setInt(4, getCourseTypeID(course.getStudyCourse()));
+            preparedStatement.setInt(5, course.getStudyDirector().getDocentNumber());
+            preparedStatement.setInt(6, course.getCourseSpeakerID());
+            setToDatabase(preparedStatement);
         }
-        return erg;
-    }
-
-    //-----------------------------UpdateObjectInDatabase-----------------
-
-    /**
-     * To update the values of the student in the database
-     *
-     * @param student    new student values
-     * @param student_id student identification
-     */
-    public static void updateStudent(DualStudent student, int student_id) {
-        setToDatabase("UPDATE student SET java_knowledge = ?, person_id = ?, course_id = ?, company_id = ? WHERE student.student_id = " + student_id, new Object[]{student.getJavaKnowledge(), updatePerson(student), updateCourse(student.getCourse()), updateCompany(student.getCompany())}, new int[]{Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER});
-    }
-
-    /**
-     * To update the values of the docent in the database
-     *
-     * @param docent    new docent values
-     * @param docent_id docent identification
-     */
-    public static void updateDocent(Docent docent, int docent_id) {
-        setToDatabase("UPDATE docent SET person_id = ? WHERE docent_id = " + docent_id, new Object[]{updatePerson(docent)}, new int[]{Types.INTEGER});
-    }
-
-    /**
-     * To update the values of the course in the database
-     *
-     * @param course new course values
-     * @return course identification
-     */
-    public static int updateCourse(Course course) {
-        setToDatabase("UPDATE course SET room = ?, name = ?, registry_date = ?, course_type = ?, study_director_id = ?, representative_student_id = ? WHERE course.course_id = " + getCourseID(course), new Object[]{getRoomID(course.getRoom()), course.getName(), (new Timestamp(course.getRegistrationDate().getTime())), getCourseTypeID(course.getStudyCourse()), course.getStudyDirector().getDocentNumber(), course.getCourseSpeakerID()}, new int[]{Types.INTEGER, Types.VARCHAR, Types.DATE, Types.INTEGER, Types.INTEGER, Types.INTEGER});
         return getCourseID(course);
     }
 
-    //---------------------------DeleteObjectInDatabase---------------------
-
-    /**
-     * To delete a student in the database
-     *
-     * @param student   studetn to delete
-     * @param studentID student identification to delete
-     */
-    public static void deleteStudent(DualStudent student, int studentID) {
-        setToDatabase("DELETE FROM student WHERE student.student_id = " + studentID, null, null);
-
-        int person_id = getPersonID(student);
-        Object[][] help = getFromDatabase("SELECT * FROM student WHERE student.person_id = " + person_id + " UNION SELECT * FROM docent WHERE docent.person_id " + person_id);
-        if (help != null && help.length == 1)
-            deletePerson(student);
-
-        deleteCourse(student.getCourse());
-
-        deleteCompany(student.getCompany());
+    private static int setAddress(Address address) throws SQLException, ClassNotFoundException {
+        if (!hasAddress(address)) {
+            PreparedStatement preparedStatement = getConnection().prepareStatement("INSERT INTO address (street, number, postal_code, city, country) VALUES (?, ?, ?, ?, ?)");
+            preparedStatement.setString(1, address.getStreet());
+            preparedStatement.setString(2, address.getNumber());
+            preparedStatement.setString(3, address.getPostcode());
+            preparedStatement.setString(4, address.getCity());
+            preparedStatement.setString(5, address.getCountry());
+            setToDatabase(preparedStatement);
+        }
+        return getAddressID(address);
     }
 
-    /**
-     * To delete a docent in the database
-     *
-     * @param docent   docent to delete
-     * @param docentID docent identification to delete
-     */
-    public static void deleteDocent(Docent docent, int docentID) {
-        setToDatabase("DELETE FROM docent WHERE docent.docent_id = " + docentID, null, null);
+    private static int setPerson(Person person) throws SQLException, ClassNotFoundException {
+        if (!hasPerson(person)) {
+            PreparedStatement preparedStatement = getConnection().prepareStatement("INSERT INTO person (first_name, last_name, birthdate, email, address_id) VALUES (?, ?, ?, ?, ?)");
+            preparedStatement.setString(1, person.getForeName());
+            preparedStatement.setString(2, person.getName());
+            preparedStatement.setDate(3, new Date(person.getBirthday().getTime()));
+            preparedStatement.setString(4, person.getEmail());
+            preparedStatement.setInt(5, setAddress(person.getAddress()));
+        }
+        return getPersonID(person);
+    }
 
-        int person_id = getPersonID(docent);
-        Object[][] help = getFromDatabase("SELECT * FROM student WHERE student.person_id = " + person_id + " UNION SELECT * FROM docent WHERE docent.person_id " + person_id);
-        if (help != null && help.length == 1)
+    private static int setCompany(Company company) throws SQLException, ClassNotFoundException {
+        if (!hasCompany(company)) {
+            PreparedStatement preparedStatement = getConnection().prepareStatement("INSERT INTO company (name, address_id, contact_person_id) VALUES (?, ?, ?)");
+            preparedStatement.setString(1, company.getName());
+            preparedStatement.setInt(2, setAddress(company.getAddress()));
+            preparedStatement.setInt(3, setPerson(company.getContactPerson()));
+            setToDatabase(preparedStatement);
+        }
+        return getCompanyID(company);
+    }
+
+    //--------------------------------getObject-----------------------
+    public static DualStudent getStudent(int id) throws SQLException, ClassNotFoundException {
+        ResultSet rs = getFromDatabase("SELECT * FROM student LEFT JOIN person ON student.person_id = person.person_id WHERE student_id = " + id);
+        if (rs.next())
+            return new DualStudent(rs.getInt("matriculation_number"), rs.getInt("student_id"), rs.getString("last_name"), rs.getString("first_name"), new java.util.Date(rs.getDate("birthdate").getTime()), getAddress(rs.getInt("address_id")), rs.getString("email"), getCourse(rs.getInt("course_id")), rs.getInt("java_knowlage"), getCompany(rs.getInt("company_id")));
+        return null;
+    }
+
+    public static Docent getDocent(int id) throws SQLException, ClassNotFoundException {
+        ResultSet rs = getFromDatabase("SELECT * FROM docent LEFT JOIN person ON docent.person_id = person.person_id WHERE docent_id = " + id);
+        if (rs.next())
+            return new Docent(rs.getString("last_name"), rs.getString("first_name"), new java.util.Date(rs.getDate("birthdate").getTime()), getAddress(rs.getInt("address_id")), rs.getString("email"), rs.getInt("docent_id"));
+        return null;
+    }
+
+    public static Course getCourse(int id) throws SQLException, ClassNotFoundException {
+        ResultSet rs = getFromDatabase("SELECT * FROM course WHERE course_id = " + id);
+        if (rs.next())
+            return new Course(rs.getString("name"), StudyCourse.AInformatik.getDeclaringClass().getEnumConstants()[rs.getInt("course_type")], getDocent(rs.getInt("study_director_id")), rs.getInt("study_director_id"), new java.util.Date(rs.getDate("registry_date").getTime()), CourseRoom.A222.getDeclaringClass().getEnumConstants()[rs.getInt("room")]);
+        return null;
+    }
+
+    private static Address getAddress(int id) throws SQLException, ClassNotFoundException {
+        ResultSet rs = getFromDatabase("SELECT * FROM address WHERE address_id = " + id);
+        if (rs.next())
+            return new Address(rs.getString("street"), rs.getString("number"), rs.getString("postal_code"), rs.getString("city"), rs.getString("country"));
+        return null;
+    }
+
+    private static Person getPerson(int id) throws SQLException, ClassNotFoundException {
+        ResultSet rs = getFromDatabase("SELECT * FROM person WHERE person_id = " + id);
+        if (rs.next())
+            return new Person(rs.getString("last_name"), rs.getString("first_name"), new java.util.Date(rs.getDate("birthdate").getTime()), getAddress(rs.getInt("address_id")), rs.getString("email"));
+        return null;
+    }
+
+    private static Company getCompany(int id) throws SQLException, ClassNotFoundException {
+        ResultSet rs = getFromDatabase("SELECT * FROM company WHERE company_id = " + id);
+        if (rs.next())
+            return new Company(rs.getString("name"), getAddress(rs.getInt("address_id")), getPerson(rs.getInt("contact_person_id")));
+        return null;
+    }
+
+    //--------------------------------deleteObject-----------------------
+    public static void deleteStudent(DualStudent student) throws SQLException, ClassNotFoundException {
+        PreparedStatement preparedStatement = getConnection().prepareStatement("DELETE FROM student WHERE student_id = ?");
+        preparedStatement.setInt(1, student.getStudentNumber());
+        setToDatabase(preparedStatement);
+        if (connectToPeron(student) == 0)
+            deletePerson(student);
+    }
+
+    public static void deleteDocent(Docent docent) throws SQLException, ClassNotFoundException {
+        PreparedStatement preparedStatement = getConnection().prepareStatement("DELETE FROM docent WHERE docent_id = ?");
+        preparedStatement.setInt(1, docent.getDocentNumber());
+        setToDatabase(preparedStatement);
+        if (connectToPeron(docent) == 0)
             deletePerson(docent);
     }
 
-    /**
-     * To delete a course in the database
-     *
-     * @param course course to delete
-     */
-    public static void deleteCourse(Course course) {
-        setToDatabase("DELETE FROM course WHERE course.course_id = " + getCourseID(course), null, null);
+    public static void deleteCourse(Course course) throws SQLException, ClassNotFoundException {
+        PreparedStatement preparedStatement = getConnection().prepareStatement("DELETE FROM course WHERE student_id = ? AND  room = ? AND name = ? AND registry_date = ? AND course_type = ? AND study_director_id = ? AND representative_student_id = ?");
+        preparedStatement.setInt(1, getRoomID(course.getRoom()));
+        preparedStatement.setString(2, course.getName());
+        preparedStatement.setDate(3, new Date(course.getRegistrationDate().getTime()));
+        preparedStatement.setInt(4, getCourseTypeID(course.getStudyCourse()));
+        preparedStatement.setInt(5, course.getStudyDirector().getDocentNumber());
+        preparedStatement.setInt(6, course.getCourseSpeakerID());
+        setToDatabase(preparedStatement);
     }
 
-    //------------------------------GetObjectID-----------------------------------------------
-
-    /**
-     * Get the ID of the course
-     *
-     * @param course the course you need the id
-     * @return id or Integer.MIN_VALUE if not found
-     */
-    public static int getCourseID(Course course) {
-        Object[][] erg = getFromDatabase("SELECT * FROM course WHERE room = " + getRoomID(course.getRoom()) + " AND name = " + course.getName() + " AND registry_date = " + (new Timestamp(course.getRegistrationDate().getTime())) + " AND course_type = " + getCourseTypeID(course.getStudyCourse()) + " AND study_director_id = " + course.getStudyDirector().getDocentNumber() + " AND representative_student_id = " + course.getCourseSpeakerID());
-        if (erg != null)
-            return (int) erg[erg.length - 1][0];
-        return Integer.MIN_VALUE;
+    private static void deleteAddress(Address address) throws SQLException, ClassNotFoundException {
+        PreparedStatement preparedStatement = getConnection().prepareStatement("DELETE FROM address WHERE street = ? AND number = ? AND postal_code = ? AND city = ? AMD country = ?");
+        preparedStatement.setString(1, address.getStreet());
+        preparedStatement.setString(2, address.getNumber());
+        preparedStatement.setString(3, address.getPostcode());
+        preparedStatement.setString(4, address.getCity());
+        preparedStatement.setString(5, address.getCountry());
+        setToDatabase(preparedStatement);
     }
 
-    /**
-     * Get the ID of the docent
-     *
-     * @param docent the docent you need the id
-     * @return id or Integer.MIN_VALUE if not found
-     */
-    public static int getDocentID(Docent docent) {
-        Object[][] erg = getFromDatabase("SELECT * FROM docent WHERE docent.docent_id = " + docent.getDocentNumber());
-        if (erg != null)
-            return (int) erg[erg.length - 1][0];
-        return Integer.MIN_VALUE;
+    private static void deletePerson(Person person) throws SQLException, ClassNotFoundException {
+        PreparedStatement preparedStatement = getConnection().prepareStatement("DELETE FROM person WHERE first_name = ?, last_name = ?, birthdate = ?, email = ?, address_id = ?");
+        preparedStatement.setString(1, person.getForeName());
+        preparedStatement.setString(2, person.getName());
+        preparedStatement.setDate(3, new Date(person.getBirthday().getTime()));
+        preparedStatement.setString(4, person.getEmail());
+        preparedStatement.setInt(5, getAddressID(person.getAddress()));
+        setToDatabase(preparedStatement);
+        if (connectToAddress(person.getAddress()) == 0)
+            deleteAddress(person.getAddress());
     }
 
-    /**
-     * Get the ID of the student
-     *
-     * @param student the student you need the id
-     * @return id or Integer.MIN_VALUE if not found
-     */
-    public static int getStudentID(DualStudent student) {
-        Object[][] erg = getFromDatabase("SELECT * FROM student WHERE student.student_id = " + student.getStudentNumber());
-        if (erg != null)
-            return (int) erg[erg.length - 1][0];
-        return Integer.MIN_VALUE;
+    private static void deleteCompany(Company company) throws SQLException, ClassNotFoundException {
+        PreparedStatement preparedStatement = getConnection().prepareStatement("DELETE FROM company WHERE name = ?, address_id = ?, contact_person_id = ?");
+        preparedStatement.setString(1, company.getName());
+        preparedStatement.setInt(2, getAddressID(company.getAddress()));
+        preparedStatement.setInt(3, getPersonID(company.getContactPerson()));
+        setToDatabase(preparedStatement);
+        if (connectToAddress(company.getAddress()) == 0)
+            deleteAddress(company.getAddress());
+        if (connectToPeron(company.getContactPerson()) == 0)
+            deletePerson(company.getContactPerson());
+    }
+
+    //------------------------CheckMultipleUse--------------------------
+    private static int connectToPeron(Person person) throws SQLException, ClassNotFoundException {
+        ResultSet rs = getFromDatabase("SELECT student_id FROM student LEFT JOIN person ON student.person_id = person.person_id WHERE person.last_name = " + person.getName() + " AND person.first_name = " + person.getForeName() + " AND person.birthdate = " + (new Timestamp(person.getBirthday().getTime())) + " AND person.email = " + person.getEmail() + " AND person.address_id = " + getAddressID(person.getAddress()) +
+                " UNION SELECT docent_id FROM docent LEFT JOIN person ON docent.person_id = person.person_id WHERE person.last_name = " + person.getName() + " AND person.first_name = " + person.getForeName() + " AND person.birthdate = " + (new Timestamp(person.getBirthday().getTime())) + " AND person.email = " + person.getEmail() + " AND person.address_id = " + getAddressID(person.getAddress()) +
+                " UNION SELECT company_id FROM company LEFT JOIN person ON company.contact_person_id = person.person_id WHERE person.last_name = " + person.getName() + " AND person.first_name = " + person.getForeName() + " AND person.birthdate = " + (new Timestamp(person.getBirthday().getTime())) + " AND person.email = " + person.getEmail() + " AND person.address_id = " + getAddressID(person.getAddress()));
+        int rowCount = 0;
+        if (rs.last()) {
+            rowCount = rs.getRow();
+            rs.beforeFirst();
+        }
+        return rowCount;
+    }
+
+    private static int connectToAddress(Address address) throws SQLException, ClassNotFoundException {
+        ResultSet rs = getFromDatabase("SELECT person_id FROM person LEFT JOIN address ON person.address_id = address.address_id SELECT * FROM address WHERE street = " + address.getStreet() + " AND number = " + address.getNumber() + " AND postal_code = " + address.getPostcode() + " AND city = " + address.getCity() + " AND country = " + address.getCountry() + "" +
+                "UNION SELECT company_id FROM company LEFT JOIN address ON company.address_id = address.address_id SELECT * FROM address WHERE street = " + address.getStreet() + " AND number = " + address.getNumber() + " AND postal_code = " + address.getPostcode() + " AND city = " + address.getCity() + " AND country = " + address.getCountry());
+        int rowCount = 0;
+        if (rs.last()) {
+            rowCount = rs.getRow();
+            rs.beforeFirst();
+        }
+        return rowCount;
+    }
+
+    //-----------------------------GetAllObject------------------------------
+    public static DualStudent[] getAllStudent() throws SQLException, ClassNotFoundException {
+        List<DualStudent> students = new ArrayList<>();
+        ResultSet rs = getFromDatabase("SELECT * FROM student LEFT JOIN person ON student.person_id = person.person_id");
+        while (rs.next())
+            students.add(new DualStudent(rs.getInt("matriculation_number"), rs.getInt("student_id"), rs.getString("last_name"), rs.getString("first_name"), new java.util.Date(rs.getDate("birthdate").getTime()), getAddress(rs.getInt("address_id")), rs.getString("email"), getCourse(rs.getInt("course_id")), rs.getInt("java_knowlage"), getCompany(rs.getInt("company_id"))));
+        return students.toArray(DualStudent[]::new);
+    }
+
+    public static Docent[] getAllDocent() throws SQLException, ClassNotFoundException {
+        List<Docent> docents = new ArrayList<>();
+        ResultSet rs = getFromDatabase("SELECT * FROM docent LEFT JOIN person ON docent.person_id = person.person_id");
+        if (rs.next())
+            docents.add(new Docent(rs.getString("last_name"), rs.getString("first_name"), new java.util.Date(rs.getDate("birthdate").getTime()), getAddress(rs.getInt("address_id")), rs.getString("email"), rs.getInt("docent_id")));
+        return docents.toArray(Docent[]::new);
+    }
+
+    public static Course[] getAllCourse() throws SQLException, ClassNotFoundException {
+        List<Course> courses = new ArrayList<>();
+        ResultSet rs = getFromDatabase("SELECT * FROM course LEFT JOIN docent ON course.study_director_id = docent.docent_id LEFT JOIN person ON person.person_id = docent.person_id");
+        if (rs.next())
+            courses.add(new Course(rs.getString("name"), StudyCourse.AInformatik.getDeclaringClass().getEnumConstants()[rs.getInt("course_type")], getDocent(rs.getInt("study_director_id")), rs.getInt("study_director_id"), new java.util.Date(rs.getDate("registry_date").getTime()), CourseRoom.A222.getDeclaringClass().getEnumConstants()[rs.getInt("room")]));
+        return courses.toArray(Course[]::new);
+    }
+
+    public static Address[] getAllAddress() throws SQLException, ClassNotFoundException {
+        List<Address> addresses = new ArrayList<>();
+        ResultSet rs = getFromDatabase("SELECT * FROM course LEFT JOIN docent ON course.study_director_id = docent.docent_id LEFT JOIN person ON person.person_id = docent.person_id");
+        if (rs.next())
+            addresses.add(new Address(rs.getString("street"), rs.getString("number"), rs.getString("postal_code"), rs.getString("city"), rs.getString("country")));
+        return addresses.toArray(Address[]::new);
+    }
+
+    public static Person[] getAllPerson() throws SQLException, ClassNotFoundException {
+        List<Person> persons = new ArrayList<>();
+        ResultSet rs = getFromDatabase("SELECT * FROM course LEFT JOIN docent ON course.study_director_id = docent.docent_id LEFT JOIN person ON person.person_id = docent.person_id");
+        if (rs.next())
+            persons.add(new Person(rs.getString("last_name"), rs.getString("first_name"), new java.util.Date(rs.getDate("birthdate").getTime()), getAddress(rs.getInt("address_id")), rs.getString("email")));
+        return persons.toArray(Person[]::new);
+    }
+
+    public static Company[] getAllCompany() throws SQLException, ClassNotFoundException {
+        List<Company> companies = new ArrayList<>();
+        ResultSet rs = getFromDatabase("SELECT * FROM course LEFT JOIN docent ON course.study_director_id = docent.docent_id LEFT JOIN person ON person.person_id = docent.person_id");
+        if (rs.next())
+            companies.add(new Company(rs.getString("name"), getAddress(rs.getInt("address_id")), getPerson(rs.getInt("contact_person_id"))));
+        return companies.toArray(Company[]::new);
+    }
+
+    //-----------------------------UpdateObject------------------------------
+    public static void updateStudent(DualStudent student, int id) throws SQLException, ClassNotFoundException {
+        PreparedStatement preparedStatement = getConnection().prepareStatement("UPDATE student SET java_knowledge = ?, person_id = ?, course_id = ?, company_id = ? WHERE student.student_id = ?");
+        preparedStatement.setInt(1, student.getJavaKnowledge());
+        int person_id;
+        if (connectToPeron(student) > 1)
+            person_id = setPerson(student);
+        else
+            person_id = updatePerson(student, getPersonID(student));
+        preparedStatement.setInt(2, person_id);
+        preparedStatement.setInt(3, updateCourse(student.getCourse(),getCourseID(student.getCourse())));
+        preparedStatement.setInt(4, updateCompany(student.getCompany(), getCompanyID(student.getCompany())));
+        preparedStatement.setInt(5, id);
+        setToDatabase(preparedStatement);
+    }
+
+    public static void updateDocent(Docent docent, int id) throws SQLException, ClassNotFoundException {
+        PreparedStatement preparedStatement = getConnection().prepareStatement("UPDATE docent SET person_id = ? WHERE docent_id = ?");
+        int person_id;
+        if (connectToPeron(docent) > 1)
+            person_id = setPerson(docent);
+        else
+            person_id = updatePerson(docent, docent.getDocentNumber());
+        preparedStatement.setInt(1, person_id);
+        preparedStatement.setInt(2, docent.getDocentNumber());
+        setToDatabase(preparedStatement);
+    }
+
+    public static int updateCourse(Course course, int id) throws SQLException, ClassNotFoundException {
+        PreparedStatement preparedStatement = getConnection().prepareStatement("UPDATE course SET room = ?, name = ?, registry_date = ?, course_type = ?, study_director_id = ?, representative_student_id = ? WHERE course.course_id = ?");
+        preparedStatement.setInt(1, getRoomID(course.getRoom()));
+        preparedStatement.setString(2, course.getName());
+        preparedStatement.setDate(3, new Date(course.getRegistrationDate().getTime()));
+        preparedStatement.setInt(4, getCourseTypeID(course.getStudyCourse()));
+        preparedStatement.setInt(5, course.getStudyDirector().getDocentNumber());
+        preparedStatement.setInt(6, course.getCourseSpeakerID());
+        preparedStatement.setInt(7, id);
+        setToDatabase(preparedStatement);
+        return id;
+    }
+
+    private static int updateAddress(Address address, int id) throws SQLException, ClassNotFoundException {
+        PreparedStatement preparedStatement = getConnection().prepareStatement("UPDATE address SET street = ? AND number = ? AND postal_code = ? AND city = ? AMD country = ? WHERE address_id = ?");
+        preparedStatement.setString(1, address.getStreet());
+        preparedStatement.setString(2, address.getNumber());
+        preparedStatement.setString(3, address.getPostcode());
+        preparedStatement.setString(4, address.getCity());
+        preparedStatement.setString(5, address.getCountry());
+        preparedStatement.setInt(6, id);
+        setToDatabase(preparedStatement);
+        return id;
+    }
+
+    private static int updatePerson(Person person, int id) throws SQLException, ClassNotFoundException {
+        PreparedStatement preparedStatement = getConnection().prepareStatement("UPDATE person SET first_name = ?, last_name = ?, birthdate = ?, email = ?, address_id = ? WHERE person_id = ?");
+        preparedStatement.setString(1, person.getForeName());
+        preparedStatement.setString(2, person.getName());
+        preparedStatement.setDate(3, new Date(person.getBirthday().getTime()));
+        preparedStatement.setString(4, person.getEmail());
+        int address_id;
+        if (connectToAddress(person.getAddress()) > 1)
+            address_id = setAddress(person.getAddress());
+        else
+            address_id = updateAddress(person.getAddress(), getAddressID(person.getAddress()));
+        preparedStatement.setInt(5, address_id);
+        preparedStatement.setInt(6, id);
+        setToDatabase(preparedStatement);
+        return id;
+    }
+
+    private static int updateCompany(Company company, int company_id) throws SQLException, ClassNotFoundException {
+        int id = getCompanyID(company);
+        PreparedStatement preparedStatement = getConnection().prepareStatement("UPDATE company SET name = ?, address_id = ?, contact_person_id = ? WHERE company_id = ?");
+        preparedStatement.setString(1, company.getName());
+        int address_id;
+        if (connectToAddress(company.getAddress()) > 1)
+            address_id = setAddress(company.getAddress());
+        else
+            address_id = updateAddress(company.getAddress(), getAddressID(company.getAddress()));
+        preparedStatement.setInt(2, address_id);
+        int person_id;
+        if (connectToPeron(company.getContactPerson()) > 1)
+            person_id = setPerson(company.getContactPerson());
+        else
+            person_id = updatePerson(company.getContactPerson(), getPersonID(company.getContactPerson()));
+        preparedStatement.setInt(3, person_id);
+        preparedStatement.setInt(4, id);
+        setToDatabase(preparedStatement);
+        return id;
     }
 
 
@@ -302,143 +457,5 @@ public class Database {
             if (help[f] == c)
                 return f;
         return Integer.MIN_VALUE;
-    }
-
-    private static int getPersonID(Person person) {
-        Object[][] erg = getFromDatabase("SELECT * FROM person WHERE person.last_name = " + person.getName() + " AND person.first_name = " + person.getForeName() + " AND person.birthdate = " + (new Timestamp(person.getBirthday().getTime())) + " AND person.email = " + person.getEmail() + " AND person.address_id = " + getAddressID(person.getAddress()));
-        if (erg != null)
-            return (int) erg[erg.length - 1][0];
-        return Integer.MIN_VALUE;
-    }
-
-    private static int getAddressID(Address address) {
-        Object[][] erg = getFromDatabase("SELECT * FROM address WHERE street = " + address.getStreet() + " AND number = " + address.getNumber() + " AND postal_code = " + address.getPostcode() + " AND city = " + address.getCity() + " AND country = " + address.getCountry());
-        if (erg != null)
-            return (int) erg[erg.length - 1][0];
-        return Integer.MIN_VALUE;
-    }
-
-    private static int getCompanyID(Company company) {
-        Object[][] erg = getFromDatabase("SELECT * FROM company WHERE name = " + company.getName() + " AND address_id = " + getAddressID(company.getAddress()) + " AND contact_person_id = " + getPersonID(company.getContactPerson()));
-        if (erg != null)
-            return (int) erg[erg.length - 1][0];
-        return Integer.MIN_VALUE;
-    }
-
-
-    private static int setPersonToDatabase(Person person) {
-        int personID = getPersonID(person);
-        if (personID == Integer.MIN_VALUE) {
-            setToDatabase("INSERT INTO person (first_name, last_name, birthdate, email, address_id) VALUES (?, ?, ?, ?, ?)", new Object[]{person.getForeName(), person.getName(), person.getBirthday(), person.getEmail(), setAddressToDatabase(person.getAddress())}, new int[]{Types.VARCHAR, Types.VARCHAR, Types.DATE, Types.VARCHAR, Types.INTEGER});
-            sleep100();
-        }
-        return personID == Integer.MIN_VALUE ? getPersonID(person) : personID;
-    }
-
-    private static int setAddressToDatabase(Address address) {
-        int addressID = getAddressID(address);
-        if (addressID == Integer.MIN_VALUE) {
-            setToDatabase("INSERT INTO address (street, number, postal_code, city, country) VALUES (?, ?, ?, ?, ?)", new Object[]{address.getStreet(), address.getNumber(), address.getPostcode(), address.getCity(), address.getCity()}, new int[]{Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR});
-            sleep100();
-        }
-        return addressID == Integer.MIN_VALUE ? getAddressID(address) : addressID;
-    }
-
-    private static int setCourseToDatabase(Course course) {
-        int courseID = getCourseID(course);
-        if (courseID == Integer.MIN_VALUE) {
-            setToDatabase("INSERT INTO course (room, name, registry_date, course_type, study_director_id, representative_student_id) VALUES (?, ?, ?, ?, ?, ?)", new Object[]{getRoomID(course.getRoom()), course.getName(), (new Timestamp(course.getRegistrationDate().getTime())), getCourseTypeID(course.getStudyCourse()), course.getStudyDirector().getDocentNumber(), course.getCourseSpeakerID()}, new int[]{Types.INTEGER, Types.VARCHAR, Types.DATE, Types.INTEGER, Types.INTEGER, Types.INTEGER});
-            sleep100();
-        }
-        return courseID == Integer.MIN_VALUE ? getCourseID(course) : courseID;
-    }
-
-    private static int setCompanyToDatabase(Company company) {
-        int companyID = getCompanyID(company);
-        if (companyID == Integer.MIN_VALUE) {
-            setToDatabase("INSERT INTO company (name, address_id, contact_person_id) VALUES (?, ?, ?)", new Object[]{company.getName(), setAddressToDatabase(company.getAddress()), setPersonToDatabase(company.getContactPerson())}, new int[]{Types.VARCHAR, Types.INTEGER, Types.INTEGER});
-            sleep100();
-        }
-        return companyID == Integer.MIN_VALUE ? getCompanyID(company) : companyID;
-    }
-
-    private static Docent getDocentByID(int id) {
-        Object[][] docent = getFromDatabase("SELECT * FROM student LEFT JOIN person ON student.person_id = person.person_id WHERE docent.docent_id = " + id);
-        if (docent == null || docent.length < 1) return null;
-        return new Docent((String) docent[0][4], (String) docent[0][3], new Date(((Timestamp) docent[0][5]).getTime()), getAddressByID((int) docent[0][7]), (String) docent[0][6], (int) docent[0][0]);
-    }
-
-    private static Address getAddressByID(int id) {
-        Object[][] address = getFromDatabase("SELECT * FROM address WHERE address_id = " + id);
-        if (address == null || address.length < 1) return null;
-        return new Address((String) address[0][1], (String) address[0][2], (String) address[0][3], (String) address[0][4], (String) address[0][5]);
-    }
-
-    private static Course getCourseByID(int id) {
-        Object[][] courses = getFromDatabase("SELECT * FROM course LEFT JOIN student on course.representative_student_id = student.student_id LEFT JOIN person ON student.person_id = person.person_id  WHERE course.course_id = " + id);
-        if (courses == null || courses.length < 1) return null;
-        return new Course((String) courses[0][2], StudyCourse.BWL.getDeclaringClass().getEnumConstants()[(int) courses[0][4]], getDocentByID((int) courses[0][5]), (int) courses[0][7], new Date(((Timestamp) courses[0][3]).getTime()), CourseRoom.A222.getDeclaringClass().getEnumConstants()[(int) courses[0][1]]);
-    }
-
-    private static Company getCompanyByID(int id) {
-        Object[][] company = getFromDatabase("SELECT * FROM company LEFT JOIN person ON company.contact_person_id = person.person_id WHERE company.company_id = " + id);
-        if (company == null || company.length < 1) return null;
-        return new Company((String) company[0][1], getAddressByID((int) company[0][2]), new Person((String) company[0][6], (String) company[0][5], new Date(((Timestamp) company[0][7]).getTime()), getAddressByID((int) company[0][9]), (String) company[0][8]));
-    }
-
-    private static int updatePerson(Person person) {
-        setToDatabase("UPDATE person SET first_name = ?, last_name = ?, birthdate = ?, email = ?, address_id = ? WHERE person.person_id = " + getPersonID(person), new Object[]{person.getForeName(), person.getName(), person.getBirthday(), person.getEmail(), updateAddress(person.getAddress())}, new int[]{Types.VARCHAR, Types.VARCHAR, Types.DATE, Types.VARCHAR, Types.INTEGER});
-        return getPersonID(person);
-    }
-
-    private static int updateAddress(Address address) {
-        int address_id = getAddressID(address);
-        Object[][] help = getFromDatabase("SELECT * FROM person WHERE person.address_id = " + address_id + " UNION SELECT * FROM company WHERE company.address_id = " + address_id);
-        if (help != null && help.length > 0)
-            return setAddressToDatabase(address);
-        setToDatabase("UPDATE address SET street = ?, number = ?, postal_code = ?, city = ?, country = ? WHERE address.address_id = " + address_id, new Object[]{address.getStreet(), address.getNumber(), address.getPostcode(), address.getCity(), address.getCity()}, new int[]{Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR});
-        return getAddressID(address);
-    }
-
-    private static int updateCompany(Company company) {
-        setToDatabase("UPDATE company SET name = ?. address_id = ?, contact_person_id = ? WHERE company.company_id = " + getCompanyID(company), new Object[]{company.getName(), setAddressToDatabase(company.getAddress()), setPersonToDatabase(company.getContactPerson())}, new int[]{Types.VARCHAR, Types.INTEGER, Types.INTEGER});
-        return getCompanyID(company);
-    }
-
-
-    private static void deletePerson(Person person) {
-        setToDatabase("DELETE FROM person WHERE person.person_id = " + getPersonID(person), null, null);
-        int address_id = getAddressID(person.getAddress());
-        Object[][] help = getFromDatabase("SELECT * FROM person WHERE person.address_id = " + address_id + " UNION SELECT * FROM company WHERE company.address_id = " + address_id);
-        if (help == null) return;
-        if (help.length == 1)
-            deleteAddress(address_id);
-    }
-
-    private static void deleteAddress(int addressID) {
-        setToDatabase("DELETE FROM address WHERE address.address_id = " + addressID, null, null);
-    }
-
-    private static void deleteCompany(Company company) {
-        setToDatabase("DELETE FROM company WHERE company.company_id = " + getCompanyID(company), null, null);
-
-        int address_id = getAddressID(company.getAddress());
-        Object[][] help = getFromDatabase("SELECT * FROM person WHERE person.address_id = " + address_id + " UNION SELECT * FROM company WHERE company.address_id = " + address_id);
-        if (help != null && help.length == 1)
-            deleteAddress(address_id);
-
-        int person_id = getPersonID(company.getContactPerson());
-        help = getFromDatabase("SELECT * FROM student WHERE student.person_id = " + person_id + " UNION SELECT * FROM docent WHERE docent.person_id " + person_id);
-        if (help == null || help.length == 0)
-            deletePerson(company.getContactPerson());
-    }
-
-
-    private static void sleep100() {
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 }
