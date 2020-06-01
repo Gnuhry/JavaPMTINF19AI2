@@ -5,87 +5,78 @@ import java.util.Arrays;
 import java.util.List;
 
 public class University {
-    private final List<Docent> docents;
-    private final List<DualStudent> students;
-    private final List<Course> courses;
 
     public University() {
-        DualStudent[] student_array = Database.loadAllStudents();
-        if (student_array != null)
-            students = Arrays.asList(student_array);
-        else
-            students = new ArrayList<>();
-        Docent[] docent_array = Database.loadAllDocents();
-        if (docent_array != null)
-            docents = Arrays.asList(docent_array);
-        else
-            docents = new ArrayList<>();
-        Course[] course_array = Database.loadAllCourses(docent_array);
-        if (course_array != null)
-            courses = Arrays.asList(course_array);
-        else
-            courses = new ArrayList<>();
     }
 
 
     //-----------------------------Getter---------------------
 
     public List<Docent> getDocents() {
-        return docents;
+        Docent[] docent_array = Database.loadAllDocents();
+        if (docent_array != null)
+            return Arrays.asList(docent_array);
+        else
+            return new ArrayList<>();
     }
 
     public List<DualStudent> getStudents() {
-        return students;
+        DualStudent[] student_array = Database.loadAllStudents();
+        if (student_array != null)
+            return Arrays.asList(student_array);
+        else
+            return new ArrayList<>();
     }
 
     public List<Course> getCourses() {
-        return courses;
+        Course[] course_array = Database.loadAllCourses(Database.loadAllDocents());
+        if (course_array != null)
+            return Arrays.asList(course_array);
+        else
+            return new ArrayList<>();
     }
 
 
     //-------------------------------Add------------------------
 
     public void addDocent(Docent d) {
-        docents.add(d);
         Database.setDocentsToDatabase(new Docent[]{d});
     }
 
     public void addStudent(DualStudent s) {
-        students.add(s);
         Database.setStudentsToDatabase(new DualStudent[]{s});
     }
 
     public void addCourse(Course c) {
-        courses.add(c);
         Database.setCoursesToDatabase(new Course[]{c});
     }
 
     //-------------------------------IS-------------------------
     public boolean isDocent(Docent d) {
-        return docents.contains(d);
+        int d2 = Database.getDocentID(d);
+        return d2 != Integer.MIN_VALUE;
     }
 
     public boolean isStudent(DualStudent s) {
-        return students.contains(s);
+        int s2 = Database.getStudentID(s);
+        return s2 != Integer.MIN_VALUE;
     }
 
     public boolean isCourse(Course c) {
-        return courses.contains(c);
+        int c2 = Database.getCourseID(c);
+        return c2 != Integer.MIN_VALUE;
     }
 
     //-----------------------------Remove----------------------
     public void removeDocent(Docent d) {
-        docents.remove(d);
         Database.deleteDocent(d, d.getDocentNumber());
     }
 
     public void removeStudent(DualStudent s) {
-        students.remove(s);
         Database.deleteStudent(s, s.getStudentNumber());
     }
 
     public void removeCourse(Course c) {
-        courses.remove(c);
         Database.deleteCourse(c);
     }
 
