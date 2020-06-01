@@ -30,8 +30,8 @@ public class DualStudent extends Person {
         this.course = course;
         this.javaKnowledge = javaKnowledge;
         this.company = company;
-        this.changeButton = new Button("C");
-        this.deleteButton = new Button("D");
+//        this.changeButton = new Button("C");
+//        this.deleteButton = new Button("D");
     }
 
     //--------------------------Setter------------------------
