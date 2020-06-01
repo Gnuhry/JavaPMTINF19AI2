@@ -21,8 +21,6 @@ import java.util.Date;
 
 public class InsertStudentController {
 
-    University dhbw = new University();
-
     ObservableList<Company> chooseCompanyOptions = FXCollections.observableArrayList(
             new Company("Alnatura", new Address("Test", "1", "12345", "Test", "Test"), new Person("Janina", "Hofmann"))
     );
