@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
 import org.dhbw.classes.*;
 
@@ -38,6 +39,8 @@ public class InsertCourseController {
     private ComboBox<Person> courseRepresent;
     @FXML
     private ComboBox<Docent> courseDirector;
+    @FXML
+    private DialogPane showNullPointer;
 
 
     @FXML
@@ -57,20 +60,34 @@ public class InsertCourseController {
     @FXML
     private void submit() {
 
-        LocalDate localDateCourseBirth = courseDate.getValue();
-        Instant instantCourseBirth = Instant.from(localDateCourseBirth.atStartOfDay(ZoneId.systemDefault()));
-        Date courseRDate = Date.from(instantCourseBirth);
+        try {
+            if (courseName.getText().trim().isEmpty() || courseType.getEditor().getText().trim().isEmpty() || courseRoom.getEditor().getText().trim().isEmpty() || courseDate.getValue() == null || courseRepresent.getEditor().getText().trim().isEmpty() || courseDirector.getEditor().getText().trim().isEmpty()) {
+                showNullPointer.setVisible(true);
+                System.out.println("NPE2 found");    // LOG Datei?
+            } else {
+                LocalDate localDateCourseBirth = courseDate.getValue();
+                Instant instantCourseBirth = Instant.from(localDateCourseBirth.atStartOfDay(ZoneId.systemDefault()));
+                Date courseRDate = Date.from(instantCourseBirth);
 
-        Course course = new Course(
-                courseName.getText(),
-                (StudyCourse)courseType.getValue(),
-                new Docent("Dozentname", "Dozentvorname", new Date(2000, 05,27), new Address("s", "2", "2", "s", "s")),//courseDirector.getAccessibleText(),             Combobox -> Dozent
-                10,//courseRepresent.getAccessibleText(),            Combodbox -> KurssprecherID (int)
-                courseRDate,
-                (CourseRoom)courseRoom.getValue()
-        );
+                Course course = new Course(
+                        courseName.getText(),
+                        (StudyCourse)courseType.getValue(),
+                        new Docent("Dozentname", "Dozentvorname", new Date(2000, 05,27), new Address("s", "2", "2", "s", "s")),//courseDirector.getAccessibleText(),             Combobox -> Dozent
+                        10,//courseRepresent.getAccessibleText(),            Combodbox -> KurssprecherID (int)
+                        courseRDate,
+                        (CourseRoom)courseRoom.getValue()
+                );
 
-        System.out.println(course);
+                System.out.println(course);
+                University.addCourse(course);
+
+            }
+        } catch (NullPointerException npe) {
+            showNullPointer.setVisible(true);
+            System.out.println("NPE2 found");    // LOG Datei?
+        }
+
+
     }
 
 }

@@ -8,7 +8,6 @@ public class Database {
     private static Connection connection;
 
     //----------------------------------------General----------------------------
-
     /**
      * Create a connection to the database
      *
