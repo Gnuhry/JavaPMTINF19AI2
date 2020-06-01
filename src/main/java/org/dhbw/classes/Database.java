@@ -160,7 +160,7 @@ public class Database {
         return getPersonID(person);
     }
 
-    private static int setCompany(Company company) throws SQLException, ClassNotFoundException {
+    public static int setCompany(Company company) throws SQLException, ClassNotFoundException {
         if (!hasCompany(company)) {
             PreparedStatement preparedStatement = getConnection().prepareStatement("INSERT INTO company (name, address_id, contact_person_id) VALUES (?, ?, ?)");
             preparedStatement.setString(1, company.getName());
