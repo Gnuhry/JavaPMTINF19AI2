@@ -76,6 +76,14 @@ public class University {
         }
     }
 
+    public static void addCompany(Company c) {
+        try {
+            Database.setCompany(c);
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
     //-------------------------------IS-------------------------
     public static boolean isDocent(Docent d) {
         try {
