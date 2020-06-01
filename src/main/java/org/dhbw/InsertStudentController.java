@@ -42,7 +42,7 @@ public class InsertStudentController {
     @FXML
     private TextField studentLastName;
     @FXML
-    private DatePicker studentBirth = new DatePicker();
+    private DatePicker studentBirth;
     @FXML
     private TextField studentEmail;
     @FXML
@@ -178,74 +178,81 @@ public class InsertStudentController {
     @FXML
     private void submit() throws IOException {
         try {
-            Company company;
-            Person contactPerson = new Person(companyPersonFirstName.getText(), companyPersonLastName.getText());
-            Address companyAddress = new Address(companyStreet.getText(), companyHomeNumber.getText(), companyPostalCode.getText(), companyCity.getText(), companyCountry.getText());
-            LocalDate localDateStudentBirth = studentBirth.getValue();
-            Instant instantStudentBirth = Instant.from(localDateStudentBirth.atStartOfDay(ZoneId.systemDefault()));
-            Date studentBirthday = Date.from(instantStudentBirth);
-            int focusStage = 0;
-            errorMessage.setText("Bitte korrigieren Sie die Fehler in folgenden Feldern");
-            if (companyChoose.getAccessibleText() != null) {
-                company = new Company(companyChoose.getAccessibleText(), companyAddress, contactPerson);
+            if (studentFirstName.getText().trim().isEmpty() || studentLastName.getText().trim().isEmpty() || studentBirth.getValue() == null || studentEmail.getText().trim().isEmpty() || studentStreet.getText().trim().isEmpty() || studentHomeNumber.getText().trim().isEmpty() || studentPostalCode.getText().trim().isEmpty() || studentCity.getText().trim().isEmpty() || studentCountry.getText().trim().isEmpty() || studentNumberField.getText().trim().isEmpty() || matriculationNumberField.getText().trim().isEmpty() || companyName.getText().trim().isEmpty() || companyStreet.getText().trim().isEmpty() || companyHomeNumber.getText().trim().isEmpty() || companyPostalCode.getText().trim().isEmpty() || companyCity.getText().trim().isEmpty() || companyCountry.getText().trim().isEmpty() || companyPersonFirstName.getText().trim().isEmpty() || companyPersonLastName.getText().trim().isEmpty() || courseName.getEditor().getText().equals("Kurs auswählen") || javaKnowledgeLabel.getText().trim().isEmpty()){
+                showNullPointer.setVisible(true);
+                System.out.println("NPE2 found");    // LOG Datei?
             } else {
-                if (companyPersonChoose.getAccessibleText() != null) {
-                    company = new Company(companyName.getText(), companyAddress, contactPerson); //eigentlich muss hier die companyPersonChoose in eine Person umgewandelt werden
+                Company company;
+                Person contactPerson = new Person(companyPersonFirstName.getText(), companyPersonLastName.getText());
+                Address companyAddress = new Address(companyStreet.getText(), companyHomeNumber.getText(), companyPostalCode.getText(), companyCity.getText(), companyCountry.getText());
+
+                LocalDate localDateStudentBirth = studentBirth.getValue();
+                Instant instantStudentBirth = Instant.from(localDateStudentBirth.atStartOfDay(ZoneId.systemDefault()));
+                Date studentBirthday = Date.from(instantStudentBirth);
+
+                int focusStage = 0;
+                errorMessage.setText("Bitte korrigieren Sie die Fehler in folgenden Feldern");
+                if (companyChoose.getAccessibleText() != null) {
+                    company = new Company(companyChoose.getAccessibleText(), companyAddress, contactPerson);
                 } else {
-                    company = new Company(companyName.getText(), companyAddress, contactPerson);
+                    if (companyPersonChoose.getAccessibleText() != null) {
+                        company = new Company(companyName.getText(), companyAddress, contactPerson); //eigentlich muss hier die companyPersonChoose in eine Person umgewandelt werden
+                    } else {
+                        company = new Company(companyName.getText(), companyAddress, contactPerson);
+                    }
                 }
+
+                if (!Check.validateEmail(studentEmail.getText())) {
+                    studentEmail.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
+                    focusStage = 1;
+                    errorMessage.setText(errorMessage.getText() + " E-Mail-Adresse ");
+                } else studentEmail.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
+                if (!Check.validatePostalCode(studentPostalCode.getText())) {
+                    studentPostalCode.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
+                    if (focusStage != 1) focusStage = 2;
+                    errorMessage.setText(errorMessage.getText() + " Student-Postleitzahl ");
+                } else studentPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
+                if (!Check.validatePostalCode(companyPostalCode.getText())) {
+                    companyPostalCode.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
+                    if (!(focusStage == 1 || focusStage == 2)) focusStage = 3;
+                    errorMessage.setText(errorMessage.getText() + " Unternehmen-Postleitzahl ");
+                } else companyPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
+
+                if (focusStage == 1) {
+                    studentEmail.requestFocus();
+                    scrollPane.setVvalue(0);
+                    errorMessage.setVisible(true);
+                } else if (focusStage == 2) {
+                    studentPostalCode.requestFocus();
+                    scrollPane.setVvalue(0);
+                    errorMessage.setVisible(true);
+                } else if (focusStage == 3) {
+                    companyPostalCode.requestFocus();
+                    scrollPane.setVvalue(100);
+                    errorMessage.setVisible(true);
+                } else {
+                    errorMessage.setVisible(false);
+                }
+
+                DualStudent dualStudent = new DualStudent(
+                        Integer.parseInt(matriculationNumberField.getText()),
+                        Integer.parseInt(studentNumberField.getText().substring(1)),
+                        studentLastName.getText(),
+                        studentFirstName.getText(),
+                        studentBirthday,
+                        new Address(studentStreet.getText(), studentHomeNumber.getText(), studentPostalCode.getText(), studentCity.getText(), studentCountry.getText()),
+                        studentEmail.getText(),
+                        (Course)courseName.getValue(),
+                        Integer.parseInt(javaKnowledgeLabel.getText()),
+                        company
+                );
+                System.out.println(dualStudent);
+
+                University.addStudent(dualStudent);
             }
-            if (!Check.validateEmail(studentEmail.getText())) {
-                studentEmail.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
-                focusStage = 1;
-                errorMessage.setText(errorMessage.getText() + " E-Mail-Adresse ");
-            } else studentEmail.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
-            if (!Check.validatePostalCode(studentPostalCode.getText())) {
-                studentPostalCode.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
-                if (focusStage != 1) focusStage = 2;
-                errorMessage.setText(errorMessage.getText() + " Student-Postleitzahl ");
-            } else studentPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
-            if (!Check.validatePostalCode(companyPostalCode.getText())) {
-                companyPostalCode.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
-                if (!(focusStage == 1 || focusStage == 2)) focusStage = 3;
-                errorMessage.setText(errorMessage.getText() + " Unternehmen-Postleitzahl ");
-            } else companyPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
-
-            if (focusStage == 1) {
-                studentEmail.requestFocus();
-                scrollPane.setVvalue(0);
-                errorMessage.setVisible(true);
-            } else if (focusStage == 2) {
-                studentPostalCode.requestFocus();
-                scrollPane.setVvalue(0);
-                errorMessage.setVisible(true);
-            } else if (focusStage == 3) {
-                companyPostalCode.requestFocus();
-                scrollPane.setVvalue(100);
-                errorMessage.setVisible(true);
-            } else {
-                errorMessage.setVisible(false);
-            }
-
-
-
-            DualStudent dualStudent = new DualStudent(
-                    Integer.parseInt(matriculationNumberField.getText()),
-                    Integer.parseInt(studentNumberField.getText().substring(1)),
-                    studentLastName.getText(),
-                    studentFirstName.getText(),
-                    studentBirthday,
-                    new Address(studentStreet.getText(), studentHomeNumber.getText(), studentPostalCode.getText(), studentCity.getText(), studentCountry.getText()),
-                    studentEmail.getText(),
-                    (Course)courseName.getValue(),
-                    Integer.parseInt(javaKnowledgeLabel.getText()),
-                    company
-            );
-            System.out.println(dualStudent);
         } catch (NullPointerException npe) {
             showNullPointer.setVisible(true);
             System.out.println("NPE found");    // LOG Datei?
         }
-
     }
 }

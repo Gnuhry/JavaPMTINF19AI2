@@ -6,15 +6,23 @@ public class Database {
 
     //----------------------------------------General----------------------------
 
+
+    private static Connection connection;
+
+
     /**
      * Create a connection to the database
      *
      * @return the open connection
      */
     public static Connection getConnection() throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.jdbc.Driver");
-        return DriverManager.getConnection(
-                "jdbc:mysql://85.214.247.101:3306/dhbw", "mlg_dhbw", "Reisebus1!");
+        if (connection == null) {
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection(
+                    "jdbc:mysql://85.214.247.101:3306/dhbw", "mlg_dhbw", "Reisebus1!");
+        }
+        return connection;
+
     }
 
     /**
@@ -41,7 +49,6 @@ public class Database {
                     o[resultSet.getRow() - 1][i - 1] = resultSet.getObject(i);
             resultSet.close();
             statement.close();
-            con.close();
             return o;
         } catch (SQLException | ClassNotFoundException throwable) {
             throwable.printStackTrace();
@@ -66,7 +73,6 @@ public class Database {
                 preparedStatement.setObject(f + 1, objects[f], set[f]);
             preparedStatement.executeUpdate();
             preparedStatement.close();
-            con.close();
         } catch (SQLException | ClassNotFoundException throwable) {
             throwable.printStackTrace();
         }
