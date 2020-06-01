@@ -93,7 +93,7 @@ public class InsertLectureController {
                 lectureBirthday,
                 new Address(lectureStreet.getText(), lectureHomeNumber.getText(), lecturePostalCode.getText(), lectureCity.getText(), lectureCountry.getText()),
                 lectureEmail.getText(),
-                lectureNumberField.getText()
+                Integer.parseInt(lectureNumberField.getText().substring(1))
                 );
         System.out.println(docent);
     }

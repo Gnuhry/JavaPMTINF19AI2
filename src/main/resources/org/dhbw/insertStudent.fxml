@@ -4,7 +4,6 @@
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
-<?import javafx.scene.control.ButtonType?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.DialogPane?>
@@ -191,16 +190,16 @@
             <Button id="backToOverview" fx:id="backToOverview" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Zurück zur Übersicht" />
             <Line endX="650.0" fill="#817f7fd9" layoutX="296.0" layoutY="889.0" startX="-100.0" stroke="#817f7f" />
             <Label fx:id="errorMessage" layoutX="197.0" layoutY="81.0" text="Bitte korrigieren Sie die Fehler in folgenden Feldern: " textFill="#870606" visible="false" />
-            <DialogPane contentText="Es wurden Felder frei gelassen" headerText="Fehler" layoutX="126.0" layoutY="1284.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="166.0" prefWidth="482.0" style="-fx-background-color: lightgray;" visible="false" AnchorPane.leftAnchor="126.0" AnchorPane.rightAnchor="775.0" AnchorPane.topAnchor="1284.0">
+            <DialogPane fx:id="showNullPointer" layoutX="126.0" layoutY="1308.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="142.0" prefWidth="482.0" style="-fx-background-color: lightgray;" visible="false" AnchorPane.leftAnchor="126.0" AnchorPane.rightAnchor="775.0" AnchorPane.topAnchor="1308.0">
                 <header>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="142.0" prefWidth="482.0">
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="113.0" prefWidth="482.0">
                      <children>
-                        <Text layoutX="52.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mindestens ein Feld wurde nicht ausgefüllt. Bitte füllen Sie das Feld aus" wrappingWidth="277.33673095703125" />
-                        <Text layoutX="52.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fehler:">
+                        <Text layoutX="52.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fehler:">
                            <font>
                               <Font size="19.0" />
                            </font>
                         </Text>
+                        <Text layoutX="52.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mindestens ein Feld wurde nicht ausgefüllt. Bitte füllen Sie das Feld aus" wrappingWidth="277.33673095703125" />
                      </children>
                   </AnchorPane>
                 </header>
@@ -210,9 +209,6 @@
                 <expandableContent>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="320.0" />
                 </expandableContent>
-               <buttonTypes>
-                  <ButtonType fx:constant="OK" />
-               </buttonTypes>
             </DialogPane>
             <ButtonBar layoutX="245.0" layoutY="1398.0" maxWidth="652.0" minWidth="266.0" prefHeight="52.0" prefWidth="652.0" AnchorPane.leftAnchor="245.0" AnchorPane.rightAnchor="484.0">
               <buttons>

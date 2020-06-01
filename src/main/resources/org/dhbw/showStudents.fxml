@@ -11,19 +11,43 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-
 <TabPane maxWidth="1200.0" minWidth="1200.0" prefHeight="600.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.ShowStudentsController">
   <tabs>
     <Tab text="Alle Listen">
       <content>
         <AnchorPane maxHeight="-Infinity" maxWidth="1200.0" minHeight="0.0" minWidth="1200.0" prefHeight="600.0" prefWidth="1200.0">
                <children>
-                  <TableView layoutY="68.0" prefHeight="502.0" prefWidth="1054.0">
+                  <TableView fx:id="studentTable" layoutY="50.0" onMouseMoved="#test" prefHeight="512.0" prefWidth="1200.0">
                     <columns>
-                      <TableColumn prefWidth="75.0" text="C1" />
-                      <TableColumn prefWidth="75.0" text="C2" />
+                      <TableColumn fx:id="studentNumber" prefWidth="75.0" text="ID" />
+                      <TableColumn fx:id="studentForename" prefWidth="75.0" text="Vorname" />
+                        <TableColumn fx:id="studentName" prefWidth="75.0" text="Name" />
+                        <TableColumn fx:id="studentBirth" prefWidth="75.0" text="Geburtstag" />
+                        <TableColumn fx:id="studentEmail" prefWidth="140.0" text="Email" />
+                        <TableColumn fx:id="studentStreetNumber" prefWidth="124.0" text="Straße, Hausummer" />
+                        <TableColumn fx:id="studentPostalCodeCity" prefWidth="104.0" text="PLZ, Stadt" />
+                        <TableColumn fx:id="studentCountry" prefWidth="75.0" text="Land" />
+                        <TableColumn fx:id="matriculationNumber" prefWidth="112.0" text="Matrikelnummer" />
+                        <TableColumn fx:id="studentCompany" prefWidth="98.0" text="Unternehmen" />
+                        <TableColumn fx:id="studentCourse" text="Kurs" />
+                        <TableColumn fx:id="studentJava" prefWidth="100.0" text="Java-Kenntnisse" />
                     </columns>
                   </TableView>
+                  <ToolBar prefHeight="50.0" prefWidth="1200.0">
+                     <items>
+                        <Button mnemonicParsing="false" onAction="#backToOverview" text="Zurück" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ausgewählte Filter: - Kurs - " translateX="20.0" />
+                        <Label alignment="TOP_LEFT" prefHeight="18.0" prefWidth="60.0" text="Label " translateX="20.0" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Unternehmen - " />
+                        <Label alignment="TOP_LEFT" prefHeight="18.0" prefWidth="60.0" text="Label " />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Gruppe - " />
+                        <Label alignment="TOP_LEFT" prefHeight="18.0" prefWidth="60.0" text="Label " />
+                        <ComboBox editable="true" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0" promptText="Gruppe wählen" translateX="200.0" />
+                        <ComboBox editable="true" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0" promptText="Kurs wählen" translateX="200.0" />
+                        <ComboBox editable="true" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" promptText="Unternehmen wählen" translateX="200.0" />
+                        <Button mnemonicParsing="false" text="Filtern" translateX="200.0" />
+                     </items>
+                  </ToolBar>
                </children>
             </AnchorPane>
       </content>
@@ -65,17 +89,89 @@
     </Tab>
       <Tab text="Dozenten">
         <content>
-          <AnchorPane maxWidth="1200.0" minHeight="0.0" minWidth="1200.0" prefHeight="600.0" prefWidth="1200.0" />
+          <AnchorPane maxWidth="1200.0" minHeight="0.0" minWidth="1200.0" prefHeight="600.0" prefWidth="1200.0">
+               <children>
+                  <TableView layoutY="50.0" prefHeight="521.0" prefWidth="1200.0">
+                    <columns>
+                        <TableColumn prefWidth="75.0" text="DozentenID" />
+                      <TableColumn prefWidth="75.0" text="Vorname" />
+                      <TableColumn prefWidth="75.0" text="Nachname" />
+                        <TableColumn prefWidth="75.0" text="Geburtstag" />
+                        <TableColumn prefWidth="140.0" text="Email" />
+                        <TableColumn prefWidth="124.0" text="Straße, Hausnummer" />
+                        <TableColumn prefWidth="105.0" text="PLZ, Stadt" />
+                        <TableColumn prefWidth="75.0" text="Land" />
+                    </columns>
+                  </TableView>
+                  <ToolBar prefHeight="50.0" prefWidth="1200.0">
+                     <items>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ausgewählte Filter: - Kurs - " />
+                        <Label alignment="TOP_LEFT" prefHeight="18.0" prefWidth="60.0" text="Label " />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Unternehmen - " />
+                        <Label alignment="TOP_LEFT" prefHeight="18.0" prefWidth="60.0" text="Label " />
+                        <ComboBox editable="true" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0" promptText="Kurs wählen" translateX="250.0" />
+                        <ComboBox editable="true" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" promptText="Unternehmen wählen" translateX="250.0" />
+                        <Button mnemonicParsing="false" text="Filtern" translateX="250.0" />
+                     </items>
+                  </ToolBar>
+               </children></AnchorPane>
         </content>
       </Tab>
       <Tab text="Kurse">
         <content>
-          <AnchorPane maxWidth="1200.0" minHeight="0.0" minWidth="1200.0" prefHeight="600.0" prefWidth="1200.0" />
+          <AnchorPane maxWidth="1200.0" minHeight="0.0" minWidth="1200.0" prefHeight="600.0" prefWidth="1200.0">
+               <children>
+                  <TableView layoutY="50.0" prefHeight="512.0" prefWidth="1200.0">
+                    <columns>
+                      <TableColumn prefWidth="75.0" text="KursID" />
+                      <TableColumn prefWidth="115.0" text="Kursbezeichnung" />
+                        <TableColumn prefWidth="97.0" text="Kursart" />
+                        <TableColumn prefWidth="90.0" text="Kursraum" />
+                        <TableColumn prefWidth="123.0" text="Registrierungsdatum" />
+                        <TableColumn prefWidth="100.0" text="Kurssprecher" />
+                        <TableColumn prefWidth="146.0" text="Studiengangsleitung" />
+                    </columns>
+                  </TableView>
+                  <ToolBar prefHeight="50.0" prefWidth="1200.0">
+                     <items>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ausgewählte Filter: - Kurs - " />
+                        <Label alignment="TOP_LEFT" prefHeight="18.0" prefWidth="60.0" text="Label " />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Unternehmen - " />
+                        <Label alignment="TOP_LEFT" prefHeight="18.0" prefWidth="60.0" text="Label " />
+                        <ComboBox editable="true" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0" promptText="Kurs wählen" translateX="250.0" />
+                        <ComboBox editable="true" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" promptText="Unternehmen wählen" translateX="250.0" />
+                        <Button mnemonicParsing="false" text="Filtern" translateX="250.0" />
+                     </items>
+                  </ToolBar>
+               </children></AnchorPane>
         </content>
       </Tab>
       <Tab text="Unternehmen">
         <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <TableView layoutY="50.0" prefHeight="512.0" prefWidth="1200.0">
+                    <columns>
+                      <TableColumn prefWidth="130.0" text="UnternehmenID" />
+                      <TableColumn prefWidth="128.0" text="Unternehmenname" />
+                        <TableColumn prefWidth="149.0" text="Straße, Hausnummer" />
+                        <TableColumn prefWidth="115.0" text="PLZ, Stadt" />
+                        <TableColumn prefWidth="75.0" text="Land" />
+                        <TableColumn prefWidth="126.0" text="Ansprechperson" />
+                    </columns>
+                  </TableView>
+                  <ToolBar prefHeight="50.0" prefWidth="1200.0">
+                     <items>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ausgewählte Filter: - Kurs - " />
+                        <Label alignment="TOP_LEFT" prefHeight="18.0" prefWidth="60.0" text="Label " />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Unternehmen - " />
+                        <Label alignment="TOP_LEFT" prefHeight="18.0" prefWidth="60.0" text="Label " />
+                        <ComboBox editable="true" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0" promptText="Kurs wählen" translateX="250.0" />
+                        <ComboBox editable="true" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" promptText="Unternehmen wählen" translateX="250.0" />
+                        <Button mnemonicParsing="false" text="Filtern" translateX="250.0" />
+                     </items>
+                  </ToolBar>
+               </children></AnchorPane>
         </content>
       </Tab>
   </tabs>
