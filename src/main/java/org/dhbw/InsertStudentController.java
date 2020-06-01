@@ -16,17 +16,21 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 
 public class InsertStudentController {
 
-    ObservableList<String> test = FXCollections.observableArrayList(
-            "1",
-            "2",
-            "3"
-    );
     ObservableList<Company> chooseCompanyOptions = FXCollections.observableArrayList(
             new Company("Alnatura", new Address("Test", "1", "12345", "Test", "Test"), new Person("Janina", "Hofmann"))
+    );
+
+    ObservableList<Course> chooseCourseOptions = FXCollections.observableArrayList(
+            new Course("TINF19AI2", StudyCourse.AInformatik, new Date(119, Calendar.OCTOBER, 1))
+    );
+
+    ObservableList<Person> chooseContactPersonOptions = FXCollections.observableArrayList(
+            new Person("Janina", "Hofmann")
     );
 
     @FXML
@@ -56,7 +60,7 @@ public class InsertStudentController {
     @FXML
     private TextField matriculationNumberField;
     @FXML
-    private ComboBox<String> companyChoose;
+    private ComboBox<Company> companyChoose;
     @FXML
     private VBox cCompany;
     @FXML
@@ -74,13 +78,13 @@ public class InsertStudentController {
     @FXML
     private HBox companyPerson;
     @FXML
-    private ComboBox companyPersonChoose;
+    private ComboBox<Person> companyPersonChoose;
     @FXML
     private TextField companyPersonFirstName;
     @FXML
     private TextField companyPersonLastName;
     @FXML
-    private ComboBox courseName;
+    private ComboBox<Course> courseName;
     @FXML
     private TextField courseType;
     @FXML
@@ -92,12 +96,12 @@ public class InsertStudentController {
     @FXML
     private DialogPane showNullPointer;
 
-
+    @FXML
     private void initialize() {
-        companyChoose.setValue("1");
-        companyChoose.setItems(test);
+        companyChoose.setItems(chooseCompanyOptions);
+        companyPersonChoose.setItems(chooseContactPersonOptions);
+        courseName.setItems(chooseCourseOptions);
     }
-
 
     @FXML
     private void backToOverview() throws IOException {
@@ -137,9 +141,28 @@ public class InsertStudentController {
 
     @FXML
     private void showCourse() throws IOException {
-        Course course = (Course)courseName.getValue();
+        Course course = courseName.getValue();
         courseType.setText("" + course.getStudyCourse());
         courseDate.setValue(convertToLocalDateViaSqlDate(course.getRegistrationDate()));
+    }
+
+    @FXML
+    private void showCompany() {
+        Company company = companyChoose.getValue();
+        companyName.setText(company.getName());
+        companyStreet.setText(company.getAddress().getStreet());
+        companyHomeNumber.setText(company.getAddress().getNumber());
+        companyPostalCode.setText(company.getAddress().getPostcode());
+        companyCity.setText(company.getAddress().getCity());
+        companyCountry.setText(company.getAddress().getCountry());
+    }
+
+    @FXML
+    private void showContactPerson() {
+        Person contactPerson = companyPersonChoose.getValue();
+        companyPersonFirstName.setText(contactPerson.getForeName());
+        companyPersonLastName.setText(contactPerson.getName());
+
     }
 
     @FXML

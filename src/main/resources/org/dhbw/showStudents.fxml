@@ -9,43 +9,61 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<TabPane maxWidth="1200.0" minWidth="1200.0" prefHeight="600.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.ShowStudentsController">
+<TabPane maxWidth="1250.0" minWidth="1250.0" prefHeight="600.0" prefWidth="1250.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.ShowStudentsController">
   <tabs>
     <Tab text="Alle Listen">
       <content>
-        <AnchorPane maxHeight="-Infinity" maxWidth="1200.0" minHeight="0.0" minWidth="1200.0" prefHeight="600.0" prefWidth="1200.0">
+        <AnchorPane maxHeight="-Infinity" maxWidth="1250.0" minHeight="0.0" minWidth="1250.0" prefHeight="600.0" prefWidth="1250.0">
                <children>
-                  <TableView fx:id="studentTable" layoutY="50.0" onMouseMoved="#test" prefHeight="512.0" prefWidth="1200.0">
+                  <TableView fx:id="studentTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0" tableMenuButtonVisible="true">
                     <columns>
                       <TableColumn fx:id="studentNumber" prefWidth="75.0" text="ID" />
                       <TableColumn fx:id="studentForename" prefWidth="75.0" text="Vorname" />
                         <TableColumn fx:id="studentName" prefWidth="75.0" text="Name" />
-                        <TableColumn fx:id="studentBirth" prefWidth="75.0" text="Geburtstag" />
-                        <TableColumn fx:id="studentEmail" prefWidth="140.0" text="Email" />
-                        <TableColumn fx:id="studentStreetNumber" prefWidth="124.0" text="Straße, Hausummer" />
-                        <TableColumn fx:id="studentPostalCodeCity" prefWidth="104.0" text="PLZ, Stadt" />
-                        <TableColumn fx:id="studentCountry" prefWidth="75.0" text="Land" />
-                        <TableColumn fx:id="matriculationNumber" prefWidth="112.0" text="Matrikelnummer" />
-                        <TableColumn fx:id="studentCompany" prefWidth="98.0" text="Unternehmen" />
-                        <TableColumn fx:id="studentCourse" text="Kurs" />
-                        <TableColumn fx:id="studentJava" prefWidth="100.0" text="Java-Kenntnisse" />
+                        <TableColumn fx:id="studentBirth" prefWidth="107.0" text="Geburtstag" />
+                        <TableColumn fx:id="studentEmail" prefWidth="146.0" text="Email" />
+                        <TableColumn fx:id="studentAddress" prefWidth="299.0" text="Adresse" />
+                        <TableColumn fx:id="matriculationNumber" prefWidth="105.0" text="Matrikelnummer" />
+                        <TableColumn fx:id="studentCompany" prefWidth="137.0" text="Unternehmen" />
+                        <TableColumn fx:id="studentCourse" prefWidth="113.0" text="Kurs" />
+                        <TableColumn fx:id="studentJava" prefWidth="45.0" text="Java" />
+                        <TableColumn fx:id="studentC" prefWidth="29.0" text="C" />
+                        <TableColumn fx:id="studentD" prefWidth="29.0" text="D" />
                     </columns>
                   </TableView>
-                  <ToolBar prefHeight="50.0" prefWidth="1200.0">
+                  <ToolBar prefHeight="50.0" prefWidth="1241.0">
                      <items>
                         <Button mnemonicParsing="false" onAction="#backToOverview" text="Zurück" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ausgewählte Filter: - Kurs - " translateX="20.0" />
-                        <Label alignment="TOP_LEFT" prefHeight="18.0" prefWidth="60.0" text="Label " translateX="20.0" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Unternehmen - " />
-                        <Label alignment="TOP_LEFT" prefHeight="18.0" prefWidth="60.0" text="Label " />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Gruppe - " />
-                        <Label alignment="TOP_LEFT" prefHeight="18.0" prefWidth="60.0" text="Label " />
-                        <ComboBox editable="true" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0" promptText="Gruppe wählen" translateX="200.0" />
-                        <ComboBox editable="true" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0" promptText="Kurs wählen" translateX="200.0" />
-                        <ComboBox editable="true" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" promptText="Unternehmen wählen" translateX="200.0" />
-                        <Button mnemonicParsing="false" text="Filtern" translateX="200.0" />
+                        <VBox translateX="50.0">
+                           <children>
+                              <HBox>
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" - Kurs - " />
+                                    <Label fx:id="courseFilter" prefHeight="18.0" prefWidth="99.0" text="Label " translateX="78.0" visible="false" />
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Unternehmen - " wrappingWidth="93.267578125" />
+                                    <Label fx:id="companyFilter" prefHeight="18.0" prefWidth="127.0" text="Label " translateX="30.0" visible="false" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <HBox>
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Gruppe - " translateX="30.0" />
+                              <Label fx:id="groupFilter" prefHeight="18.0" prefWidth="110.0" text="Label " translateX="30.0" visible="false" />
+                           </children>
+                        </HBox>
+                        <ComboBox fx:id="groupFilterBox" editable="true" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0" promptText="Gruppe wählen" translateX="100.0" />
+                        <ComboBox fx:id="courseFilterBox" editable="true" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0" promptText="Kurs wählen" translateX="100.0" />
+                        <ComboBox fx:id="companyFilterBox" editable="true" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" promptText="Unternehmen wählen" translateX="100.0" />
+                        <Button fx:id="filterButton" mnemonicParsing="false" onAction="#filter" text="Filtern" translateX="100.0" />
                      </items>
                   </ToolBar>
                </children>

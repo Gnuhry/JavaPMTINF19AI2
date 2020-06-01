@@ -91,14 +91,20 @@ public class Person {
         return Objects.hash(birthday, name, forename, address);
     }
 
+//    @Override
+//    public String toString() {
+//        return "Person{" +
+//                "birthday=" + birthday +
+//                ", name='" + name + '\'' +
+//                ", forename='" + forename + '\'' +
+//                ", email='" + email + '\'' +
+//                ", address=" + address +
+//                '}';
+//    }
+
+
     @Override
     public String toString() {
-        return "Person{" +
-                "birthday=" + birthday +
-                ", name='" + name + '\'' +
-                ", forename='" + forename + '\'' +
-                ", email='" + email + '\'' +
-                ", address=" + address +
-                '}';
+        return name + ", " + forename;
     }
 }

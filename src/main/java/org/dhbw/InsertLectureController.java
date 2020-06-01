@@ -7,7 +7,6 @@ import javafx.scene.control.TextField;
 import org.dhbw.classes.Address;
 import org.dhbw.classes.Check;
 import org.dhbw.classes.Docent;
-import org.dhbw.classes.Person;
 
 import java.io.IOException;
 import java.time.Instant;

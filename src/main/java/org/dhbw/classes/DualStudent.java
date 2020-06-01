@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public class DualStudent extends Person {
     private final Company company;
-    private int matriculationNumber; //TODO automatic? or manuel with constructer?
+    private int matriculationNumber; //TODO automatic? or manuel with constructer? -> Silas: Ist schon automatisch generiert im GUI
     private int studentNumber;
     private Course course;
     private int javaKnowledge;
@@ -30,8 +30,8 @@ public class DualStudent extends Person {
         this.course = course;
         this.javaKnowledge = javaKnowledge;
         this.company = company;
-        this.changeButton = new Button("Change");
-        this.deleteButton = new Button("Delete");
+        this.changeButton = new Button("C");
+        this.deleteButton = new Button("D");
     }
 
     //--------------------------Setter------------------------
@@ -90,8 +90,8 @@ public class DualStudent extends Person {
     @Override
     public String toString() {
         return "DualStudent{" +
-                "Student" + super.toString() +
-                "company=" + company +
+                "Student=" + super.toString() +
+                ", company=" + company +
                 ", matriculationNumber=" + matriculationNumber +
                 ", studentNumber='" + studentNumber + '\'' +
                 ", course=" + course +

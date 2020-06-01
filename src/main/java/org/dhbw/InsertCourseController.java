@@ -1,5 +1,7 @@
 package org.dhbw;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -10,22 +12,41 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 
 public class InsertCourseController {
 
+    ObservableList<Person> chooseCourseRepresentOptions = FXCollections.observableArrayList(
+            new Person("Silas", "Wessely")
+    );
+
+    ObservableList<Docent> chooseCourseDirectorOptions = FXCollections.observableArrayList(
+            new Docent("Stroetmann", "Karl", new Date(70, Calendar.JANUARY, 1), new Address("Test", "1", "12345", "Test", "Test"))
+    );
+
     @FXML
     private TextField courseName;
     @FXML
-    private ComboBox courseType;
+    private ComboBox<StudyCourse> courseType;
     @FXML
-    private ComboBox courseRoom;
+    private ComboBox<CourseRoom> courseRoom;
     @FXML
     private DatePicker courseDate;
     @FXML
-    private ComboBox courseRepresent;
+    private ComboBox<Person> courseRepresent;
     @FXML
-    private ComboBox courseDirector;
+    private ComboBox<Docent> courseDirector;
+
+
+    @FXML
+    private void initialize() {
+        courseType.getItems().setAll(FXCollections.observableArrayList(StudyCourse.values()));
+        courseRoom.getItems().setAll(FXCollections.observableArrayList(CourseRoom.values()));
+        courseRepresent.getItems().setAll(FXCollections.observableArrayList(chooseCourseRepresentOptions));
+        courseDirector.getItems().setAll(FXCollections.observableArrayList(chooseCourseDirectorOptions));
+    }
 
 
     @FXML

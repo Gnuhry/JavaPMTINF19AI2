@@ -59,10 +59,15 @@ public class Company {
 
     @Override
     public String toString() {
-        return "Company{" +
-                "name='" + name + '\'' +
-                ", address=" + address +
-                ", contactPerson=" + contactPerson +
-                '}';
+        return name;
     }
+
+    //    @Override
+//    public String toString() {
+//        return "Company{" +
+//                "name='" + name + '\'' +
+//                ", address=" + address +
+//                ", contactPerson=" + contactPerson +
+//                '}';
+//    }
 }

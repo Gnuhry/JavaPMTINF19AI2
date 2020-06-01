@@ -88,15 +88,21 @@ public class Course {
         return Objects.hash(registrationDate, studyCourse, name, room);
     }
 
+//    @Override
+//    public String toString() {
+//        return "Course{" +
+//                "registrationDate=" + registrationDate +
+//                ", studyCourse=" + studyCourse +
+//                ", name='" + name + '\'' +
+//                ", studyDirector=" + studyDirector +
+//                ", courseSpeakerID=" + courseSpeakerID +
+//                ", room=" + room +
+//                '}';
+//    }
+
+
     @Override
     public String toString() {
-        return "Course{" +
-                "registrationDate=" + registrationDate +
-                ", studyCourse=" + studyCourse +
-                ", name='" + name + '\'' +
-                ", studyDirector=" + studyDirector +
-                ", courseSpeakerID=" + courseSpeakerID +
-                ", room=" + room +
-                '}';
+        return name;
     }
 }

@@ -35,11 +35,17 @@ public class Docent extends Person{
         return Objects.hash(docentNumber);
     }
 
+//    @Override
+//    public String toString() {
+//        return "Docent{" +
+//                "person=" + super.toString() +
+//                "docentNumber='" + docentNumber + '\'' +
+//                '}';
+//    }
+
+
     @Override
     public String toString() {
-        return "Docent{" +
-                "person=" + super.toString() +
-                "docentNumber='" + docentNumber + '\'' +
-                '}';
+        return super.toString();
     }
 }
