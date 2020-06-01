@@ -7,9 +7,6 @@ import java.util.List;
 
 public class University {
 
-    public University() {
-    }
-
 
     //-----------------------------Getter---------------------
 
