@@ -33,7 +33,8 @@ public class ShowStudentsController implements Initializable {
             //new Course("TINF19AI2", StudyCourse.AInformatik, new Date(119, Calendar.OCTOBER, 1))
     );
     private ObservableList<Company> filterCompanyOptions = FXCollections.observableArrayList(
-            new Company("Alnatura", new Address("Test", "1", "12345", "Test", "Test"), new Person("Hofmann", "Janina", ""))
+            University.getCompanies()
+            //new Company("Alnatura", new Address("Test", "1", "12345", "Test", "Test"), new Person("Hofmann", "Janina", ""))
     );
 
 

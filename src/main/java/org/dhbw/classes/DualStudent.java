@@ -119,14 +119,7 @@ public class DualStudent extends Person {
 
     @Override
     public String toString() {
-        return "DualStudent{" +
-                "Student=" + super.toString() +
-                ", company=" + company +
-                ", matriculationNumber=" + matriculationNumber +
-                ", studentNumber='" + studentNumber + '\'' +
-                ", course=" + course +
-                ", javaKnowledge=" + javaKnowledge +
-                '}';
+        return super.toString();
     }
 
     public void addFunctionOnButtons() {
