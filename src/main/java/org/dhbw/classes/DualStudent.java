@@ -7,7 +7,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
 import org.dhbw.App;
 import org.dhbw.ShowStudentsController;
 
@@ -25,6 +28,7 @@ public class DualStudent extends Person {
     private int javaKnowledge;
     private Button changeButton;
     public Button deleteButton;
+    Image image = new Image("", true);
 
     public DualStudent(String name, String forename, Date birthday, Address address, Company company) {
         super(name, forename, birthday, address);
@@ -41,6 +45,7 @@ public class DualStudent extends Person {
         this.company = company;
         this.changeButton = new Button("C");
         this.deleteButton = new Button("D");
+        this.deleteButton.setGraphic(new ImageView(image));
         this.changeButton.setOnAction((ActionEvent event) -> {
             System.out.println("Update");
             University.updateStudent(this);

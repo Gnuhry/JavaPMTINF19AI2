@@ -20,7 +20,7 @@
       <content>
         <AnchorPane maxHeight="-Infinity" maxWidth="1250.0" minHeight="0.0" minWidth="1250.0" prefHeight="600.0" prefWidth="1250.0">
                <children>
-                  <TableView fx:id="studentTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0" tableMenuButtonVisible="true">
+                  <TableView fx:id="studentTable" editable="true" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0" tableMenuButtonVisible="true">
                     <columns>
                       <TableColumn fx:id="studentNumber" prefWidth="75.0" text="ID" />
                       <TableColumn fx:id="studentForename" prefWidth="75.0" text="Vorname" />
@@ -32,8 +32,8 @@
                         <TableColumn fx:id="studentCompany" prefWidth="137.0" text="Unternehmen" />
                         <TableColumn fx:id="studentCourse" prefWidth="104.0" text="Kurs" />
                         <TableColumn fx:id="studentJava" prefWidth="48.0" text="Java" />
-                        <TableColumn fx:id="studentC" prefWidth="31.199951171875" text="C" />
-                        <TableColumn fx:id="studentD" prefWidth="35.2000732421875" text="D" />
+                        <TableColumn fx:id="studentC" prefWidth="31.199951171875" />
+                        <TableColumn fx:id="studentD" prefWidth="35.2000732421875" />
                     </columns>
                   </TableView>
                   <ToolBar prefHeight="50.0" prefWidth="1241.0">

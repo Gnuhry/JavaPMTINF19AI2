@@ -99,16 +99,6 @@ public class ShowStudentsController implements Initializable {
 
     }
 
-    @FXML
-    private void change() {
-        System.out.println("hallo");
-    }
-
-    @FXML
-    private void delete() {
-        System.out.println("tschüss");
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         studentNumber.setCellValueFactory(new PropertyValueFactory<>("studentNumber"));
