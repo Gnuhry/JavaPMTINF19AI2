@@ -38,7 +38,7 @@ public class Person {
         return name;
     }
 
-    public String getForeName() {
+    public String getForename() {
         return forename;
     }
 

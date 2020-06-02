@@ -3,7 +3,6 @@ package org.dhbw.classes;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class Database {
@@ -24,7 +23,7 @@ public class Database {
             connection = DriverManager.getConnection(
                     "jdbc:mysql://85.214.247.101:3306/dhbw", "mlg_dhbw", "Reisebus1!");
         }
-        if(dateFormat == null)
+        if (dateFormat == null)
             dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return connection;
 
@@ -100,11 +99,11 @@ public class Database {
     }
 
     private static int getPersonID(Person person) throws SQLException, ClassNotFoundException {
-        if (person.getBirthday() == null && person.getAddress() == null){
-            ResultSet resultSet = getFromDatabase("SELECT person_id FROM person WHERE person.last_name = '" + person.getName() + "' AND person.first_name = '" + person.getForeName() + "' AND person.email = '" + person.getEmail() + "'");
+        if (person.getBirthday() == null && person.getAddress() == null) {
+            ResultSet resultSet = getFromDatabase("SELECT person_id FROM person WHERE person.last_name = '" + person.getName() + "' AND person.first_name = '" + person.getForename() + "' AND person.email = '" + person.getEmail() + "'");
             return resultSet != null && resultSet.next() ? resultSet.getInt(1) : Integer.MIN_VALUE;
         }
-        ResultSet resultSet = getFromDatabase("SELECT person_id FROM person WHERE person.last_name = '" + person.getName() + "' AND person.first_name = '" + person.getForeName() + "' AND person.birthdate = '" + dateFormat.format(person.getBirthday()) + "' AND person.email = '" + person.getEmail() + "' AND person.address_id = " + getAddressID(person.getAddress()));
+        ResultSet resultSet = getFromDatabase("SELECT person_id FROM person WHERE person.last_name = '" + person.getName() + "' AND person.first_name = '" + person.getForename() + "' AND person.birthdate = '" + dateFormat.format(person.getBirthday()) + "' AND person.email = '" + person.getEmail() + "' AND person.address_id = " + getAddressID(person.getAddress()));
         return resultSet != null && resultSet.next() ? resultSet.getInt(1) : Integer.MIN_VALUE;
     }
 
@@ -176,7 +175,7 @@ public class Database {
     private static int setPerson(Person person) throws SQLException, ClassNotFoundException {
         if (!hasPerson(person)) {
             PreparedStatement preparedStatement = getConnection().prepareStatement("INSERT INTO person (first_name, last_name, birthdate, email, address_id) VALUES (?, ?, ?, ?, ?)");
-            preparedStatement.setString(1, person.getForeName());
+            preparedStatement.setString(1, person.getForename());
             preparedStatement.setString(2, person.getName());
             if (person.getBirthday() == null)
                 preparedStatement.setDate(3, null);
@@ -231,8 +230,14 @@ public class Database {
 
     private static Person getPerson(int id) throws SQLException, ClassNotFoundException {
         ResultSet rs = getFromDatabase("SELECT * FROM person WHERE person_id = " + id);
-        if (rs.next())
-            return new Person(rs.getString("last_name"), rs.getString("first_name"), new java.util.Date(rs.getDate("birthdate").getTime()), getAddress(rs.getInt("address_id")), rs.getString("email"));
+        java.util.Date date;
+        if (rs.next()) {
+            if (rs.getDate("birthdate") == null)
+                date = null;
+            else
+                date = new java.util.Date(rs.getDate("birthdate").getTime());
+            return new Person(rs.getString("last_name"), rs.getString("first_name"), date, getAddress(rs.getInt("address_id")), rs.getString("email"));
+        }
         return null;
     }
 
@@ -288,7 +293,7 @@ public class Database {
 
     private static void deletePerson(Person person) throws SQLException, ClassNotFoundException {
         PreparedStatement preparedStatement = getConnection().prepareStatement("DELETE FROM person WHERE first_name = ? AND last_name = ? AND birthdate = ? AND email = ? AND address_id = ?");
-        preparedStatement.setString(1, person.getForeName());
+        preparedStatement.setString(1, person.getForename());
         preparedStatement.setString(2, person.getName());
         preparedStatement.setDate(3, new Date(person.getBirthday().getTime()));
         preparedStatement.setString(4, person.getEmail());
@@ -300,9 +305,9 @@ public class Database {
 
     //------------------------CheckMultipleUse--------------------------
     private static int connectToPeron(Person person) throws SQLException, ClassNotFoundException {
-        ResultSet rs = getFromDatabase("SELECT student_id FROM student LEFT JOIN person ON student.person_id = person.person_id WHERE person.last_name = '" + person.getName() + "' AND person.first_name = '" + person.getForeName() + "' AND person.birthdate = '" + (dateFormat.format(person.getBirthday())) + "' AND person.email = '" + person.getEmail() + "' AND person.address_id = " + getAddressID(person.getAddress()) +
-                " UNION SELECT docent_id FROM docent LEFT JOIN person ON docent.person_id = person.person_id WHERE person.last_name = '" + person.getName() + "' AND person.first_name = '" + person.getForeName() + "' AND person.birthdate = '" + (dateFormat.format(person.getBirthday())) + "' AND person.email = '" + person.getEmail() + "' AND person.address_id = " + getAddressID(person.getAddress()) +
-                " UNION SELECT company_id FROM company LEFT JOIN person ON company.contact_person_id = person.person_id WHERE person.last_name = '" + person.getName() + "' AND person.first_name = '" + person.getForeName() + "' AND person.birthdate = '" + (dateFormat.format(person.getBirthday())) + "' AND person.email = '" + person.getEmail() + "' AND person.address_id = " + getAddressID(person.getAddress()));
+        ResultSet rs = getFromDatabase("SELECT student_id FROM student LEFT JOIN person ON student.person_id = person.person_id WHERE person.last_name = '" + person.getName() + "' AND person.first_name = '" + person.getForename() + "' AND person.birthdate = '" + (dateFormat.format(person.getBirthday())) + "' AND person.email = '" + person.getEmail() + "' AND person.address_id = " + getAddressID(person.getAddress()) +
+                " UNION SELECT docent_id FROM docent LEFT JOIN person ON docent.person_id = person.person_id WHERE person.last_name = '" + person.getName() + "' AND person.first_name = '" + person.getForename() + "' AND person.birthdate = '" + (dateFormat.format(person.getBirthday())) + "' AND person.email = '" + person.getEmail() + "' AND person.address_id = " + getAddressID(person.getAddress()) +
+                " UNION SELECT company_id FROM company LEFT JOIN person ON company.contact_person_id = person.person_id WHERE person.last_name = '" + person.getName() + "' AND person.first_name = '" + person.getForename() + "' AND person.birthdate = '" + (dateFormat.format(person.getBirthday())) + "' AND person.email = '" + person.getEmail() + "' AND person.address_id = " + getAddressID(person.getAddress()));
         int rowCount = 0;
         if (rs.last()) {
             rowCount = rs.getRow();
@@ -313,7 +318,7 @@ public class Database {
 
     private static int connectToAddress(Address address) throws SQLException, ClassNotFoundException {
         ResultSet rs = getFromDatabase("SELECT person_id FROM person LEFT JOIN address ON person.address_id = address.address_id WHERE street = '" + address.getStreet() + "' AND number = '" + address.getNumber() + "' AND postal_code = '" + address.getPostcode() + "' AND city = '" + address.getCity() + "' AND country = '" + address.getCountry() + "'" +
-                "UNION SELECT company_id FROM company LEFT JOIN address ON company.address_id = address.address_id WHERE street = '" + address.getStreet() + "' AND number = '" + address.getNumber() + "' AND postal_code = '" + address.getPostcode() + "' AND city = '" + address.getCity() + "' AND country = '" + address.getCountry()+"'");
+                "UNION SELECT company_id FROM company LEFT JOIN address ON company.address_id = address.address_id WHERE street = '" + address.getStreet() + "' AND number = '" + address.getNumber() + "' AND postal_code = '" + address.getPostcode() + "' AND city = '" + address.getCity() + "' AND country = '" + address.getCountry() + "'");
         int rowCount = 0;
         if (rs.last()) {
             rowCount = rs.getRow();
@@ -447,7 +452,7 @@ public class Database {
 
     private static int updatePerson(Person person, int id) throws SQLException, ClassNotFoundException {
         PreparedStatement preparedStatement = getConnection().prepareStatement("UPDATE person SET first_name = ?, last_name = ?, birthdate = ?, email = ?, address_id = ? WHERE person_id = ?");
-        preparedStatement.setString(1, person.getForeName());
+        preparedStatement.setString(1, person.getForename());
         preparedStatement.setString(2, person.getName());
         preparedStatement.setDate(3, new Date(person.getBirthday().getTime()));
         preparedStatement.setString(4, person.getEmail());
@@ -479,7 +484,8 @@ public class Database {
                 return f;
         return Integer.MIN_VALUE;
     }
-    private static void sleep(int milli){
+
+    private static void sleep(int milli) {
         try {
             Thread.sleep(milli);
         } catch (InterruptedException e) {
