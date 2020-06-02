@@ -242,7 +242,7 @@ public class InsertStudentController {
                         studentBirthday,
                         new Address(studentStreet.getText(), studentHomeNumber.getText(), studentPostalCode.getText(), studentCity.getText(), studentCountry.getText()),
                         studentEmail.getText(),
-                        (Course)courseName.getValue(),
+                        courseName.getValue(),
                         Integer.parseInt(javaKnowledgeLabel.getText()),
                         company
                 );
