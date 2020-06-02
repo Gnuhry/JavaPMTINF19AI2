@@ -11,6 +11,8 @@ import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -94,10 +96,6 @@ public class ShowStudentsController implements Initializable {
         groupFilter.setVisible(true);
     }
 
-    @FXML
-    private void search() {
-
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -136,5 +134,27 @@ public class ShowStudentsController implements Initializable {
         System.out.println(filterCompanyOptions);
         companyFilterBox.getItems().setAll(filterCompanyOptions);
         groupFilterBox.getItems().setAll("Studierende", "Dozenten", "Kurse", "Unternehmen");
+
+        FilteredList<DualStudent> filteredData = new FilteredList<>(data, p -> true);
+        searchBox.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(person -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (person.getForename().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                } else if (person.getName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                return false;
+            });
+        });
+        SortedList<DualStudent> sortedData = new SortedList<>(filteredData);
+        sortedData.comparatorProperty().bind(studentTable.comparatorProperty());
+        studentTable.setItems(sortedData);
+
     }
 }

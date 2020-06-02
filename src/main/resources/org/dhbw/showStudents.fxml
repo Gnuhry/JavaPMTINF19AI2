@@ -61,7 +61,7 @@
                               <Label fx:id="groupFilter" prefHeight="18.0" prefWidth="110.0" text="Label " translateX="30.0" visible="false" />
                            </children>
                         </HBox>
-                        <TextField fx:id="searchBox" onAction="#search" />
+                        <TextField fx:id="searchBox" promptText="Nachnamen suchen" />
                         <ComboBox fx:id="groupFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0" promptText="Gruppe wählen" translateX="50.0" />
                         <ComboBox fx:id="courseFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0" promptText="Kurs wählen" translateX="50.0" />
                         <ComboBox fx:id="companyFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" promptText="Unternehmen wählen" translateX="50.0" />
