@@ -1,37 +1,32 @@
 package org.dhbw;
 
-import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import org.dhbw.classes.*;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Calendar;
 import java.util.Date;
 
 public class InsertStudentController {
 
     ObservableList<Company> chooseCompanyOptions = FXCollections.observableArrayList(
-            new Company("Alnatura", new Address("Test", "1", "12345", "Test", "Test"), new Person("Janina", "Hofmann", ""))
+            University.getCompanies()
+            //new Company("Alnatura", new Address("Test", "1", "12345", "Test", "Test"), new Person("Janina", "Hofmann", ""))
     );
 
     ObservableList<Course> chooseCourseOptions = FXCollections.observableArrayList(
-            new Course("TINF19AI2", StudyCourse.AInformatik, new Date(119, Calendar.OCTOBER, 1))
+            //new Course("TINF19AI2", StudyCourse.AInformatik, new Date(119, Calendar.OCTOBER, 1))
+            University.getCourses()
     );
 
-    ObservableList<Person> chooseContactPersonOptions = FXCollections.observableArrayList(
-            new Person("Janina", "Hofmann", "")
-    );
 
     @FXML
     private Label errorMessage;
@@ -62,8 +57,6 @@ public class InsertStudentController {
     @FXML
     private ComboBox<Company> companyChoose;
     @FXML
-    private VBox cCompany;
-    @FXML
     private TextField companyName;
     @FXML
     private TextField companyStreet;
@@ -78,11 +71,11 @@ public class InsertStudentController {
     @FXML
     private HBox companyPerson;
     @FXML
-    private ComboBox<Person> companyPersonChoose;
-    @FXML
     private TextField companyPersonFirstName;
     @FXML
     private TextField companyPersonLastName;
+    @FXML
+    private TextField companyPersonEmail;
     @FXML
     private ComboBox<Course> courseName;
     @FXML
@@ -99,7 +92,6 @@ public class InsertStudentController {
     @FXML
     private void initialize() {
         companyChoose.setItems(chooseCompanyOptions);
-        companyPersonChoose.setItems(chooseContactPersonOptions);
         courseName.setItems(chooseCourseOptions);
     }
 
@@ -125,16 +117,6 @@ public class InsertStudentController {
         javaKnowledgeLabel.setText("" + (int)javaKnowledgeSlider.getValue());
     }
 
-    @FXML
-    private void createCompany() throws IOException {
-        cCompany.setVisible(true);
-    }
-
-    @FXML
-    private void createCompanyPerson() throws IOException {
-        companyPerson.setVisible(true);
-    }
-
     private LocalDate convertToLocalDateViaSqlDate(Date dateToConvert) {
         return new java.sql.Date(dateToConvert.getTime()).toLocalDate();
     }
@@ -158,22 +140,12 @@ public class InsertStudentController {
     }
 
     @FXML
-    private void showContactPerson() {
-        Person contactPerson = companyPersonChoose.getValue();
-        companyPersonFirstName.setText(contactPerson.getForename());
-        companyPersonLastName.setText(contactPerson.getName());
-
-    }
-
-    @FXML
     private void acceptTab(KeyEvent keyEvent) {
             System.out.println("test");
             if (keyEvent.getCode() == KeyCode.TAB) {
                 System.out.println("Hallo" + studentBirth.getEditor().getText());
             }
     }
-
-
 
     @FXML
     private void submit() throws IOException {
@@ -183,7 +155,7 @@ public class InsertStudentController {
                 System.out.println("NPE2 found");    // LOG Datei?
             } else {
                 Company company;
-                Person contactPerson = new Person(companyPersonFirstName.getText(), companyPersonLastName.getText(), "");
+                Person contactPerson = new Person(companyPersonFirstName.getText(), companyPersonLastName.getText(), companyPersonEmail.getText());
                 Address companyAddress = new Address(companyStreet.getText(), companyHomeNumber.getText(), companyPostalCode.getText(), companyCity.getText(), companyCountry.getText());
 
                 LocalDate localDateStudentBirth = studentBirth.getValue();
@@ -192,15 +164,7 @@ public class InsertStudentController {
 
                 int focusStage = 0;
                 errorMessage.setText("Bitte korrigieren Sie die Fehler in folgenden Feldern");
-                if (companyChoose.getAccessibleText() != null) {
-                    company = new Company(companyChoose.getAccessibleText(), companyAddress, contactPerson);
-                } else {
-                    if (companyPersonChoose.getAccessibleText() != null) {
-                        company = new Company(companyName.getText(), companyAddress, contactPerson); //eigentlich muss hier die companyPersonChoose in eine Person umgewandelt werden
-                    } else {
-                        company = new Company(companyName.getText(), companyAddress, contactPerson);
-                    }
-                }
+                company = new Company(companyName.getText(), companyAddress, contactPerson);
 
                 if (!Check.validateEmail(studentEmail.getText())) {
                     studentEmail.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
@@ -247,6 +211,9 @@ public class InsertStudentController {
                         company
                 );
                 System.out.println(dualStudent);
+                if (companyChoose.getEditor().getText() == "Unternehmen auswählen") {
+                    University.addCompany(company);
+                }
                 University.addStudent(dualStudent);
             }
         } catch (NullPointerException npe) {

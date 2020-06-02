@@ -37,20 +37,19 @@ public class DualStudent extends Person {
         this.deleteButton = new Button("D");
         this.changeButton.setOnAction((ActionEvent event) -> {
             System.out.println("Update");
-            /*try {
+            try {
                 Database.updateStudent(this, this.getStudentNumber());
             } catch (SQLException | ClassNotFoundException throwables) {
                 throwables.printStackTrace();
-            }*/
+            }
         });
         this.deleteButton.setOnAction((ActionEvent event) -> {
             System.out.println("Delete");
-            /*
             try {
-                //Database.deleteStudent(this);
+                Database.deleteStudent(this);
             } catch (SQLException | ClassNotFoundException throwables) {
                 throwables.printStackTrace();
-            }*/
+            }
         });
     }
 

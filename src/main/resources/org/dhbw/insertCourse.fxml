@@ -21,6 +21,32 @@
 
 <AnchorPane maxHeight="600.0" maxWidth="1080.0" minHeight="600.0" minWidth="1080.0" prefHeight="600.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.InsertCourseController">
    <children>
+      <ImageView fitHeight="600.0" fitWidth="1080.0" layoutX="10.0" layoutY="10.0" opacity="0.28" pickOnBounds="true" smooth="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <image>
+            <Image url="@images/DHBW_Verwaltungsgebäude.jpg" />
+         </image>
+         <effect>
+            <BoxBlur height="3.0" width="3.0" />
+         </effect>
+         <viewport>
+            <Rectangle2D />
+         </viewport>
+      </ImageView>
+      <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" opacity="0.05" prefHeight="600.0" prefWidth="1080.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <ImageView fitHeight="600.0" fitWidth="1080.0" opacity="0.75" pickOnBounds="true" smooth="false">
+               <image>
+                  <Image url="@images/DHBW_Verwaltungsgebäude.jpg" />
+               </image>
+               <effect>
+                  <BoxBlur height="3.0" width="3.0" />
+               </effect>
+               <viewport>
+                  <Rectangle2D />
+               </viewport>
+            </ImageView>
+         </children>
+      </VBox>
       <Circle fill="#aebcca" layoutX="88.0" layoutY="123.0" radius="58.0" stroke="BLACK" strokeType="INSIDE" />
       <Button id="backToOverview" fx:id="backToOverview" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Zurück zur Übersicht" />
       <ImageView fitHeight="67.0" fitWidth="82.0" layoutX="54.0" layoutY="90.0" pickOnBounds="true" preserveRatio="true">
@@ -78,32 +104,6 @@
             <Font name="Comic Sans MS Bold Italic" size="18.0" />
          </font>
       </Label>
-      <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" opacity="0.05" prefHeight="600.0" prefWidth="1080.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-         <children>
-            <ImageView fitHeight="600.0" fitWidth="1080.0" opacity="0.75" pickOnBounds="true" smooth="false">
-               <image>
-                  <Image url="@images/DHBW_Verwaltungsgebäude.jpg" />
-               </image>
-               <effect>
-                  <BoxBlur height="3.0" width="3.0" />
-               </effect>
-               <viewport>
-                  <Rectangle2D />
-               </viewport>
-            </ImageView>
-         </children>
-      </VBox>
-      <ImageView fitHeight="600.0" fitWidth="1080.0" layoutX="10.0" layoutY="10.0" opacity="0.28" pickOnBounds="true" smooth="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <image>
-            <Image url="@images/DHBW_Verwaltungsgebäude.jpg" />
-         </image>
-         <effect>
-            <BoxBlur height="3.0" width="3.0" />
-         </effect>
-         <viewport>
-            <Rectangle2D />
-         </viewport>
-      </ImageView>
       <DialogPane fx:id="showNullPointer" layoutX="136.0" layoutY="400.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="142.0" prefWidth="482.0" style="-fx-background-color: lightgray;" visible="false">
          <header>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="113.0" prefWidth="482.0">
