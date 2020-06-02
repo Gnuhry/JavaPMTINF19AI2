@@ -26,7 +26,7 @@ public class InsertStudentController {
     );
 
     ObservableList<Course> chooseCourseOptions = FXCollections.observableArrayList(
-            new Course("TINF19AI2", StudyCourse.AInformatik, new Date(119, Calendar.OCTOBER, 1))
+            University.getCourses()
     );
 
     ObservableList<Person> chooseContactPersonOptions = FXCollections.observableArrayList(
@@ -246,10 +246,11 @@ public class InsertStudentController {
                         Integer.parseInt(javaKnowledgeLabel.getText()),
                         company
                 );
+                System.out.println(courseName.getValue());
                 System.out.println(dualStudent);
                 University.addStudent(dualStudent);
             }
-        } catch (NullPointerException npe) {
+        } catch (NumberFormatException npe) {
             showNullPointer.setVisible(true);
             System.out.println("NPE found");    // LOG Datei?
         }
