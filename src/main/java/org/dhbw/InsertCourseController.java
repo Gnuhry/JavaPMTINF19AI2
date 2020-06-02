@@ -20,11 +20,13 @@ import java.util.Date;
 public class InsertCourseController {
 
     ObservableList<Person> chooseCourseRepresentOptions = FXCollections.observableArrayList(
-            new Person("Silas", "Wessely", "")
+            University.getStudents()
+            //new Person("Silas", "Wessely", "")
     );
 
     ObservableList<Docent> chooseCourseDirectorOptions = FXCollections.observableArrayList(
-            new Docent("Stroetmann", "Karl", new Date(70, Calendar.JANUARY, 1), new Address("Test", "1", "12345", "Test", "Test"))
+            University.getDocents()
+            //new Docent("Stroetmann", "Karl", new Date(70, Calendar.JANUARY, 1), new Address("Test", "1", "12345", "Test", "Test"))
     );
 
     @FXML
