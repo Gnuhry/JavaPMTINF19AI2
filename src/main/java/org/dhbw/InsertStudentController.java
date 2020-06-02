@@ -160,7 +160,7 @@ public class InsertStudentController {
     @FXML
     private void showContactPerson() {
         Person contactPerson = companyPersonChoose.getValue();
-        companyPersonFirstName.setText(contactPerson.getForeName());
+        companyPersonFirstName.setText(contactPerson.getForename());
         companyPersonLastName.setText(contactPerson.getName());
 
     }
