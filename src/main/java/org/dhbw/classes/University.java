@@ -19,8 +19,7 @@ public class University {
         }
         if (docent_array != null)
             return Arrays.asList(docent_array);
-        else
-            return new ArrayList<>();
+        return new ArrayList<>();
     }
 
     public static List<DualStudent> getStudents() {
@@ -32,8 +31,7 @@ public class University {
         }
         if (student_array != null)
             return Arrays.asList(student_array);
-        else
-            return new ArrayList<>();
+        return new ArrayList<>();
     }
 
     public static List<Course> getCourses() {
@@ -45,8 +43,19 @@ public class University {
         }
         if (course_array != null)
             return Arrays.asList(course_array);
-        else
-            return new ArrayList<>();
+        return new ArrayList<>();
+    }
+
+    public static List<Company> getCompanies() {
+        Company[] company_array = new Company[0];
+        try {
+            company_array = Database.getAllCompany();
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+        if (company_array != null)
+            return Arrays.asList(company_array);
+        return new ArrayList<>();
     }
 
 
@@ -112,6 +121,15 @@ public class University {
         return false;
     }
 
+    public static boolean isCompany(Company company) throws ClassNotFoundException {
+        try {
+            return Database.hasCompany(company);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
+
     //-----------------------------Remove----------------------
     public static void removeDocent(Docent d) {
         try {
@@ -132,6 +150,14 @@ public class University {
     public static void removeCourse(Course c) {
         try {
             Database.deleteCourse(c);
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public static void removeCompany(Company c) {
+        try {
+            Database.deleteCompany(c);
         } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
         }
@@ -158,6 +184,14 @@ public class University {
         try {
             Database.updateCourse(c, Database.getCourseID(c));
         } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public static void updateCompany(Company c) throws ClassNotFoundException {
+        try {
+            Database.updateCompany(c, Database.getCompanyID(c));
+        } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
     }

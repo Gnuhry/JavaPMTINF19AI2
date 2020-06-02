@@ -70,6 +70,10 @@ public class Database {
         return getCourseID(course) != Integer.MIN_VALUE;
     }
 
+    public static boolean hasCompany(Company company) throws SQLException, ClassNotFoundException {
+        return getCompanyID(company) != Integer.MIN_VALUE;
+    }
+
     private static boolean hasAddress(Address address) throws SQLException, ClassNotFoundException {
         return getAddressID(address) != Integer.MIN_VALUE;
     }
@@ -78,14 +82,15 @@ public class Database {
         return getPersonID(person) != Integer.MIN_VALUE;
     }
 
-    private static boolean hasCompany(Company company) throws SQLException, ClassNotFoundException {
-        return getCompanyID(company) != Integer.MIN_VALUE;
-    }
-
 
     //--------------------------------getObjectID-----------------------
     public static int getCourseID(Course course) throws SQLException, ClassNotFoundException {
         ResultSet resultSet = getFromDatabase("SELECT course_id, registry_date FROM course WHERE room = " + getRoomID(course.getRoom()) + " AND name = '" + course.getName() + "' AND registry_date = '" + dateFormat.format(course.getRegistrationDate()) + "'AND course_type = " + getCourseTypeID(course.getStudyCourse()) + " AND study_director_id = " + course.getStudyDirector().getDocentNumber() + " AND representative_student_id = " + course.getCourseSpeakerID());
+        return resultSet != null && resultSet.next() ? resultSet.getInt(1) : Integer.MIN_VALUE;
+    }
+
+    public static int getCompanyID(Company company) throws SQLException, ClassNotFoundException {
+        ResultSet resultSet = getFromDatabase("SELECT company_id FROM company WHERE name = '" + company.getName() + "' AND address_id = " + getAddressID(company.getAddress()) + " AND contact_person_id = " + getPersonID(company.getContactPerson()));
         return resultSet != null && resultSet.next() ? resultSet.getInt(1) : Integer.MIN_VALUE;
     }
 
@@ -97,11 +102,6 @@ public class Database {
     private static int getPersonID(Person person) throws SQLException, ClassNotFoundException {
         if (person.getBirthday() == null) return Integer.MIN_VALUE;
         ResultSet resultSet = getFromDatabase("SELECT person_id, birthdate FROM person WHERE person.last_name = '" + person.getName() + "' AND person.first_name = '" + person.getForeName() + "' AND person.birthdate = '" + dateFormat.format(person.getBirthday()) + "' AND person.email = '" + person.getEmail() + "' AND person.address_id = " + getAddressID(person.getAddress()));
-        return resultSet != null && resultSet.next() ? resultSet.getInt(1) : Integer.MIN_VALUE;
-    }
-
-    private static int getCompanyID(Company company) throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = getFromDatabase("SELECT company_id FROM company WHERE name = '" + company.getName() + "' AND address_id = " + getAddressID(company.getAddress()) + " AND contact_person_id = " + getPersonID(company.getContactPerson()));
         return resultSet != null && resultSet.next() ? resultSet.getInt(1) : Integer.MIN_VALUE;
     }
 
@@ -144,6 +144,18 @@ public class Database {
         return getCourseID(course);
     }
 
+    public static int setCompany(Company company) throws SQLException, ClassNotFoundException {
+        if (!hasCompany(company)) {
+            PreparedStatement preparedStatement = getConnection().prepareStatement("INSERT INTO company (name, address_id, contact_person_id) VALUES (?, ?, ?)");
+            preparedStatement.setString(1, company.getName());
+            preparedStatement.setInt(2, setAddress(company.getAddress()));
+            preparedStatement.setInt(3, setPerson(company.getContactPerson()));
+            setToDatabase(preparedStatement);
+            sleep(1000);
+        }
+        return getCompanyID(company);
+    }
+
     private static int setAddress(Address address) throws SQLException, ClassNotFoundException {
         if (!hasAddress(address)) {
             PreparedStatement preparedStatement = getConnection().prepareStatement("INSERT INTO address (street, number, postal_code, city, country) VALUES (?, ?, ?, ?, ?)");
@@ -178,18 +190,6 @@ public class Database {
         return getPersonID(person);
     }
 
-    public static int setCompany(Company company) throws SQLException, ClassNotFoundException {
-        if (!hasCompany(company)) {
-            PreparedStatement preparedStatement = getConnection().prepareStatement("INSERT INTO company (name, address_id, contact_person_id) VALUES (?, ?, ?)");
-            preparedStatement.setString(1, company.getName());
-            preparedStatement.setInt(2, setAddress(company.getAddress()));
-            preparedStatement.setInt(3, setPerson(company.getContactPerson()));
-            setToDatabase(preparedStatement);
-            sleep(1000);
-        }
-        return getCompanyID(company);
-    }
-
     //--------------------------------getObject-----------------------
     public static DualStudent getStudent(int id) throws SQLException, ClassNotFoundException {
         ResultSet rs = getFromDatabase("SELECT * FROM student LEFT JOIN person ON student.person_id = person.person_id WHERE student_id = " + id);
@@ -212,6 +212,13 @@ public class Database {
         return null;
     }
 
+    public static Company getCompany(int id) throws SQLException, ClassNotFoundException {
+        ResultSet rs = getFromDatabase("SELECT * FROM company WHERE company_id = " + id);
+        if (rs.next())
+            return new Company(rs.getString("name"), getAddress(rs.getInt("address_id")), getPerson(rs.getInt("contact_person_id")));
+        return null;
+    }
+
     private static Address getAddress(int id) throws SQLException, ClassNotFoundException {
         ResultSet rs = getFromDatabase("SELECT * FROM address WHERE address_id = " + id);
         if (rs.next())
@@ -223,13 +230,6 @@ public class Database {
         ResultSet rs = getFromDatabase("SELECT * FROM person WHERE person_id = " + id);
         if (rs.next())
             return new Person(rs.getString("last_name"), rs.getString("first_name"), new java.util.Date(rs.getDate("birthdate").getTime()), getAddress(rs.getInt("address_id")), rs.getString("email"));
-        return null;
-    }
-
-    private static Company getCompany(int id) throws SQLException, ClassNotFoundException {
-        ResultSet rs = getFromDatabase("SELECT * FROM company WHERE company_id = " + id);
-        if (rs.next())
-            return new Company(rs.getString("name"), getAddress(rs.getInt("address_id")), getPerson(rs.getInt("contact_person_id")));
         return null;
     }
 
@@ -261,6 +261,18 @@ public class Database {
         setToDatabase(preparedStatement);
     }
 
+    public static void deleteCompany(Company company) throws SQLException, ClassNotFoundException {
+        PreparedStatement preparedStatement = getConnection().prepareStatement("DELETE FROM company WHERE name = ?, address_id = ?, contact_person_id = ?");
+        preparedStatement.setString(1, company.getName());
+        preparedStatement.setInt(2, getAddressID(company.getAddress()));
+        preparedStatement.setInt(3, getPersonID(company.getContactPerson()));
+        setToDatabase(preparedStatement);
+        if (connectToAddress(company.getAddress()) == 0)
+            deleteAddress(company.getAddress());
+        if (connectToPeron(company.getContactPerson()) == 0)
+            deletePerson(company.getContactPerson());
+    }
+
     private static void deleteAddress(Address address) throws SQLException, ClassNotFoundException {
         PreparedStatement preparedStatement = getConnection().prepareStatement("DELETE FROM address WHERE street = ? AND address.number = ? AND postal_code = ? AND city = ? AND country = ?");
         preparedStatement.setString(1, address.getStreet());
@@ -281,18 +293,6 @@ public class Database {
         setToDatabase(preparedStatement);
         if (connectToAddress(person.getAddress()) == 0)
             deleteAddress(person.getAddress());
-    }
-
-    private static void deleteCompany(Company company) throws SQLException, ClassNotFoundException {
-        PreparedStatement preparedStatement = getConnection().prepareStatement("DELETE FROM company WHERE name = ?, address_id = ?, contact_person_id = ?");
-        preparedStatement.setString(1, company.getName());
-        preparedStatement.setInt(2, getAddressID(company.getAddress()));
-        preparedStatement.setInt(3, getPersonID(company.getContactPerson()));
-        setToDatabase(preparedStatement);
-        if (connectToAddress(company.getAddress()) == 0)
-            deleteAddress(company.getAddress());
-        if (connectToPeron(company.getContactPerson()) == 0)
-            deletePerson(company.getContactPerson());
     }
 
     //------------------------CheckMultipleUse--------------------------
@@ -344,6 +344,14 @@ public class Database {
         return courses.toArray(Course[]::new);
     }
 
+    public static Company[] getAllCompany() throws SQLException, ClassNotFoundException {
+        List<Company> companies = new ArrayList<>();
+        ResultSet rs = getFromDatabase("SELECT * FROM course LEFT JOIN docent ON course.study_director_id = docent.docent_id LEFT JOIN person ON person.person_id = docent.person_id");
+        if (rs.next())
+            companies.add(new Company(rs.getString("name"), getAddress(rs.getInt("address_id")), getPerson(rs.getInt("contact_person_id"))));
+        return companies.toArray(Company[]::new);
+    }
+
     public static Address[] getAllAddress() throws SQLException, ClassNotFoundException {
         List<Address> addresses = new ArrayList<>();
         ResultSet rs = getFromDatabase("SELECT * FROM course LEFT JOIN docent ON course.study_director_id = docent.docent_id LEFT JOIN person ON person.person_id = docent.person_id");
@@ -358,14 +366,6 @@ public class Database {
         if (rs.next())
             persons.add(new Person(rs.getString("last_name"), rs.getString("first_name"), new java.util.Date(rs.getDate("birthdate").getTime()), getAddress(rs.getInt("address_id")), rs.getString("email")));
         return persons.toArray(Person[]::new);
-    }
-
-    public static Company[] getAllCompany() throws SQLException, ClassNotFoundException {
-        List<Company> companies = new ArrayList<>();
-        ResultSet rs = getFromDatabase("SELECT * FROM course LEFT JOIN docent ON course.study_director_id = docent.docent_id LEFT JOIN person ON person.person_id = docent.person_id");
-        if (rs.next())
-            companies.add(new Company(rs.getString("name"), getAddress(rs.getInt("address_id")), getPerson(rs.getInt("contact_person_id"))));
-        return companies.toArray(Company[]::new);
     }
 
     //-----------------------------UpdateObject------------------------------
@@ -409,6 +409,27 @@ public class Database {
         return id;
     }
 
+    public static int updateCompany(Company company, int company_id) throws SQLException, ClassNotFoundException {
+        int id = getCompanyID(company);
+        PreparedStatement preparedStatement = getConnection().prepareStatement("UPDATE company SET name = ?, address_id = ?, contact_person_id = ? WHERE company_id = ?");
+        preparedStatement.setString(1, company.getName());
+        int address_id;
+        if (connectToAddress(company.getAddress()) > 1)
+            address_id = setAddress(company.getAddress());
+        else
+            address_id = updateAddress(company.getAddress(), getAddressID(company.getAddress()));
+        preparedStatement.setInt(2, address_id);
+        int person_id;
+        if (connectToPeron(company.getContactPerson()) > 1)
+            person_id = setPerson(company.getContactPerson());
+        else
+            person_id = updatePerson(company.getContactPerson(), getPersonID(company.getContactPerson()));
+        preparedStatement.setInt(3, person_id);
+        preparedStatement.setInt(4, id);
+        setToDatabase(preparedStatement);
+        return id;
+    }
+
     private static int updateAddress(Address address, int id) throws SQLException, ClassNotFoundException {
         PreparedStatement preparedStatement = getConnection().prepareStatement("UPDATE address SET street = ? AND number = ? AND postal_code = ? AND city = ? AMD country = ? WHERE address_id = ?");
         preparedStatement.setString(1, address.getStreet());
@@ -437,28 +458,6 @@ public class Database {
         setToDatabase(preparedStatement);
         return id;
     }
-
-    private static int updateCompany(Company company, int company_id) throws SQLException, ClassNotFoundException {
-        int id = getCompanyID(company);
-        PreparedStatement preparedStatement = getConnection().prepareStatement("UPDATE company SET name = ?, address_id = ?, contact_person_id = ? WHERE company_id = ?");
-        preparedStatement.setString(1, company.getName());
-        int address_id;
-        if (connectToAddress(company.getAddress()) > 1)
-            address_id = setAddress(company.getAddress());
-        else
-            address_id = updateAddress(company.getAddress(), getAddressID(company.getAddress()));
-        preparedStatement.setInt(2, address_id);
-        int person_id;
-        if (connectToPeron(company.getContactPerson()) > 1)
-            person_id = setPerson(company.getContactPerson());
-        else
-            person_id = updatePerson(company.getContactPerson(), getPersonID(company.getContactPerson()));
-        preparedStatement.setInt(3, person_id);
-        preparedStatement.setInt(4, id);
-        setToDatabase(preparedStatement);
-        return id;
-    }
-
 
     //----------------------private-------------------------------------------
 
