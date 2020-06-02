@@ -81,6 +81,8 @@ public class InsertStudentController {
     @FXML
     private DatePicker courseDate;
     @FXML
+    private TextField courseRoom;
+    @FXML
     private Label javaKnowledgeLabel;
     @FXML
     private Slider javaKnowledgeSlider;
@@ -119,11 +121,16 @@ public class InsertStudentController {
         return new java.sql.Date(dateToConvert.getTime()).toLocalDate();
     }
 
+    private Date convertToDateViaSqlDate(LocalDate dateToConvert) {
+        return java.sql.Date.valueOf(dateToConvert);
+    }
+
     @FXML
     private void showCourse() throws IOException {
         Course course = courseName.getValue();
         courseType.setText("" + course.getStudyCourse());
         courseDate.setValue(convertToLocalDateViaSqlDate(course.getRegistrationDate()));
+        courseRoom.setText("" + course.getRoom());
     }
 
     @FXML
@@ -135,6 +142,9 @@ public class InsertStudentController {
         companyPostalCode.setText(company.getAddress().getPostcode());
         companyCity.setText(company.getAddress().getCity());
         companyCountry.setText(company.getAddress().getCountry());
+        companyPersonFirstName.setText(company.getContactPerson().getForename());
+        companyPersonLastName.setText(company.getContactPerson().getName());
+        companyPersonEmail.setText(company.getContactPerson().getEmail());
     }
 
     @FXML
@@ -153,7 +163,7 @@ public class InsertStudentController {
                 System.out.println("NPE2 found");    // LOG Datei?
             } else {
                 Company company;
-                Person contactPerson = new Person(companyPersonFirstName.getText(), companyPersonLastName.getText(), companyPersonEmail.getText());
+                Person contactPerson = new Person(companyPersonLastName.getText(), companyPersonFirstName.getText(), companyPersonEmail.getText());
                 Address companyAddress = new Address(companyStreet.getText(), companyHomeNumber.getText(), companyPostalCode.getText(), companyCity.getText(), companyCountry.getText());
 
                 LocalDate localDateStudentBirth = studentBirth.getValue();
@@ -179,6 +189,11 @@ public class InsertStudentController {
                     if (!(focusStage == 1 || focusStage == 2)) focusStage = 3;
                     errorMessage.setText(errorMessage.getText() + " Unternehmen-Postleitzahl ");
                 } else companyPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
+                if (!Check.validateBirthdate(convertToDateViaSqlDate(studentBirth.getValue()))) {
+                    studentPostalCode.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
+                    if (focusStage == 1 || focusStage == 2 || focusStage == 3) focusStage = 4;
+                    errorMessage.setText(errorMessage.getText() + " Student-Geburtstag ");
+                }
 
                 if (focusStage == 1) {
                     studentEmail.requestFocus();
@@ -210,10 +225,12 @@ public class InsertStudentController {
                 );
                 System.out.println(courseName.getValue());
                 System.out.println(dualStudent);
-                if (companyChoose.getEditor().getText().equals("Unternehmen auswählen")) {
+                if (companyChoose.getValue() != null) {
                     University.addCompany(company);
                 }
                 University.addStudent(dualStudent);
+                System.out.println("Success");
+                backToOverview();
             }
         } catch (NumberFormatException npe) {
             showNullPointer.setVisible(true);

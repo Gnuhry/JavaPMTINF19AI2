@@ -1,8 +1,14 @@
 package org.dhbw.classes;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
+import org.dhbw.App;
 import org.dhbw.ShowStudentsController;
 
 import java.sql.SQLException;
@@ -11,14 +17,14 @@ import java.util.Date;
 import java.util.Objects;
 
 public class DualStudent extends Person {
+
     private final Company company;
     private int matriculationNumber; //TODO automatic? or manuel with constructer? -> Silas: Ist schon automatisch generiert im GUI
     private int studentNumber;
     private Course course;
     private int javaKnowledge;
     private Button changeButton;
-    private Button deleteButton;
-
+    public Button deleteButton;
 
     public DualStudent(String name, String forename, Date birthday, Address address, Company company) {
         super(name, forename, birthday, address);
@@ -37,21 +43,15 @@ public class DualStudent extends Person {
         this.deleteButton = new Button("D");
         this.changeButton.setOnAction((ActionEvent event) -> {
             System.out.println("Update");
-            try {
-                Database.updateStudent(this, this.getStudentNumber());
-            } catch (SQLException | ClassNotFoundException throwables) {
-                throwables.printStackTrace();
-            }
+            University.updateStudent(this);
         });
         this.deleteButton.setOnAction((ActionEvent event) -> {
             System.out.println("Delete");
-            try {
-                Database.deleteStudent(this);
-            } catch (SQLException | ClassNotFoundException throwables) {
-                throwables.printStackTrace();
-            }
+            University.removeStudent(this);
         });
     }
+
+
 
     //--------------------------Setter------------------------
     public void setCourse(Course course) {
