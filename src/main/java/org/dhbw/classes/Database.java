@@ -1,13 +1,18 @@
 package org.dhbw.classes;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class Database {
     private static Connection connection;
+    private static Statement statement;
+    private static SimpleDateFormat dateFormat;
 
     //----------------------------------------General----------------------------
+
     /**
      * Create a connection to the database
      *
@@ -19,6 +24,8 @@ public class Database {
             connection = DriverManager.getConnection(
                     "jdbc:mysql://85.214.247.101:3306/dhbw", "mlg_dhbw", "Reisebus1!");
         }
+        if(dateFormat == null)
+            dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return connection;
 
     }
@@ -30,10 +37,9 @@ public class Database {
      * @return all the values from the commands. [row][column]. if no value return null
      */
     public static ResultSet getFromDatabase(String command) throws SQLException, ClassNotFoundException {
-        Connection con = getConnection();
-        Statement statement = con.createStatement();
-        ResultSet resultSet = statement.executeQuery(command);
-        return resultSet;
+        getConnection();
+        statement = connection.createStatement();
+        return statement.executeQuery(command);
     }
 
     /**
@@ -43,20 +49,21 @@ public class Database {
      */
     public static void setToDatabase(PreparedStatement preparedStatement) {
         try {
-            Connection con = getConnection();
             preparedStatement.executeUpdate();
-        } catch (SQLException | ClassNotFoundException throwable) {
+            preparedStatement.close();
+//            statement.close();
+        } catch (SQLException throwable) {
             throwable.printStackTrace();
         }
     }
 
     //--------------------------------hasObject-----------------------
     public static boolean hasStudent(DualStudent student) throws SQLException, ClassNotFoundException {
-        return !getFromDatabase("SELECT student_id FROM student WHERE student_id = " + student.getStudentNumber()).next();
+        return getFromDatabase("SELECT student_id FROM student WHERE student_id = " + student.getStudentNumber()).next();
     }
 
     public static boolean hasDocent(Docent docent) throws SQLException, ClassNotFoundException {
-        return !getFromDatabase("SELECT docent_id FROM docent WHERE docent_id = " + docent.getDocentNumber()).next();
+        return getFromDatabase("SELECT docent_id FROM docent WHERE docent_id = " + docent.getDocentNumber()).next();
     }
 
     public static boolean hasCourse(Course course) throws SQLException, ClassNotFoundException {
@@ -78,29 +85,30 @@ public class Database {
 
     //--------------------------------getObjectID-----------------------
     public static int getCourseID(Course course) throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = getFromDatabase("SELECT course_id FROM course WHERE room = " + getRoomID(course.getRoom()) + " AND name = " + course.getName() + " AND registry_date = " + (new Timestamp(course.getRegistrationDate().getTime())) + " AND course_type = " + getCourseTypeID(course.getStudyCourse()) + " AND study_director_id = " + course.getStudyDirector().getDocentNumber() + " AND representative_student_id = " + course.getCourseSpeakerID());
-        return resultSet == null ? Integer.MIN_VALUE : resultSet.getInt(1);
+        ResultSet resultSet = getFromDatabase("SELECT course_id, registry_date FROM course WHERE room = " + getRoomID(course.getRoom()) + " AND name = '" + course.getName() + "' AND registry_date = '" + dateFormat.format(course.getRegistrationDate()) + "'AND course_type = " + getCourseTypeID(course.getStudyCourse()) + " AND study_director_id = " + course.getStudyDirector().getDocentNumber() + " AND representative_student_id = " + course.getCourseSpeakerID());
+        return resultSet != null && resultSet.next() ? resultSet.getInt(1) : Integer.MIN_VALUE;
     }
 
     private static int getAddressID(Address address) throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = getFromDatabase("SELECT * FROM address WHERE street = " + address.getStreet() + " AND number = " + address.getNumber() + " AND postal_code = " + address.getPostcode() + " AND city = " + address.getCity() + " AND country = " + address.getCountry());
-        return resultSet == null ? Integer.MIN_VALUE : resultSet.getInt(1);
+        ResultSet resultSet = getFromDatabase("SELECT address_id FROM address WHERE street = '" + address.getStreet() + "' AND number = '" + address.getNumber() + "' AND postal_code = '" + address.getPostcode() + "' AND city = '" + address.getCity() + "' AND country = '" + address.getCountry() + "'");
+        return resultSet != null && resultSet.next() ? resultSet.getInt(1) : Integer.MIN_VALUE;
     }
 
     private static int getPersonID(Person person) throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = getFromDatabase("SELECT * FROM person WHERE person.last_name = " + person.getName() + " AND person.first_name = " + person.getForeName() + " AND person.birthdate = " + (new Timestamp(person.getBirthday().getTime())) + " AND person.email = " + person.getEmail() + " AND person.address_id = " + getAddressID(person.getAddress()));
-        return resultSet == null ? Integer.MIN_VALUE : resultSet.getInt(1);
+        if (person.getBirthday() == null) return Integer.MIN_VALUE;
+        ResultSet resultSet = getFromDatabase("SELECT person_id, birthdate FROM person WHERE person.last_name = '" + person.getName() + "' AND person.first_name = '" + person.getForeName() + "' AND person.birthdate = '" + dateFormat.format(person.getBirthday()) + "' AND person.email = '" + person.getEmail() + "' AND person.address_id = " + getAddressID(person.getAddress()));
+        return resultSet != null && resultSet.next() ? resultSet.getInt(1) : Integer.MIN_VALUE;
     }
 
     private static int getCompanyID(Company company) throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = getFromDatabase("SELECT * FROM company WHERE name = " + company.getName() + " AND address_id = " + getAddressID(company.getAddress()) + " AND contact_person_id = " + getPersonID(company.getContactPerson()));
-        return resultSet == null ? Integer.MIN_VALUE : resultSet.getInt(1);
+        ResultSet resultSet = getFromDatabase("SELECT company_id FROM company WHERE name = '" + company.getName() + "' AND address_id = " + getAddressID(company.getAddress()) + " AND contact_person_id = " + getPersonID(company.getContactPerson()));
+        return resultSet != null && resultSet.next() ? resultSet.getInt(1) : Integer.MIN_VALUE;
     }
 
     //--------------------------------setObject-----------------------
     public static void setStudent(DualStudent student) throws SQLException, ClassNotFoundException {
         if (!hasStudent(student)) {
-            PreparedStatement preparedStatement = getConnection().prepareStatement("INSERT INTO STUDENT (student_id, matriculation_number, person_id, java_knowledge, course_id, company_id) VALUES (?, ?, ?, ?, ?, ?)");
+            PreparedStatement preparedStatement = getConnection().prepareStatement("INSERT INTO student (student_id, matriculation_number, person_id, java_knowlage, course_id, company_id) VALUES (?, ?, ?, ?, ?, ?)");
             preparedStatement.setInt(1, student.getStudentNumber());
             preparedStatement.setInt(2, student.getMatriculationNumber());
             preparedStatement.setInt(3, setPerson(student));
@@ -109,6 +117,7 @@ public class Database {
             preparedStatement.setInt(6, setCompany(student.getCompany()));
             setToDatabase(preparedStatement);
         }
+
     }
 
     public static void setDocent(Docent docent) throws SQLException, ClassNotFoundException {
@@ -130,6 +139,7 @@ public class Database {
             preparedStatement.setInt(5, course.getStudyDirector().getDocentNumber());
             preparedStatement.setInt(6, course.getCourseSpeakerID());
             setToDatabase(preparedStatement);
+            sleep(1000);
         }
         return getCourseID(course);
     }
@@ -143,6 +153,7 @@ public class Database {
             preparedStatement.setString(4, address.getCity());
             preparedStatement.setString(5, address.getCountry());
             setToDatabase(preparedStatement);
+            sleep(100);
         }
         return getAddressID(address);
     }
@@ -152,9 +163,17 @@ public class Database {
             PreparedStatement preparedStatement = getConnection().prepareStatement("INSERT INTO person (first_name, last_name, birthdate, email, address_id) VALUES (?, ?, ?, ?, ?)");
             preparedStatement.setString(1, person.getForeName());
             preparedStatement.setString(2, person.getName());
-            preparedStatement.setDate(3, new Date(person.getBirthday().getTime()));
+            if (person.getBirthday() == null)
+                preparedStatement.setDate(3, null);
+            else
+                preparedStatement.setDate(3, new Date(person.getBirthday().getTime()));
             preparedStatement.setString(4, person.getEmail());
-            preparedStatement.setInt(5, setAddress(person.getAddress()));
+            if (person.getAddress() == null)
+                preparedStatement.setInt(5, -1);
+            else
+                preparedStatement.setInt(5, setAddress(person.getAddress()));
+            setToDatabase(preparedStatement);
+            sleep(500);
         }
         return getPersonID(person);
     }
@@ -166,6 +185,7 @@ public class Database {
             preparedStatement.setInt(2, setAddress(company.getAddress()));
             preparedStatement.setInt(3, setPerson(company.getContactPerson()));
             setToDatabase(preparedStatement);
+            sleep(1000);
         }
         return getCompanyID(company);
     }
@@ -242,7 +262,7 @@ public class Database {
     }
 
     private static void deleteAddress(Address address) throws SQLException, ClassNotFoundException {
-        PreparedStatement preparedStatement = getConnection().prepareStatement("DELETE FROM address WHERE street = ? AND number = ? AND postal_code = ? AND city = ? AMD country = ?");
+        PreparedStatement preparedStatement = getConnection().prepareStatement("DELETE FROM address WHERE street = ? AND address.number = ? AND postal_code = ? AND city = ? AND country = ?");
         preparedStatement.setString(1, address.getStreet());
         preparedStatement.setString(2, address.getNumber());
         preparedStatement.setString(3, address.getPostcode());
@@ -252,7 +272,7 @@ public class Database {
     }
 
     private static void deletePerson(Person person) throws SQLException, ClassNotFoundException {
-        PreparedStatement preparedStatement = getConnection().prepareStatement("DELETE FROM person WHERE first_name = ?, last_name = ?, birthdate = ?, email = ?, address_id = ?");
+        PreparedStatement preparedStatement = getConnection().prepareStatement("DELETE FROM person WHERE first_name = ? AND last_name = ? AND birthdate = ? AND email = ? AND address_id = ?");
         preparedStatement.setString(1, person.getForeName());
         preparedStatement.setString(2, person.getName());
         preparedStatement.setDate(3, new Date(person.getBirthday().getTime()));
@@ -277,9 +297,9 @@ public class Database {
 
     //------------------------CheckMultipleUse--------------------------
     private static int connectToPeron(Person person) throws SQLException, ClassNotFoundException {
-        ResultSet rs = getFromDatabase("SELECT student_id FROM student LEFT JOIN person ON student.person_id = person.person_id WHERE person.last_name = " + person.getName() + " AND person.first_name = " + person.getForeName() + " AND person.birthdate = " + (new Timestamp(person.getBirthday().getTime())) + " AND person.email = " + person.getEmail() + " AND person.address_id = " + getAddressID(person.getAddress()) +
-                " UNION SELECT docent_id FROM docent LEFT JOIN person ON docent.person_id = person.person_id WHERE person.last_name = " + person.getName() + " AND person.first_name = " + person.getForeName() + " AND person.birthdate = " + (new Timestamp(person.getBirthday().getTime())) + " AND person.email = " + person.getEmail() + " AND person.address_id = " + getAddressID(person.getAddress()) +
-                " UNION SELECT company_id FROM company LEFT JOIN person ON company.contact_person_id = person.person_id WHERE person.last_name = " + person.getName() + " AND person.first_name = " + person.getForeName() + " AND person.birthdate = " + (new Timestamp(person.getBirthday().getTime())) + " AND person.email = " + person.getEmail() + " AND person.address_id = " + getAddressID(person.getAddress()));
+        ResultSet rs = getFromDatabase("SELECT student_id FROM student LEFT JOIN person ON student.person_id = person.person_id WHERE person.last_name = '" + person.getName() + "' AND person.first_name = '" + person.getForeName() + "' AND person.birthdate = '" + (dateFormat.format(person.getBirthday())) + "' AND person.email = '" + person.getEmail() + "' AND person.address_id = " + getAddressID(person.getAddress()) +
+                " UNION SELECT docent_id FROM docent LEFT JOIN person ON docent.person_id = person.person_id WHERE person.last_name = '" + person.getName() + "' AND person.first_name = '" + person.getForeName() + "' AND person.birthdate = '" + (dateFormat.format(person.getBirthday())) + "' AND person.email = '" + person.getEmail() + "' AND person.address_id = " + getAddressID(person.getAddress()) +
+                " UNION SELECT company_id FROM company LEFT JOIN person ON company.contact_person_id = person.person_id WHERE person.last_name = '" + person.getName() + "' AND person.first_name = '" + person.getForeName() + "' AND person.birthdate = '" + (dateFormat.format(person.getBirthday())) + "' AND person.email = '" + person.getEmail() + "' AND person.address_id = " + getAddressID(person.getAddress()));
         int rowCount = 0;
         if (rs.last()) {
             rowCount = rs.getRow();
@@ -289,8 +309,8 @@ public class Database {
     }
 
     private static int connectToAddress(Address address) throws SQLException, ClassNotFoundException {
-        ResultSet rs = getFromDatabase("SELECT person_id FROM person LEFT JOIN address ON person.address_id = address.address_id SELECT * FROM address WHERE street = " + address.getStreet() + " AND number = " + address.getNumber() + " AND postal_code = " + address.getPostcode() + " AND city = " + address.getCity() + " AND country = " + address.getCountry() + "" +
-                "UNION SELECT company_id FROM company LEFT JOIN address ON company.address_id = address.address_id SELECT * FROM address WHERE street = " + address.getStreet() + " AND number = " + address.getNumber() + " AND postal_code = " + address.getPostcode() + " AND city = " + address.getCity() + " AND country = " + address.getCountry());
+        ResultSet rs = getFromDatabase("SELECT person_id FROM person LEFT JOIN address ON person.address_id = address.address_id WHERE street = '" + address.getStreet() + "' AND number = '" + address.getNumber() + "' AND postal_code = '" + address.getPostcode() + "' AND city = '" + address.getCity() + "' AND country = '" + address.getCountry() + "'" +
+                "UNION SELECT company_id FROM company LEFT JOIN address ON company.address_id = address.address_id WHERE street = '" + address.getStreet() + "' AND number = '" + address.getNumber() + "' AND postal_code = '" + address.getPostcode() + "' AND city = '" + address.getCity() + "' AND country = '" + address.getCountry()+"'");
         int rowCount = 0;
         if (rs.last()) {
             rowCount = rs.getRow();
@@ -358,7 +378,7 @@ public class Database {
         else
             person_id = updatePerson(student, getPersonID(student));
         preparedStatement.setInt(2, person_id);
-        preparedStatement.setInt(3, updateCourse(student.getCourse(),getCourseID(student.getCourse())));
+        preparedStatement.setInt(3, updateCourse(student.getCourse(), getCourseID(student.getCourse())));
         preparedStatement.setInt(4, updateCompany(student.getCompany(), getCompanyID(student.getCompany())));
         preparedStatement.setInt(5, id);
         setToDatabase(preparedStatement);
@@ -456,5 +476,12 @@ public class Database {
             if (help[f] == c)
                 return f;
         return Integer.MIN_VALUE;
+    }
+    private static void sleep(int milli){
+        try {
+            Thread.sleep(milli);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

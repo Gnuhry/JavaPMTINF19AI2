@@ -26,17 +26,25 @@ public class Main {
 //        printout(Database.getFromDatabase("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA='dhbw' "));
 //        for(Student s:Database.loadStudent())
 //            System.out.println(s.getName());
-        try {
-            for (DualStudent dualStudent : Database.getAllStudent()) {
+        Calendar c = Calendar.getInstance();
+        c.set(2000, Calendar.NOVEMBER, 1, 0, 0, 0);
+        Calendar c2 = Calendar.getInstance();
+        c2.set(1970, Calendar.JANUARY, 1, 0, 0, 0);
+        Calendar c3 = Calendar.getInstance();
+        c3.set(2020, Calendar.JANUARY, 1, 0, 0, 0);
+         try {
+             Database.setStudent(new DualStudent(9874985, 7485688, "Wessely", "Silas", c.getTime(), new Address("Darmstädter Straße", "45", "78459", "Hanau", "Deutschland"), "silas.wessely@gmx.de", new Course("TINF19AI2", StudyCourse.AInformatik,
+                     new Docent("Hoffmann", "Prof. Dr. Holger", c2.getTime(), new Address("Baumgartenstraße", "23a", "64738", "Stuttgart", "Deutschland"), "holger@hoffmann.de", 879546), 0, c3.getTime(), CourseRoom.A222),
+                     78, new Company("Alnatura Produktions- und Handels GmbH", new Address("Mahatma-Gandhi-Straße", "7", "64295", "Darmstadt", "Deutschland"), new Person("Kasch", "Rüdiger", "kasch@alnatura.de"))));
+             for (DualStudent dualStudent : Database.getAllStudent()) {
                 System.out.println(dualStudent);
                 System.out.println(dualStudent.getCompany());
                 System.out.println(dualStudent.getCourse());
                 System.out.println(dualStudent.getAddress());
             }
-        } catch (SQLException throwables) {
+        } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("Test");
         }
 
     }

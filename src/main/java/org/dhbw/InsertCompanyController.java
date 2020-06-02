@@ -40,7 +40,7 @@ public class InsertCompanyController {
             if (companyName.getText().trim().isEmpty() || companyStreet.getText().trim().isEmpty() || companyHomeNumber.getText().trim().isEmpty() || companyPostalCode.getText().trim().isEmpty() || companyCity.getText().trim().isEmpty() || companyCountry.getText().trim().isEmpty() || companyContactPersonFirstName.getText().trim().isEmpty() || companyContactPersonLastName.getText().trim().isEmpty()) {
                 System.out.println("Fehler");
             } else {
-                Person contactPerson = new Person(companyContactPersonLastName.getText(), companyContactPersonFirstName.getText());
+                Person contactPerson = new Person(companyContactPersonLastName.getText(), companyContactPersonFirstName.getText(), "");
                 errorMessage.setText("Bitte korrigieren Sie die Fehler in folgenden Feldern");
                 if (!Check.validatePostalCode(companyPostalCode.getText())) {
                     companyPostalCode.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");

@@ -12,9 +12,10 @@ public class Person {
     private String name, forename, email;
     private Address address;
 
-    public Person (String name, String forename) {
+    public Person (String name, String forename, String email) {
         this.name = name;
         this.forename = forename;
+        this.email=email;
     }
 
     public Person(String name, String forename, Date birthday, Address address) {
