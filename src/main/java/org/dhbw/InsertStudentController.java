@@ -211,7 +211,7 @@ public class InsertStudentController {
                         company
                 );
                 System.out.println(dualStudent);
-                if (companyChoose.getEditor().getText() == "Unternehmen auswählen") {
+                if (companyChoose.getEditor().getText().equals("Unternehmen auswählen")) {
                     University.addCompany(company);
                 }
                 University.addStudent(dualStudent);
