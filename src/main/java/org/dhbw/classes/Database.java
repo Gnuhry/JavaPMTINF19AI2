@@ -85,7 +85,7 @@ public class Database {
 
     //--------------------------------getObjectID-----------------------
     public static int getCourseID(Course course) throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = getFromDatabase("SELECT course_id, registry_date FROM course WHERE room = " + getRoomID(course.getRoom()) + " AND name = '" + course.getName() + "' AND registry_date = '" + dateFormat.format(course.getRegistrationDate()) + "'AND course_type = " + getCourseTypeID(course.getStudyCourse()) + " AND study_director_id = " + course.getStudyDirector().getDocentNumber() + " AND representative_student_id = " + course.getCourseSpeakerID());
+        ResultSet resultSet = getFromDatabase("SELECT course_id FROM course WHERE room = " + getRoomID(course.getRoom()) + " AND name = '" + course.getName() + "' AND registry_date = '" + dateFormat.format(course.getRegistrationDate()) + "'AND course_type = " + getCourseTypeID(course.getStudyCourse()) + " AND study_director_id = " + course.getStudyDirector().getDocentNumber() + " AND representative_student_id = " + course.getCourseSpeakerID());
         return resultSet != null && resultSet.next() ? resultSet.getInt(1) : Integer.MIN_VALUE;
     }
 
@@ -100,8 +100,11 @@ public class Database {
     }
 
     private static int getPersonID(Person person) throws SQLException, ClassNotFoundException {
-        if (person.getBirthday() == null) return Integer.MIN_VALUE;
-        ResultSet resultSet = getFromDatabase("SELECT person_id, birthdate FROM person WHERE person.last_name = '" + person.getName() + "' AND person.first_name = '" + person.getForeName() + "' AND person.birthdate = '" + dateFormat.format(person.getBirthday()) + "' AND person.email = '" + person.getEmail() + "' AND person.address_id = " + getAddressID(person.getAddress()));
+        if (person.getBirthday() == null && person.getAddress() == null){
+            ResultSet resultSet = getFromDatabase("SELECT person_id FROM person WHERE person.last_name = '" + person.getName() + "' AND person.first_name = '" + person.getForeName() + "' AND person.email = '" + person.getEmail() + "'");
+            return resultSet != null && resultSet.next() ? resultSet.getInt(1) : Integer.MIN_VALUE;
+        }
+        ResultSet resultSet = getFromDatabase("SELECT person_id FROM person WHERE person.last_name = '" + person.getName() + "' AND person.first_name = '" + person.getForeName() + "' AND person.birthdate = '" + dateFormat.format(person.getBirthday()) + "' AND person.email = '" + person.getEmail() + "' AND person.address_id = " + getAddressID(person.getAddress()));
         return resultSet != null && resultSet.next() ? resultSet.getInt(1) : Integer.MIN_VALUE;
     }
 
