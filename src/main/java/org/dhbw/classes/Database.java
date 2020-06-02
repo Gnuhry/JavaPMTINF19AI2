@@ -84,6 +84,14 @@ public class Database {
 
     //--------------------------------getObjectID-----------------------
     public static int getCourseID(Course course) throws SQLException, ClassNotFoundException {
+        if(course.getRegistrationDate()==null)
+            System.out.println("Hello");
+        if(course.getStudyDirector()==null)
+            System.out.println("hello2");
+        if(course.getStudyCourse()==null)
+            System.out.println("hello3");
+        if(course.getRoom()==null)
+            System.out.println("hello4");
         ResultSet resultSet = getFromDatabase("SELECT course_id FROM course WHERE room = " + getRoomID(course.getRoom()) + " AND name = '" + course.getName() + "' AND registry_date = '" + dateFormat.format(course.getRegistrationDate()) + "'AND course_type = " + getCourseTypeID(course.getStudyCourse()) + " AND study_director_id = " + course.getStudyDirector().getDocentNumber() + " AND representative_student_id = " + course.getCourseSpeakerID());
         return resultSet != null && resultSet.next() ? resultSet.getInt(1) : Integer.MIN_VALUE;
     }
@@ -348,7 +356,7 @@ public class Database {
         List<Course> courses = new ArrayList<>();
         ResultSet rs = getFromDatabase("SELECT * FROM course LEFT JOIN docent ON course.study_director_id = docent.docent_id LEFT JOIN person ON person.person_id = docent.person_id");
         if (rs.next())
-            courses.add(new Course(rs.getString("name"), StudyCourse.AInformatik.getDeclaringClass().getEnumConstants()[rs.getInt("course_type")], getDocent(rs.getInt("study_director_id")), rs.getInt("study_director_id"), new java.util.Date(rs.getDate("registry_date").getTime()), CourseRoom.A222.getDeclaringClass().getEnumConstants()[rs.getInt("room")]));
+            courses.add(new Course(rs.getString("name"), StudyCourse.AInformatik.getDeclaringClass().getEnumConstants()[rs.getInt("course_type")], getDocent(rs.getInt("study_director_id")), rs.getInt("representative_student_id"), new java.util.Date(rs.getDate("registry_date").getTime()), CourseRoom.A222.getDeclaringClass().getEnumConstants()[rs.getInt("room")]));
         return courses.toArray(Course[]::new);
     }
 
