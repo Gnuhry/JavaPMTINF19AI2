@@ -28,7 +28,6 @@ public class DualStudent extends Person {
     private int javaKnowledge;
     private Button changeButton;
     public Button deleteButton;
-    Image image = new Image("", true);
 
     public DualStudent(String name, String forename, Date birthday, Address address, Company company) {
         super(name, forename, birthday, address);
@@ -43,9 +42,8 @@ public class DualStudent extends Person {
         this.course = course;
         this.javaKnowledge = javaKnowledge;
         this.company = company;
-        this.changeButton = new Button("C");
-        this.deleteButton = new Button("D");
-        this.deleteButton.setGraphic(new ImageView(image));
+        this.changeButton = new Button();
+        this.deleteButton = new Button();
         this.changeButton.setOnAction((ActionEvent event) -> {
             System.out.println("Update");
             University.updateStudent(this);
