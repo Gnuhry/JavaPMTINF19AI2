@@ -22,7 +22,7 @@ import java.util.Date;
 public class InsertStudentController {
 
     ObservableList<Company> chooseCompanyOptions = FXCollections.observableArrayList(
-            new Company("Alnatura", new Address("Test", "1", "12345", "Test", "Test"), new Person("Janina", "Hofmann"))
+            new Company("Alnatura", new Address("Test", "1", "12345", "Test", "Test"), new Person("Janina", "Hofmann", ""))
     );
 
     ObservableList<Course> chooseCourseOptions = FXCollections.observableArrayList(
@@ -30,7 +30,7 @@ public class InsertStudentController {
     );
 
     ObservableList<Person> chooseContactPersonOptions = FXCollections.observableArrayList(
-            new Person("Janina", "Hofmann")
+            new Person("Janina", "Hofmann", "")
     );
 
     @FXML
@@ -183,7 +183,7 @@ public class InsertStudentController {
                 System.out.println("NPE2 found");    // LOG Datei?
             } else {
                 Company company;
-                Person contactPerson = new Person(companyPersonFirstName.getText(), companyPersonLastName.getText());
+                Person contactPerson = new Person(companyPersonFirstName.getText(), companyPersonLastName.getText(), "");
                 Address companyAddress = new Address(companyStreet.getText(), companyHomeNumber.getText(), companyPostalCode.getText(), companyCity.getText(), companyCountry.getText());
 
                 LocalDate localDateStudentBirth = studentBirth.getValue();
@@ -247,7 +247,6 @@ public class InsertStudentController {
                         company
                 );
                 System.out.println(dualStudent);
-
                 University.addStudent(dualStudent);
             }
         } catch (NullPointerException npe) {

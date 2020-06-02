@@ -20,7 +20,7 @@ import java.util.Date;
 public class InsertCourseController {
 
     ObservableList<Person> chooseCourseRepresentOptions = FXCollections.observableArrayList(
-            new Person("Silas", "Wessely")
+            new Person("Silas", "Wessely", "")
     );
 
     ObservableList<Docent> chooseCourseDirectorOptions = FXCollections.observableArrayList(
