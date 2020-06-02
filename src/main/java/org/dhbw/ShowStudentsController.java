@@ -2,6 +2,7 @@ package org.dhbw;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -113,6 +114,22 @@ public class ShowStudentsController implements Initializable {
         studentNumber.setCellValueFactory(new PropertyValueFactory<>("studentNumber"));
         studentName.setCellValueFactory(new PropertyValueFactory<>("name"));
         studentForename.setCellValueFactory(new PropertyValueFactory<>("forename"));
+        studentBirth.setCellFactory(column -> {
+            TableCell<DualStudent, Date> cell = new TableCell<>() {
+                private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+
+                @Override
+                protected void updateItem(Date date, boolean b) {
+                    super.updateItem(date, b);
+                    if (b) {
+                        setText(null);
+                    } else {
+                        this.setText(format.format(date));
+                    }
+                }
+            };
+            return cell;
+        });
         studentBirth.setCellValueFactory(new PropertyValueFactory<>("birthday"));
         studentEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         studentAddress.setCellValueFactory(new PropertyValueFactory<>("Address"));
