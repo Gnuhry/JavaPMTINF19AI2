@@ -347,7 +347,7 @@ public class Database {
     public static Docent[] getAllDocent() throws SQLException, ClassNotFoundException {
         List<Docent> docents = new ArrayList<>();
         ResultSet rs = getFromDatabase("SELECT * FROM docent LEFT JOIN person ON docent.person_id = person.person_id");
-        if (rs.next())
+        while (rs.next())
             docents.add(new Docent(rs.getString("last_name"), rs.getString("first_name"), new java.util.Date(rs.getDate("birthdate").getTime()), getAddress(rs.getInt("address_id")), rs.getString("email"), rs.getInt("docent_id")));
         return docents.toArray(Docent[]::new);
     }
@@ -355,15 +355,15 @@ public class Database {
     public static Course[] getAllCourse() throws SQLException, ClassNotFoundException {
         List<Course> courses = new ArrayList<>();
         ResultSet rs = getFromDatabase("SELECT * FROM course LEFT JOIN docent ON course.study_director_id = docent.docent_id LEFT JOIN person ON person.person_id = docent.person_id");
-        if (rs.next())
+        while (rs.next())
             courses.add(new Course(rs.getString("name"), StudyCourse.AInformatik.getDeclaringClass().getEnumConstants()[rs.getInt("course_type")], getDocent(rs.getInt("study_director_id")), rs.getInt("representative_student_id"), new java.util.Date(rs.getDate("registry_date").getTime()), CourseRoom.A222.getDeclaringClass().getEnumConstants()[rs.getInt("room")]));
         return courses.toArray(Course[]::new);
     }
 
     public static Company[] getAllCompany() throws SQLException, ClassNotFoundException {
         List<Company> companies = new ArrayList<>();
-        ResultSet rs = getFromDatabase("SELECT * FROM course LEFT JOIN docent ON course.study_director_id = docent.docent_id LEFT JOIN person ON person.person_id = docent.person_id");
-        if (rs.next())
+        ResultSet rs = getFromDatabase("SELECT * FROM company");
+        while (rs.next())
             companies.add(new Company(rs.getString("name"), getAddress(rs.getInt("address_id")), getPerson(rs.getInt("contact_person_id"))));
         return companies.toArray(Company[]::new);
     }
@@ -371,7 +371,7 @@ public class Database {
     public static Address[] getAllAddress() throws SQLException, ClassNotFoundException {
         List<Address> addresses = new ArrayList<>();
         ResultSet rs = getFromDatabase("SELECT * FROM course LEFT JOIN docent ON course.study_director_id = docent.docent_id LEFT JOIN person ON person.person_id = docent.person_id");
-        if (rs.next())
+        while (rs.next())
             addresses.add(new Address(rs.getString("street"), rs.getString("number"), rs.getString("postal_code"), rs.getString("city"), rs.getString("country")));
         return addresses.toArray(Address[]::new);
     }
@@ -379,7 +379,7 @@ public class Database {
     public static Person[] getAllPerson() throws SQLException, ClassNotFoundException {
         List<Person> persons = new ArrayList<>();
         ResultSet rs = getFromDatabase("SELECT * FROM course LEFT JOIN docent ON course.study_director_id = docent.docent_id LEFT JOIN person ON person.person_id = docent.person_id");
-        if (rs.next())
+        while (rs.next())
             persons.add(new Person(rs.getString("last_name"), rs.getString("first_name"), new java.util.Date(rs.getDate("birthdate").getTime()), getAddress(rs.getInt("address_id")), rs.getString("email")));
         return persons.toArray(Person[]::new);
     }
