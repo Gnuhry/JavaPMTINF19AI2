@@ -58,17 +58,6 @@ public class University {
         return new ArrayList<>();
     }
 
-    public static List<Company> getCompany() {
-        Company[] company_array = new Company[0];
-        try {
-            company_array = Database.getAllCompany();
-        } catch (SQLException | ClassNotFoundException throwables) {
-            throwables.printStackTrace();
-        }
-        if (company_array != null) return  Arrays.asList(company_array);
-        else return new ArrayList<>();
-    }
-
 
     //-------------------------------Add------------------------
 
