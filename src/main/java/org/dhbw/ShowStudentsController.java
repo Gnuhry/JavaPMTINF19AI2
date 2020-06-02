@@ -1,26 +1,37 @@
 package org.dhbw;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.ResourceBundle;
 
+import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import kotlin.time.AbstractDoubleTimeSource;
 import org.dhbw.classes.*;
 
-public class ShowStudentsController {
+import javax.security.auth.callback.Callback;
+
+public class ShowStudentsController implements Initializable {
     private ObservableList<DualStudent> data = FXCollections.observableArrayList(
+            //new DualStudent(123456, 1234567, "Silas", "Wessely", new Date(100, 5,27), new Address("Birkenauer Straße", "51", "68309", "Mannheim", "Deutschland"), "silas.wessely@gmx.de", new Course("TINF19AI2", StudyCourse.AInformatik, new Date(119, Calendar.OCTOBER, 1)), 75, new Company("Alnatura", new Address("Test", "1", "12345", "Test", "Test"), new Person("Hofmann", "Janina"))).
             University.getStudents()
     );
     private ObservableList<Course> filterCourseOptions = FXCollections.observableArrayList(
-            new Course("TINF19AI2", StudyCourse.AInformatik, new Date(119, Calendar.OCTOBER, 1))
+            University.getCourses()
+            //new Course("TINF19AI2", StudyCourse.AInformatik, new Date(119, Calendar.OCTOBER, 1))
     );
     private ObservableList<Company> filterCompanyOptions = FXCollections.observableArrayList(
-            new Company("Alnatura", new Address("Test", "1", "12345", "Test", "Test"), new Person("Hofmann", "Janina"))
+            University.getCompany()
+            //new Company("Alnatura", new Address("Test", "1", "12345", "Test", "Test"), new Person("Hofmann", "Janina"))
     );
 
 
@@ -30,6 +41,8 @@ public class ShowStudentsController {
     private Label companyFilter;
     @FXML
     private Label groupFilter;
+    @FXML
+    private TextField searchBox;
     @FXML
     private ComboBox<Course> courseFilterBox;
     @FXML
@@ -71,7 +84,8 @@ public class ShowStudentsController {
         App.setRoot("primary");
     }
 
-    @FXML void filter() {
+    @FXML
+    private void filter() {
         courseFilter.setText(courseFilterBox.getEditor().getText());
         courseFilter.setVisible(true);
         companyFilter.setText(companyFilterBox.getEditor().getText());
@@ -81,7 +95,22 @@ public class ShowStudentsController {
     }
 
     @FXML
-    private void initialize() {
+    private void search() {
+
+    }
+
+    @FXML
+    private void change() {
+        System.out.println("hallo");
+    }
+
+    @FXML
+    private void delete() {
+        System.out.println("tschüss");
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         studentNumber.setCellValueFactory(new PropertyValueFactory<>("studentNumber"));
         studentName.setCellValueFactory(new PropertyValueFactory<>("name"));
         studentForename.setCellValueFactory(new PropertyValueFactory<>("forename"));
@@ -98,18 +127,8 @@ public class ShowStudentsController {
         studentTable.setItems(data);
 
         courseFilterBox.getItems().setAll(filterCourseOptions);
+        System.out.println(filterCompanyOptions);
         companyFilterBox.getItems().setAll(filterCompanyOptions);
         groupFilterBox.getItems().setAll("Studierende", "Dozenten", "Kurse", "Unternehmen");
     }
-
-    @FXML
-    private void change() {
-        System.out.println("hallo");
-    }
-
-    @FXML
-    private void delete() {
-        System.out.println("tschüss");
-    }
-
 }

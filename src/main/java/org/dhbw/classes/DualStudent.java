@@ -1,8 +1,11 @@
 package org.dhbw.classes;
 
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import org.dhbw.ShowStudentsController;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
@@ -32,6 +35,23 @@ public class DualStudent extends Person {
         this.company = company;
         this.changeButton = new Button("C");
         this.deleteButton = new Button("D");
+        this.changeButton.setOnAction((ActionEvent event) -> {
+            System.out.println("Update");
+            /*try {
+                Database.updateStudent(this, this.getStudentNumber());
+            } catch (SQLException | ClassNotFoundException throwables) {
+                throwables.printStackTrace();
+            }*/
+        });
+        this.deleteButton.setOnAction((ActionEvent event) -> {
+            System.out.println("Delete");
+            /*
+            try {
+                //Database.deleteStudent(this);
+            } catch (SQLException | ClassNotFoundException throwables) {
+                throwables.printStackTrace();
+            }*/
+        });
     }
 
     //--------------------------Setter------------------------
@@ -43,9 +63,13 @@ public class DualStudent extends Person {
         this.javaKnowledge = javaKnowledge;
     }
 
-    public void setChangeButton(Button changeButton) {this.changeButton = changeButton;}
+    public void setChangeButton(Button changeButton) {
+        this.changeButton = changeButton;
+    }
 
-    public void setDeleteButton(Button deleteButton) {this.deleteButton = deleteButton;}
+    public void setDeleteButton(Button deleteButton) {
+        this.deleteButton = deleteButton;
+    }
 
     //-----------------------Getter-----------------------
     public int getMatriculationNumber() {
@@ -68,9 +92,13 @@ public class DualStudent extends Person {
         return company;
     }
 
-    public Button getChangeButton() {return changeButton;}
+    public Button getChangeButton() {
+        return changeButton;
+    }
 
-    public Button getDeleteButton() {return deleteButton;}
+    public Button getDeleteButton() {
+        return deleteButton;
+    }
 
     //-------------------Overrides--------------
 
@@ -97,5 +125,9 @@ public class DualStudent extends Person {
                 ", course=" + course +
                 ", javaKnowledge=" + javaKnowledge +
                 '}';
+    }
+
+    public void addFunctionOnButtons() {
+
     }
 }
