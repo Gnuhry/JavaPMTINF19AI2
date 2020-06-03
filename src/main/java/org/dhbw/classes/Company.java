@@ -1,16 +1,40 @@
 package org.dhbw.classes;
 
+import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
+import java.io.InputStream;
 import java.util.Objects;
 
 public class Company {
     private String name;
     private Address address;
     private Person contactPerson;
+    private Button changeButton;
+    public Button deleteButton;
+
+    Class<?> clazz = this.getClass();
+    InputStream inputEdit = clazz.getResourceAsStream("/org/dhbw/images/editButton.png");
+    Image imageEdit = new Image(inputEdit);
+    InputStream inputDelete = clazz.getResourceAsStream("/org/dhbw/images/deleteButton.png");
+    Image imageDelete = new Image(inputDelete);
 
     public Company(String name, Address address, Person contactPerson) {
         this.name = name;
         this.address = address;
         this.contactPerson = contactPerson;
+        this.changeButton = new Button();
+        this.deleteButton = new Button();
+        this.changeButton.setOnAction((ActionEvent event) -> {
+            //University.updateCompany(this);
+        });
+        changeButton.setGraphic(new ImageView(imageEdit));
+        this.deleteButton.setOnAction((ActionEvent event) -> {
+            University.removeCompany(this);
+        });
+        deleteButton.setGraphic(new ImageView(imageDelete));
     }
 
     //-----------------------Getter-------------------------------
@@ -26,6 +50,10 @@ public class Company {
         return contactPerson;
     }
 
+    public Button getChangeButton() {return changeButton;}
+
+    public Button getDeleteButton() {return deleteButton;}
+
     //--------------------------Setter-------------------------------
 
     public void setName(String name) {
@@ -39,6 +67,10 @@ public class Company {
     public void setContactPerson(Person contactPerson) {
         this.contactPerson = contactPerson;
     }
+
+    public void setChangeButton(Button changeButton) {this.changeButton = changeButton;}
+
+    public void setDeleteButton(Button deleteButton) {this.deleteButton = deleteButton;}
 
     //---------------------Override-----------------------------
 

@@ -36,7 +36,7 @@
                         <TableColumn fx:id="studentD" prefWidth="35.2000732421875" />
                     </columns>
                   </TableView>
-                  <ToolBar prefHeight="50.0" prefWidth="1241.0">
+                  <ToolBar prefHeight="50.0" prefWidth="1250.0">
                      <items>
                         <Button mnemonicParsing="false" onAction="#backToOverview" text="Zurück" />
                         <VBox translateX="50.0">
@@ -71,27 +71,23 @@
         <content>
           <AnchorPane maxWidth="1200.0" minHeight="0.0" minWidth="1200.0" prefHeight="600.0" prefWidth="1200.0">
                <children>
-                  <TableView layoutY="50.0" prefHeight="521.0" prefWidth="1200.0">
+                  <TableView fx:id="lectureTable" layoutY="50.0" prefHeight="521.0" prefWidth="1250.0" tableMenuButtonVisible="true">
                     <columns>
-                        <TableColumn prefWidth="75.0" text="DozentenID" />
-                      <TableColumn prefWidth="75.0" text="Vorname" />
-                      <TableColumn prefWidth="75.0" text="Nachname" />
-                        <TableColumn prefWidth="75.0" text="Geburtstag" />
-                        <TableColumn prefWidth="140.0" text="Email" />
-                        <TableColumn prefWidth="124.0" text="Straße, Hausnummer" />
-                        <TableColumn prefWidth="105.0" text="PLZ, Stadt" />
-                        <TableColumn prefWidth="75.0" text="Land" />
+                        <TableColumn fx:id="lectureNumber" prefWidth="75.0" text="DozentenID" />
+                      <TableColumn fx:id="lectureFirstName" prefWidth="75.0" text="Vorname" />
+                      <TableColumn fx:id="lectureLastName" prefWidth="75.0" text="Nachname" />
+                        <TableColumn fx:id="lectureBirth" prefWidth="75.0" text="Geburtstag" />
+                        <TableColumn fx:id="lectureEmail" prefWidth="140.0" text="Email" />
+                        <TableColumn fx:id="lectureAddress" prefWidth="124.0" text="Addresse" />
+                        <TableColumn fx:id="lectureC" prefWidth="34.0" />
+                        <TableColumn fx:id="lectureD" prefWidth="34.0" />
                     </columns>
                   </TableView>
-                  <ToolBar prefHeight="50.0" prefWidth="1200.0">
+                  <ToolBar prefHeight="50.0" prefWidth="1250.0">
                      <items>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ausgewählte Filter: - Kurs - " />
-                        <Label alignment="TOP_LEFT" prefHeight="18.0" prefWidth="60.0" text="Label " />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Unternehmen - " />
-                        <Label alignment="TOP_LEFT" prefHeight="18.0" prefWidth="60.0" text="Label " />
-                        <ComboBox editable="true" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0" promptText="Kurs wählen" translateX="250.0" />
-                        <ComboBox editable="true" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" promptText="Unternehmen wählen" translateX="250.0" />
-                        <Button mnemonicParsing="false" text="Filtern" translateX="250.0" />
+                        <Button mnemonicParsing="false" onAction="#backToOverview" text="Zurück" />
+                        <TextField fx:id="searchBoxLecture" promptText="Namen suchen" translateX="944.0" />
+                        <Button mnemonicParsing="false" onAction="#refreshLecture" text="Refresh" translateX="944.0" />
                      </items>
                   </ToolBar>
                </children></AnchorPane>
@@ -101,28 +97,25 @@
         <content>
           <AnchorPane maxWidth="1200.0" minHeight="0.0" minWidth="1200.0" prefHeight="600.0" prefWidth="1200.0">
                <children>
-                  <TableView layoutY="50.0" prefHeight="512.0" prefWidth="1200.0">
-                    <columns>
-                      <TableColumn prefWidth="75.0" text="KursID" />
-                      <TableColumn prefWidth="115.0" text="Kursbezeichnung" />
-                        <TableColumn prefWidth="97.0" text="Kursart" />
-                        <TableColumn prefWidth="90.0" text="Kursraum" />
-                        <TableColumn prefWidth="123.0" text="Registrierungsdatum" />
-                        <TableColumn prefWidth="100.0" text="Kurssprecher" />
-                        <TableColumn prefWidth="146.0" text="Studiengangsleitung" />
-                    </columns>
-                  </TableView>
-                  <ToolBar prefHeight="50.0" prefWidth="1200.0">
+                  <ToolBar prefHeight="50.0" prefWidth="1250.0">
                      <items>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ausgewählte Filter: - Kurs - " />
-                        <Label alignment="TOP_LEFT" prefHeight="18.0" prefWidth="60.0" text="Label " />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Unternehmen - " />
-                        <Label alignment="TOP_LEFT" prefHeight="18.0" prefWidth="60.0" text="Label " />
-                        <ComboBox editable="true" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0" promptText="Kurs wählen" translateX="250.0" />
-                        <ComboBox editable="true" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" promptText="Unternehmen wählen" translateX="250.0" />
-                        <Button mnemonicParsing="false" text="Filtern" translateX="250.0" />
+                        <Button mnemonicParsing="false" onAction="#backToOverview" text="Zurück" />
+                        <TextField fx:id="searchBoxCourse" promptText="Namen suchen" translateX="944.0" />
+                        <Button mnemonicParsing="false" onAction="#refreshCourse" text="Refresh" translateX="944.0" />
                      </items>
                   </ToolBar>
+                  <TableView fx:id="courseTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0">
+                    <columns>
+                      <TableColumn fx:id="courseName" prefWidth="115.0" text="Kursbezeichnung" />
+                        <TableColumn fx:id="courseType" prefWidth="97.0" text="Kursart" />
+                        <TableColumn fx:id="courseRoom" prefWidth="90.0" text="Kursraum" />
+                        <TableColumn fx:id="courseDate" prefWidth="123.0" text="Registrierungsdatum" />
+                        <TableColumn fx:id="courseRepresent" prefWidth="100.0" text="Kurssprecher" />
+                        <TableColumn fx:id="courseLecture" prefWidth="200.0" text="Studiengangsleitung" />
+                        <TableColumn fx:id="courseC" prefWidth="32.0" />
+                        <TableColumn fx:id="courseD" prefWidth="31.0" />
+                    </columns>
+                  </TableView>
                </children></AnchorPane>
         </content>
       </Tab>
@@ -130,25 +123,20 @@
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <TableView layoutY="50.0" prefHeight="512.0" prefWidth="1200.0">
+                  <TableView fx:id="companyTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0">
                     <columns>
-                      <TableColumn prefWidth="130.0" text="UnternehmenID" />
-                      <TableColumn prefWidth="128.0" text="Unternehmenname" />
-                        <TableColumn prefWidth="149.0" text="Straße, Hausnummer" />
-                        <TableColumn prefWidth="115.0" text="PLZ, Stadt" />
-                        <TableColumn prefWidth="75.0" text="Land" />
-                        <TableColumn prefWidth="126.0" text="Ansprechperson" />
+                      <TableColumn fx:id="companyName" prefWidth="200.0" text="Unternehmenname" />
+                        <TableColumn fx:id="companyAddress" prefWidth="200.0" text="Adresse" />
+                        <TableColumn fx:id="companyPerson" prefWidth="250.0" text="Ansprechperson" />
+                        <TableColumn fx:id="companyC" prefWidth="31.0" />
+                        <TableColumn fx:id="companyD" prefWidth="32.0" />
                     </columns>
                   </TableView>
-                  <ToolBar prefHeight="50.0" prefWidth="1200.0">
+                  <ToolBar prefHeight="50.0" prefWidth="1250.0">
                      <items>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ausgewählte Filter: - Kurs - " />
-                        <Label alignment="TOP_LEFT" prefHeight="18.0" prefWidth="60.0" text="Label " />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Unternehmen - " />
-                        <Label alignment="TOP_LEFT" prefHeight="18.0" prefWidth="60.0" text="Label " />
-                        <ComboBox editable="true" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0" promptText="Kurs wählen" translateX="250.0" />
-                        <ComboBox editable="true" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" promptText="Unternehmen wählen" translateX="250.0" />
-                        <Button mnemonicParsing="false" text="Filtern" translateX="250.0" />
+                        <Button mnemonicParsing="false" onAction="#backToOverview" text="Zurück" />
+                        <TextField fx:id="searchBoxCompany" promptText="Namen suchen" translateX="944.0" />
+                        <Button mnemonicParsing="false" onAction="#refreshCourse" text="Refresh" translateX="944.0" />
                      </items>
                   </ToolBar>
                </children></AnchorPane>

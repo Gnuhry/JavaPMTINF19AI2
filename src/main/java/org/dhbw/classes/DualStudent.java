@@ -54,12 +54,10 @@ public class DualStudent extends Person {
         this.changeButton = new Button();
         this.deleteButton = new Button();
         this.changeButton.setOnAction((ActionEvent event) -> {
-            System.out.println("Update");
             University.updateStudent(this);
         });
         changeButton.setGraphic(new ImageView(imageEdit));
         this.deleteButton.setOnAction((ActionEvent event) -> {
-            System.out.println("Delete");
             University.removeStudent(this);
         });
         deleteButton.setGraphic(new ImageView(imageDelete));

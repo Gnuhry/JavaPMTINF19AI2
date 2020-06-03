@@ -94,7 +94,7 @@
       </Label>
       <ButtonBar layoutX="-28.0" layoutY="530.0" prefHeight="52.0" prefWidth="1080.0" AnchorPane.leftAnchor="-28.0" AnchorPane.rightAnchor="28.0">
         <buttons>
-          <Button alignment="CENTER" mnemonicParsing="false" onAction="#submit" stylesheets="@css/application.css" text="Eintragen" />
+          <Button alignment="CENTER" mnemonicParsing="false" onAction="#submit" onMouseClicked="#backToOverview" stylesheets="@css/application.css" text="Eintragen" />
             <Button alignment="CENTER" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Abbrechen" />
         </buttons>
          <padding>

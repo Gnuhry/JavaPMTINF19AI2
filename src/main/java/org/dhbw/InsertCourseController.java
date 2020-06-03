@@ -63,7 +63,7 @@ public class InsertCourseController {
     private void submit() {
 
         try {
-            if (courseName.getText().trim().isEmpty() || courseType.getEditor().getText().trim().isEmpty() || courseRoom.getEditor().getText().trim().isEmpty() || courseDate.getValue() == null || courseRepresent.getEditor().getText().trim().isEmpty() || courseDirector.getEditor().getText().trim().isEmpty()) {
+            if (courseName.getText().trim().isEmpty() || courseType.getValue() == null || courseRoom.getValue() == null || courseDate.getValue() == null || courseRepresent.getValue() == null || courseDirector.getValue() == null) {
                 showNullPointer.setVisible(true);
                 System.out.println("NPE2 found");    // LOG Datei?
             } else {
@@ -73,9 +73,9 @@ public class InsertCourseController {
 
                 Course course = new Course(
                         courseName.getText(),
-                        (StudyCourse)courseType.getValue(),
-                        new Docent("Dozentname", "Dozentvorname", new Date(2000, 05,27), new Address("s", "2", "2", "s", "s")),//courseDirector.getAccessibleText(),             Combobox -> Dozent
-                        10,//courseRepresent.getAccessibleText(),            Combodbox -> KurssprecherID (int)
+                        courseType.getValue(),
+                        courseDirector.getValue(),
+                        10,//courseRepresent.getValue(),            Combodbox -> KurssprecherID (int)
                         courseRDate,
                         (CourseRoom)courseRoom.getValue()
                 );

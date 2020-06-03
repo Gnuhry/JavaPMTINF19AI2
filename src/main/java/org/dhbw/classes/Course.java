@@ -1,5 +1,11 @@
 package org.dhbw.classes;
 
+import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
@@ -11,6 +17,14 @@ public class Course {
     private Docent studyDirector;
     private int courseSpeakerID;
     private CourseRoom room;
+    private Button changeButton;
+    public Button deleteButton;
+
+    Class<?> clazz = this.getClass();
+    InputStream inputEdit = clazz.getResourceAsStream("/org/dhbw/images/editButton.png");
+    Image imageEdit = new Image(inputEdit);
+    InputStream inputDelete = clazz.getResourceAsStream("/org/dhbw/images/deleteButton.png");
+    Image imageDelete = new Image(inputDelete);
 
 
     public Course(String name, StudyCourse studyCourse, Date registrationDate) {
@@ -26,6 +40,16 @@ public class Course {
         this.courseSpeakerID = courseSpeakerID;
         this.registrationDate = registrationDate;
         this.room = room;
+        this.changeButton = new Button();
+        this.deleteButton = new Button();
+        this.changeButton.setOnAction((ActionEvent event) -> {
+            University.updateCourse(this);
+        });
+        changeButton.setGraphic(new ImageView(imageEdit));
+        this.deleteButton.setOnAction((ActionEvent event) -> {
+            University.removeCourse(this);
+        });
+        deleteButton.setGraphic(new ImageView(imageDelete));
     }
 
     //-------------------------------Setter----------------------------------------------
@@ -44,6 +68,10 @@ public class Course {
     public void setRoom(CourseRoom room) {
         this.room = room;
     }
+
+    public void setChangeButton(Button changeButton) {this.changeButton = changeButton;}
+
+    public void setDeleteButton(Button deleteButton) {this.deleteButton = deleteButton;}
 
     //-------------------------------Getter----------------------------------------------
     public String getName() {
@@ -69,6 +97,10 @@ public class Course {
     public CourseRoom getRoom() {
         return room;
     }
+
+    public Button getChangeButton() {return changeButton;}
+
+    public Button getDeleteButton() {return deleteButton;}
 
     //----------------------------Override--------------------------
 

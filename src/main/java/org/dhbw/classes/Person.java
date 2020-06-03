@@ -105,7 +105,5 @@ public class Person {
 
 
     @Override
-    public String toString() {
-        return name + ", " + forename;
-    }
+    public String toString() {return name + ", " + forename + " , " + email; }
 }

@@ -267,7 +267,7 @@ public class Database {
     }
 
     public static void deleteCourse(Course course) throws SQLException, ClassNotFoundException {
-        PreparedStatement preparedStatement = getConnection().prepareStatement("DELETE FROM course WHERE student_id = ? AND  room = ? AND name = ? AND registry_date = ? AND course_type = ? AND study_director_id = ? AND representative_student_id = ?");
+        PreparedStatement preparedStatement = getConnection().prepareStatement("DELETE FROM course WHERE room = ? AND name = ? AND registry_date = ? AND course_type = ? AND study_director_id = ? AND representative_student_id = ?");
         preparedStatement.setInt(1, getRoomID(course.getRoom()));
         preparedStatement.setString(2, course.getName());
         preparedStatement.setDate(3, new Date(course.getRegistrationDate().getTime()));
@@ -278,7 +278,7 @@ public class Database {
     }
 
     public static void deleteCompany(Company company) throws SQLException, ClassNotFoundException {
-        PreparedStatement preparedStatement = getConnection().prepareStatement("DELETE FROM company WHERE name = ?, address_id = ?, contact_person_id = ?");
+        PreparedStatement preparedStatement = getConnection().prepareStatement("DELETE FROM company WHERE name = ? AND address_id = ? AND contact_person_id = ?");
         preparedStatement.setString(1, company.getName());
         preparedStatement.setInt(2, getAddressID(company.getAddress()));
         preparedStatement.setInt(3, getPersonID(company.getContactPerson()));
