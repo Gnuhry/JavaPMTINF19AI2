@@ -196,7 +196,7 @@
             <Button id="backToOverview" fx:id="backToOverview" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Zurück zur Übersicht" />
             <Line endX="650.0" fill="#817f7fd9" layoutX="296.0" layoutY="889.0" startX="-100.0" stroke="#817f7f" />
             <Label fx:id="errorMessage" layoutX="197.0" layoutY="81.0" text="Bitte korrigieren Sie die Fehler in folgenden Feldern: " textFill="#870606" visible="false" />
-            <DialogPane fx:id="showNullPointer" layoutX="126.0" layoutY="1308.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="142.0" prefWidth="482.0" style="-fx-background-color: lightgray;" visible="false" AnchorPane.leftAnchor="126.0" AnchorPane.rightAnchor="775.0" AnchorPane.topAnchor="1308.0">
+            <DialogPane fx:id="showNullPointer" layoutX="126.0" layoutY="1147.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="142.0" prefWidth="482.0" style="-fx-background-color: lightgray;" AnchorPane.leftAnchor="126.0" AnchorPane.rightAnchor="775.0" AnchorPane.topAnchor="1147.0">
                 <header>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="113.0" prefWidth="482.0">
                      <children>

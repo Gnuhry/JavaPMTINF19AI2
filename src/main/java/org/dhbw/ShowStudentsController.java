@@ -95,6 +95,13 @@ public class ShowStudentsController implements Initializable {
             companyFilter.setVisible(true);
         }
     }
+    @FXML
+    public void refresh() {
+        ObservableList<DualStudent> data2 = FXCollections.observableArrayList(
+                University.getStudents()
+        );
+        studentTable.setItems(data2);
+    }
 
 
     @Override
@@ -153,6 +160,8 @@ public class ShowStudentsController implements Initializable {
         SortedList<DualStudent> sortedName = new SortedList<>(filteredName);
         sortedName.comparatorProperty().bind(studentTable.comparatorProperty());
         studentTable.setItems(sortedName);
+
+
 
         /*
         FilteredList<DualStudent> filteredCourse = new FilteredList<>(data, p -> true);

@@ -56,10 +56,11 @@
                            </children>
                         </VBox>
                         <HBox />
-                        <TextField fx:id="searchBox" promptText="Nachnamen suchen" translateX="200.0" />
-                        <ComboBox fx:id="courseFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0" promptText="Kurs wählen" translateX="200.0" />
-                        <ComboBox fx:id="companyFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" promptText="Unternehmen wählen" translateX="200.0" />
-                        <Button fx:id="filterButton" mnemonicParsing="false" onAction="#filter" text="Filtern" translateX="200.0" />
+                        <TextField fx:id="searchBox" promptText="Nachnamen suchen" translateX="150.0" />
+                        <ComboBox fx:id="courseFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0" promptText="Kurs wählen" translateX="150.0" />
+                        <ComboBox fx:id="companyFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" promptText="Unternehmen wählen" translateX="150.0" />
+                        <Button fx:id="filterButton" mnemonicParsing="false" onAction="#filter" text="Filtern" translateX="150.0" />
+                        <Button mnemonicParsing="false" onAction="#refresh" text="Refresh" translateX="150.0" />
                      </items>
                   </ToolBar>
                </children>
