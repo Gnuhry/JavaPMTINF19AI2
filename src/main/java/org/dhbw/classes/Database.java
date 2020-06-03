@@ -21,7 +21,7 @@ public class Database {
         if (connection == null) {
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(
-                    "jdbc:mysql://85.214.247.101:3306/dhbw", "mlg_dhbw", "Reisebus1!");
+                    "jdbc:mysql://85.214.247.101:3306/dhbw?useSSL=false", "mlg_dhbw", "Reisebus1!");
         }
         if (dateFormat == null)
             dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

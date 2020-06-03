@@ -11,9 +11,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundRepeat;
 import org.dhbw.App;
 import org.dhbw.ShowStudentsController;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Date;
@@ -28,6 +31,12 @@ public class DualStudent extends Person {
     private int javaKnowledge;
     private Button changeButton;
     public Button deleteButton;
+
+    Class<?> clazz = this.getClass();
+    InputStream inputEdit = clazz.getResourceAsStream("/org/dhbw/images/editButton.png");
+    Image imageEdit = new Image(inputEdit);
+    InputStream inputDelete = clazz.getResourceAsStream("/org/dhbw/images/deleteButton.png");
+    Image imageDelete = new Image(inputDelete);
 
     public DualStudent(String name, String forename, Date birthday, Address address, Company company) {
         super(name, forename, birthday, address);
@@ -48,10 +57,12 @@ public class DualStudent extends Person {
             System.out.println("Update");
             University.updateStudent(this);
         });
+        changeButton.setGraphic(new ImageView(imageEdit));
         this.deleteButton.setOnAction((ActionEvent event) -> {
             System.out.println("Delete");
             University.removeStudent(this);
         });
+        deleteButton.setGraphic(new ImageView(imageDelete));
     }
 
 

@@ -44,28 +44,22 @@
                               <HBox>
                                  <children>
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" - Kurs - " />
-                                    <Label fx:id="courseFilter" prefHeight="18.0" prefWidth="99.0" text="Label " translateX="78.0" visible="false" />
+                                    <Label fx:id="courseFilter" prefHeight="18.0" prefWidth="275.0" text="Label " translateX="78.0" visible="false" />
                                  </children>
                               </HBox>
-                              <HBox>
+                              <HBox prefHeight="18.0" prefWidth="373.0">
                                  <children>
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Unternehmen - " wrappingWidth="93.267578125" />
-                                    <Label fx:id="companyFilter" prefHeight="18.0" prefWidth="127.0" text="Label " translateX="30.0" visible="false" />
+                                    <Label fx:id="companyFilter" prefHeight="18.0" prefWidth="273.0" text="Label " translateX="30.0" visible="false" />
                                  </children>
                               </HBox>
                            </children>
                         </VBox>
-                        <HBox>
-                           <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Gruppe - " translateX="30.0" />
-                              <Label fx:id="groupFilter" prefHeight="18.0" prefWidth="110.0" text="Label " translateX="30.0" visible="false" />
-                           </children>
-                        </HBox>
-                        <TextField fx:id="searchBox" promptText="Nachnamen suchen" />
-                        <ComboBox fx:id="groupFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0" promptText="Gruppe wählen" translateX="50.0" />
-                        <ComboBox fx:id="courseFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0" promptText="Kurs wählen" translateX="50.0" />
-                        <ComboBox fx:id="companyFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" promptText="Unternehmen wählen" translateX="50.0" />
-                        <Button fx:id="filterButton" mnemonicParsing="false" onAction="#filter" text="Filtern" translateX="50.0" />
+                        <HBox />
+                        <TextField fx:id="searchBox" promptText="Nachnamen suchen" translateX="200.0" />
+                        <ComboBox fx:id="courseFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0" promptText="Kurs wählen" translateX="200.0" />
+                        <ComboBox fx:id="companyFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" promptText="Unternehmen wählen" translateX="200.0" />
+                        <Button fx:id="filterButton" mnemonicParsing="false" onAction="#filter" text="Filtern" translateX="200.0" />
                      </items>
                   </ToolBar>
                </children>

@@ -18,6 +18,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import kotlin.time.AbstractDoubleTimeSource;
 import org.dhbw.classes.*;
 
@@ -43,15 +44,11 @@ public class ShowStudentsController implements Initializable {
     @FXML
     private Label companyFilter;
     @FXML
-    private Label groupFilter;
-    @FXML
     private TextField searchBox;
     @FXML
     private ComboBox<Course> courseFilterBox;
     @FXML
     private ComboBox<Company> companyFilterBox;
-    @FXML
-    private ComboBox<String> groupFilterBox;
     @FXML
     private Button filterButton;
     @FXML
@@ -89,12 +86,14 @@ public class ShowStudentsController implements Initializable {
 
     @FXML
     private void filter() {
-        courseFilter.setText(courseFilterBox.getEditor().getText());
-        courseFilter.setVisible(true);
-        companyFilter.setText(companyFilterBox.getEditor().getText());
-        companyFilter.setVisible(true);
-        groupFilter.setText(groupFilterBox.getEditor().getText());
-        groupFilter.setVisible(true);
+        if (courseFilterBox.getValue() != null) {
+            courseFilter.setText(courseFilterBox.getValue().getName());
+            courseFilter.setVisible(true);
+        }
+        if (companyFilterBox.getValue() != null) {
+            companyFilter.setText(companyFilterBox.getValue().getName());
+            companyFilter.setVisible(true);
+        }
     }
 
 
@@ -132,13 +131,11 @@ public class ShowStudentsController implements Initializable {
         studentTable.setItems(data);
 
         courseFilterBox.getItems().setAll(filterCourseOptions);
-        System.out.println(filterCompanyOptions);
         companyFilterBox.getItems().setAll(filterCompanyOptions);
-        groupFilterBox.getItems().setAll("Studierende", "Dozenten", "Kurse", "Unternehmen");
 
-        FilteredList<DualStudent> filteredData = new FilteredList<>(data, p -> true);
+        FilteredList<DualStudent> filteredName = new FilteredList<>(data, p -> true);
         searchBox.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredData.setPredicate(person -> {
+            filteredName.setPredicate(person -> {
                 if (newValue == null || newValue.isEmpty()) {
                     return true;
                 }
@@ -153,9 +150,47 @@ public class ShowStudentsController implements Initializable {
                 return false;
             });
         });
-        SortedList<DualStudent> sortedData = new SortedList<>(filteredData);
-        sortedData.comparatorProperty().bind(studentTable.comparatorProperty());
-        studentTable.setItems(sortedData);
+        SortedList<DualStudent> sortedName = new SortedList<>(filteredName);
+        sortedName.comparatorProperty().bind(studentTable.comparatorProperty());
+        studentTable.setItems(sortedName);
 
+        /*
+        FilteredList<DualStudent> filteredCourse = new FilteredList<>(data, p -> true);
+        courseFilterBox.itemsProperty().addListener((observable, oldValue, newValue) -> {
+            filteredCourse.setPredicate(course -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                String lowerCaseFilter = newValue.toString();
+
+                if (course.getName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                return false;
+            });
+        });
+        SortedList<DualStudent> sortedCourse = new SortedList<>(filteredCourse);
+        sortedCourse.comparatorProperty().bind(studentTable.comparatorProperty());
+        studentTable.setItems(sortedCourse);
+
+        FilteredList<DualStudent> filteredCompany = new FilteredList<>(data, p -> true);
+        companyFilterBox.itemsProperty().addListener((observable, oldValue, newValue) -> {
+            filteredCompany.setPredicate(company -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                String lowerCaseFilter = newValue.toString();
+
+                if (company.getName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                return false;
+            });
+        });
+        SortedList<DualStudent> sortedCompany = new SortedList<>(filteredCompany);
+        sortedCompany.comparatorProperty().bind(studentTable.comparatorProperty());
+        studentTable.setItems(sortedCompany);*/
     }
 }
