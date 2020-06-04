@@ -110,7 +110,6 @@
                         <TableColumn fx:id="courseType" prefWidth="97.0" text="Kursart" />
                         <TableColumn fx:id="courseRoom" prefWidth="90.0" text="Kursraum" />
                         <TableColumn fx:id="courseDate" prefWidth="123.0" text="Registrierungsdatum" />
-                        <TableColumn fx:id="courseRepresent" prefWidth="100.0" text="Kurssprecher" />
                         <TableColumn fx:id="courseLecture" prefWidth="200.0" text="Studiengangsleitung" />
                         <TableColumn fx:id="courseC" prefWidth="32.0" />
                         <TableColumn fx:id="courseD" prefWidth="31.0" />
