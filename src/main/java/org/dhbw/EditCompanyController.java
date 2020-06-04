@@ -1,15 +1,18 @@
 package org.dhbw;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import org.dhbw.classes.*;
 
 import java.io.IOException;
 
-public class InsertCompanyController {
+public class EditCompanyController {
 
-
+    @FXML
+    private Button cancelButton;
     @FXML
     private Label errorMessage;
     @FXML
@@ -31,9 +34,27 @@ public class InsertCompanyController {
     @FXML
     private TextField companyContactPersonEmail;
 
+    public void initVariables(Company company) {
+        if (!company.getName().isEmpty()) companyName.setText(company.getName());
+        if (company.getAddress() != null) {
+            companyStreet.setText(company.getAddress().getStreet());
+            companyHomeNumber.setText(company.getAddress().getNumber());
+            companyPostalCode.setText(company.getAddress().getPostcode());
+            companyCity.setText(company.getAddress().getCity());
+            companyCountry.setText(company.getAddress().getCountry());
+        }
+        if (company.getContactPerson() != null) {
+            companyContactPersonFirstName.setText(company.getContactPerson().getForename());
+            companyContactPersonLastName.setText(company.getContactPerson().getName());
+            companyContactPersonEmail.setText(company.getContactPerson().getEmail());
+        }
+    }
+
     @FXML
     private void backToOverview() throws IOException {
         App.setRoot("primary");
+        Stage stage = (Stage) cancelButton.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
@@ -61,7 +82,7 @@ public class InsertCompanyController {
                         new Address(companyStreet.getText(), companyHomeNumber.getText(), companyPostalCode.getText(), companyCity.getText(), companyCountry.getText()),
                         contactPerson
                 );
-                University.addCompany(company);
+                University.updateCompany(company);
             }
         } catch (NullPointerException npe) {
             System.out.println("Fehler");

@@ -188,10 +188,10 @@ public class University {
         }
     }
 
-    public static void updateCompany(Company c) throws ClassNotFoundException {
+    public static void updateCompany(Company c) {
         try {
             Database.updateCompany(c, Database.getCompanyID(c));
-        } catch (SQLException throwables) {
+        } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
         }
     }

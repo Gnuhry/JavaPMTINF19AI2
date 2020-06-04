@@ -34,7 +34,7 @@ public class Main {
         c3.set(2020, Calendar.JANUARY, 1, 0, 0, 0);
          try {
              Database.setStudent(new DualStudent(9874985, 7485688, "Wessely", "Silas", c.getTime(), new Address("Darmstädter Straße", "45", "78459", "Hanau", "Deutschland"), "silas.wessely@gmx.de", new Course("TINF19AI2", StudyCourse.AInformatik,
-                     new Docent("Hoffmann", "Prof. Dr. Holger", c2.getTime(), new Address("Baumgartenstraße", "23a", "64738", "Stuttgart", "Deutschland"), "holger@hoffmann.de", 879546), 0, c3.getTime(), CourseRoom.A222),
+                     new Docent("Hoffmann", "Prof. Dr. Holger", c2.getTime(), new Address("Baumgartenstraße", "23a", "64738", "Stuttgart", "Deutschland"), "holger@hoffmann.de", 879546), c3.getTime(), CourseRoom.A222),
                      78, new Company("Alnatura Produktions- und Handels GmbH", new Address("Mahatma-Gandhi-Straße", "7", "64295", "Darmstadt", "Deutschland"), new Person("Kasch", "Rüdiger", "kasch@alnatura.de"))));
              for (DualStudent dualStudent : Database.getAllStudent()) {
                 System.out.println(dualStudent);

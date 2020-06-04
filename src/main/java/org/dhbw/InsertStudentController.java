@@ -229,7 +229,6 @@ public class InsertStudentController {
                     University.addCompany(company);
                 }
                 University.addStudent(dualStudent);
-                System.out.println("Success");
                 backToOverview();
             }
         } catch (NumberFormatException npe) {

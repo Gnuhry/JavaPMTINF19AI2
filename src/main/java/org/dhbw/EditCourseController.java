@@ -3,21 +3,17 @@ package org.dhbw;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.DialogPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
 import org.dhbw.classes.*;
 
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 
-public class InsertCourseController {
+public class EditCourseController {
 
     ObservableList<Person> chooseCourseRepresentOptions = FXCollections.observableArrayList(
             University.getStudents()
@@ -29,6 +25,8 @@ public class InsertCourseController {
             //new Docent("Stroetmann", "Karl", new Date(70, Calendar.JANUARY, 1), new Address("Test", "1", "12345", "Test", "Test"))
     );
 
+    @FXML
+    private Button cancelButton;
     @FXML
     private TextField courseName;
     @FXML
@@ -42,6 +40,17 @@ public class InsertCourseController {
     @FXML
     private DialogPane showNullPointer;
 
+    public void initVariables(Course course) {
+        if (!course.getName().isEmpty()) courseName.setText(course.getName());
+        if (course.getStudyCourse() != null) courseType.setValue(course.getStudyCourse());
+        if (course.getRoom()!= null) courseRoom.setValue(course.getRoom());
+        if (course.getRegistrationDate() != null) courseDate.setValue(convertToLocalDateViaSqlDate(course.getRegistrationDate()));
+        if (course.getStudyDirector() != null) courseDirector.setValue(course.getStudyDirector());
+    }
+
+    private LocalDate convertToLocalDateViaSqlDate(Date dateToConvert) {
+        return new java.sql.Date(dateToConvert.getTime()).toLocalDate();
+    }
 
     @FXML
     private void initialize() {
@@ -53,7 +62,8 @@ public class InsertCourseController {
 
     @FXML
     private void backToOverview() throws IOException {
-        App.setRoot("primary");
+        Stage stage = (Stage) cancelButton.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
@@ -68,14 +78,12 @@ public class InsertCourseController {
                 Instant instantCourseBirth = Instant.from(localDateCourseBirth.atStartOfDay(ZoneId.systemDefault()));
                 Date courseRDate = Date.from(instantCourseBirth);
 
-
-
                 Course course = new Course(
                         courseName.getText(),
                         courseType.getValue(),
                         courseDirector.getValue(),
                         courseRDate,
-                        (CourseRoom)courseRoom.getValue()
+                        courseRoom.getValue()
                 );
                 University.addCourse(course);
 

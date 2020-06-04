@@ -92,7 +92,7 @@ public class Database {
             System.out.println("hello3");
         if(course.getRoom()==null)
             System.out.println("hello4");
-        ResultSet resultSet = getFromDatabase("SELECT course_id FROM course WHERE room = " + getRoomID(course.getRoom()) + " AND name = '" + course.getName() + "' AND registry_date = '" + dateFormat.format(course.getRegistrationDate()) + "'AND course_type = " + getCourseTypeID(course.getStudyCourse()) + " AND study_director_id = " + course.getStudyDirector().getDocentNumber() + " AND representative_student_id = " + course.getCourseSpeakerID());
+        ResultSet resultSet = getFromDatabase("SELECT course_id FROM course WHERE room = " + getRoomID(course.getRoom()) + " AND name = '" + course.getName() + "' AND registry_date = '" + dateFormat.format(course.getRegistrationDate()) + "'AND course_type = " + getCourseTypeID(course.getStudyCourse()) + " AND study_director_id = " + course.getStudyDirector().getDocentNumber());
         return resultSet != null && resultSet.next() ? resultSet.getInt(1) : Integer.MIN_VALUE;
     }
 
@@ -141,13 +141,12 @@ public class Database {
 
     public static int setCourse(Course course) throws SQLException, ClassNotFoundException {
         if (!hasCourse(course)) {
-            PreparedStatement preparedStatement = getConnection().prepareStatement("INSERT INTO course (room, name, registry_date, course_type, study_director_id, representative_student_id) VALUES (?, ?, ?, ?, ?, ?)");
+            PreparedStatement preparedStatement = getConnection().prepareStatement("INSERT INTO course (room, name, registry_date, course_type, study_director_id) VALUES (?, ?, ?, ?, ?)");
             preparedStatement.setInt(1, getRoomID(course.getRoom()));
             preparedStatement.setString(2, course.getName());
             preparedStatement.setDate(3, new Date(course.getRegistrationDate().getTime()));
             preparedStatement.setInt(4, getCourseTypeID(course.getStudyCourse()));
             preparedStatement.setInt(5, course.getStudyDirector().getDocentNumber());
-            preparedStatement.setInt(6, course.getCourseSpeakerID());
             setToDatabase(preparedStatement);
             sleep(1000);
         }
@@ -218,7 +217,7 @@ public class Database {
     public static Course getCourse(int id) throws SQLException, ClassNotFoundException {
         ResultSet rs = getFromDatabase("SELECT * FROM course WHERE course_id = " + id);
         if (rs.next())
-            return new Course(rs.getString("name"), StudyCourse.AInformatik.getDeclaringClass().getEnumConstants()[rs.getInt("course_type")], getDocent(rs.getInt("study_director_id")), rs.getInt("study_director_id"), new java.util.Date(rs.getDate("registry_date").getTime()), CourseRoom.A222.getDeclaringClass().getEnumConstants()[rs.getInt("room")]);
+            return new Course(rs.getString("name"), StudyCourse.AInformatik.getDeclaringClass().getEnumConstants()[rs.getInt("course_type")], getDocent(rs.getInt("study_director_id")), new java.util.Date(rs.getDate("registry_date").getTime()), CourseRoom.A222.getDeclaringClass().getEnumConstants()[rs.getInt("room")]);
         return null;
     }
 
@@ -267,13 +266,12 @@ public class Database {
     }
 
     public static void deleteCourse(Course course) throws SQLException, ClassNotFoundException {
-        PreparedStatement preparedStatement = getConnection().prepareStatement("DELETE FROM course WHERE room = ? AND name = ? AND registry_date = ? AND course_type = ? AND study_director_id = ? AND representative_student_id = ?");
+        PreparedStatement preparedStatement = getConnection().prepareStatement("DELETE FROM course WHERE room = ? AND name = ? AND registry_date = ? AND course_type = ? AND study_director_id = ?");
         preparedStatement.setInt(1, getRoomID(course.getRoom()));
         preparedStatement.setString(2, course.getName());
         preparedStatement.setDate(3, new Date(course.getRegistrationDate().getTime()));
         preparedStatement.setInt(4, getCourseTypeID(course.getStudyCourse()));
         preparedStatement.setInt(5, course.getStudyDirector().getDocentNumber());
-        preparedStatement.setInt(6, course.getCourseSpeakerID());
         setToDatabase(preparedStatement);
     }
 
@@ -356,7 +354,7 @@ public class Database {
         List<Course> courses = new ArrayList<>();
         ResultSet rs = getFromDatabase("SELECT * FROM course LEFT JOIN docent ON course.study_director_id = docent.docent_id LEFT JOIN person ON person.person_id = docent.person_id");
         while (rs.next())
-            courses.add(new Course(rs.getString("name"), StudyCourse.AInformatik.getDeclaringClass().getEnumConstants()[rs.getInt("course_type")], getDocent(rs.getInt("study_director_id")), rs.getInt("representative_student_id"), new java.util.Date(rs.getDate("registry_date").getTime()), CourseRoom.A222.getDeclaringClass().getEnumConstants()[rs.getInt("room")]));
+            courses.add(new Course(rs.getString("name"), StudyCourse.AInformatik.getDeclaringClass().getEnumConstants()[rs.getInt("course_type")], getDocent(rs.getInt("study_director_id")), new java.util.Date(rs.getDate("registry_date").getTime()), CourseRoom.A222.getDeclaringClass().getEnumConstants()[rs.getInt("room")]));
         return courses.toArray(Course[]::new);
     }
 
@@ -413,13 +411,12 @@ public class Database {
     }
 
     public static int updateCourse(Course course, int id) throws SQLException, ClassNotFoundException {
-        PreparedStatement preparedStatement = getConnection().prepareStatement("UPDATE course SET room = ?, name = ?, registry_date = ?, course_type = ?, study_director_id = ?, representative_student_id = ? WHERE course.course_id = ?");
+        PreparedStatement preparedStatement = getConnection().prepareStatement("UPDATE course SET room = ?, name = ?, registry_date = ?, course_type = ?, study_director_id = ? WHERE course.course_id = ?");
         preparedStatement.setInt(1, getRoomID(course.getRoom()));
         preparedStatement.setString(2, course.getName());
         preparedStatement.setDate(3, new Date(course.getRegistrationDate().getTime()));
         preparedStatement.setInt(4, getCourseTypeID(course.getStudyCourse()));
         preparedStatement.setInt(5, course.getStudyDirector().getDocentNumber());
-        preparedStatement.setInt(6, course.getCourseSpeakerID());
         preparedStatement.setInt(7, id);
         setToDatabase(preparedStatement);
         return id;

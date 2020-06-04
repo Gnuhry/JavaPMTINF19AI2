@@ -3,7 +3,6 @@ package org.dhbw;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
 
@@ -16,17 +15,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.AccessibleAction;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.dhbw.classes.*;
 
 public class ShowStudentsController extends Application implements Initializable {
-    private ObservableList<DualStudent> data = FXCollections.observableArrayList(
+    private ObservableList<DualStudent> students = FXCollections.observableArrayList(
             //new DualStudent(123456, 1234567, "Silas", "Wessely", new Date(100, 5,27), new Address("Birkenauer Straße", "51", "68309", "Mannheim", "Deutschland"), "silas.wessely@gmx.de", new Course("TINF19AI2", StudyCourse.AInformatik, new Date(119, Calendar.OCTOBER, 1)), 75, new Company("Alnatura", new Address("Test", "1", "12345", "Test", "Test"), new Person("Hofmann", "Janina"))).
             University.getStudents()
     );
@@ -42,7 +39,11 @@ public class ShowStudentsController extends Application implements Initializable
     );
 
     private static Scene scene;
+    private String file;
     private DualStudent student;
+    private Docent lecture;
+    private Company company;
+    private Course course;
 
     @FXML
     private Label courseFilter;
@@ -116,8 +117,6 @@ public class ShowStudentsController extends Application implements Initializable
     private TableColumn<Course, CourseRoom> courseRoom;
     @FXML
     private TableColumn<Course, Date> courseDate;
-    @FXML
-    private TableColumn<Course, Integer> courseRepresent;
     @FXML
     private TableColumn<Course, Docent> courseLecture;
     @FXML
@@ -222,12 +221,12 @@ public class ShowStudentsController extends Application implements Initializable
         studentJava.setCellValueFactory(new PropertyValueFactory<>("javaKnowledge"));
         studentC.setCellValueFactory(new PropertyValueFactory<>("changeButton"));
         studentD.setCellValueFactory(new PropertyValueFactory<>("deleteButton"));
-        studentTable.setItems(data);
+        studentTable.setItems(students);
 
         courseFilterBox.getItems().setAll(courses);
         companyFilterBox.getItems().setAll(companies);
 
-        FilteredList<DualStudent> filteredName = new FilteredList<>(data, p -> true);
+        FilteredList<DualStudent> filteredName = new FilteredList<>(students, p -> true);
         searchBox.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredName.setPredicate(person -> {
                 if (newValue == null || newValue.isEmpty()) {
@@ -355,7 +354,6 @@ public class ShowStudentsController extends Application implements Initializable
             return cell;
         });
         courseDate.setCellValueFactory(new PropertyValueFactory<>("registrationDate"));
-        courseRepresent.setCellValueFactory(new PropertyValueFactory<>("courseSpeakerID"));
         courseLecture.setCellValueFactory(new PropertyValueFactory<>("studyDirector"));
         courseC.setCellValueFactory(new PropertyValueFactory<>("changeButton"));
         courseD.setCellValueFactory(new PropertyValueFactory<>("deleteButton"));
@@ -408,10 +406,14 @@ public class ShowStudentsController extends Application implements Initializable
     }
 
     @FXML
-    public Button addFunction(Button button, DualStudent student) throws IOException {
+    public Button addFunction(Button button, Object object, String file) throws IOException {
         button.setOnAction((ActionEvent event) -> {
             try {
-                this.student = student;
+                if (file.equals("editStudent")) this.student = (DualStudent)object;
+                else if (file.equals("editLecture")) this.lecture = (Docent)object;
+                else if (file.equals("editCompany")) this.company = (Company)object;
+                else if (file.equals("editCourse")) this.course = (Course)object;
+                this.file = file;
                 start(new Stage());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -422,12 +424,23 @@ public class ShowStudentsController extends Application implements Initializable
 
     @Override
     public void start(Stage stage) throws Exception {
-        String resourcePath = "editStudent.fxml";
+        String resourcePath = file + ".fxml";
         URL location = getClass().getResource(resourcePath);
         FXMLLoader fxmlLoader = new FXMLLoader(location);
         Parent root = (Parent)fxmlLoader.load();
-        EditStudentController controller = fxmlLoader.<EditStudentController>getController();
-        controller.initVariables(student);
+        if (file.equals("editStudent")) {
+            EditStudentController controller = fxmlLoader.<EditStudentController>getController();
+            controller.initVariables(student);
+        } else if (file.equals("editLecture")) {
+            EditLectureController controller = fxmlLoader.<EditLectureController>getController();
+            controller.initVariables(lecture);
+        } else if (file.equals("editCompany")) {
+            EditCompanyController controller = fxmlLoader.<EditCompanyController>getController();
+            controller.initVariables(company);
+        } else if (file.equals("editCourse")) {
+            EditCourseController controller = fxmlLoader.<EditCourseController>getController();
+            controller.initVariables(course);
+        }
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();

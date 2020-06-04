@@ -97,35 +97,43 @@ public class EditStudentController {
     private DialogPane showNullPointer;
 
     public void initVariables(DualStudent student) {
-        studentFirstName.setText(student.getForename());
-        studentLastName.setText(student.getName());
-        studentBirth.setValue(convertToLocalDateViaSqlDate(student.getBirthday()));
-        studentEmail.setText(student.getEmail());
-        studentStreet.setText(student.getAddress().getStreet());
-        studentHomeNumber.setText(student.getAddress().getNumber());
-        studentPostalCode.setText(student.getAddress().getPostcode());
-        studentCity.setText(student.getAddress().getCity());
-        studentCountry.setText(student.getAddress().getCountry());
-        studentNumberField.setText("s" + student.getStudentNumber());
-        matriculationNumberField.setText("" + student.getMatriculationNumber());
-        companyChoose.setValue(student.getCompany());
-        Company company = companyChoose.getValue();
-        companyName.setText(company.getName());
-        companyStreet.setText(company.getAddress().getStreet());
-        companyHomeNumber.setText(company.getAddress().getNumber());
-        companyPostalCode.setText(company.getAddress().getPostcode());
-        companyCity.setText(company.getAddress().getCity());
-        companyCountry.setText(company.getAddress().getCountry());
-        companyPersonFirstName.setText(company.getContactPerson().getForename());
-        companyPersonLastName.setText(company.getContactPerson().getName());
-        companyPersonEmail.setText(company.getContactPerson().getEmail());
-        courseName.setValue(student.getCourse());
-        Course course = courseName.getValue();
-        courseType.setText("" + course.getStudyCourse());
-        courseDate.setValue(convertToLocalDateViaSqlDate(course.getRegistrationDate()));
-        courseRoom.setText("" + course.getRoom());
-        javaKnowledgeLabel.setText("" + student.getJavaKnowledge());
-        javaKnowledgeSlider.setValue(student.getJavaKnowledge());
+        if (!student.getForename().isEmpty()) studentFirstName.setText(student.getForename());
+        if (!student.getName().isEmpty()) studentLastName.setText(student.getName());
+        if (student.getBirthday() != null) studentBirth.setValue(convertToLocalDateViaSqlDate(student.getBirthday()));
+        if (!student.getEmail().isEmpty()) studentEmail.setText(student.getEmail());
+        if (student.getAddress() != null) {
+            studentStreet.setText(student.getAddress().getStreet());
+            studentHomeNumber.setText(student.getAddress().getNumber());
+            studentPostalCode.setText(student.getAddress().getPostcode());
+            studentCity.setText(student.getAddress().getCity());
+            studentCountry.setText(student.getAddress().getCountry());
+        }
+        if (student.getStudentNumber() != 0) studentNumberField.setText("s" + student.getStudentNumber());
+        if (student.getMatriculationNumber() != 0) matriculationNumberField.setText("" + student.getMatriculationNumber());
+        if (student.getCompany() != null) {
+            companyChoose.setValue(student.getCompany());
+            Company company = companyChoose.getValue();
+            companyName.setText(company.getName());
+            companyStreet.setText(company.getAddress().getStreet());
+            companyHomeNumber.setText(company.getAddress().getNumber());
+            companyPostalCode.setText(company.getAddress().getPostcode());
+            companyCity.setText(company.getAddress().getCity());
+            companyCountry.setText(company.getAddress().getCountry());
+            companyPersonFirstName.setText(company.getContactPerson().getForename());
+            companyPersonLastName.setText(company.getContactPerson().getName());
+            companyPersonEmail.setText(company.getContactPerson().getEmail());
+        }
+        if (student.getCourse() != null) {
+            courseName.setValue(student.getCourse());
+            Course course = courseName.getValue();
+            courseType.setText("" + course.getStudyCourse());
+            courseDate.setValue(convertToLocalDateViaSqlDate(course.getRegistrationDate()));
+            courseRoom.setText("" + course.getRoom());
+        }
+        if (student.getJavaKnowledge() != 0) {
+            javaKnowledgeLabel.setText("" + student.getJavaKnowledge());
+            javaKnowledgeSlider.setValue(student.getJavaKnowledge());
+        }
     }
 
     @FXML
@@ -264,10 +272,6 @@ public class EditStudentController {
                         Integer.parseInt(javaKnowledgeLabel.getText()),
                         company
                 );
-
-                if (companyChoose.getValue() != null) {
-                    University.addCompany(company);
-                }
                 University.updateStudent(dualStudent);
             }
         } catch (NumberFormatException npe) {
