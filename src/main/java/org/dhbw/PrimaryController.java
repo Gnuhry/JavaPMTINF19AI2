@@ -41,4 +41,9 @@ public class PrimaryController {
         App.setRoot("insertCourse");
     }
 
+    @FXML
+    private void editStudent() throws IOException{
+        App.setRoot("editStudent");
+    }
+
 }

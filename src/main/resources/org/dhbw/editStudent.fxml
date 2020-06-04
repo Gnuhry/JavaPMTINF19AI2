@@ -22,9 +22,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<ScrollPane fx:id="scrollPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.InsertStudentController">
+<ScrollPane fx:id="scrollPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.EditStudentController">
    <content>
-      <AnchorPane prefHeight="1500.0" prefWidth="1080.0">
+      <AnchorPane prefHeight="600.0" prefWidth="1080.0">
          <children>
             <ImageView fitHeight="600.0" fitWidth="1250.0" opacity="0.28" pickOnBounds="true" smooth="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <image>
@@ -43,7 +43,7 @@
                   <Image url="@images/addStudent.png" />
                </image>
             </ImageView>
-            <Label ellipsisString="200" layoutX="383.0" layoutY="34.0" text="Neuen Studendierenden anlegen" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" underline="true">
+            <Label ellipsisString="200" layoutX="383.0" layoutY="34.0" text="Studierenden bearbeiten" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" underline="true">
                <font>
                   <Font name="Comic Sans MS" size="24.0" />
                </font>
@@ -218,7 +218,7 @@
             </DialogPane>
             <ButtonBar layoutX="293.0" layoutY="1159.0" maxWidth="652.0" minWidth="266.0" prefHeight="52.0" prefWidth="652.0" AnchorPane.leftAnchor="293.0" AnchorPane.rightAnchor="436.0">
               <buttons>
-                <Button alignment="CENTER" mnemonicParsing="false" onAction="#submit" stylesheets="@css/application.css" text="Eintragen" />
+                <Button alignment="CENTER" mnemonicParsing="false" onAction="#submit" stylesheets="@css/application.css" text="Speichern" />
                   <Button alignment="CENTER" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Abbrechen" />
               </buttons>
                <padding>

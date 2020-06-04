@@ -3,20 +3,29 @@ package org.dhbw;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.AccessibleAction;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import org.dhbw.classes.*;
 
-public class ShowStudentsController implements Initializable {
+public class ShowStudentsController extends Application implements Initializable {
     private ObservableList<DualStudent> data = FXCollections.observableArrayList(
             //new DualStudent(123456, 1234567, "Silas", "Wessely", new Date(100, 5,27), new Address("Birkenauer Straße", "51", "68309", "Mannheim", "Deutschland"), "silas.wessely@gmx.de", new Course("TINF19AI2", StudyCourse.AInformatik, new Date(119, Calendar.OCTOBER, 1)), 75, new Company("Alnatura", new Address("Test", "1", "12345", "Test", "Test"), new Person("Hofmann", "Janina"))).
             University.getStudents()
@@ -32,6 +41,8 @@ public class ShowStudentsController implements Initializable {
             //new Company("Alnatura", new Address("Test", "1", "12345", "Test", "Test"), new Person("Hofmann", "Janina", ""))
     );
 
+    private static Scene scene;
+    private DualStudent student;
 
     @FXML
     private Label courseFilter;
@@ -176,6 +187,8 @@ public class ShowStudentsController implements Initializable {
         );
         companyTable.setItems(companies2);
     }
+
+
 
 
     @Override
@@ -392,5 +405,31 @@ public class ShowStudentsController implements Initializable {
         SortedList<Company> sortedCompany = new SortedList<>(filteredCompany);
         sortedCompany.comparatorProperty().bind(companyTable.comparatorProperty());
         companyTable.setItems(sortedCompany);
+    }
+
+    @FXML
+    public Button addFunction(Button button, DualStudent student) throws IOException {
+        button.setOnAction((ActionEvent event) -> {
+            try {
+                this.student = student;
+                start(new Stage());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        return button;
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        String resourcePath = "editStudent.fxml";
+        URL location = getClass().getResource(resourcePath);
+        FXMLLoader fxmlLoader = new FXMLLoader(location);
+        Parent root = (Parent)fxmlLoader.load();
+        EditStudentController controller = fxmlLoader.<EditStudentController>getController();
+        controller.initVariables(student);
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 }
