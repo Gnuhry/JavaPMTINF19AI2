@@ -93,21 +93,21 @@
                      <children>
                         <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@css/application.css" text="Studenten-Nummer" />
                         <TextField fx:id="studentNumberField" editable="false" focusTraversable="false" prefWidth="250.0" stylesheets="@css/application.css" translateX="50.0" />
-                        <Button mnemonicParsing="false" onAction="#generateSN" stylesheets="@css/application.css" text="generieren" />
+                        <Button disable="true" mnemonicParsing="false" onAction="#generateSN" stylesheets="@css/application.css" text="generieren" />
                      </children>
                   </HBox>
                   <HBox spacing="100.0">
                      <children>
                         <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@css/application.css" text="Matrikel-Nummer" />
                         <TextField fx:id="matriculationNumberField" editable="false" focusTraversable="false" prefWidth="250.0" stylesheets="@css/application.css" translateX="50.0" />
-                        <Button mnemonicParsing="false" onAction="#generateMN" stylesheets="@css/application.css" text="generieren" />
+                        <Button disable="true" mnemonicParsing="false" onAction="#generateMN" stylesheets="@css/application.css" text="generieren" />
                      </children>
                   </HBox>
                </children>
             </VBox>
             <HBox layoutX="188.0" layoutY="587.0" prefHeight="26.0" prefWidth="508.0" spacing="50.0" AnchorPane.leftAnchor="188.0" AnchorPane.rightAnchor="384.0">
                <children>
-                  <ComboBox fx:id="companyChoose" onAction="#showCompany" prefHeight="26.0" prefWidth="177.0" promptText="Unternehmen auswählen" stylesheets="@css/application.css" />
+                  <ComboBox fx:id="companyChoose" disable="true" onAction="#showCompany" prefHeight="26.0" prefWidth="177.0" promptText="Unternehmen auswählen" stylesheets="@css/application.css" />
                </children>
             </HBox>
             <VBox fx:id="cCompany" layoutX="195.0" layoutY="643.0" prefHeight="214.0" prefWidth="990.0" spacing="20.0" AnchorPane.leftAnchor="195.0" AnchorPane.rightAnchor="0.1999999999999318">
@@ -115,34 +115,34 @@
                   <HBox spacing="170.0">
                      <children>
                         <Label prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="Name" />
-                        <TextField fx:id="companyName" prefWidth="350.0" stylesheets="@css/application.css" />
+                        <TextField fx:id="companyName" editable="false" prefWidth="350.0" stylesheets="@css/application.css" />
                      </children>
                   </HBox>
                   <HBox spacing="30.0">
                      <children>
                         <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="Straße, Hausnummer" />
-                        <TextField fx:id="companyStreet" prefWidth="250.0" stylesheets="@css/application.css" translateX="125.0" />
-                        <TextField fx:id="companyHomeNumber" prefWidth="50.0" stylesheets="@css/application.css" translateX="125.0" />
+                        <TextField fx:id="companyStreet" editable="false" prefWidth="250.0" stylesheets="@css/application.css" translateX="125.0" />
+                        <TextField fx:id="companyHomeNumber" editable="false" prefWidth="50.0" stylesheets="@css/application.css" translateX="125.0" />
                      </children>
                   </HBox>
                   <HBox spacing="30.0">
                      <children>
                         <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="PLZ, Ort, Land" />
-                        <TextField fx:id="companyPostalCode" prefWidth="100.0" stylesheets="@css/application.css" translateX="125.0" />
-                        <TextField fx:id="companyCity" prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
-                        <TextField fx:id="companyCountry" prefWidth="200.0" stylesheets="@css/application.css" text="Deutschland" translateX="125.0" />
+                        <TextField fx:id="companyPostalCode" editable="false" prefWidth="100.0" stylesheets="@css/application.css" translateX="125.0" />
+                        <TextField fx:id="companyCity" editable="false" prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
+                        <TextField fx:id="companyCountry" editable="false" prefWidth="200.0" stylesheets="@css/application.css" text="Deutschland" translateX="125.0" />
                      </children>
                   </HBox>
                   <HBox fx:id="companyPerson" prefHeight="26.0" prefWidth="752.0" spacing="30.0">
                      <children>
                         <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="Ansprechperson" />
-                        <TextField fx:id="companyPersonFirstName" prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
-                        <TextField fx:id="companyPersonLastName" prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
+                        <TextField fx:id="companyPersonFirstName" editable="false" prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
+                        <TextField fx:id="companyPersonLastName" editable="false" prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
                      </children>
                   </HBox>
                   <HBox layoutX="270.0">
                      <children>
-                        <TextField fx:id="companyPersonEmail" maxWidth="301.0" prefHeight="26.0" prefWidth="301.0" stylesheets="@css/application.css" />
+                        <TextField fx:id="companyPersonEmail" editable="false" maxWidth="301.0" prefHeight="26.0" prefWidth="301.0" stylesheets="@css/application.css" />
                      </children>
                      <VBox.margin>
                         <Insets left="270.0" />
@@ -219,7 +219,7 @@
             <ButtonBar layoutX="293.0" layoutY="1159.0" maxWidth="652.0" minWidth="266.0" prefHeight="52.0" prefWidth="652.0" AnchorPane.leftAnchor="293.0" AnchorPane.rightAnchor="436.0">
               <buttons>
                 <Button alignment="CENTER" mnemonicParsing="false" onAction="#submit" stylesheets="@css/application.css" text="Speichern" />
-                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Abbrechen" />
+                  <Button fx:id="cancelButton" alignment="CENTER" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Abbrechen" />
               </buttons>
                <padding>
                   <Insets right="50.0" />

@@ -29,7 +29,6 @@
                   <Rectangle2D />
                </viewport>
             </ImageView>
-            <Button mnemonicParsing="false" onAction="#editStudent" text="Button" />
          </children>
       </VBox>
       <VBox alignment="TOP_CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">

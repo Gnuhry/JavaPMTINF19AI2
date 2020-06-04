@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import org.dhbw.classes.*;
 
 import java.io.IOException;
@@ -28,6 +29,10 @@ public class EditStudentController {
 
     private DualStudent student;
 
+    @FXML
+    private Button backToOverview;
+    @FXML
+    private Button cancelButton;
     @FXML
     private Label errorMessage;
     @FXML
@@ -132,6 +137,8 @@ public class EditStudentController {
     @FXML
     private void backToOverview() throws IOException {
         App.setRoot("primary");
+        Stage stage = (Stage) cancelButton.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
@@ -257,14 +264,11 @@ public class EditStudentController {
                         Integer.parseInt(javaKnowledgeLabel.getText()),
                         company
                 );
-                System.out.println(courseName.getValue());
-                System.out.println(dualStudent);
+
                 if (companyChoose.getValue() != null) {
                     University.addCompany(company);
                 }
-                University.addStudent(dualStudent);
-                System.out.println("Success");
-                backToOverview();
+                University.updateStudent(dualStudent);
             }
         } catch (NumberFormatException npe) {
             showNullPointer.setVisible(true);
