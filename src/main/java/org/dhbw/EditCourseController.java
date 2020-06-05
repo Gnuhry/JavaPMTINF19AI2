@@ -85,7 +85,7 @@ public class EditCourseController {
                         courseRDate,
                         courseRoom.getValue()
                 );
-                University.addCourse(course);
+                University.updateCourse(course);
 
             }
         } catch (NullPointerException npe) {

@@ -20,7 +20,6 @@ public class EditStudentController {
 
     ObservableList<Company> chooseCompanyOptions = FXCollections.observableArrayList(
             University.getCompanies()
-            //new Company("Alnatura", new Address("Test", "1", "12345", "Test", "Test"), new Person("Janina", "Hofmann", ""))
     );
 
     ObservableList<Course> chooseCourseOptions = FXCollections.observableArrayList(
@@ -214,10 +213,6 @@ public class EditStudentController {
                 Person contactPerson = new Person(companyPersonLastName.getText(), companyPersonFirstName.getText(), companyPersonEmail.getText());
                 Address companyAddress = new Address(companyStreet.getText(), companyHomeNumber.getText(), companyPostalCode.getText(), companyCity.getText(), companyCountry.getText());
 
-                LocalDate localDateStudentBirth = studentBirth.getValue();
-                Instant instantStudentBirth = Instant.from(localDateStudentBirth.atStartOfDay(ZoneId.systemDefault()));
-                Date studentBirthday = Date.from(instantStudentBirth);
-
                 int focusStage = 0;
                 errorMessage.setText("Bitte korrigieren Sie die Fehler in folgenden Feldern");
                 company = new Company(companyName.getText(), companyAddress, contactPerson);
@@ -264,7 +259,7 @@ public class EditStudentController {
                         Integer.parseInt(studentNumberField.getText().substring(1)),
                         studentLastName.getText(),
                         studentFirstName.getText(),
-                        studentBirthday,
+                        convertToDateViaSqlDate(studentBirth.getValue()),
                         new Address(studentStreet.getText(), studentHomeNumber.getText(), studentPostalCode.getText(), studentCity.getText(), studentCountry.getText()),
                         studentEmail.getText(),
                         courseName.getValue(),
@@ -272,6 +267,7 @@ public class EditStudentController {
                         company
                 );
                 University.updateStudent(dualStudent);
+                backToOverview();
             }
         } catch (NumberFormatException npe) {
             showNullPointer.setVisible(true);

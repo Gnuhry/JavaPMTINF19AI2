@@ -241,6 +241,10 @@ public class ShowStudentsController extends Application implements Initializable
                     return true;
                 } else if (person.getName().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
+                } else if (("" + person.getStudentNumber()).toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                } else if (("" + person.getMatriculationNumber()).toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
                 }
                 return false;
             });
@@ -293,7 +297,7 @@ public class ShowStudentsController extends Application implements Initializable
         lectureFirstName.setCellValueFactory(new PropertyValueFactory<>("forename"));
         lectureBirth.setCellFactory(column -> {
             TableCell<Docent, Date> cell = new TableCell<>() {
-                private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+                private final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
                 @Override
                 protected void updateItem(Date date, boolean b) {
@@ -327,6 +331,8 @@ public class ShowStudentsController extends Application implements Initializable
                 if (person.getForename().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 } else if (person.getName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                } else if (("" + person.getDocentNumber()).toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
                 return false;

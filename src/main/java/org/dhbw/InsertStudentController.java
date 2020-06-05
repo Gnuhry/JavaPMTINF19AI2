@@ -166,10 +166,6 @@ public class InsertStudentController {
                 Person contactPerson = new Person(companyPersonLastName.getText(), companyPersonFirstName.getText(), companyPersonEmail.getText());
                 Address companyAddress = new Address(companyStreet.getText(), companyHomeNumber.getText(), companyPostalCode.getText(), companyCity.getText(), companyCountry.getText());
 
-                LocalDate localDateStudentBirth = studentBirth.getValue();
-                Instant instantStudentBirth = Instant.from(localDateStudentBirth.atStartOfDay(ZoneId.systemDefault()));
-                Date studentBirthday = Date.from(instantStudentBirth);
-
                 int focusStage = 0;
                 errorMessage.setText("Bitte korrigieren Sie die Fehler in folgenden Feldern");
                 company = new Company(companyName.getText(), companyAddress, contactPerson);
@@ -216,7 +212,7 @@ public class InsertStudentController {
                         Integer.parseInt(studentNumberField.getText().substring(1)),
                         studentLastName.getText(),
                         studentFirstName.getText(),
-                        studentBirthday,
+                        convertToDateViaSqlDate(studentBirth.getValue()),
                         new Address(studentStreet.getText(), studentHomeNumber.getText(), studentPostalCode.getText(), studentCity.getText(), studentCountry.getText()),
                         studentEmail.getText(),
                         courseName.getValue(),
