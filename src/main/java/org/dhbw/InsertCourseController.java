@@ -78,9 +78,9 @@ public class InsertCourseController {
                         (CourseRoom)courseRoom.getValue()
                 );
                 University.addCourse(course);
-
+                backToOverview();
             }
-        } catch (NullPointerException npe) {
+        } catch (NullPointerException | IOException npe) {
             showNullPointer.setVisible(true);
             System.out.println("NPE2 found");    // LOG Datei?
         }

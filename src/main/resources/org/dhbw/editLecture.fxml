@@ -103,7 +103,7 @@
                <children>
                   <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@css/application.css" text="Dozenten-Nummer" />
                   <TextField fx:id="lectureNumberField" editable="false" prefWidth="250.0" stylesheets="@css/application.css" translateX="50.0" />
-                  <Button disable="true" mnemonicParsing="false" onAction="#generateLN" stylesheets="@css/application.css" text="generieren" />
+                  <Button disable="true" mnemonicParsing="false" stylesheets="@css/application.css" text="generieren" />
                </children>
             </HBox>
          </children>

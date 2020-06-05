@@ -148,18 +148,6 @@ public class EditStudentController {
     }
 
     @FXML
-    private void generateSN() throws IOException {
-        String studentNumber = "s" + (100000+(int)(Math.random()*900000));
-        studentNumberField.setText(studentNumber);
-    }
-
-    @FXML
-    private void generateMN() throws IOException {
-        String matriculationNumber = "" + (1000000+(int)(Math.random()*9000000));
-        matriculationNumberField.setText(matriculationNumber);
-    }
-
-    @FXML
     private void showSlider() throws IOException {
         javaKnowledgeLabel.setText("" + (int)javaKnowledgeSlider.getValue());
     }

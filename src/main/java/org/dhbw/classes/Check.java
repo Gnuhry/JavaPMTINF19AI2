@@ -2,6 +2,7 @@ package org.dhbw.classes;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,5 +33,17 @@ public class Check {
     public static boolean validatePostalCode(String postalCodeStr) {
         Matcher matcher = VALID_POSTAL_CODE_REGEX.matcher(postalCodeStr);
         return matcher.find();
+    }
+
+    public static boolean checkSNContains(int studentNumber) {
+        return Objects.requireNonNull(Database.getStudentIDs()).contains(studentNumber);
+    }
+
+    public static boolean checkMNContains(int matriculationNumber) {
+        return Objects.requireNonNull(Database.getMatriculationNumbers()).contains(matriculationNumber);
+    }
+
+    public static boolean checkDNContains(int docentNumber) {
+        return Objects.requireNonNull(Database.getDocentIDs()).contains(docentNumber);
     }
 }

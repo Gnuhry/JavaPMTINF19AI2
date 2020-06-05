@@ -76,7 +76,7 @@ public class EditCompanyController {
                     errorMessage.setVisible(true);
                     allRight = false;
                 } else companyPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgba(0, 0, 0, 0.1) rgba(0,0,0,0)");
-                if (Check.validateEmail(companyContactPersonEmail.getText())) {
+                if (!Check.validateEmail(companyContactPersonEmail.getText())) {
                     companyContactPersonEmail.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
                     companyContactPersonEmail.requestFocus();
                     errorMessage.setText(errorMessage.getText() + " E-Mail-Adresse ");

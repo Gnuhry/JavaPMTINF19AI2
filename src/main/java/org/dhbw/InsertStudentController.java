@@ -99,14 +99,24 @@ public class InsertStudentController {
 
     @FXML
     private void generateSN() throws IOException {
-        String studentNumber = "s" + (100000+(int)(Math.random()*900000));
-        studentNumberField.setText(studentNumber);
+        while (true) {
+            int studentNumber = (100000+(int)(Math.random()*900000));
+            if (!Check.checkSNContains(studentNumber)) {
+                studentNumberField.setText("s" + studentNumber);
+                break;
+            }
+        }
     }
 
     @FXML
     private void generateMN() throws IOException {
-        String matriculationNumber = "" + (1000000+(int)(Math.random()*9000000));
-        matriculationNumberField.setText(matriculationNumber);
+        while(true) {
+            int matriculationNumber = (1000000+(int)(Math.random()*9000000));
+            if (!Check.checkMNContains(matriculationNumber)) {
+                matriculationNumberField.setText("" + matriculationNumber);
+                break;
+            }
+        }
     }
 
     @FXML

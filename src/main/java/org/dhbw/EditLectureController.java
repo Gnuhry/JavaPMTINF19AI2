@@ -70,12 +70,6 @@ public class EditLectureController {
     }
 
     @FXML
-    private void generateLN() throws IOException {
-        String lectureNumber = "d" + (100000+(int)(Math.random()*999999));
-        lectureNumberField.setText(lectureNumber);
-    }
-
-    @FXML
     private void submit() throws IOException {
 
         try {
@@ -91,7 +85,7 @@ public class EditLectureController {
                 int focusStage = 0;
                 errorMessage.setText("Bitte korrigieren Sie die Fehler in folgenden Feldern");
 
-                if (Check.validateEmail(lectureEmail.getText())) {
+                if (!Check.validateEmail(lectureEmail.getText())) {
                     lectureEmail.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
                     focusStage = 1;
                     errorMessage.setText(errorMessage.getText() + " E-mail-Adresse ");
@@ -126,6 +120,7 @@ public class EditLectureController {
                             Integer.parseInt(lectureNumberField.getText().substring(1))
                     );
                     University.updateDocent(docent, lecture);
+                    backToOverview();
                 }
             }
         } catch (NullPointerException npe) {

@@ -93,14 +93,14 @@
                      <children>
                         <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@css/application.css" text="Studenten-Nummer" />
                         <TextField fx:id="studentNumberField" editable="false" focusTraversable="false" prefWidth="250.0" stylesheets="@css/application.css" translateX="50.0" />
-                        <Button disable="true" mnemonicParsing="false" onAction="#generateSN" stylesheets="@css/application.css" text="generieren" />
+                        <Button disable="true" mnemonicParsing="false" stylesheets="@css/application.css" text="generieren" />
                      </children>
                   </HBox>
                   <HBox spacing="100.0">
                      <children>
                         <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@css/application.css" text="Matrikel-Nummer" />
                         <TextField fx:id="matriculationNumberField" editable="false" focusTraversable="false" prefWidth="250.0" stylesheets="@css/application.css" translateX="50.0" />
-                        <Button disable="true" mnemonicParsing="false" onAction="#generateMN" stylesheets="@css/application.css" text="generieren" />
+                        <Button disable="true" mnemonicParsing="false" stylesheets="@css/application.css" text="generieren" />
                      </children>
                   </HBox>
                </children>
@@ -115,34 +115,34 @@
                   <HBox spacing="170.0">
                      <children>
                         <Label prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="Name" />
-                        <TextField fx:id="companyName" editable="false" prefWidth="350.0" stylesheets="@css/application.css" />
+                        <TextField fx:id="companyName" disable="true" editable="false" prefWidth="350.0" stylesheets="@css/application.css" />
                      </children>
                   </HBox>
                   <HBox spacing="30.0">
                      <children>
                         <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="Straße, Hausnummer" />
-                        <TextField fx:id="companyStreet" editable="false" prefWidth="250.0" stylesheets="@css/application.css" translateX="125.0" />
-                        <TextField fx:id="companyHomeNumber" editable="false" prefWidth="50.0" stylesheets="@css/application.css" translateX="125.0" />
+                        <TextField fx:id="companyStreet" disable="true" editable="false" prefWidth="250.0" stylesheets="@css/application.css" translateX="125.0" />
+                        <TextField fx:id="companyHomeNumber" disable="true" editable="false" prefWidth="50.0" stylesheets="@css/application.css" translateX="125.0" />
                      </children>
                   </HBox>
                   <HBox spacing="30.0">
                      <children>
                         <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="PLZ, Ort, Land" />
-                        <TextField fx:id="companyPostalCode" editable="false" prefWidth="100.0" stylesheets="@css/application.css" translateX="125.0" />
-                        <TextField fx:id="companyCity" editable="false" prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
-                        <TextField fx:id="companyCountry" editable="false" prefWidth="200.0" stylesheets="@css/application.css" text="Deutschland" translateX="125.0" />
+                        <TextField fx:id="companyPostalCode" disable="true" editable="false" prefWidth="100.0" stylesheets="@css/application.css" translateX="125.0" />
+                        <TextField fx:id="companyCity" disable="true" editable="false" prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
+                        <TextField fx:id="companyCountry" disable="true" editable="false" prefWidth="200.0" stylesheets="@css/application.css" text="Deutschland" translateX="125.0" />
                      </children>
                   </HBox>
                   <HBox fx:id="companyPerson" prefHeight="26.0" prefWidth="752.0" spacing="30.0">
                      <children>
                         <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="Ansprechperson" />
-                        <TextField fx:id="companyPersonFirstName" editable="false" prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
-                        <TextField fx:id="companyPersonLastName" editable="false" prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
+                        <TextField fx:id="companyPersonFirstName" disable="true" editable="false" prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
+                        <TextField fx:id="companyPersonLastName" disable="true" editable="false" prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
                      </children>
                   </HBox>
                   <HBox layoutX="270.0">
                      <children>
-                        <TextField fx:id="companyPersonEmail" editable="false" maxWidth="301.0" prefHeight="26.0" prefWidth="301.0" stylesheets="@css/application.css" />
+                        <TextField fx:id="companyPersonEmail" disable="true" editable="false" maxWidth="301.0" prefHeight="26.0" prefWidth="301.0" stylesheets="@css/application.css" />
                      </children>
                      <VBox.margin>
                         <Insets left="270.0" />
@@ -184,9 +184,9 @@
             <HBox layoutX="197.0" layoutY="943.0" prefHeight="26.0" prefWidth="835.0" spacing="30.0">
                <children>
                   <ComboBox fx:id="courseName" onAction="#showCourse" prefHeight="26.0" prefWidth="177.0" promptText="Kurs auswählen" stylesheets="@css/application.css" />
-                  <TextField fx:id="courseType" editable="false" promptText="Fachbereich" stylesheets="@css/application.css" translateX="63.0" />
-                  <DatePicker fx:id="courseDate" editable="false" promptText="Registrierungsdatum" stylesheets="@css/application.css" translateX="63.0" />
-                  <TextField fx:id="courseRoom" stylesheets="@css/application.css">
+                  <TextField fx:id="courseType" disable="true" editable="false" promptText="Fachbereich" stylesheets="@css/application.css" translateX="63.0" />
+                  <DatePicker fx:id="courseDate" disable="true" editable="false" promptText="Registrierungsdatum" stylesheets="@css/application.css" translateX="63.0" />
+                  <TextField fx:id="courseRoom" disable="true" editable="false" stylesheets="@css/application.css">
                      <HBox.margin>
                         <Insets left="60.0" />
                      </HBox.margin>

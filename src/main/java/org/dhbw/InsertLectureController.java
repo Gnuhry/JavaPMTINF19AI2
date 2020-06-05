@@ -56,8 +56,13 @@ public class InsertLectureController {
 
     @FXML
     private void generateLN() throws IOException {
-        String lectureNumber = "d" + (100000+(int)(Math.random()*999999));
-        lectureNumberField.setText(lectureNumber);
+        while(true) {
+            int lectureNumber = (100000+(int)(Math.random()*999999));
+            if (!Check.checkDNContains(lectureNumber)) {
+                lectureNumberField.setText("" + lectureNumber);
+                break;
+            }
+        }
     }
 
     @FXML
