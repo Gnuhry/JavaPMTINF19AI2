@@ -89,9 +89,9 @@ public class EditCourseController {
                         courseRoom.getValue()
                 );
                 University.updateCourse(course, course_old);
-
+                backToOverview();
             }
-        } catch (NullPointerException npe) {
+        } catch (NullPointerException | IOException npe) {
             showNullPointer.setVisible(true);
             System.out.println("NPE2 found");    // LOG Datei?
         }
