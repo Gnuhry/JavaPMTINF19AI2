@@ -1,11 +1,11 @@
 package org.dhbw;
 
-import com.mysql.jdbc.NotUpdatable;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import kotlin.time.TestTimeSource;
 import org.dhbw.classes.Address;
 import org.dhbw.classes.Check;
 import org.dhbw.classes.Docent;
@@ -64,6 +64,9 @@ public class InsertLectureController {
     private void submit() throws IOException {
 
         try {
+
+            boolean allRight;
+
             if (lectureFirstName.getText().trim().isEmpty() || lectureLastName.getText().trim().isEmpty() || lectureBirthday.getValue() == null || lectureEmail.getText().trim().isEmpty() || lectureStreet.getText().trim().isEmpty() || lectureHomeNumber.getText().trim().isEmpty() || lecturePostalCode.getText().trim().isEmpty() || lectureCity.getText().trim().isEmpty() || lectureCountry.getText().trim().isEmpty() || lectureNumberField.getText().trim().isEmpty()) {
                 showNullPointer.setVisible(true);
                 System.out.println("NPE2 found");    // LOG Datei?
@@ -74,12 +77,13 @@ public class InsertLectureController {
                 int focusStage = 0;
                 errorMessage.setText("Bitte korrigieren Sie die Fehler in folgenden Feldern");
 
+                System.out.println(!Check.validateEmail(lectureEmail.getText()));
                 if (!Check.validateEmail(lectureEmail.getText())) {
                     lectureEmail.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
                     focusStage = 1;
                     errorMessage.setText(errorMessage.getText() + " E-mail-Adresse ");
-
                 } else lectureEmail.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgba(43, 56, 112, 0.9) rgba(0,0,0,0)");
+                System.out.println(!Check.validatePostalCode(lecturePostalCode.getText()));
                 if (!Check.validatePostalCode(lecturePostalCode.getText())) {
                     lecturePostalCode.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
                     if (focusStage != 1) focusStage = 2;
@@ -89,23 +93,30 @@ public class InsertLectureController {
                 if (focusStage == 1) {
                     lectureEmail.requestFocus();
                     errorMessage.setVisible(true);
+                    allRight = false;
+
                 } else if (focusStage == 2) {
                     lecturePostalCode.requestFocus();
                     errorMessage.setVisible(true);
+                    allRight = false;
                 } else {
                     errorMessage.setVisible(false);
+                    allRight = true;
                 }
 
-                Docent docent = new Docent(
-                        lectureLastName.getText(),
-                        lectureFirstName.getText(),
-                        lectureBirthday,
-                        new Address(lectureStreet.getText(), lectureHomeNumber.getText(), lecturePostalCode.getText(), lectureCity.getText(), lectureCountry.getText()),
-                        lectureEmail.getText(),
-                        Integer.parseInt(lectureNumberField.getText().substring(1))
-                );
-                System.out.println(docent);
-                University.addDocent(docent);
+                if (allRight) {
+                    Docent docent = new Docent(
+                            lectureLastName.getText(),
+                            lectureFirstName.getText(),
+                            lectureBirthday,
+                            new Address(lectureStreet.getText(), lectureHomeNumber.getText(), lecturePostalCode.getText(), lectureCity.getText(), lectureCountry.getText()),
+                            lectureEmail.getText(),
+                            Integer.parseInt(lectureNumberField.getText().substring(1))
+                    );
+                    System.out.println(docent);
+                    University.addDocent(docent);
+                    backToOverview();
+                }
             }
         } catch (NullPointerException npe) {
             showNullPointer.setVisible(true);

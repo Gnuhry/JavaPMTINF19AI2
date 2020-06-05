@@ -89,7 +89,7 @@ public class EditLectureController {
                 int focusStage = 0;
                 errorMessage.setText("Bitte korrigieren Sie die Fehler in folgenden Feldern");
 
-                if (!Check.validateEmail(lectureEmail.getText())) {
+                if (Check.validateEmail(lectureEmail.getText())) {
                     lectureEmail.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
                     focusStage = 1;
                     errorMessage.setText(errorMessage.getText() + " E-mail-Adresse ");

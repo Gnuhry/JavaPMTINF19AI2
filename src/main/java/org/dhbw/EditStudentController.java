@@ -11,9 +11,7 @@ import javafx.stage.Stage;
 import org.dhbw.classes.*;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 
 public class EditStudentController {
@@ -123,9 +121,10 @@ public class EditStudentController {
             companyPersonLastName.setText(company.getContactPerson().getName());
             companyPersonEmail.setText(company.getContactPerson().getEmail());
         }
-        if (student.getCourse() != null) {
+        if (student.getCourse() != null && student.getCourse().getRegistrationDate() != null) {
+            System.out.println(student.getCourse());
             courseName.setValue(student.getCourse());
-            Course course = courseName.getValue();
+            Course course = student.getCourse();
             courseType.setText("" + course.getStudyCourse());
             courseDate.setValue(convertToLocalDateViaSqlDate(course.getRegistrationDate()));
             courseRoom.setText("" + course.getRoom());
@@ -218,7 +217,7 @@ public class EditStudentController {
                 errorMessage.setText("Bitte korrigieren Sie die Fehler in folgenden Feldern");
                 company = new Company(companyName.getText(), companyAddress, contactPerson);
 
-                if (!Check.validateEmail(studentEmail.getText())) {
+                if (Check.validateEmail(studentEmail.getText())) {
                     studentEmail.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
                     focusStage = 1;
                     errorMessage.setText(errorMessage.getText() + " E-Mail-Adresse ");
