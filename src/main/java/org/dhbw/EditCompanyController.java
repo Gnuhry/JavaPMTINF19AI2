@@ -11,6 +11,8 @@ import java.io.IOException;
 
 public class EditCompanyController {
 
+    private Company company_old;
+
     @FXML
     private Button cancelButton;
     @FXML
@@ -35,6 +37,7 @@ public class EditCompanyController {
     private TextField companyContactPersonEmail;
 
     public void initVariables(Company company) {
+        this.company_old = company;
         if (!company.getName().isEmpty()) companyName.setText(company.getName());
         if (company.getAddress() != null) {
             companyStreet.setText(company.getAddress().getStreet());
@@ -81,7 +84,7 @@ public class EditCompanyController {
                         new Address(companyStreet.getText(), companyHomeNumber.getText(), companyPostalCode.getText(), companyCity.getText(), companyCountry.getText()),
                         contactPerson
                 );
-                University.updateCompany(company);
+                University.updateCompany(company, company_old);
             }
         } catch (NullPointerException npe) {
             System.out.println("Fehler");

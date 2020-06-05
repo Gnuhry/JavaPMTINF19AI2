@@ -44,6 +44,7 @@ public class ShowStudentsController extends Application implements Initializable
     private Docent lecture;
     private Company company;
     private Course course;
+    private final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
     @FXML
     private Label courseFilter;
@@ -186,6 +187,7 @@ public class ShowStudentsController extends Application implements Initializable
         ObservableList<Company> companies2 = FXCollections.observableArrayList(
                 University.getCompanies()
         );
+        System.out.println("Ausgabe");
         companyTable.setItems(companies2);
     }
 
@@ -199,8 +201,6 @@ public class ShowStudentsController extends Application implements Initializable
         studentForename.setCellValueFactory(new PropertyValueFactory<>("forename"));
         studentBirth.setCellFactory(column -> {
             TableCell<DualStudent, Date> cell = new TableCell<>() {
-                private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-
                 @Override
                 protected void updateItem(Date date, boolean b) {
                     super.updateItem(date, b);
@@ -295,10 +295,8 @@ public class ShowStudentsController extends Application implements Initializable
         lectureNumber.setCellValueFactory(new PropertyValueFactory<>("docentNumber"));
         lectureLastName.setCellValueFactory(new PropertyValueFactory<>("name"));
         lectureFirstName.setCellValueFactory(new PropertyValueFactory<>("forename"));
-        lectureBirth.setCellFactory(column -> {
+/*        lectureBirth.setCellFactory(column -> {
             TableCell<Docent, Date> cell = new TableCell<>() {
-                private final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-
                 @Override
                 protected void updateItem(Date date, boolean b) {
                     super.updateItem(date, b);
@@ -310,7 +308,7 @@ public class ShowStudentsController extends Application implements Initializable
                 }
             };
             return cell;
-        });
+        });*/
         lectureBirth.setCellValueFactory(new PropertyValueFactory<>("birthday"));
         lectureEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         lectureAddress.setCellValueFactory(new PropertyValueFactory<>("Address"));
@@ -345,10 +343,8 @@ public class ShowStudentsController extends Application implements Initializable
         courseName.setCellValueFactory(new PropertyValueFactory<>("name"));
         courseType.setCellValueFactory(new PropertyValueFactory<>("studyCourse"));
         courseRoom.setCellValueFactory(new PropertyValueFactory<>("room"));
-        courseDate.setCellFactory(column -> {
+/*        courseDate.setCellFactory(column -> {
             TableCell<Course, Date> cell = new TableCell<>() {
-                private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-
                 @Override
                 protected void updateItem(Date date, boolean b) {
                     super.updateItem(date, b);
@@ -360,7 +356,7 @@ public class ShowStudentsController extends Application implements Initializable
                 }
             };
             return cell;
-        });
+        });*/
         courseDate.setCellValueFactory(new PropertyValueFactory<>("registrationDate"));
         courseLecture.setCellValueFactory(new PropertyValueFactory<>("studyDirector"));
         courseC.setCellValueFactory(new PropertyValueFactory<>("changeButton"));

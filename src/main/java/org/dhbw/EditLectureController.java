@@ -13,6 +13,8 @@ import java.util.Date;
 
 public class EditLectureController {
 
+    private Docent lecture;
+
     @FXML
     private Label errorMessage;
     @FXML
@@ -46,6 +48,7 @@ public class EditLectureController {
     }
 
     public void initVariables(Docent lecture) {
+        this.lecture = lecture;
         if (!lecture.getForename().isEmpty()) lectureFirstName.setText(lecture.getForename());
         if (!lecture.getName().isEmpty())lectureLastName.setText(lecture.getName());
         if (lecture.getBirthday() != null)lectureBirthday.setValue(convertToLocalDateViaSqlDate(lecture.getBirthday()));
@@ -116,7 +119,7 @@ public class EditLectureController {
                         lectureEmail.getText(),
                         Integer.parseInt(lectureNumberField.getText().substring(1))
                 );
-                University.updateDocent(docent);
+                University.updateDocent(docent, lecture);
             }
         } catch (NullPointerException npe) {
             showNullPointer.setVisible(true);

@@ -25,6 +25,8 @@ public class EditCourseController {
             //new Docent("Stroetmann", "Karl", new Date(70, Calendar.JANUARY, 1), new Address("Test", "1", "12345", "Test", "Test"))
     );
 
+    private Course course_old;
+
     @FXML
     private Button cancelButton;
     @FXML
@@ -41,6 +43,7 @@ public class EditCourseController {
     private DialogPane showNullPointer;
 
     public void initVariables(Course course) {
+        this.course_old = course;
         if (!course.getName().isEmpty()) courseName.setText(course.getName());
         if (course.getStudyCourse() != null) courseType.setValue(course.getStudyCourse());
         if (course.getRoom()!= null) courseRoom.setValue(course.getRoom());
@@ -85,7 +88,7 @@ public class EditCourseController {
                         courseRDate,
                         courseRoom.getValue()
                 );
-                University.updateCourse(course);
+                University.updateCourse(course, course_old);
 
             }
         } catch (NullPointerException npe) {

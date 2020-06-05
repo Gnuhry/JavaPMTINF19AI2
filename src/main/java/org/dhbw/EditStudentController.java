@@ -26,7 +26,7 @@ public class EditStudentController {
             University.getCourses()
     );
 
-    private DualStudent student;
+    private DualStudent student_old;
 
     @FXML
     private Button backToOverview;
@@ -96,6 +96,7 @@ public class EditStudentController {
     private DialogPane showNullPointer;
 
     public void initVariables(DualStudent student) {
+        this.student_old = student;
         if (!student.getForename().isEmpty()) studentFirstName.setText(student.getForename());
         if (!student.getName().isEmpty()) studentLastName.setText(student.getName());
         if (student.getBirthday() != null) studentBirth.setValue(convertToLocalDateViaSqlDate(student.getBirthday()));
@@ -266,7 +267,7 @@ public class EditStudentController {
                         Integer.parseInt(javaKnowledgeLabel.getText()),
                         company
                 );
-                University.updateStudent(dualStudent);
+                University.updateStudent(dualStudent, student_old);
                 backToOverview();
             }
         } catch (NumberFormatException npe) {
