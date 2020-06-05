@@ -20,7 +20,6 @@ public class EditStudentController {
 
     ObservableList<Company> chooseCompanyOptions = FXCollections.observableArrayList(
             University.getCompanies()
-            //new Company("Alnatura", new Address("Test", "1", "12345", "Test", "Test"), new Person("Janina", "Hofmann", ""))
     );
 
     ObservableList<Course> chooseCourseOptions = FXCollections.observableArrayList(
@@ -272,6 +271,7 @@ public class EditStudentController {
                         company
                 );
                 University.updateStudent(dualStudent);
+                backToOverview();
             }
         } catch (NumberFormatException npe) {
             showNullPointer.setVisible(true);
