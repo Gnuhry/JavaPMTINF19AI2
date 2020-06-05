@@ -49,7 +49,7 @@ public class EditLectureController {
         if (!lecture.getForename().isEmpty()) lectureFirstName.setText(lecture.getForename());
         if (!lecture.getName().isEmpty())lectureLastName.setText(lecture.getName());
         if (lecture.getBirthday() != null)lectureBirthday.setValue(convertToLocalDateViaSqlDate(lecture.getBirthday()));
-        if (lecture.getEmail().isEmpty())lectureEmail.setText(lecture.getEmail());
+        if (!lecture.getEmail().isEmpty())lectureEmail.setText(lecture.getEmail());
         if (lecture.getAddress() != null) {
             lectureStreet.setText(lecture.getAddress().getStreet());
             lectureHomeNumber.setText(lecture.getAddress().getNumber());
