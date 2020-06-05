@@ -75,7 +75,7 @@ public class InsertCourseController {
                         courseName.getText(),
                         courseType.getValue(),
                         courseDirector.getValue(),
-                        10,//courseRepresent.getValue(),            Combodbox -> KurssprecherID (int)
+                        //courseRepresent.getValue(),            Combodbox -> KurssprecherID (int)
                         courseRDate,
                         (CourseRoom)courseRoom.getValue()
                 );

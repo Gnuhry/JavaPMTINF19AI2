@@ -33,7 +33,7 @@ public class Course {
         this.registrationDate = registrationDate;
     }
 
-    public Course(String name, StudyCourse studyCourse, Docent studyDirector, int courseSpeakerID, Date registrationDate, CourseRoom room) {
+    public Course(String name, StudyCourse studyCourse, Docent studyDirector, Date registrationDate, CourseRoom room) {
         this.name = name;
         this.studyCourse = studyCourse;
         this.studyDirector = studyDirector;
