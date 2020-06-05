@@ -47,7 +47,7 @@
          </children>
       </VBox>
       <Circle fill="#aebcca" layoutX="88.0" layoutY="123.0" radius="58.0" stroke="BLACK" strokeType="INSIDE" />
-      <Button id="backToOverview" fx:id="backToOverview" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Zurück zur Übersicht" />
+      <Button id="backToOverview" fx:id="backToOverview" focusTraversable="false" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Zurück zur Übersicht" />
       <ImageView fitHeight="67.0" fitWidth="82.0" layoutX="54.0" layoutY="90.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@images/addLecture.png" />
