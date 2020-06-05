@@ -32,7 +32,7 @@
 
 .text-field
 {
-    -fx-background-color: rgba(0,0,0,0.2);
+    -fx-background-color: rgba(0,0,0,0.3);
     -fx-background-radius: 10px 10px 0px 0px;
     -fx-padding: 0.166667em 0.166667em 0.166667em 1em;
     -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) black rgba(0,0,0,0);
