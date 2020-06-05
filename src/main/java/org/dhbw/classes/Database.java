@@ -188,7 +188,7 @@ public class Database {
 
     //-------------------------------------updateObject-------------------------------------------------------
     public static void updateStudent(DualStudent student, DualStudent old) {
-        if (student == null || old == null) return;
+        if (student == null) return;
         int person_id = updatePerson(student, old);
         int course_id = updateCourse(student.getCourse(), old.getCourse());
         int company_id = updateCompany(student.getCompany(), old.getCompany());
@@ -210,7 +210,7 @@ public class Database {
     }
 
     public static int updateDocent(Docent docent, Docent old) {
-        if (docent == null || old == null) return Integer.MIN_VALUE;
+        if (docent == null) return Integer.MIN_VALUE;
         int person_id = updatePerson(docent, old);
         try {
             initialize();
@@ -218,21 +218,19 @@ public class Database {
             statement.setInt(1, person_id);
             statement.setInt(2, docent.getDocentNumber());
             statement.execute();
-            resultSet = statement.getGeneratedKeys();
-            if (resultSet.next())
-                return resultSet.getInt(1);
+            return docent.getDocentNumber();
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
             closeConnection();
         }
-
         return Integer.MIN_VALUE;
     }
 
     public static int updateCourse(Course course, Course old) {
-        if (course == null || old == null) return Integer.MIN_VALUE;
+        if (course == null) return Integer.MIN_VALUE;
         int id = getCourseId(old);
+        System.out.println(id);
         if (id >= 0) {
             int docent_id = updateDocent(course.getStudyDirector(), old.getStudyDirector());
             try {
@@ -254,7 +252,7 @@ public class Database {
     }
 
     public static int updatePerson(Person person, Person old) {
-        if (person == null || old == null) return Integer.MIN_VALUE;
+        if (person == null) return Integer.MIN_VALUE;
         if (countUsedPerson(person) > 1) return addPerson(person);
         int id = getPersonId(old);
         if (id >= 0) {
@@ -276,7 +274,7 @@ public class Database {
     }
 
     public static int updateCompany(Company company, Company old) {
-        if (company == null || old == null) return Integer.MIN_VALUE;
+        if (company == null) return Integer.MIN_VALUE;
         int id = getCompanyId(old);
         if (id >= 0) {
             int address_id = updateAddress(company.getAddress(), old.getAddress());
@@ -300,7 +298,7 @@ public class Database {
     }
 
     public static int updateAddress(Address address, Address old) {
-        if (address == null || old == null) return Integer.MIN_VALUE;
+        if (address == null) return Integer.MIN_VALUE;
         if (countUsedAddress(address) > 1) return addAddress(address);
         System.out.println("Update address");
         int id = getAddressId(old);
@@ -403,7 +401,8 @@ public class Database {
         } finally {
             closeConnection();
         }
-        deleteAddress(person.getAddress());
+        if (person.getAddress() != null && person.getAddress().getNumber() != null)
+            deleteAddress(person.getAddress());
     }
 
     public static void deleteAddress(Address address) {
@@ -764,7 +763,11 @@ public class Database {
             statement.setString(2, course.getName());
             statement.setDate(3, convertDate(course.getRegistrationDate()));
             statement.setInt(4, getCourseTypeID(course.getStudyCourse()));
-            statement.setInt(5, course.getStudyDirector().getDocentNumber());
+            if (course.getStudyCourse() == null || course.getStudyDirector().getDocentNumber() == 0)
+                statement.setInt(5, Integer.MIN_VALUE);
+            else
+                statement.setInt(5, course.getStudyDirector().getDocentNumber());
+            System.out.println(statement.toString());
             resultSet = statement.executeQuery();
             if (resultSet.next())
                 return resultSet.getInt(1);
