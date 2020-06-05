@@ -223,8 +223,6 @@ public class InsertStudentController {
                         Integer.parseInt(javaKnowledgeLabel.getText()),
                         company
                 );
-                System.out.println(courseName.getValue());
-                System.out.println(dualStudent);
                 if (companyChoose.getValue() != null) {
                     University.addCompany(company);
                 }

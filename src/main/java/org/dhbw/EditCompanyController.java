@@ -52,7 +52,6 @@ public class EditCompanyController {
 
     @FXML
     private void backToOverview() throws IOException {
-        App.setRoot("primary");
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }

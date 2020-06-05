@@ -40,7 +40,7 @@
             <Circle fill="#aebcca" layoutX="88.0" layoutY="123.0" radius="58.0" stroke="BLACK" strokeType="INSIDE" />
             <ImageView fitHeight="67.0" fitWidth="82.0" layoutX="54.0" layoutY="90.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@images/addStudent.png" />
+                  <Image url="@images/addStudentHat.png" />
                </image>
             </ImageView>
             <Label ellipsisString="200" layoutX="383.0" layoutY="34.0" text="Neuen Studendierenden anlegen" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" underline="true">
@@ -65,7 +65,7 @@
                   <HBox spacing="170.0">
                      <children>
                         <Label prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="Geburtstag" />
-                        <DatePicker fx:id="studentBirth" editable="false" onInputMethodTextChanged="#acceptTab" onKeyPressed="#acceptTab" onKeyTyped="#acceptTab" promptText="dd.mm.yyyy" stylesheets="@css/application.css" />
+                        <DatePicker id="date" fx:id="studentBirth" editable="false" onInputMethodTextChanged="#acceptTab" onKeyPressed="#acceptTab" onKeyTyped="#acceptTab" promptText="dd.mm.yyyy" stylesheets="@css/application.css" />
                      </children>
                   </HBox>
                   <HBox spacing="170.0">
@@ -167,15 +167,6 @@
             </Label>
             <Line endX="650.0" fill="#817f7fd9" layoutX="296.0" layoutY="513.0" startX="-100.0" stroke="#817f7f" AnchorPane.bottomAnchor="571.3" AnchorPane.leftAnchor="195.5" AnchorPane.rightAnchor="133.5" AnchorPane.topAnchor="512.5" />
             <Line endX="650.0" fill="#817f7fd9" layoutX="295.0" layoutY="1016.0" startX="-100.0" stroke="#817f7f" AnchorPane.leftAnchor="194.5" AnchorPane.rightAnchor="135.29999999999995" />
-            <HBox layoutX="197.0" layoutY="1074.0" prefHeight="26.0" prefWidth="592.0" spacing="20.0" AnchorPane.leftAnchor="197.0" AnchorPane.rightAnchor="291.0">
-               <children>
-                  <Label prefHeight="26.0" prefWidth="110.0" stylesheets="@css/application.css" text="Java-Kenntnisse" />
-                  <Label prefHeight="25.0" text="0" translateX="135.0" />
-                  <Slider fx:id="javaKnowledgeSlider" onMouseClicked="#showSlider" onMouseDragged="#showSlider" prefHeight="25.0" translateX="135.0" />
-                  <Label prefHeight="25.0" text="100" translateX="135.0" />
-                  <Label fx:id="javaKnowledgeLabel" prefHeight="25.6" text="0" translateX="155.0" />
-               </children>
-            </HBox>
             <Label ellipsisString="" layoutX="197.0" layoutY="899.0" text="Kursinformationen" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS">
                <font>
                   <Font name="Comic Sans MS Bold Italic" size="18.0" />
@@ -191,6 +182,15 @@
                         <Insets left="60.0" />
                      </HBox.margin>
                   </TextField>
+               </children>
+            </HBox>
+            <HBox layoutX="197.0" layoutY="1074.0" prefHeight="26.0" prefWidth="592.0" spacing="20.0" AnchorPane.leftAnchor="197.0" AnchorPane.rightAnchor="291.0">
+               <children>
+                  <Label prefHeight="26.0" prefWidth="110.0" stylesheets="@css/application.css" text="Java-Kenntnisse" />
+                  <Label prefHeight="25.0" text="0" translateX="135.0" />
+                  <Slider fx:id="javaKnowledgeSlider" onMouseClicked="#showSlider" onMouseDragged="#showSlider" prefHeight="25.0" translateX="135.0" />
+                  <Label prefHeight="25.0" text="100" translateX="135.0" />
+                  <Label fx:id="javaKnowledgeLabel" prefHeight="25.6" text="0" translateX="155.0" />
                </children>
             </HBox>
             <Button id="backToOverview" fx:id="backToOverview" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Zurück zur Übersicht" />

@@ -58,7 +58,7 @@ public class ShowStudentsController extends Application implements Initializable
     @FXML
     private Button filterButton;
     @FXML
-    private TableView<DualStudent> studentTable;
+    public TableView<DualStudent> studentTable;
     @FXML
     private TableColumn<DualStudent, Integer> studentNumber;
     @FXML
@@ -155,16 +155,18 @@ public class ShowStudentsController extends Application implements Initializable
             companyFilter.setVisible(true);
         }
     }
+
     @FXML
     public void refresh() {
         ObservableList<DualStudent> data2 = FXCollections.observableArrayList(
                 University.getStudents()
         );
+        System.out.println("t");
         studentTable.setItems(data2);
     }
 
     @FXML
-    public void refreshLecture() {
+    private void refreshLecture() {
         ObservableList<Docent> docents2 = FXCollections.observableArrayList(
                 University.getDocents()
         );
@@ -172,7 +174,7 @@ public class ShowStudentsController extends Application implements Initializable
     }
 
     @FXML
-    public void refreshCourse() {
+    private void refreshCourse() {
         ObservableList<Course> courses2 = FXCollections.observableArrayList(
                 University.getCourses()
         );
@@ -180,7 +182,7 @@ public class ShowStudentsController extends Application implements Initializable
     }
 
     @FXML
-    public void refreshCompany() {
+    private void refreshCompany() {
         ObservableList<Company> companies2 = FXCollections.observableArrayList(
                 University.getCompanies()
         );
