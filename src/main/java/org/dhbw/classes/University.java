@@ -11,7 +11,7 @@ public class University {
     //-----------------------------Getter---------------------
 
     public static List<Docent> getDocents() {
-       return Database.getDocents();
+        return Database.getDocents();
     }
 
     public static List<DualStudent> getStudents() {
@@ -80,19 +80,19 @@ public class University {
     }
 
     //------------------------------Update-----------------
-    public static void updateDocent(Docent d) {
-        addDocent(d);
+    public static void updateDocent(Docent d, Docent old) {
+        Database.updateDocent(d, old);
     }
 
-    public static void updateStudent(DualStudent s) {
-        addStudent(s);
+    public static void updateStudent(DualStudent s, DualStudent old) {
+        Database.updateStudent(s, old);
     }
 
-    public static void updateCourse(Course c) {
-        addCourse(c);
+    public static void updateCourse(Course c, Course old) {
+        Database.updateCourse(c, old);
     }
 
-    public static void updateCompany(Company c) {
-        addCompany(c);
+    public static void updateCompany(Company c, Company old) {
+        Database.updateCompany(c, old);
     }
 }

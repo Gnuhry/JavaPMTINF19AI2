@@ -50,15 +50,15 @@ public class Database {
         return dualStudents;
     }
 
-    public static int addStudent(DualStudent student) {
-        if (student == null) return Integer.MIN_VALUE;
-        if (hasID("student", "student_id", student.getStudentNumber())) return student.getStudentNumber();
+    public static void addStudent(DualStudent student) {
+        if (student == null) return;
+        if (hasID("student", "student_id", student.getStudentNumber())) return;
         int person_id = addPerson(student);
         int course_id = addCourse(student.getCourse());
         int address_id = addCompany(student.getCompany());
         try {
             initialize();
-            statement = connection.prepareStatement("INSERT INTO student (student_id, matriculation_number, person_id, java_knowlage, course_id, company_id) VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            statement = connection.prepareStatement("INSERT INTO student (student_id, matriculation_number, person_id, java_knowlage, course_id, company_id) VALUES (?, ?, ?, ?, ?, ?)");
             statement.setInt(1, student.getStudentNumber());
             statement.setInt(2, student.getMatriculationNumber());
             statement.setInt(3, person_id);
@@ -66,15 +66,11 @@ public class Database {
             statement.setInt(5, course_id);
             statement.setInt(6, address_id);
             statement.execute();
-            resultSet = statement.getGeneratedKeys();
-            if (resultSet.next())
-                return resultSet.getInt(1);
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
             closeConnection();
         }
-        return Integer.MIN_VALUE;
     }
 
     public static int addDocent(Docent docent) {
@@ -132,24 +128,11 @@ public class Database {
         try {
             initialize();
             statement = connection.prepareStatement("INSERT INTO person (first_name, last_name, birthdate, email, address_id) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-            statement.setString(1, person.getForename());
-            statement.setString(2, person.getName());
-            if (person.getBirthday() == null)
-                statement.setDate(3, null);
-            else
-                statement.setDate(3, convertDate(person.getBirthday()));
-            statement.setString(4, person.getEmail());
-            if (person.getAddress() == null)
-                statement.setInt(5, -1);
-            else
-                statement.setInt(5, address_id);
+            addPersonToStatment(person, address_id);
             statement.execute();
             resultSet = statement.getGeneratedKeys();
             if (resultSet.next())
                 return resultSet.getInt(1);
-            else {
-                System.out.println("Nope");
-            }
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
@@ -201,6 +184,147 @@ public class Database {
         }
         return Integer.MIN_VALUE;
     }
+
+    public static void updateStudent(DualStudent student, DualStudent old) {
+        if (student == null) return;
+        int person_id = updatePerson(student, old);
+        int course_id = updateCourse(student.getCourse(), old.getCourse());
+        int address_id = updateCompany(student.getCompany(), old.getCompany());
+        try {
+            initialize();
+            statement = connection.prepareStatement("UPDATE student SET person_id=?, java_knowlage=?, course_id=?, company_id=? WHERE student_id=?");
+            statement.setInt(1, person_id);
+            statement.setInt(2, student.getJavaKnowledge());
+            statement.setInt(3, course_id);
+            statement.setInt(4, address_id);
+            statement.setInt(5, student.getStudentNumber());
+            statement.execute();
+        } catch (SQLException | ClassNotFoundException exception) {
+            exception.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+    }
+
+    public static int updateDocent(Docent docent, Docent old) {
+        if (docent == null) return Integer.MIN_VALUE;
+        int person_id = updatePerson(docent, old);
+        try {
+            initialize();
+            statement = connection.prepareStatement("UPDATE docent SET person_id=? WHERE docent_id=?", Statement.RETURN_GENERATED_KEYS);
+            statement.setInt(1, person_id);
+            statement.setInt(2, docent.getDocentNumber());
+            statement.execute();
+            resultSet = statement.getGeneratedKeys();
+            if (resultSet.next())
+                return resultSet.getInt(1);
+        } catch (SQLException | ClassNotFoundException exception) {
+            exception.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+
+        return Integer.MIN_VALUE;
+    }
+
+    public static int updateCourse(Course course, Course old) {
+        if (course == null) return Integer.MIN_VALUE;
+        int id = getCourseId(old);
+        if (id >= 0) {
+            int docent_id = updateDocent(course.getStudyDirector(), old.getStudyDirector());
+            try {
+                initialize();
+                statement = connection.prepareStatement("UPDATE course SET room=?, name=?, study_director_id=? WHERE course_id=?", Statement.RETURN_GENERATED_KEYS);
+                statement.setInt(1, getRoomID(course.getRoom()));
+                statement.setString(2, course.getName());
+                statement.setInt(3, docent_id);
+                statement.setInt(4, id);
+                statement.execute();
+                resultSet = statement.getGeneratedKeys();
+                if (resultSet.next())
+                    return resultSet.getInt(1);
+            } catch (SQLException | ClassNotFoundException exception) {
+                exception.printStackTrace();
+            } finally {
+                closeConnection();
+            }
+        }
+        return Integer.MIN_VALUE;
+    }
+
+    public static int updatePerson(Person person, Person old) {
+        if (person == null) return Integer.MIN_VALUE;
+        if (countUsedPerson(person) > 1) return addPerson(person);
+        int id = getPersonId(old);
+        if (id >= 0) {
+            int address_id = updateAddress(person.getAddress(), old.getAddress());
+            try {
+                initialize();
+                statement = connection.prepareStatement("UPDATE person SET first_name=?, last_name=?, birthdate=?, email=?, address_id=? WHERE person_id=?", Statement.RETURN_GENERATED_KEYS);
+                addPersonToStatment(person, address_id);
+                statement.setInt(6, id);
+                statement.execute();
+                resultSet = statement.getGeneratedKeys();
+                if (resultSet.next())
+                    return resultSet.getInt(1);
+            } catch (SQLException | ClassNotFoundException exception) {
+                exception.printStackTrace();
+            } finally {
+                closeConnection();
+            }
+        }
+        return Integer.MIN_VALUE;
+    }
+
+    public static int updateCompany(Company company, Company old) {
+        if (company == null) return Integer.MIN_VALUE;
+        int id = getCompanyId(old);
+        if (id >= 0) {
+            int address_id = updateAddress(company.getAddress(), old.getAddress());
+            int person_id = updatePerson(company.getContactPerson(), old.getContactPerson());
+            try {
+                initialize();
+                statement = connection.prepareStatement("UPDATE company SET name=?, address_id=?, contact_person_id=? WHERE company_id=?", Statement.RETURN_GENERATED_KEYS);
+                statement.setString(1, company.getName());
+                statement.setInt(2, address_id);
+                statement.setInt(3, person_id);
+                statement.setInt(4, id);
+                statement.execute();
+                resultSet = statement.getGeneratedKeys();
+                if (resultSet.next())
+                    return resultSet.getInt(1);
+            } catch (SQLException | ClassNotFoundException exception) {
+                exception.printStackTrace();
+            } finally {
+                closeConnection();
+            }
+        }
+        return Integer.MIN_VALUE;
+    }
+
+    public static int updateAddress(Address address, Address old) {
+        if (address == null) return Integer.MIN_VALUE;
+        if (countUsedAddress(address) > 1) return addAddress(address);
+        int id = getAddressId(old);
+        if (id >= 0) {
+            try {
+                initialize();
+                statement = connection.prepareStatement("UPDATE address SET street=?, number=?, postal_code=?, city=?, country=? WHERE address_id=?", Statement.RETURN_GENERATED_KEYS);
+                addAddressToStatement(address);
+                statement.setInt(6, id);
+                statement.execute();
+                resultSet = statement.getGeneratedKeys();
+                if (resultSet.next())
+                    return resultSet.getInt(1);
+            } catch (SQLException | ClassNotFoundException exception) {
+                exception.printStackTrace();
+            } finally {
+                closeConnection();
+            }
+        }
+        return Integer.MIN_VALUE;
+    }
+
 
     public static void deleteStudent(DualStudent student) {
         try {
@@ -254,7 +378,7 @@ public class Database {
         int id = getCompanyId(company);
         try {
             initialize();
-            statement = connection.prepareStatement("DELETE FROM company WHERE compamy_id = ?");
+            statement = connection.prepareStatement("DELETE FROM company WHERE company_id = ?");
             statement.setInt(1, id);
             statement.execute();
         } catch (SQLException | ClassNotFoundException exception) {
@@ -269,7 +393,7 @@ public class Database {
     }
 
     public static void deletePerson(Person person) {
-        if (!isNotUsedPerson(person))
+        if (countUsedPerson(person) > 0)
             return;
         try {
             initialize();
@@ -286,7 +410,7 @@ public class Database {
     }
 
     public static void deleteAddress(Address address) {
-        if (!isNotUsedAddress(address))
+        if (countUsedAddress(address) > 0)
             return;
         try {
             initialize();
@@ -301,41 +425,47 @@ public class Database {
         }
     }
 
-    private static boolean isNotUsedAddress(Address address) {
+    private static int countUsedAddress(Address address) {
         try {
+            int counter = 0;
             initialize();
             statement = connection.prepareStatement("SELECT company_id, person_id FROM address LEFT JOIN company c on address.address_id = c.address_id LEFT JOIN person p on address.address_id = p.address_id WHERE street = ? AND number = ? AND postal_code = ? AND city = ? AND country = ?");
             addAddressToStatement(address);
             resultSet = statement.executeQuery();
-            if (resultSet.next() && resultSet.getInt("company_id") == 0 && resultSet.getInt("person_id") == 0) {
+            while (resultSet.next()) {
+                if (resultSet.getInt("company_id") > 0 || resultSet.getInt("person_id") > 0)
+                    counter++;
 //                System.out.println(resultSet.getInt("company_id")+", "+resultSet.getInt("person_id"));
-                return true;
             }
+            return counter;
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
 
         } finally {
             closeConnection();
         }
-        return false;
+        return 0;
     }
 
-    private static boolean isNotUsedPerson(Person person) {
+    private static int countUsedPerson(Person person) {
         try {
+            int counter = 0;
             initialize();
             statement = connection.prepareStatement("SELECT student_id,docent_id,company.company_id FROM person LEFT JOIN student s on person.person_id = s.person_id LEFT JOIN docent d on person.person_id = d.person_id LEFT JOIN company ON contact_person_id=person.person_id WHERE email = ?");
             statement.setString(1, person.getEmail());
             resultSet = statement.executeQuery();
-            if (resultSet.next() && resultSet.getInt("company_id") == 0 && resultSet.getInt("student_id") == 0 && resultSet.getInt("company_id") == 0) {
+            while (resultSet.next()) {
+                if (resultSet.getInt("company_id") > 0 || resultSet.getInt("student_id") > 0 || resultSet.getInt("company_id") > 0)
+                    counter++;
 //                System.out.println(resultSet.getInt("company_id")+","+resultSet.getInt("student_id")+","+resultSet.getInt("docent_id"));
-                return true;
             }
+            return counter;
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
             closeConnection();
         }
-        return false;
+        return 0;
     }
 
     private static void initialize() throws ClassNotFoundException, SQLException {
@@ -728,7 +858,7 @@ public class Database {
         List<Address> addresses1 = new ArrayList<>();
         try {
             initialize();
-            statement = connection.prepareStatement("SELECT student_id, email, street, number, postal_code, city, country FROM student LEFT JOIN person ON person.person_id=student.person_id LEFT JOIN address ON address.addres_id=person.address_id WHERE compamy_id = ?");
+            statement = connection.prepareStatement("SELECT student_id, email, street, number, postal_code, city, country FROM student LEFT JOIN person ON person.person_id=student.person_id LEFT JOIN address ON address.address_id=person.address_id WHERE company_id = ?");
             statement.setInt(1, id);
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -758,4 +888,19 @@ public class Database {
         statement.setString(4, address.getCity());
         statement.setString(5, address.getCountry());
     }
+
+    private static void addPersonToStatment(Person person, int address_id) throws SQLException {
+        statement.setString(1, person.getForename());
+        statement.setString(2, person.getName());
+        if (person.getBirthday() == null)
+            statement.setDate(3, null);
+        else
+            statement.setDate(3, convertDate(person.getBirthday()));
+        statement.setString(4, person.getEmail());
+        if (person.getAddress() == null)
+            statement.setInt(5, -1);
+        else
+            statement.setInt(5, address_id);
+    }
+
 }
