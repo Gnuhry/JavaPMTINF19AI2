@@ -189,11 +189,7 @@ public class Database {
         try {
             initialize();
             statement = connection.prepareStatement("INSERT INTO address (street, number, postal_code, city, country) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-            statement.setString(1, address.getStreet());
-            statement.setString(2, address.getNumber());
-            statement.setString(3, address.getPostcode());
-            statement.setString(4, address.getCity());
-            statement.setString(5, address.getCountry());
+            addAddressToStatement(address);
             statement.execute();
             resultSet = statement.getGeneratedKeys();
             if (resultSet.next())
@@ -218,7 +214,7 @@ public class Database {
         } finally {
             closeConnection();
         }
-        deletePerson(student); //TODO passiert nichts
+        deletePerson(student);
     }
 
     public static void deleteDocent(Docent docent) {
@@ -295,11 +291,7 @@ public class Database {
         try {
             initialize();
             statement = connection.prepareStatement("DELETE FROM address WHERE street = ? AND number = ? AND postal_code = ? AND city = ? AND country = ?");
-            statement.setString(1, address.getStreet());
-            statement.setString(2, address.getNumber());
-            statement.setString(3, address.getPostcode());
-            statement.setString(4, address.getCity());
-            statement.setString(5, address.getCountry());
+            addAddressToStatement(address);
             statement.execute();
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
@@ -313,13 +305,9 @@ public class Database {
         try {
             initialize();
             statement = connection.prepareStatement("SELECT company_id, person_id FROM address LEFT JOIN company c on address.address_id = c.address_id LEFT JOIN person p on address.address_id = p.address_id WHERE street = ? AND number = ? AND postal_code = ? AND city = ? AND country = ?");
-            statement.setString(1, address.getStreet());
-            statement.setString(2, address.getNumber());
-            statement.setString(3, address.getPostcode());
-            statement.setString(4, address.getCity());
-            statement.setString(5, address.getCountry());
+            addAddressToStatement(address);
             resultSet = statement.executeQuery();
-            if (resultSet.next() && resultSet.getInt("company_id") == 0 && resultSet.getInt("person_id") == 0){
+            if (resultSet.next() && resultSet.getInt("company_id") == 0 && resultSet.getInt("person_id") == 0) {
 //                System.out.println(resultSet.getInt("company_id")+", "+resultSet.getInt("person_id"));
                 return true;
             }
@@ -338,7 +326,7 @@ public class Database {
             statement = connection.prepareStatement("SELECT student_id,docent_id,company.company_id FROM person LEFT JOIN student s on person.person_id = s.person_id LEFT JOIN docent d on person.person_id = d.person_id LEFT JOIN company ON contact_person_id=person.person_id WHERE email = ?");
             statement.setString(1, person.getEmail());
             resultSet = statement.executeQuery();
-            if (resultSet.next() && resultSet.getInt("company_id") == 0 && resultSet.getInt("student_id") == 0 && resultSet.getInt("company_id") == 0){
+            if (resultSet.next() && resultSet.getInt("company_id") == 0 && resultSet.getInt("student_id") == 0 && resultSet.getInt("company_id") == 0) {
 //                System.out.println(resultSet.getInt("company_id")+","+resultSet.getInt("student_id")+","+resultSet.getInt("docent_id"));
                 return true;
             }
@@ -649,11 +637,7 @@ public class Database {
         try {
             initialize();
             statement = connection.prepareStatement("SELECT address_id FROM address WHERE street = ? AND number = ? AND postal_code = ? AND city = ? AND country = ?");
-            statement.setString(1, address.getStreet());
-            statement.setString(2, address.getNumber());
-            statement.setString(3, address.getPostcode());
-            statement.setString(4, address.getCity());
-            statement.setString(5, address.getCountry());
+            addAddressToStatement(address);
             resultSet = statement.executeQuery();
             if (resultSet.next())
                 return resultSet.getInt(1);
@@ -739,16 +723,39 @@ public class Database {
     }
 
     private static void deleteStudentByCompanyId(int id) {
+        List<String> emails = new ArrayList<>();
+        List<Integer> studentIDs = new ArrayList<>();
+        List<Address> addresses1 = new ArrayList<>();
         try {
             initialize();
-            statement = connection.prepareStatement("DELETE FROM student WHERE compamy_id = ?");
+            statement = connection.prepareStatement("SELECT student_id, email, street, number, postal_code, city, country FROM student LEFT JOIN person ON person.person_id=student.person_id LEFT JOIN address ON address.addres_id=person.address_id WHERE compamy_id = ?");
             statement.setInt(1, id);
-            statement.execute();
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                emails.add(resultSet.getString("email"));
+                studentIDs.add(resultSet.getInt("student_id"));
+                addresses1.add(new Address(resultSet.getString("street"),
+                        resultSet.getString("number"),
+                        resultSet.getString("postal_code"),
+                        resultSet.getString("city"),
+                        resultSet.getString("country")));
+            }
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
-
         } finally {
             closeConnection();
         }
+        for (int f = 0; f < emails.size() && f < studentIDs.size() && f < addresses1.size(); f++) {
+            deleteStudent(new DualStudent(-1, studentIDs.get(f), null, null, null, addresses1.get(f), emails.get(f), null, 0, null));
+        }
+
+    }
+
+    private static void addAddressToStatement(Address address) throws SQLException {
+        statement.setString(1, address.getStreet());
+        statement.setString(2, address.getNumber());
+        statement.setString(3, address.getPostcode());
+        statement.setString(4, address.getCity());
+        statement.setString(5, address.getCountry());
     }
 }
