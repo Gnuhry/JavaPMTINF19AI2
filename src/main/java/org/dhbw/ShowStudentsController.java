@@ -162,7 +162,6 @@ public class ShowStudentsController extends Application implements Initializable
         ObservableList<DualStudent> data2 = FXCollections.observableArrayList(
                 University.getStudents()
         );
-        System.out.println("t");
         studentTable.setItems(data2);
     }
 
@@ -253,49 +252,10 @@ public class ShowStudentsController extends Application implements Initializable
         sortedName.comparatorProperty().bind(studentTable.comparatorProperty());
         studentTable.setItems(sortedName);
 
-        /*
-        FilteredList<DualStudent> filteredCourse = new FilteredList<>(data, p -> true);
-        courseFilterBox.itemsProperty().addListener((observable, oldValue, newValue) -> {
-            filteredCourse.setPredicate(course -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-
-                String lowerCaseFilter = newValue.toString();
-
-                if (course.getName().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                }
-                return false;
-            });
-        });
-        SortedList<DualStudent> sortedCourse = new SortedList<>(filteredCourse);
-        sortedCourse.comparatorProperty().bind(studentTable.comparatorProperty());
-        studentTable.setItems(sortedCourse);
-
-        FilteredList<DualStudent> filteredCompany = new FilteredList<>(data, p -> true);
-        companyFilterBox.itemsProperty().addListener((observable, oldValue, newValue) -> {
-            filteredCompany.setPredicate(company -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-
-                String lowerCaseFilter = newValue.toString();
-
-                if (company.getName().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                }
-                return false;
-            });
-        });
-        SortedList<DualStudent> sortedCompany = new SortedList<>(filteredCompany);
-        sortedCompany.comparatorProperty().bind(studentTable.comparatorProperty());
-        studentTable.setItems(sortedCompany);*/
-
         lectureNumber.setCellValueFactory(new PropertyValueFactory<>("docentNumber"));
         lectureLastName.setCellValueFactory(new PropertyValueFactory<>("name"));
         lectureFirstName.setCellValueFactory(new PropertyValueFactory<>("forename"));
-/*        lectureBirth.setCellFactory(column -> {
+        lectureBirth.setCellFactory(column -> {
             TableCell<Docent, Date> cell = new TableCell<>() {
                 @Override
                 protected void updateItem(Date date, boolean b) {
@@ -308,7 +268,7 @@ public class ShowStudentsController extends Application implements Initializable
                 }
             };
             return cell;
-        });*/
+        });
         lectureBirth.setCellValueFactory(new PropertyValueFactory<>("birthday"));
         lectureEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         lectureAddress.setCellValueFactory(new PropertyValueFactory<>("Address"));
@@ -343,7 +303,7 @@ public class ShowStudentsController extends Application implements Initializable
         courseName.setCellValueFactory(new PropertyValueFactory<>("name"));
         courseType.setCellValueFactory(new PropertyValueFactory<>("studyCourse"));
         courseRoom.setCellValueFactory(new PropertyValueFactory<>("room"));
-/*        courseDate.setCellFactory(column -> {
+        courseDate.setCellFactory(column -> {
             TableCell<Course, Date> cell = new TableCell<>() {
                 @Override
                 protected void updateItem(Date date, boolean b) {
@@ -356,16 +316,16 @@ public class ShowStudentsController extends Application implements Initializable
                 }
             };
             return cell;
-        });*/
+        });
         courseDate.setCellValueFactory(new PropertyValueFactory<>("registrationDate"));
         courseLecture.setCellValueFactory(new PropertyValueFactory<>("studyDirector"));
         courseC.setCellValueFactory(new PropertyValueFactory<>("changeButton"));
         courseD.setCellValueFactory(new PropertyValueFactory<>("deleteButton"));
         courseTable.setItems(courses);
 
-        FilteredList<Course> filteredCourse = new FilteredList<>(courses, p -> true);
+        FilteredList<Course> filteredCourse2 = new FilteredList<>(courses, p -> true);
         searchBoxCourse.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredCourse.setPredicate(course -> {
+            filteredCourse2.setPredicate(course -> {
                 if (newValue == null || newValue.isEmpty()) {
                     return true;
                 }
@@ -378,7 +338,7 @@ public class ShowStudentsController extends Application implements Initializable
                 return false;
             });
         });
-        SortedList<Course> sortedCourses = new SortedList<>(filteredCourse);
+        SortedList<Course> sortedCourses = new SortedList<>(filteredCourse2);
         sortedCourses.comparatorProperty().bind(courseTable.comparatorProperty());
         courseTable.setItems(sortedCourses);
 
@@ -389,9 +349,9 @@ public class ShowStudentsController extends Application implements Initializable
         companyD.setCellValueFactory(new PropertyValueFactory<>("deleteButton"));
         courseTable.setItems(courses);
 
-        FilteredList<Company> filteredCompany = new FilteredList<>(companies, p -> true);
+        FilteredList<Company> filteredCompany2 = new FilteredList<>(companies, p -> true);
         searchBoxCompany.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredCompany.setPredicate(course -> {
+            filteredCompany2.setPredicate(course -> {
                 if (newValue == null || newValue.isEmpty()) {
                     return true;
                 }
@@ -404,9 +364,9 @@ public class ShowStudentsController extends Application implements Initializable
                 return false;
             });
         });
-        SortedList<Company> sortedCompany = new SortedList<>(filteredCompany);
-        sortedCompany.comparatorProperty().bind(companyTable.comparatorProperty());
-        companyTable.setItems(sortedCompany);
+        SortedList<Company> sortedCompany2 = new SortedList<>(filteredCompany2);
+        sortedCompany2.comparatorProperty().bind(companyTable.comparatorProperty());
+        companyTable.setItems(sortedCompany2);
     }
 
     @FXML
