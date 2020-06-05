@@ -436,7 +436,7 @@ public class Database {
         } finally {
             closeConnection();
         }
-        return null;
+        return  new ArrayList<>();
     }
 
     public static List<Integer> getMatriculationNumbers() {
@@ -453,7 +453,7 @@ public class Database {
         } finally {
             closeConnection();
         }
-        return null;
+        return  new ArrayList<>();
     }
 
     public static List<Integer> getDocentIDs() {
@@ -470,7 +470,7 @@ public class Database {
         } finally {
             closeConnection();
         }
-        return null;
+        return  new ArrayList<>();
     }
 
     //---------------------------------------private...........................................

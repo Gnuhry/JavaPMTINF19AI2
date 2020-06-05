@@ -36,14 +36,14 @@ public class Check {
     }
 
     public static boolean checkSNContains(int studentNumber) {
-        return Objects.requireNonNull(Database.getStudentIDs()).contains(studentNumber);
+        return Database.getStudentIDs().contains(studentNumber);
     }
 
     public static boolean checkMNContains(int matriculationNumber) {
-        return Objects.requireNonNull(Database.getMatriculationNumbers()).contains(matriculationNumber);
+        return Database.getMatriculationNumbers().contains(matriculationNumber);
     }
 
     public static boolean checkDNContains(int docentNumber) {
-        return Objects.requireNonNull(Database.getDocentIDs()).contains(docentNumber);
+        return Database.getDocentIDs().contains(docentNumber);
     }
 }
