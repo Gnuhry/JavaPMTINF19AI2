@@ -205,6 +205,7 @@ public class EditStudentController {
     @FXML
     private void submit() throws IOException {
         try {
+            boolean allRight;
             if (studentFirstName.getText().trim().isEmpty() || studentLastName.getText().trim().isEmpty() || studentBirth.getValue() == null || studentEmail.getText().trim().isEmpty() || studentStreet.getText().trim().isEmpty() || studentHomeNumber.getText().trim().isEmpty() || studentPostalCode.getText().trim().isEmpty() || studentCity.getText().trim().isEmpty() || studentCountry.getText().trim().isEmpty() || studentNumberField.getText().trim().isEmpty() || matriculationNumberField.getText().trim().isEmpty() || companyName.getText().trim().isEmpty() || companyStreet.getText().trim().isEmpty() || companyHomeNumber.getText().trim().isEmpty() || companyPostalCode.getText().trim().isEmpty() || companyCity.getText().trim().isEmpty() || companyCountry.getText().trim().isEmpty() || companyPersonFirstName.getText().trim().isEmpty() || companyPersonLastName.getText().trim().isEmpty() || courseName.getEditor().getText().equals("Kurs auswählen") || javaKnowledgeLabel.getText().trim().isEmpty()){
                 showNullPointer.setVisible(true);
                 System.out.println("NPE2 found");    // LOG Datei?
@@ -217,7 +218,7 @@ public class EditStudentController {
                 errorMessage.setText("Bitte korrigieren Sie die Fehler in folgenden Feldern");
                 company = new Company(companyName.getText(), companyAddress, contactPerson);
 
-                if (Check.validateEmail(studentEmail.getText())) {
+                if (!Check.validateEmail(studentEmail.getText())) {
                     studentEmail.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
                     focusStage = 1;
                     errorMessage.setText(errorMessage.getText() + " E-Mail-Adresse ");
@@ -242,32 +243,38 @@ public class EditStudentController {
                     studentEmail.requestFocus();
                     scrollPane.setVvalue(0);
                     errorMessage.setVisible(true);
+                    allRight = false;
                 } else if (focusStage == 2) {
                     studentPostalCode.requestFocus();
                     scrollPane.setVvalue(0);
                     errorMessage.setVisible(true);
+                    allRight = false;
                 } else if (focusStage == 3) {
                     companyPostalCode.requestFocus();
                     scrollPane.setVvalue(100);
                     errorMessage.setVisible(true);
+                    allRight = false;
                 } else {
                     errorMessage.setVisible(false);
+                    allRight = true;
                 }
 
-                DualStudent dualStudent = new DualStudent(
-                        Integer.parseInt(matriculationNumberField.getText()),
-                        Integer.parseInt(studentNumberField.getText().substring(1)),
-                        studentLastName.getText(),
-                        studentFirstName.getText(),
-                        convertToDateViaSqlDate(studentBirth.getValue()),
-                        new Address(studentStreet.getText(), studentHomeNumber.getText(), studentPostalCode.getText(), studentCity.getText(), studentCountry.getText()),
-                        studentEmail.getText(),
-                        courseName.getValue(),
-                        Integer.parseInt(javaKnowledgeLabel.getText()),
-                        company
-                );
-                University.updateStudent(dualStudent, student_old);
-                backToOverview();
+                if(allRight) {
+                    DualStudent dualStudent = new DualStudent(
+                            Integer.parseInt(matriculationNumberField.getText()),
+                            Integer.parseInt(studentNumberField.getText().substring(1)),
+                            studentLastName.getText(),
+                            studentFirstName.getText(),
+                            convertToDateViaSqlDate(studentBirth.getValue()),
+                            new Address(studentStreet.getText(), studentHomeNumber.getText(), studentPostalCode.getText(), studentCity.getText(), studentCountry.getText()),
+                            studentEmail.getText(),
+                            courseName.getValue(),
+                            Integer.parseInt(javaKnowledgeLabel.getText()),
+                            company
+                    );
+                    University.updateStudent(dualStudent, student_old);
+                    backToOverview();
+                }
             }
         } catch (NumberFormatException npe) {
             showNullPointer.setVisible(true);

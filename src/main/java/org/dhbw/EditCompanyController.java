@@ -62,6 +62,8 @@ public class EditCompanyController {
     @FXML
     private void submit() {
         try {
+            boolean allRight = true;
+
             if (companyName.getText().trim().isEmpty() || companyStreet.getText().trim().isEmpty() || companyHomeNumber.getText().trim().isEmpty() || companyPostalCode.getText().trim().isEmpty() || companyCity.getText().trim().isEmpty() || companyCountry.getText().trim().isEmpty() || companyContactPersonFirstName.getText().trim().isEmpty() || companyContactPersonLastName.getText().trim().isEmpty()) {
                 System.out.println("Fehler");
             } else {
@@ -72,21 +74,26 @@ public class EditCompanyController {
                     companyPostalCode.requestFocus();
                     errorMessage.setText(errorMessage.getText() + " Student-Postleitzahl ");
                     errorMessage.setVisible(true);
+                    allRight = false;
                 } else companyPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgba(0, 0, 0, 0.1) rgba(0,0,0,0)");
                 if (Check.validateEmail(companyContactPersonEmail.getText())) {
                     companyContactPersonEmail.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
                     companyContactPersonEmail.requestFocus();
                     errorMessage.setText(errorMessage.getText() + " E-Mail-Adresse ");
+                    allRight = false;
                 } else companyContactPersonEmail.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
 
-                Company company = new Company(
-                        companyName.getText(),
-                        new Address(companyStreet.getText(), companyHomeNumber.getText(), companyPostalCode.getText(), companyCity.getText(), companyCountry.getText()),
-                        contactPerson
-                );
-                University.updateCompany(company, company_old);
+                if(allRight) {
+                    Company company = new Company(
+                            companyName.getText(),
+                            new Address(companyStreet.getText(), companyHomeNumber.getText(), companyPostalCode.getText(), companyCity.getText(), companyCountry.getText()),
+                            contactPerson
+                    );
+                    University.updateCompany(company, company_old);
+                    backToOverview();
+                }
             }
-        } catch (NullPointerException npe) {
+        } catch (NullPointerException | IOException npe) {
             System.out.println("Fehler");
         }
     }

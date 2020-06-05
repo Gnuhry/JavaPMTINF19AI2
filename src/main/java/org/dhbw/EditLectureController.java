@@ -79,6 +79,8 @@ public class EditLectureController {
     private void submit() throws IOException {
 
         try {
+            boolean allRight;
+
             if (lectureFirstName.getText().trim().isEmpty() || lectureLastName.getText().trim().isEmpty() || lectureBirthday.getValue() == null || lectureEmail.getText().trim().isEmpty() || lectureStreet.getText().trim().isEmpty() || lectureHomeNumber.getText().trim().isEmpty() || lecturePostalCode.getText().trim().isEmpty() || lectureCity.getText().trim().isEmpty() || lectureCountry.getText().trim().isEmpty() || lectureNumberField.getText().trim().isEmpty()) {
                 showNullPointer.setVisible(true);
                 System.out.println("NPE2 found");    // LOG Datei?
@@ -104,22 +106,27 @@ public class EditLectureController {
                 if (focusStage == 1) {
                     lectureEmail.requestFocus();
                     errorMessage.setVisible(true);
+                    allRight = false;
                 } else if (focusStage == 2) {
                     lecturePostalCode.requestFocus();
                     errorMessage.setVisible(true);
+                    allRight = false;
                 } else {
                     errorMessage.setVisible(false);
+                    allRight = true;
                 }
 
-                Docent docent = new Docent(
-                        lectureLastName.getText(),
-                        lectureFirstName.getText(),
-                        lectureBirthday,
-                        new Address(lectureStreet.getText(), lectureHomeNumber.getText(), lecturePostalCode.getText(), lectureCity.getText(), lectureCountry.getText()),
-                        lectureEmail.getText(),
-                        Integer.parseInt(lectureNumberField.getText().substring(1))
-                );
-                University.updateDocent(docent, lecture);
+                if(allRight) {
+                    Docent docent = new Docent(
+                            lectureLastName.getText(),
+                            lectureFirstName.getText(),
+                            lectureBirthday,
+                            new Address(lectureStreet.getText(), lectureHomeNumber.getText(), lecturePostalCode.getText(), lectureCity.getText(), lectureCountry.getText()),
+                            lectureEmail.getText(),
+                            Integer.parseInt(lectureNumberField.getText().substring(1))
+                    );
+                    University.updateDocent(docent, lecture);
+                }
             }
         } catch (NullPointerException npe) {
             showNullPointer.setVisible(true);

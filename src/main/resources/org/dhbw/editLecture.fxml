@@ -115,7 +115,7 @@
       </Label>
       <ButtonBar layoutX="-32.0" layoutY="553.0" prefHeight="50.0" prefWidth="1113.0" AnchorPane.leftAnchor="-32.0" AnchorPane.rightAnchor="32.0">
         <buttons>
-          <Button fx:id="cancelButton" alignment="CENTER" mnemonicParsing="false" onAction="#submit" onMouseClicked="#backToOverview" stylesheets="@css/application.css" text="Speichern" />
+          <Button fx:id="cancelButton" alignment="CENTER" mnemonicParsing="false" onAction="#submit" stylesheets="@css/application.css" text="Speichern" />
             <Button alignment="CENTER" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Abbrechen" />
         </buttons>
          <padding>
