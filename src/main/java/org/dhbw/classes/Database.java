@@ -56,7 +56,7 @@ public class Database {
         if (hasID("student", "student_id", student.getStudentNumber())) return;
         int person_id = addPerson(student);
         int course_id = addCourse(student.getCourse());
-        int address_id = addCompany(student.getCompany());
+        int company_id = addCompany(student.getCompany());
         try {
             initialize();
             statement = connection.prepareStatement("INSERT INTO student (student_id, matriculation_number, person_id, java_knowlage, course_id, company_id) VALUES (?, ?, ?, ?, ?, ?)");
@@ -65,7 +65,7 @@ public class Database {
             statement.setInt(3, person_id);
             statement.setInt(4, student.getJavaKnowledge());
             statement.setInt(5, course_id);
-            statement.setInt(6, address_id);
+            statement.setInt(6, company_id);
             statement.execute();
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
@@ -191,14 +191,15 @@ public class Database {
         if (student == null || old == null) return;
         int person_id = updatePerson(student, old);
         int course_id = updateCourse(student.getCourse(), old.getCourse());
-        int address_id = updateCompany(student.getCompany(), old.getCompany());
+        int company_id = updateCompany(student.getCompany(), old.getCompany());
+        System.out.println(student.getAddress());
         try {
             initialize();
             statement = connection.prepareStatement("UPDATE student SET person_id=?, java_knowlage=?, course_id=?, company_id=? WHERE student_id=?");
             statement.setInt(1, person_id);
             statement.setInt(2, student.getJavaKnowledge());
             statement.setInt(3, course_id);
-            statement.setInt(4, address_id);
+            statement.setInt(4, company_id);
             statement.setInt(5, student.getStudentNumber());
             statement.execute();
         } catch (SQLException | ClassNotFoundException exception) {
@@ -242,9 +243,7 @@ public class Database {
                 statement.setInt(3, docent_id);
                 statement.setInt(4, id);
                 statement.execute();
-                resultSet = statement.getGeneratedKeys();
-                if (resultSet.next())
-                    return resultSet.getInt(1);
+                return id;
             } catch (SQLException | ClassNotFoundException exception) {
                 exception.printStackTrace();
             } finally {
@@ -266,9 +265,7 @@ public class Database {
                 addPersonToStatment(person, address_id);
                 statement.setInt(6, id);
                 statement.execute();
-                resultSet = statement.getGeneratedKeys();
-                if (resultSet.next())
-                    return resultSet.getInt(1);
+                return id;
             } catch (SQLException | ClassNotFoundException exception) {
                 exception.printStackTrace();
             } finally {
@@ -292,9 +289,7 @@ public class Database {
                 statement.setInt(3, person_id);
                 statement.setInt(4, id);
                 statement.execute();
-                resultSet = statement.getGeneratedKeys();
-                if (resultSet.next())
-                    return resultSet.getInt(1);
+                return id;
             } catch (SQLException | ClassNotFoundException exception) {
                 exception.printStackTrace();
             } finally {
@@ -307,7 +302,9 @@ public class Database {
     public static int updateAddress(Address address, Address old) {
         if (address == null || old == null) return Integer.MIN_VALUE;
         if (countUsedAddress(address) > 1) return addAddress(address);
+        System.out.println("Update address");
         int id = getAddressId(old);
+        System.out.println(id);
         if (id >= 0) {
             try {
                 initialize();
@@ -315,9 +312,7 @@ public class Database {
                 addAddressToStatement(address);
                 statement.setInt(6, id);
                 statement.execute();
-                resultSet = statement.getGeneratedKeys();
-                if (resultSet.next())
-                    return resultSet.getInt(1);
+                return id;
             } catch (SQLException | ClassNotFoundException exception) {
                 exception.printStackTrace();
             } finally {
