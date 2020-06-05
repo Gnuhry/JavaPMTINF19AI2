@@ -104,7 +104,7 @@
                         <Button mnemonicParsing="false" onAction="#refreshCourse" stylesheets="@css/application.css" text="Refresh" translateX="944.0" />
                      </items>
                   </ToolBar>
-                  <TableView fx:id="courseTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0">
+                  <TableView fx:id="courseTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0" tableMenuButtonVisible="true">
                     <columns>
                       <TableColumn fx:id="courseName" prefWidth="115.0" text="Kursbezeichnung" />
                         <TableColumn fx:id="courseType" prefWidth="97.0" text="Kursart" />
@@ -122,7 +122,7 @@
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <TableView fx:id="companyTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0">
+                  <TableView fx:id="companyTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0" tableMenuButtonVisible="true">
                     <columns>
                       <TableColumn fx:id="companyName" prefWidth="200.0" text="Unternehmenname" />
                         <TableColumn fx:id="companyAddress" prefWidth="200.0" text="Adresse" />
