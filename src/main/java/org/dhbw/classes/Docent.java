@@ -4,7 +4,9 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.dhbw.ShowStudentsController;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.Objects;
@@ -30,7 +32,11 @@ public class Docent extends Person{
         this.changeButton = new Button();
         this.deleteButton = new Button();
         this.changeButton.setOnAction((ActionEvent event) -> {
-            University.updateDocent(this);
+            try {
+                changeButton = new ShowStudentsController().addFunction(this.changeButton, this, "editLecture");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
         changeButton.setGraphic(new ImageView(imageEdit));
         this.deleteButton.setOnAction((ActionEvent event) -> {

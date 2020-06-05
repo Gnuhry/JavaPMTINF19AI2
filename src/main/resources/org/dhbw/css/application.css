@@ -1,25 +1,28 @@
-.button:hover, .button:focused {
-    -fx-background-color: -fx-shadow-highlight-color, -fx-body-color;
-    -fx-border-radius: 5px;
-    -fx-text-fill: -fx-text-base-color;
-    -fx-background-radius: 5px;
-}
-
-.button:hover,
-.combo-box:hover
+.button
 {
-    -fx-background-color: rgba(0,0,0,0.1);
+    -fx-border-radius: 100px;
+    -fx-background-radius: 100px;
+    -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) #2f3c6d rgba(0,0,0,0);
+    -fx-background-color: rgba(57, 74, 134, 0.1);
 }
 
-#gui_button:hover, #gui_button:focused {
-    -fx-scale-x: 1.08;
-    -fx-scale-y: 1.08;
-    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
-    -fx-border-color: black;
+.button:hover, .button:focused {
+    -fx-border-color: #2f3c6d;
+    -fx-background-color: rgba(57, 74, 134, 0.3);
 }
 
-#gui_button:hover {
-    -fx-background-color: rgba(81, 96, 136, 0.534);
+.button#gui_button {
+    -fx-border-radius: 100px;
+    -fx-background-radius: 100px;
+    -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) #2f3c6d rgba(0,0,0,0);
+    -fx-background-color: rgba(57, 74, 134, 0.1);
+}
+
+.button#gui_button:hover, .button#gui_button:focused {
+    -fx-scale-x: 1.15;
+    -fx-scale-y: 1.15;
+    -fx-border-color: #2f3c6d;
+    -fx-background-color: rgba(57, 74, 134, 0.3);
 }
 
 #backToOverview {
@@ -30,8 +33,8 @@
 .text-field
 {
     -fx-background-color: rgba(0,0,0,0.2);
-    -fx-background-radius: 2px 2px 0px 0px;
-    -fx-padding: 0.166667em;
+    -fx-background-radius: 10px 10px 0px 0px;
+    -fx-padding: 0.166667em 0.166667em 0.166667em 1em;
     -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) black rgba(0,0,0,0);
     -fx-prompt-text-fill: rgba(0,0,0,0.8);
 }
@@ -43,9 +46,29 @@
     -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgba(43, 56, 112, 0.9) rgba(0,0,0,0);
 }
 
+.text-field#date
+{
+    -fx-background-radius: 0;
+}
+
 .date-picker:focused
 {
     -fx-background-color: -fx-shadow-highlight-color, -fx-body-color;
     -fx-text-fill: -fx-text-base-color;
+    -fx-prompt-text-fill: rgba(0,0,0,0.8);
+}
+
+.combo-box
+{
+    -fx-text-fill: -fx-text-base-color;
+    -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgba(43, 56, 112, 0.9) rgba(0,0,0,0);
+    -fx-prompt-text-fill: rgba(0,0,0,0.8);
+}
+
+.combo-box:focused
+{
+    -fx-background-color: -fx-shadow-highlight-color, -fx-body-color;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) black rgba(0,0,0,0);
     -fx-prompt-text-fill: rgba(0,0,0,0.8);
 }

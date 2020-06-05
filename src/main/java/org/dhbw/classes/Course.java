@@ -4,7 +4,9 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.dhbw.ShowStudentsController;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.Date;
@@ -15,7 +17,6 @@ public class Course {
     private final StudyCourse studyCourse;
     private String name;
     private Docent studyDirector;
-    private int courseSpeakerID;
     private CourseRoom room;
     private Button changeButton;
     public Button deleteButton;
@@ -37,13 +38,16 @@ public class Course {
         this.name = name;
         this.studyCourse = studyCourse;
         this.studyDirector = studyDirector;
-        this.courseSpeakerID = courseSpeakerID;
         this.registrationDate = registrationDate;
         this.room = room;
         this.changeButton = new Button();
         this.deleteButton = new Button();
         this.changeButton.setOnAction((ActionEvent event) -> {
-            University.updateCourse(this);
+            try {
+                changeButton = new ShowStudentsController().addFunction(this.changeButton, this, "editCourse");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
         changeButton.setGraphic(new ImageView(imageEdit));
         this.deleteButton.setOnAction((ActionEvent event) -> {
@@ -59,10 +63,6 @@ public class Course {
 
     public void setStudyDirector(Docent studyDirector) {
         this.studyDirector = studyDirector;
-    }
-
-    public void setCourseSpeakerID(int courseSpeakerID) {
-        this.courseSpeakerID = courseSpeakerID;
     }
 
     public void setRoom(CourseRoom room) {
@@ -84,10 +84,6 @@ public class Course {
 
     public Docent getStudyDirector() {
         return studyDirector;
-    }
-
-    public int getCourseSpeakerID() {
-        return courseSpeakerID;
     }
 
     public Date getRegistrationDate() {
@@ -127,7 +123,6 @@ public class Course {
 //                ", studyCourse=" + studyCourse +
 //                ", name='" + name + '\'' +
 //                ", studyDirector=" + studyDirector +
-//                ", courseSpeakerID=" + courseSpeakerID +
 //                ", room=" + room +
 //                '}';
 //    }

@@ -223,13 +223,10 @@ public class InsertStudentController {
                         Integer.parseInt(javaKnowledgeLabel.getText()),
                         company
                 );
-                System.out.println(courseName.getValue());
-                System.out.println(dualStudent);
                 if (companyChoose.getValue() != null) {
                     University.addCompany(company);
                 }
                 University.addStudent(dualStudent);
-                System.out.println("Success");
                 backToOverview();
             }
         } catch (NumberFormatException npe) {
