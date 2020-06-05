@@ -50,6 +50,7 @@ public class Database {
         return dualStudents;
     }
 
+    //--------------------------------------------AddObject-----------------------------------------------------------------
     public static void addStudent(DualStudent student) {
         if (student == null) return;
         if (hasID("student", "student_id", student.getStudentNumber())) return;
@@ -185,8 +186,9 @@ public class Database {
         return Integer.MIN_VALUE;
     }
 
+    //-------------------------------------updateObject-------------------------------------------------------
     public static void updateStudent(DualStudent student, DualStudent old) {
-        if (student == null) return;
+        if (student == null || old == null) return;
         int person_id = updatePerson(student, old);
         int course_id = updateCourse(student.getCourse(), old.getCourse());
         int address_id = updateCompany(student.getCompany(), old.getCompany());
@@ -207,7 +209,7 @@ public class Database {
     }
 
     public static int updateDocent(Docent docent, Docent old) {
-        if (docent == null) return Integer.MIN_VALUE;
+        if (docent == null || old == null) return Integer.MIN_VALUE;
         int person_id = updatePerson(docent, old);
         try {
             initialize();
@@ -228,7 +230,7 @@ public class Database {
     }
 
     public static int updateCourse(Course course, Course old) {
-        if (course == null) return Integer.MIN_VALUE;
+        if (course == null || old == null) return Integer.MIN_VALUE;
         int id = getCourseId(old);
         if (id >= 0) {
             int docent_id = updateDocent(course.getStudyDirector(), old.getStudyDirector());
@@ -253,7 +255,7 @@ public class Database {
     }
 
     public static int updatePerson(Person person, Person old) {
-        if (person == null) return Integer.MIN_VALUE;
+        if (person == null || old == null) return Integer.MIN_VALUE;
         if (countUsedPerson(person) > 1) return addPerson(person);
         int id = getPersonId(old);
         if (id >= 0) {
@@ -277,7 +279,7 @@ public class Database {
     }
 
     public static int updateCompany(Company company, Company old) {
-        if (company == null) return Integer.MIN_VALUE;
+        if (company == null || old == null) return Integer.MIN_VALUE;
         int id = getCompanyId(old);
         if (id >= 0) {
             int address_id = updateAddress(company.getAddress(), old.getAddress());
@@ -303,7 +305,7 @@ public class Database {
     }
 
     public static int updateAddress(Address address, Address old) {
-        if (address == null) return Integer.MIN_VALUE;
+        if (address == null || old == null) return Integer.MIN_VALUE;
         if (countUsedAddress(address) > 1) return addAddress(address);
         int id = getAddressId(old);
         if (id >= 0) {
@@ -325,7 +327,7 @@ public class Database {
         return Integer.MIN_VALUE;
     }
 
-
+    //----------------------------------------DeleteObject----------------------------------
     public static void deleteStudent(DualStudent student) {
         try {
             initialize();
@@ -425,6 +427,59 @@ public class Database {
         }
     }
 
+    //------------------------------------------getIDS---------------------------------------------------
+    public static List<Integer> getStudentIDs() {
+        try {
+            List<Integer> erg = new ArrayList<>();
+            initialize();
+            statement = connection.prepareStatement("SELECT student_id FROM student");
+            resultSet = statement.executeQuery();
+            while (resultSet.next())
+                erg.add(resultSet.getInt("student_id"));
+            return erg;
+        } catch (SQLException | ClassNotFoundException exception) {
+            exception.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return null;
+    }
+
+    public static List<Integer> getMatriculationNumbers() {
+        try {
+            List<Integer> erg = new ArrayList<>();
+            initialize();
+            statement = connection.prepareStatement("SELECT matriculation_number FROM student");
+            resultSet = statement.executeQuery();
+            while (resultSet.next())
+                erg.add(resultSet.getInt("matriculation_number"));
+            return erg;
+        } catch (SQLException | ClassNotFoundException exception) {
+            exception.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return null;
+    }
+
+    public static List<Integer> getDocentIDs() {
+        try {
+            List<Integer> erg = new ArrayList<>();
+            initialize();
+            statement = connection.prepareStatement("SELECT docent_id FROM docent");
+            resultSet = statement.executeQuery();
+            while (resultSet.next())
+                erg.add(resultSet.getInt("docent_id"));
+            return erg;
+        } catch (SQLException | ClassNotFoundException exception) {
+            exception.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return null;
+    }
+
+    //---------------------------------------private...........................................
     private static int countUsedAddress(Address address) {
         try {
             int counter = 0;
@@ -467,6 +522,7 @@ public class Database {
         }
         return 0;
     }
+
 
     private static void initialize() throws ClassNotFoundException, SQLException {
         if (connection == null || connection.isClosed()) {
