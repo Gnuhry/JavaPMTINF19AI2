@@ -59,7 +59,7 @@ public class InsertLectureController {
         while(true) {
             int lectureNumber = (100000+(int)(Math.random()*999999));
             if (!Check.checkDNContains(lectureNumber)) {
-                lectureNumberField.setText("" + lectureNumber);
+                lectureNumberField.setText("c" + lectureNumber);
                 break;
             }
         }

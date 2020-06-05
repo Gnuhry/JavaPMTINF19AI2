@@ -38,7 +38,11 @@ public class Company {
         });
         changeButton.setGraphic(new ImageView(imageEdit));
         this.deleteButton.setOnAction((ActionEvent event) -> {
-            University.removeCompany(this);
+            try {
+                deleteButton = new ShowStudentsController().addFunction(this.deleteButton, this, "acceptDeleteCompany");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
         deleteButton.setGraphic(new ImageView(imageDelete));
     }

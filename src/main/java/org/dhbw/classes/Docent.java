@@ -40,7 +40,11 @@ public class Docent extends Person{
         });
         changeButton.setGraphic(new ImageView(imageEdit));
         this.deleteButton.setOnAction((ActionEvent event) -> {
-            University.removeDocent(this);
+            try {
+                deleteButton = new ShowStudentsController().addFunction(this.deleteButton, this, "acceptDeleteLecture");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
         deleteButton.setGraphic(new ImageView(imageDelete));
     }

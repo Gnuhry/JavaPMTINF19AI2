@@ -52,7 +52,11 @@ public class DualStudent extends Person {
         });
         changeButton.setGraphic(new ImageView(imageEdit));
         this.deleteButton.setOnAction((ActionEvent event) -> {
-            University.removeStudent(this);
+            try {
+                deleteButton = new ShowStudentsController().addFunction(this.deleteButton, this, "acceptDeleteStudent");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             //new ShowStudentsController().refresh();
         });
         deleteButton.setGraphic(new ImageView(imageDelete));

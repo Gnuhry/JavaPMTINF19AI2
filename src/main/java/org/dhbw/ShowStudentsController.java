@@ -373,7 +373,7 @@ public class ShowStudentsController extends Application implements Initializable
     public Button addFunction(Button button, Object object, String file) throws IOException {
         button.setOnAction((ActionEvent event) -> {
             try {
-                if (file.equals("editStudent")) this.student = (DualStudent)object;
+                if (file.equals("editStudent") || file.equals("acceptDeleteStudent")) this.student = (DualStudent)object;
                 else if (file.equals("editLecture")) this.lecture = (Docent)object;
                 else if (file.equals("editCompany")) this.company = (Company)object;
                 else if (file.equals("editCourse")) this.course = (Course)object;
@@ -404,6 +404,9 @@ public class ShowStudentsController extends Application implements Initializable
         } else if (file.equals("editCourse")) {
             EditCourseController controller = fxmlLoader.<EditCourseController>getController();
             controller.initVariables(course);
+        } else if (file.equals("acceptDeleteStudent")) {
+            AcceptDeleteStudentController controller = fxmlLoader.getController();
+            //controller.initVariables(student);
         }
         Scene scene = new Scene(root);
         stage.setScene(scene);
