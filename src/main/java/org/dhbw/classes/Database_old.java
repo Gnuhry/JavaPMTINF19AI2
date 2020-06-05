@@ -84,7 +84,7 @@ public class Database_old {
 
     //--------------------------------getObjectID-----------------------
     public static int getCourseID(Course course) throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = getFromDatabase("SELECT course_id FROM course WHERE room = " + getRoomID(course.getRoom()) + " AND name = '" + course.getName() + "' AND registry_date = '" + dateFormat.format(course.getRegistrationDate()) + "'AND course_type = " + getCourseTypeID(course.getStudyCourse()) + " AND study_director_id = " + course.getStudyDirector().getDocentNumber() + " AND representative_student_id = " + course.getCourseSpeakerID());
+        ResultSet resultSet = getFromDatabase("SELECT course_id FROM course WHERE room = " + getRoomID(course.getRoom()) + " AND name = '" + course.getName() + "' AND registry_date = '" + dateFormat.format(course.getRegistrationDate()) + "'AND course_type = " + getCourseTypeID(course.getStudyCourse()) + " AND study_director_id = " + course.getStudyDirector().getDocentNumber() + " AND representative_student_id = " + 1);
         return resultSet != null && resultSet.next() ? resultSet.getInt(1) : Integer.MIN_VALUE;
     }
 
@@ -139,7 +139,7 @@ public class Database_old {
             preparedStatement.setDate(3, new Date(course.getRegistrationDate().getTime()));
             preparedStatement.setInt(4, getCourseTypeID(course.getStudyCourse()));
             preparedStatement.setInt(5, course.getStudyDirector().getDocentNumber());
-            preparedStatement.setInt(6, course.getCourseSpeakerID());
+            preparedStatement.setInt(6, 1);
             setToDatabase(preparedStatement);
             sleep(1000);
         }
@@ -265,7 +265,7 @@ public class Database_old {
         preparedStatement.setDate(3, new Date(course.getRegistrationDate().getTime()));
         preparedStatement.setInt(4, getCourseTypeID(course.getStudyCourse()));
         preparedStatement.setInt(5, course.getStudyDirector().getDocentNumber());
-        preparedStatement.setInt(6, course.getCourseSpeakerID());
+        preparedStatement.setInt(6, 1);
         setToDatabase(preparedStatement);
     }
 
@@ -419,7 +419,7 @@ public class Database_old {
         preparedStatement.setDate(3, new Date(course.getRegistrationDate().getTime()));
         preparedStatement.setInt(4, getCourseTypeID(course.getStudyCourse()));
         preparedStatement.setInt(5, course.getStudyDirector().getDocentNumber());
-        preparedStatement.setInt(6, course.getCourseSpeakerID());
+        preparedStatement.setInt(6, 1);
         preparedStatement.setInt(7, id);
         setToDatabase(preparedStatement);
         return id;
