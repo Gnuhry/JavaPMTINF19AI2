@@ -24,9 +24,9 @@
 
 <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.InsertStudentController">
    <content>
-      <AnchorPane prefHeight="1500.0" prefWidth="1250.0">
+      <AnchorPane prefHeight="1100.0" prefWidth="1250.0">
          <children>
-            <ImageView fitHeight="600.0" fitWidth="1250.0" opacity="0.28" pickOnBounds="true" smooth="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <ImageView fitHeight="638.0" fitWidth="1250.0" opacity="0.28" pickOnBounds="true" smooth="false" AnchorPane.bottomAnchor="862.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="133.0" AnchorPane.topAnchor="0.0">
                <image>
                   <Image url="@images/DHBW_Verwaltungsgebäude.jpg" />
                </image>
@@ -193,7 +193,7 @@
                   <Label fx:id="javaKnowledgeLabel" prefHeight="25.6" text="0" translateX="155.0" />
                </children>
             </HBox>
-            <Button id="backToOverview" fx:id="backToOverview" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Zurück zur Übersicht" />
+            <Button id="backToOverview" fx:id="backToOverview" focusTraversable="false" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Zurück zur Übersicht" />
             <Line endX="650.0" fill="#817f7fd9" layoutX="296.0" layoutY="889.0" startX="-100.0" stroke="#817f7f" />
             <Label fx:id="errorMessage" layoutX="197.0" layoutY="81.0" text="Bitte korrigieren Sie die Fehler in folgenden Feldern: " textFill="#870606" visible="false" />
             <DialogPane fx:id="showNullPointer" layoutX="126.0" layoutY="1147.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="142.0" prefWidth="482.0" style="-fx-background-color: lightgray;" visible="false" AnchorPane.leftAnchor="126.0" AnchorPane.rightAnchor="775.0" AnchorPane.topAnchor="1147.0">
