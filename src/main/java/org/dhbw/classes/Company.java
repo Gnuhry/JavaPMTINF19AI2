@@ -31,7 +31,7 @@ public class Company {
         this.deleteButton = new Button();
         this.changeButton.setOnAction((ActionEvent event) -> {
             try {
-                changeButton = new ShowStudentsController().addFunction(this.changeButton, this, "editCompany");
+                changeButton = new ShowStudentsController().addFunction(this.changeButton, this, "editCompany", "company");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -39,7 +39,7 @@ public class Company {
         changeButton.setGraphic(new ImageView(imageEdit));
         this.deleteButton.setOnAction((ActionEvent event) -> {
             try {
-                deleteButton = new ShowStudentsController().addFunction(this.deleteButton, this, "acceptDeleteCompany");
+                deleteButton = new ShowStudentsController().addFunction(this.deleteButton, this, "acceptDelete", "company");
             } catch (IOException e) {
                 e.printStackTrace();
             }

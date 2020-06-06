@@ -45,7 +45,7 @@ public class DualStudent extends Person {
         this.deleteButton = new Button();
         this.changeButton.setOnAction((ActionEvent event) -> {
             try {
-                changeButton = new ShowStudentsController().addFunction(this.changeButton, this, "editStudent");
+                changeButton = new ShowStudentsController().addFunction(this.changeButton, this, "editStudent", "student");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -53,7 +53,7 @@ public class DualStudent extends Person {
         changeButton.setGraphic(new ImageView(imageEdit));
         this.deleteButton.setOnAction((ActionEvent event) -> {
             try {
-                deleteButton = new ShowStudentsController().addFunction(this.deleteButton, this, "acceptDeleteStudent");
+                deleteButton = new ShowStudentsController().addFunction(this.deleteButton, this, "acceptDelete", "student");
             } catch (IOException e) {
                 e.printStackTrace();
             }

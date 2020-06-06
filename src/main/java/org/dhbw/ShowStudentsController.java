@@ -40,6 +40,7 @@ public class ShowStudentsController extends Application implements Initializable
 
     private static Scene scene;
     private String file;
+    private String choose;
     private DualStudent student;
     private Docent lecture;
     private Company company;
@@ -186,7 +187,6 @@ public class ShowStudentsController extends Application implements Initializable
         ObservableList<Company> companies2 = FXCollections.observableArrayList(
                 University.getCompanies()
         );
-        System.out.println("Ausgabe");
         companyTable.setItems(companies2);
     }
 
@@ -370,14 +370,15 @@ public class ShowStudentsController extends Application implements Initializable
     }
 
     @FXML
-    public Button addFunction(Button button, Object object, String file) throws IOException {
+    public Button addFunction(Button button, Object object, String file, String choose) throws IOException {
         button.setOnAction((ActionEvent event) -> {
             try {
-                if (file.equals("editStudent") || file.equals("acceptDeleteStudent")) this.student = (DualStudent)object;
-                else if (file.equals("editLecture")) this.lecture = (Docent)object;
-                else if (file.equals("editCompany")) this.company = (Company)object;
-                else if (file.equals("editCourse")) this.course = (Course)object;
+                if (choose.equals("student")) this.student = (DualStudent)object;
+                else if (choose.equals("lecture")) this.lecture = (Docent)object;
+                else if (choose.equals("company")) this.company = (Company)object;
+                else if (choose.equals("course")) this.course = (Course)object;
                 this.file = file;
+                this.choose = choose;
                 start(new Stage());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -393,20 +394,29 @@ public class ShowStudentsController extends Application implements Initializable
         FXMLLoader fxmlLoader = new FXMLLoader(location);
         Parent root = (Parent)fxmlLoader.load();
         if (file.equals("editStudent")) {
-            EditStudentController controller = fxmlLoader.<EditStudentController>getController();
+            EditStudentController controller = fxmlLoader.getController();
             controller.initVariables(student);
         } else if (file.equals("editLecture")) {
-            EditLectureController controller = fxmlLoader.<EditLectureController>getController();
+            EditLectureController controller = fxmlLoader.getController();
             controller.initVariables(lecture);
         } else if (file.equals("editCompany")) {
-            EditCompanyController controller = fxmlLoader.<EditCompanyController>getController();
+            EditCompanyController controller = fxmlLoader.getController();
             controller.initVariables(company);
         } else if (file.equals("editCourse")) {
-            EditCourseController controller = fxmlLoader.<EditCourseController>getController();
+            EditCourseController controller = fxmlLoader.getController();
             controller.initVariables(course);
-        } else if (file.equals("acceptDeleteStudent")) {
-            AcceptDeleteStudentController controller = fxmlLoader.getController();
-            //controller.initVariables(student);
+        } else if (choose.equals("student")) {
+            AcceptDeleteController controller = fxmlLoader.getController();
+            controller.initVariables(student, choose);
+        } else if (choose.equals("lecture")) {
+            AcceptDeleteController controller = fxmlLoader.getController();
+            controller.initVariables(lecture, choose);
+        } else if (choose.equals("company")) {
+            AcceptDeleteController controller = fxmlLoader.getController();
+            controller.initVariables(company, choose);
+        } else if (choose.equals("course")) {
+            AcceptDeleteController controller = fxmlLoader.getController();
+            controller.initVariables(course, choose);
         }
         Scene scene = new Scene(root);
         stage.setScene(scene);

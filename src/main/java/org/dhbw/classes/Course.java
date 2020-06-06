@@ -44,7 +44,7 @@ public class Course {
         this.deleteButton = new Button();
         this.changeButton.setOnAction((ActionEvent event) -> {
             try {
-                changeButton = new ShowStudentsController().addFunction(this.changeButton, this, "editCourse");
+                changeButton = new ShowStudentsController().addFunction(this.changeButton, this, "editCourse", "course");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -52,7 +52,7 @@ public class Course {
         changeButton.setGraphic(new ImageView(imageEdit));
         this.deleteButton.setOnAction((ActionEvent event) -> {
             try {
-                deleteButton = new ShowStudentsController().addFunction(this.deleteButton, this, "acceptDeleteCourse");
+                deleteButton = new ShowStudentsController().addFunction(this.deleteButton, this, "acceptDelete", "course");
             } catch (IOException e) {
                 e.printStackTrace();
             }

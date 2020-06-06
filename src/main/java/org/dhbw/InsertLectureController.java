@@ -118,7 +118,6 @@ public class InsertLectureController {
                             lectureEmail.getText(),
                             Integer.parseInt(lectureNumberField.getText().substring(1))
                     );
-                    System.out.println(docent);
                     University.addDocent(docent);
                     backToOverview();
                 }
