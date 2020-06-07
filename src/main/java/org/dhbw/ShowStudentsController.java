@@ -6,7 +6,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -42,7 +41,6 @@ public class ShowStudentsController extends Application implements Initializable
             //new Company("Alnatura", new Address("Test", "1", "12345", "Test", "Test"), new Person("Hofmann", "Janina", ""))
     );
 
-    private static Scene scene;
     private String file;
     private Object object;
     private DualStudent student;
@@ -227,23 +225,21 @@ public class ShowStudentsController extends Application implements Initializable
         companyFilterBox.getItems().setAll(companies);
 
         FilteredList<DualStudent> filteredName = new FilteredList<>(students, p -> true);
-        searchBox.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredName.setPredicate(person -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
+        searchBox.textProperty().addListener((observable, oldValue, newValue) -> filteredName.setPredicate(person -> {
+            if (newValue == null || newValue.isEmpty()) {
+                return true;
+            }
 
-                String lowerCaseFilter = newValue.toLowerCase();
+            String lowerCaseFilter = newValue.toLowerCase();
 
-                if (person.getForename().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                } else if (person.getName().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                } else if (("" + person.getStudentNumber()).toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                } else return ("" + person.getMatriculationNumber()).toLowerCase().contains(lowerCaseFilter);
-            });
-        });
+            if (person.getForename().toLowerCase().contains(lowerCaseFilter)) {
+                return true;
+            } else if (person.getName().toLowerCase().contains(lowerCaseFilter)) {
+                return true;
+            } else if (("" + person.getStudentNumber()).toLowerCase().contains(lowerCaseFilter)) {
+                return true;
+            } else return ("" + person.getMatriculationNumber()).toLowerCase().contains(lowerCaseFilter);
+        }));
         SortedList<DualStudent> sortedName = new SortedList<>(filteredName);
         sortedName.comparatorProperty().bind(studentTable.comparatorProperty());
         studentTable.setItems(sortedName);
@@ -271,21 +267,19 @@ public class ShowStudentsController extends Application implements Initializable
         lectureTable.setItems(docents);
 
         FilteredList<Docent> filteredLecture = new FilteredList<>(docents, p -> true);
-        searchBoxLecture.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredLecture.setPredicate(person -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
+        searchBoxLecture.textProperty().addListener((observable, oldValue, newValue) -> filteredLecture.setPredicate(person -> {
+            if (newValue == null || newValue.isEmpty()) {
+                return true;
+            }
 
-                String lowerCaseFilter = newValue.toLowerCase();
+            String lowerCaseFilter = newValue.toLowerCase();
 
-                if (person.getForename().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                } else if (person.getName().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                } else return ("" + person.getDocentNumber()).toLowerCase().contains(lowerCaseFilter);
-            });
-        });
+            if (person.getForename().toLowerCase().contains(lowerCaseFilter)) {
+                return true;
+            } else if (person.getName().toLowerCase().contains(lowerCaseFilter)) {
+                return true;
+            } else return ("" + person.getDocentNumber()).toLowerCase().contains(lowerCaseFilter);
+        }));
         SortedList<Docent> sortedLecture = new SortedList<>(filteredLecture);
         sortedLecture.comparatorProperty().bind(lectureTable.comparatorProperty());
         lectureTable.setItems(sortedLecture);
@@ -311,17 +305,15 @@ public class ShowStudentsController extends Application implements Initializable
         courseTable.setItems(courses);
 
         FilteredList<Course> filteredCourse2 = new FilteredList<>(courses, p -> true);
-        searchBoxCourse.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredCourse2.setPredicate(course -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
+        searchBoxCourse.textProperty().addListener((observable, oldValue, newValue) -> filteredCourse2.setPredicate(course -> {
+            if (newValue == null || newValue.isEmpty()) {
+                return true;
+            }
 
-                String lowerCaseFilter = newValue.toLowerCase();
+            String lowerCaseFilter = newValue.toLowerCase();
 
-                return course.getName().toLowerCase().contains(lowerCaseFilter);
-            });
-        });
+            return course.getName().toLowerCase().contains(lowerCaseFilter);
+        }));
         SortedList<Course> sortedCourses = new SortedList<>(filteredCourse2);
         sortedCourses.comparatorProperty().bind(courseTable.comparatorProperty());
         courseTable.setItems(sortedCourses);
@@ -334,17 +326,15 @@ public class ShowStudentsController extends Application implements Initializable
         courseTable.setItems(courses);
 
         FilteredList<Company> filteredCompany2 = new FilteredList<>(companies, p -> true);
-        searchBoxCompany.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredCompany2.setPredicate(course -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
+        searchBoxCompany.textProperty().addListener((observable, oldValue, newValue) -> filteredCompany2.setPredicate(course -> {
+            if (newValue == null || newValue.isEmpty()) {
+                return true;
+            }
 
-                String lowerCaseFilter = newValue.toLowerCase();
+            String lowerCaseFilter = newValue.toLowerCase();
 
-                return course.getName().toLowerCase().contains(lowerCaseFilter);
-            });
-        });
+            return course.getName().toLowerCase().contains(lowerCaseFilter);
+        }));
         SortedList<Company> sortedCompany2 = new SortedList<>(filteredCompany2);
         sortedCompany2.comparatorProperty().bind(companyTable.comparatorProperty());
         companyTable.setItems(sortedCompany2);
