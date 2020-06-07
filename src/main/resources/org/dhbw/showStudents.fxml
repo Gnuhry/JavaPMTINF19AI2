@@ -40,7 +40,7 @@
                            </children>
                         </VBox>
                         <HBox />
-                        <TextField fx:id="searchBox" promptText="Nachnamen suchen" stylesheets="@css/application.css" translateX="150.0" />
+                        <TextField fx:id="searchBox" promptText="Suchen" stylesheets="@css/application.css" translateX="150.0" />
                         <ComboBox fx:id="courseFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0" promptText="Kurs wählen" stylesheets="@css/application.css" translateX="150.0" />
                         <ComboBox fx:id="companyFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" promptText="Unternehmen wählen" stylesheets="@css/application.css" translateX="150.0" />
                         <Button fx:id="filterButton" mnemonicParsing="false" onAction="#filter" stylesheets="@css/application.css" text="Filtern" translateX="150.0" />
@@ -59,8 +59,8 @@
                         <TableColumn fx:id="studentCompany" prefWidth="137.0" text="Unternehmen" />
                         <TableColumn fx:id="studentCourse" prefWidth="88.0" text="Kurs" />
                         <TableColumn fx:id="studentJava" prefWidth="47.199951171875" text="Java" />
-                        <TableColumn fx:id="studentC" prefWidth="38.4000244140625" />
-                        <TableColumn fx:id="studentD" prefWidth="45.5999755859375" />
+                        <TableColumn fx:id="studentC" prefWidth="38.4000244140625" resizable="false" />
+                        <TableColumn fx:id="studentD" prefWidth="45.5999755859375" resizable="false" />
                     </columns>
                   </TableView>
                </children>
@@ -79,14 +79,14 @@
                         <TableColumn fx:id="lectureBirth" prefWidth="75.0" text="Geburtstag" />
                         <TableColumn fx:id="lectureEmail" prefWidth="140.0" text="Email" />
                         <TableColumn fx:id="lectureAddress" prefWidth="124.0" text="Addresse" />
-                        <TableColumn fx:id="lectureC" prefWidth="34.0" />
-                        <TableColumn fx:id="lectureD" prefWidth="34.0" />
+                        <TableColumn fx:id="lectureC" prefWidth="40.0" resizable="false" />
+                        <TableColumn fx:id="lectureD" prefWidth="40.0" resizable="false" />
                     </columns>
                   </TableView>
                   <ToolBar prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
                      <items>
                         <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Zurück" />
-                        <TextField fx:id="searchBoxLecture" promptText="Namen suchen" stylesheets="@css/application.css" translateX="944.0" />
+                        <TextField fx:id="searchBoxLecture" promptText="Suchen" stylesheets="@css/application.css" translateX="944.0" />
                         <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="Refresh" translateX="944.0" />
                      </items>
                   </ToolBar>
@@ -111,8 +111,8 @@
                         <TableColumn fx:id="courseRoom" prefWidth="90.0" text="Kursraum" />
                         <TableColumn fx:id="courseDate" prefWidth="123.0" text="Registrierungsdatum" />
                         <TableColumn fx:id="courseLecture" prefWidth="200.0" text="Studiengangsleitung" />
-                        <TableColumn fx:id="courseC" prefWidth="32.0" />
-                        <TableColumn fx:id="courseD" prefWidth="31.0" />
+                        <TableColumn fx:id="courseC" prefWidth="40.0" resizable="false" />
+                        <TableColumn fx:id="courseD" prefWidth="40.0" resizable="false" />
                     </columns>
                   </TableView>
                </children></AnchorPane>
@@ -127,8 +127,8 @@
                       <TableColumn fx:id="companyName" prefWidth="200.0" text="Unternehmenname" />
                         <TableColumn fx:id="companyAddress" prefWidth="200.0" text="Adresse" />
                         <TableColumn fx:id="companyPerson" prefWidth="250.0" text="Ansprechperson" />
-                        <TableColumn fx:id="companyC" prefWidth="31.0" />
-                        <TableColumn fx:id="companyD" prefWidth="32.0" />
+                        <TableColumn fx:id="companyC" prefWidth="40.0" resizable="false" />
+                        <TableColumn fx:id="companyD" prefWidth="40.0" resizable="false" />
                     </columns>
                   </TableView>
                   <ToolBar prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
