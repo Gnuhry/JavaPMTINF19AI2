@@ -40,7 +40,7 @@ public class ShowStudentsController extends Application implements Initializable
 
     private static Scene scene;
     private String file;
-    private String choose;
+    private Object object;
     private DualStudent student;
     private Docent lecture;
     private Company company;
@@ -370,15 +370,15 @@ public class ShowStudentsController extends Application implements Initializable
     }
 
     @FXML
-    public Button addFunction(Button button, Object object, String file, String choose) throws IOException {
+    public Button addFunction(Button button, Object object, String file) throws IOException {
         button.setOnAction((ActionEvent event) -> {
             try {
-                if (choose.equals("student")) this.student = (DualStudent)object;
-                else if (choose.equals("lecture")) this.lecture = (Docent)object;
-                else if (choose.equals("company")) this.company = (Company)object;
-                else if (choose.equals("course")) this.course = (Course)object;
+                if (object instanceof DualStudent) this.student = (DualStudent)object;
+                else if (object instanceof Docent) this.lecture = (Docent)object;
+                else if (object instanceof Company) this.company = (Company)object;
+                else if (object instanceof Course) this.course = (Course)object;
                 this.file = file;
-                this.choose = choose;
+                this.object = object;
                 start(new Stage());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -392,7 +392,7 @@ public class ShowStudentsController extends Application implements Initializable
         String resourcePath = file + ".fxml";
         URL location = getClass().getResource(resourcePath);
         FXMLLoader fxmlLoader = new FXMLLoader(location);
-        Parent root = (Parent)fxmlLoader.load();
+        Parent root = fxmlLoader.load();
         if (file.equals("editStudent")) {
             EditStudentController controller = fxmlLoader.getController();
             controller.initVariables(student);
@@ -405,18 +405,18 @@ public class ShowStudentsController extends Application implements Initializable
         } else if (file.equals("editCourse")) {
             EditCourseController controller = fxmlLoader.getController();
             controller.initVariables(course);
-        } else if (choose.equals("student")) {
+        } else if (object instanceof DualStudent) {
             AcceptDeleteController controller = fxmlLoader.getController();
-            controller.initVariables(student, choose);
-        } else if (choose.equals("lecture")) {
+            controller.initVariables(student);
+        } else if (object instanceof Docent) {
             AcceptDeleteController controller = fxmlLoader.getController();
-            controller.initVariables(lecture, choose);
-        } else if (choose.equals("company")) {
+            controller.initVariables(lecture);
+        } else if (object instanceof Company) {
             AcceptDeleteController controller = fxmlLoader.getController();
-            controller.initVariables(company, choose);
-        } else if (choose.equals("course")) {
+            controller.initVariables(company);
+        } else if (object instanceof Course) {
             AcceptDeleteController controller = fxmlLoader.getController();
-            controller.initVariables(course, choose);
+            controller.initVariables(course);
         }
         Scene scene = new Scene(root);
         stage.setScene(scene);

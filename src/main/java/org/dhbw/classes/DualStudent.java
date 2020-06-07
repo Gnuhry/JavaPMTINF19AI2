@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import org.dhbw.ShowStudentsController;
 
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class DualStudent extends Person {
         this.deleteButton = new Button();
         this.changeButton.setOnAction((ActionEvent event) -> {
             try {
-                changeButton = new ShowStudentsController().addFunction(this.changeButton, this, "editStudent", "student");
+                changeButton = new ShowStudentsController().addFunction(this.changeButton, this, "editStudent");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -53,7 +54,7 @@ public class DualStudent extends Person {
         changeButton.setGraphic(new ImageView(imageEdit));
         this.deleteButton.setOnAction((ActionEvent event) -> {
             try {
-                deleteButton = new ShowStudentsController().addFunction(this.deleteButton, this, "acceptDelete", "student");
+                deleteButton = new ShowStudentsController().addFunction(this.deleteButton, this, "acceptDelete");
             } catch (IOException e) {
                 e.printStackTrace();
             }

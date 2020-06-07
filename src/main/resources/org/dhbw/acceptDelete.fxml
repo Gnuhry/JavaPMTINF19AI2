@@ -8,7 +8,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="137.0" prefWidth="300.0" style="-fx-background-color: rgba(0,0,0,0.2);" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.AcceptDeleteController">
    <children>
-      <Text layoutX="18.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Möchten Sie den Studenten wirklich löschen?" textAlignment="CENTER" wrappingWidth="267.53009033203125">
+      <Text layoutX="18.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Möchten Sie wirklich löschen?" textAlignment="CENTER" wrappingWidth="267.53009033203125">
          <font>
             <Font name="Comic Sans MS" size="18.0" />
          </font>
