@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,7 +16,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import org.dhbw.classes.*;
 
@@ -23,6 +27,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ShowStudentsController extends Application implements Initializable {
@@ -163,9 +168,13 @@ public class ShowStudentsController extends Application implements Initializable
     @FXML
     public void refresh() {
         studentTable.setItems(FXCollections.observableArrayList(University.getStudents()));
+        studentTable.refresh();
         lectureTable.setItems(FXCollections.observableArrayList(University.getDocents()));
+        lectureTable.refresh();
         courseTable.setItems(FXCollections.observableArrayList(University.getCourses()));
+        courseTable.refresh();
         companyTable.setItems(FXCollections.observableArrayList(University.getCompanies()));
+        companyTable.refresh();
     }
 
 
@@ -367,6 +376,9 @@ public class ShowStudentsController extends Application implements Initializable
         }
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.setOnHidden(windowEvent -> refresh());
+        stage.initOwner(studentTable.getScene().getWindow());
+        stage.initModality(Modality.WINDOW_MODAL);
         stage.show();
     }
 
