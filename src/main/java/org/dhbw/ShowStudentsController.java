@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -403,7 +404,7 @@ public class ShowStudentsController extends Application implements Initializable
         stage.show();
     }
 
-    private static <T> Callback<TableColumn<T, Void>, TableCell<T, Void>> getCallback(String function, String image) {
+    private <T> Callback<TableColumn<T, Void>, TableCell<T, Void>> getCallback(String function, String image) {
         return new Callback<>() {
             @Override
             public TableCell<T, Void> call(TableColumn<T, Void> dualStudentVoidTableColumn) {
@@ -416,9 +417,10 @@ public class ShowStudentsController extends Application implements Initializable
                         if (b) {
                             setGraphic(null);
                         } else {
-                            btn = new ShowStudentsController().addFunction(btn, getTableView().getItems().get(getIndex()), function);
+                            btn = addFunction(btn, getTableView().getItems().get(getIndex()), function);
                             btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/" + image + ".png"))));
                             setGraphic(btn);
+
                         }
                     }
                 };
