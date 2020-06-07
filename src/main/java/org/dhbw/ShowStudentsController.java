@@ -1,11 +1,5 @@
 package org.dhbw;
 
-import java.io.IOException;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.ResourceBundle;
-
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,8 +13,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.dhbw.classes.*;
+
+import java.io.IOException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.ResourceBundle;
 
 public class ShowStudentsController extends Application implements Initializable {
     private ObservableList<DualStudent> students = FXCollections.observableArrayList(
@@ -38,8 +41,8 @@ public class ShowStudentsController extends Application implements Initializable
             //new Company("Alnatura", new Address("Test", "1", "12345", "Test", "Test"), new Person("Hofmann", "Janina", ""))
     );
 
-    private static Scene scene;
     private String file;
+    private Object object;
     private DualStudent student;
     private Docent lecture;
     private Company company;
@@ -136,9 +139,9 @@ public class ShowStudentsController extends Application implements Initializable
     @FXML
     private TableColumn<Company, Person> companyPerson;
     @FXML
-    private TableColumn<Course, Void> companyC;
+    private TableColumn<Company, Void> companyC;
     @FXML
-    private TableColumn<Course, Void> companyD;
+    private TableColumn<Company, Void> companyD;
 
     @FXML
     private void backToOverview() throws IOException {
@@ -162,7 +165,6 @@ public class ShowStudentsController extends Application implements Initializable
         ObservableList<DualStudent> data2 = FXCollections.observableArrayList(
                 University.getStudents()
         );
-        System.out.println("t");
         studentTable.setItems(data2);
     }
 
@@ -187,11 +189,8 @@ public class ShowStudentsController extends Application implements Initializable
         ObservableList<Company> companies2 = FXCollections.observableArrayList(
                 University.getCompanies()
         );
-        System.out.println("Ausgabe");
         companyTable.setItems(companies2);
     }
-
-
 
 
     @Override
@@ -199,19 +198,16 @@ public class ShowStudentsController extends Application implements Initializable
         studentNumber.setCellValueFactory(new PropertyValueFactory<>("studentNumber"));
         studentName.setCellValueFactory(new PropertyValueFactory<>("name"));
         studentForename.setCellValueFactory(new PropertyValueFactory<>("forename"));
-        studentBirth.setCellFactory(column -> {
-            TableCell<DualStudent, Date> cell = new TableCell<>() {
-                @Override
-                protected void updateItem(Date date, boolean b) {
-                    super.updateItem(date, b);
-                    if (b) {
-                        setText(null);
-                    } else {
-                        this.setText(format.format(date));
-                    }
+        studentBirth.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(Date date, boolean b) {
+                super.updateItem(date, b);
+                if (b) {
+                    setText(null);
+                } else {
+                    this.setText(format.format(date));
                 }
-            };
-            return cell;
+            }
         });
         studentBirth.setCellValueFactory(new PropertyValueFactory<>("birthday"));
         studentEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
@@ -221,121 +217,69 @@ public class ShowStudentsController extends Application implements Initializable
         studentCompany.setCellValueFactory(new PropertyValueFactory<>("company"));
         studentCourse.setCellValueFactory(new PropertyValueFactory<>("course"));
         studentJava.setCellValueFactory(new PropertyValueFactory<>("javaKnowledge"));
-        studentC.setCellValueFactory(new PropertyValueFactory<>("changeButton"));
-        studentD.setCellValueFactory(new PropertyValueFactory<>("deleteButton"));
+        studentC.setCellFactory(getCallback("editStudent", "editButton"));
+        studentD.setCellFactory(getCallback("acceptDelete", "deleteButton"));
         studentTable.setItems(students);
-
+        studentTable.requestFocus();
         courseFilterBox.getItems().setAll(courses);
         companyFilterBox.getItems().setAll(companies);
 
         FilteredList<DualStudent> filteredName = new FilteredList<>(students, p -> true);
-        searchBox.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredName.setPredicate(person -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
+        searchBox.textProperty().addListener((observable, oldValue, newValue) -> filteredName.setPredicate(person -> {
+            if (newValue == null || newValue.isEmpty()) {
+                return true;
+            }
 
-                String lowerCaseFilter = newValue.toLowerCase();
+            String lowerCaseFilter = newValue.toLowerCase();
 
-                if (person.getForename().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                } else if (person.getName().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                } else if (("" + person.getStudentNumber()).toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                } else if (("" + person.getMatriculationNumber()).toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                }
-                return false;
-            });
-        });
+            if (person.getForename().toLowerCase().contains(lowerCaseFilter)) {
+                return true;
+            } else if (person.getName().toLowerCase().contains(lowerCaseFilter)) {
+                return true;
+            } else if (("" + person.getStudentNumber()).toLowerCase().contains(lowerCaseFilter)) {
+                return true;
+            } else return ("" + person.getMatriculationNumber()).toLowerCase().contains(lowerCaseFilter);
+        }));
         SortedList<DualStudent> sortedName = new SortedList<>(filteredName);
         sortedName.comparatorProperty().bind(studentTable.comparatorProperty());
         studentTable.setItems(sortedName);
 
-        /*
-        FilteredList<DualStudent> filteredCourse = new FilteredList<>(data, p -> true);
-        courseFilterBox.itemsProperty().addListener((observable, oldValue, newValue) -> {
-            filteredCourse.setPredicate(course -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-
-                String lowerCaseFilter = newValue.toString();
-
-                if (course.getName().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                }
-                return false;
-            });
-        });
-        SortedList<DualStudent> sortedCourse = new SortedList<>(filteredCourse);
-        sortedCourse.comparatorProperty().bind(studentTable.comparatorProperty());
-        studentTable.setItems(sortedCourse);
-
-        FilteredList<DualStudent> filteredCompany = new FilteredList<>(data, p -> true);
-        companyFilterBox.itemsProperty().addListener((observable, oldValue, newValue) -> {
-            filteredCompany.setPredicate(company -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-
-                String lowerCaseFilter = newValue.toString();
-
-                if (company.getName().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                }
-                return false;
-            });
-        });
-        SortedList<DualStudent> sortedCompany = new SortedList<>(filteredCompany);
-        sortedCompany.comparatorProperty().bind(studentTable.comparatorProperty());
-        studentTable.setItems(sortedCompany);*/
-
         lectureNumber.setCellValueFactory(new PropertyValueFactory<>("docentNumber"));
         lectureLastName.setCellValueFactory(new PropertyValueFactory<>("name"));
         lectureFirstName.setCellValueFactory(new PropertyValueFactory<>("forename"));
-/*        lectureBirth.setCellFactory(column -> {
-            TableCell<Docent, Date> cell = new TableCell<>() {
-                @Override
-                protected void updateItem(Date date, boolean b) {
-                    super.updateItem(date, b);
-                    if (b) {
-                        setText(null);
-                    } else {
-                        this.setText(format.format(date));
-                    }
+        lectureBirth.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(Date date, boolean b) {
+                super.updateItem(date, b);
+                if (b) {
+                    setText(null);
+                } else {
+                    this.setText(format.format(date));
                 }
-            };
-            return cell;
-        });*/
+            }
+        });
         lectureBirth.setCellValueFactory(new PropertyValueFactory<>("birthday"));
         lectureEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         lectureAddress.setCellValueFactory(new PropertyValueFactory<>("Address"));
         lectureEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        lectureC.setCellValueFactory(new PropertyValueFactory<>("changeButton"));
-        lectureD.setCellValueFactory(new PropertyValueFactory<>("deleteButton"));
+        lectureC.setCellFactory(getCallback("editLecture", "editButton"));
+        lectureD.setCellFactory(getCallback("acceptDelete", "deleteButton"));
         lectureTable.setItems(docents);
 
         FilteredList<Docent> filteredLecture = new FilteredList<>(docents, p -> true);
-        searchBoxLecture.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredLecture.setPredicate(person -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
+        searchBoxLecture.textProperty().addListener((observable, oldValue, newValue) -> filteredLecture.setPredicate(person -> {
+            if (newValue == null || newValue.isEmpty()) {
+                return true;
+            }
 
-                String lowerCaseFilter = newValue.toLowerCase();
+            String lowerCaseFilter = newValue.toLowerCase();
 
-                if (person.getForename().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                } else if (person.getName().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                } else if (("" + person.getDocentNumber()).toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                }
-                return false;
-            });
-        });
+            if (person.getForename().toLowerCase().contains(lowerCaseFilter)) {
+                return true;
+            } else if (person.getName().toLowerCase().contains(lowerCaseFilter)) {
+                return true;
+            } else return ("" + person.getDocentNumber()).toLowerCase().contains(lowerCaseFilter);
+        }));
         SortedList<Docent> sortedLecture = new SortedList<>(filteredLecture);
         sortedLecture.comparatorProperty().bind(lectureTable.comparatorProperty());
         lectureTable.setItems(sortedLecture);
@@ -343,81 +287,69 @@ public class ShowStudentsController extends Application implements Initializable
         courseName.setCellValueFactory(new PropertyValueFactory<>("name"));
         courseType.setCellValueFactory(new PropertyValueFactory<>("studyCourse"));
         courseRoom.setCellValueFactory(new PropertyValueFactory<>("room"));
-/*        courseDate.setCellFactory(column -> {
-            TableCell<Course, Date> cell = new TableCell<>() {
-                @Override
-                protected void updateItem(Date date, boolean b) {
-                    super.updateItem(date, b);
-                    if (b) {
-                        setText(null);
-                    } else {
-                        this.setText(format.format(date));
-                    }
+        courseDate.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(Date date, boolean b) {
+                super.updateItem(date, b);
+                if (b) {
+                    setText(null);
+                } else {
+                    this.setText(format.format(date));
                 }
-            };
-            return cell;
-        });*/
+            }
+        });
         courseDate.setCellValueFactory(new PropertyValueFactory<>("registrationDate"));
         courseLecture.setCellValueFactory(new PropertyValueFactory<>("studyDirector"));
-        courseC.setCellValueFactory(new PropertyValueFactory<>("changeButton"));
-        courseD.setCellValueFactory(new PropertyValueFactory<>("deleteButton"));
+        courseC.setCellFactory(getCallback("editCourse", "editButton"));
+        courseD.setCellFactory(getCallback("acceptDelete", "deleteButton"));
         courseTable.setItems(courses);
 
-        FilteredList<Course> filteredCourse = new FilteredList<>(courses, p -> true);
-        searchBoxCourse.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredCourse.setPredicate(course -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
+        FilteredList<Course> filteredCourse2 = new FilteredList<>(courses, p -> true);
+        searchBoxCourse.textProperty().addListener((observable, oldValue, newValue) -> filteredCourse2.setPredicate(course -> {
+            if (newValue == null || newValue.isEmpty()) {
+                return true;
+            }
 
-                String lowerCaseFilter = newValue.toLowerCase();
+            String lowerCaseFilter = newValue.toLowerCase();
 
-                if (course.getName().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                }
-                return false;
-            });
-        });
-        SortedList<Course> sortedCourses = new SortedList<>(filteredCourse);
+            return course.getName().toLowerCase().contains(lowerCaseFilter);
+        }));
+        SortedList<Course> sortedCourses = new SortedList<>(filteredCourse2);
         sortedCourses.comparatorProperty().bind(courseTable.comparatorProperty());
         courseTable.setItems(sortedCourses);
 
         companyName.setCellValueFactory(new PropertyValueFactory<>("name"));
         companyAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
         companyPerson.setCellValueFactory(new PropertyValueFactory<>("contactPerson"));
-        companyC.setCellValueFactory(new PropertyValueFactory<>("changeButton"));
-        companyD.setCellValueFactory(new PropertyValueFactory<>("deleteButton"));
+        companyC.setCellFactory(getCallback("editCompany", "editButton"));
+        companyD.setCellFactory(getCallback("acceptDelete", "deleteButton"));
         courseTable.setItems(courses);
 
-        FilteredList<Company> filteredCompany = new FilteredList<>(companies, p -> true);
-        searchBoxCompany.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredCompany.setPredicate(course -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
+        FilteredList<Company> filteredCompany2 = new FilteredList<>(companies, p -> true);
+        searchBoxCompany.textProperty().addListener((observable, oldValue, newValue) -> filteredCompany2.setPredicate(course -> {
+            if (newValue == null || newValue.isEmpty()) {
+                return true;
+            }
 
-                String lowerCaseFilter = newValue.toLowerCase();
+            String lowerCaseFilter = newValue.toLowerCase();
 
-                if (course.getName().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                }
-                return false;
-            });
-        });
-        SortedList<Company> sortedCompany = new SortedList<>(filteredCompany);
-        sortedCompany.comparatorProperty().bind(companyTable.comparatorProperty());
-        companyTable.setItems(sortedCompany);
+            return course.getName().toLowerCase().contains(lowerCaseFilter);
+        }));
+        SortedList<Company> sortedCompany2 = new SortedList<>(filteredCompany2);
+        sortedCompany2.comparatorProperty().bind(companyTable.comparatorProperty());
+        companyTable.setItems(sortedCompany2);
     }
 
     @FXML
-    public Button addFunction(Button button, Object object, String file) throws IOException {
+    public Button addFunction(Button button, Object object, String file) {
         button.setOnAction((ActionEvent event) -> {
             try {
-                if (file.equals("editStudent")) this.student = (DualStudent)object;
-                else if (file.equals("editLecture")) this.lecture = (Docent)object;
-                else if (file.equals("editCompany")) this.company = (Company)object;
-                else if (file.equals("editCourse")) this.course = (Course)object;
+                if (object instanceof DualStudent) this.student = (DualStudent) object;
+                else if (object instanceof Docent) this.lecture = (Docent) object;
+                else if (object instanceof Company) this.company = (Company) object;
+                else if (object instanceof Course) this.course = (Course) object;
                 this.file = file;
+                this.object = object;
                 start(new Stage());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -431,22 +363,58 @@ public class ShowStudentsController extends Application implements Initializable
         String resourcePath = file + ".fxml";
         URL location = getClass().getResource(resourcePath);
         FXMLLoader fxmlLoader = new FXMLLoader(location);
-        Parent root = (Parent)fxmlLoader.load();
+        Parent root = fxmlLoader.load();
         if (file.equals("editStudent")) {
-            EditStudentController controller = fxmlLoader.<EditStudentController>getController();
+            EditStudentController controller = fxmlLoader.getController();
             controller.initVariables(student);
         } else if (file.equals("editLecture")) {
-            EditLectureController controller = fxmlLoader.<EditLectureController>getController();
+            EditLectureController controller = fxmlLoader.getController();
             controller.initVariables(lecture);
         } else if (file.equals("editCompany")) {
-            EditCompanyController controller = fxmlLoader.<EditCompanyController>getController();
+            EditCompanyController controller = fxmlLoader.getController();
             controller.initVariables(company);
         } else if (file.equals("editCourse")) {
-            EditCourseController controller = fxmlLoader.<EditCourseController>getController();
+            EditCourseController controller = fxmlLoader.getController();
+            controller.initVariables(course);
+        } else if (object instanceof DualStudent) {
+            AcceptDeleteController controller = fxmlLoader.getController();
+            controller.initVariables(student);
+        } else if (object instanceof Docent) {
+            AcceptDeleteController controller = fxmlLoader.getController();
+            controller.initVariables(lecture);
+        } else if (object instanceof Company) {
+            AcceptDeleteController controller = fxmlLoader.getController();
+            controller.initVariables(company);
+        } else if (object instanceof Course) {
+            AcceptDeleteController controller = fxmlLoader.getController();
             controller.initVariables(course);
         }
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+
+    private <T> Callback<TableColumn<T, Void>, TableCell<T, Void>> getCallback(String function, String image) {
+        return new Callback<>() {
+            @Override
+            public TableCell<T, Void> call(TableColumn<T, Void> dualStudentVoidTableColumn) {
+                return new TableCell<>() {
+                    Button btn = new Button();
+
+                    @Override
+                    protected void updateItem(Void aVoid, boolean b) {
+                        super.updateItem(aVoid, b);
+                        if (b) {
+                            setGraphic(null);
+                        } else {
+                            btn = addFunction(btn, getTableView().getItems().get(getIndex()), function);
+                            btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/" + image + ".png"))));
+                            setGraphic(btn);
+
+                        }
+                    }
+                };
+            }
+        };
     }
 }
