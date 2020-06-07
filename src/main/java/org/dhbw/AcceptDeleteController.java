@@ -18,7 +18,6 @@ public class AcceptDeleteController {
 
     public void initVariables(Object object) {
         if (object instanceof DualStudent) {
-            System.out.println("Test");
             this.student = (DualStudent) object;
         } else if (object instanceof Docent) {
             this.lecture = (Docent) object;

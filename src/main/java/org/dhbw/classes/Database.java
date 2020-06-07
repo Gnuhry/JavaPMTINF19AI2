@@ -192,7 +192,6 @@ public class Database {
         int person_id = updatePerson(student, old);
         int course_id = updateCourse(student.getCourse(), old.getCourse());
         int company_id = updateCompany(student.getCompany(), old.getCompany());
-        System.out.println(student.getAddress());
         try {
             initialize();
             statement = connection.prepareStatement("UPDATE student SET person_id=?, java_knowlage=?, course_id=?, company_id=? WHERE student_id=?");
@@ -230,7 +229,6 @@ public class Database {
     public static int updateCourse(Course course, Course old) {
         if (course == null) return Integer.MIN_VALUE;
         int id = getCourseId(old);
-        System.out.println(id);
         if (id >= 0) {
             int docent_id = updateDocent(course.getStudyDirector(), old.getStudyDirector());
             try {
@@ -300,9 +298,7 @@ public class Database {
     public static int updateAddress(Address address, Address old) {
         if (address == null) return Integer.MIN_VALUE;
         if (countUsedAddress(address) > 1) return addAddress(address);
-        System.out.println("Update address");
         int id = getAddressId(old);
-        System.out.println(id);
         if (id >= 0) {
             try {
                 initialize();
@@ -484,7 +480,6 @@ public class Database {
             while (resultSet.next()) {
                 if (resultSet.getInt("company_id") > 0 || resultSet.getInt("person_id") > 0)
                     counter++;
-//                System.out.println(resultSet.getInt("company_id")+", "+resultSet.getInt("person_id"));
             }
             return counter;
         } catch (SQLException | ClassNotFoundException exception) {
@@ -506,7 +501,6 @@ public class Database {
             while (resultSet.next()) {
                 if (resultSet.getInt("company_id") > 0 || resultSet.getInt("student_id") > 0 || resultSet.getInt("company_id") > 0)
                     counter++;
-//                System.out.println(resultSet.getInt("company_id")+","+resultSet.getInt("student_id")+","+resultSet.getInt("docent_id"));
             }
             return counter;
         } catch (SQLException | ClassNotFoundException exception) {
@@ -767,7 +761,6 @@ public class Database {
                 statement.setInt(5, Integer.MIN_VALUE);
             else
                 statement.setInt(5, course.getStudyDirector().getDocentNumber());
-            System.out.println(statement.toString());
             resultSet = statement.executeQuery();
             if (resultSet.next())
                 return resultSet.getInt(1);

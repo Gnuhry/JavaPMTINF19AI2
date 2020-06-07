@@ -5,7 +5,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import kotlin.time.TestTimeSource;
 import org.dhbw.classes.Address;
 import org.dhbw.classes.Check;
 import org.dhbw.classes.Docent;
@@ -55,7 +54,7 @@ public class InsertLectureController {
     }
 
     @FXML
-    private void generateLN() throws IOException {
+    private void generateLN() {
         while(true) {
             int lectureNumber = (100000+(int)(Math.random()*999999));
             if (!Check.checkDNContains(lectureNumber)) {
