@@ -164,34 +164,10 @@ public class ShowStudentsController extends Application implements Initializable
 
     @FXML
     public void refresh() {
-        ObservableList<DualStudent> data2 = FXCollections.observableArrayList(
-                University.getStudents()
-        );
-        studentTable.setItems(data2);
-    }
-
-    @FXML
-    private void refreshLecture() {
-        ObservableList<Docent> docents2 = FXCollections.observableArrayList(
-                University.getDocents()
-        );
-        lectureTable.setItems(docents2);
-    }
-
-    @FXML
-    private void refreshCourse() {
-        ObservableList<Course> courses2 = FXCollections.observableArrayList(
-                University.getCourses()
-        );
-        courseTable.setItems(courses2);
-    }
-
-    @FXML
-    private void refreshCompany() {
-        ObservableList<Company> companies2 = FXCollections.observableArrayList(
-                University.getCompanies()
-        );
-        companyTable.setItems(companies2);
+        studentTable.setItems(FXCollections.observableArrayList(University.getStudents()));
+        lectureTable.setItems(FXCollections.observableArrayList(University.getDocents()));
+        courseTable.setItems(FXCollections.observableArrayList(University.getCourses()));
+        companyTable.setItems(FXCollections.observableArrayList(University.getCompanies()));
     }
 
 
