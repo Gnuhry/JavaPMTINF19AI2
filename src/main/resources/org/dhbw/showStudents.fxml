@@ -87,7 +87,7 @@
                      <items>
                         <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Zurück" />
                         <TextField fx:id="searchBoxLecture" promptText="Namen suchen" stylesheets="@css/application.css" translateX="944.0" />
-                        <Button mnemonicParsing="false" onAction="#refreshLecture" stylesheets="@css/application.css" text="Refresh" translateX="944.0" />
+                        <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="Refresh" translateX="944.0" />
                      </items>
                   </ToolBar>
                </children></AnchorPane>
@@ -101,7 +101,7 @@
                      <items>
                         <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Zurück" />
                         <TextField fx:id="searchBoxCourse" promptText="Namen suchen" stylesheets="@css/application.css" translateX="944.0" />
-                        <Button mnemonicParsing="false" onAction="#refreshCourse" stylesheets="@css/application.css" text="Refresh" translateX="944.0" />
+                        <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="Refresh" translateX="944.0" />
                      </items>
                   </ToolBar>
                   <TableView fx:id="courseTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0" stylesheets="@css/application.css" tableMenuButtonVisible="true">
@@ -135,7 +135,7 @@
                      <items>
                         <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Zurück" />
                         <TextField fx:id="searchBoxCompany" promptText="Namen suchen" stylesheets="@css/application.css" translateX="944.0" />
-                        <Button mnemonicParsing="false" onAction="#refreshCompany" stylesheets="@css/application.css" text="Refresh" translateX="944.0" />
+                        <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="Refresh" translateX="944.0" />
                      </items>
                   </ToolBar>
                </children></AnchorPane>
