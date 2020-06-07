@@ -198,8 +198,7 @@ public class ShowStudentsController extends Application implements Initializable
         studentNumber.setCellValueFactory(new PropertyValueFactory<>("studentNumber"));
         studentName.setCellValueFactory(new PropertyValueFactory<>("name"));
         studentForename.setCellValueFactory(new PropertyValueFactory<>("forename"));
-        studentBirth.setCellFactory(column -> {
-            TableCell<DualStudent, Date> cell = new TableCell<>() {
+        studentBirth.setCellFactory(column -> new TableCell<>() {
                 @Override
                 protected void updateItem(Date date, boolean b) {
                     super.updateItem(date, b);
@@ -209,8 +208,6 @@ public class ShowStudentsController extends Application implements Initializable
                         this.setText(format.format(date));
                     }
                 }
-            };
-            return cell;
         });
         studentBirth.setCellValueFactory(new PropertyValueFactory<>("birthday"));
         studentEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
@@ -242,10 +239,7 @@ public class ShowStudentsController extends Application implements Initializable
                     return true;
                 } else if (("" + person.getStudentNumber()).toLowerCase().contains(lowerCaseFilter)) {
                     return true;
-                } else if (("" + person.getMatriculationNumber()).toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                }
-                return false;
+                } else return ("" + person.getMatriculationNumber()).toLowerCase().contains(lowerCaseFilter);
             });
         });
         SortedList<DualStudent> sortedName = new SortedList<>(filteredName);
@@ -255,8 +249,7 @@ public class ShowStudentsController extends Application implements Initializable
         lectureNumber.setCellValueFactory(new PropertyValueFactory<>("docentNumber"));
         lectureLastName.setCellValueFactory(new PropertyValueFactory<>("name"));
         lectureFirstName.setCellValueFactory(new PropertyValueFactory<>("forename"));
-        lectureBirth.setCellFactory(column -> {
-            TableCell<Docent, Date> cell = new TableCell<>() {
+        lectureBirth.setCellFactory(column ->  new TableCell<>() {
                 @Override
                 protected void updateItem(Date date, boolean b) {
                     super.updateItem(date, b);
@@ -266,8 +259,6 @@ public class ShowStudentsController extends Application implements Initializable
                         this.setText(format.format(date));
                     }
                 }
-            };
-            return cell;
         });
         lectureBirth.setCellValueFactory(new PropertyValueFactory<>("birthday"));
         lectureEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
@@ -290,10 +281,7 @@ public class ShowStudentsController extends Application implements Initializable
                     return true;
                 } else if (person.getName().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
-                } else if (("" + person.getDocentNumber()).toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                }
-                return false;
+                } else return ("" + person.getDocentNumber()).toLowerCase().contains(lowerCaseFilter);
             });
         });
         SortedList<Docent> sortedLecture = new SortedList<>(filteredLecture);
@@ -303,8 +291,7 @@ public class ShowStudentsController extends Application implements Initializable
         courseName.setCellValueFactory(new PropertyValueFactory<>("name"));
         courseType.setCellValueFactory(new PropertyValueFactory<>("studyCourse"));
         courseRoom.setCellValueFactory(new PropertyValueFactory<>("room"));
-        courseDate.setCellFactory(column -> {
-            TableCell<Course, Date> cell = new TableCell<>() {
+        courseDate.setCellFactory(column ->  new TableCell<>() {
                 @Override
                 protected void updateItem(Date date, boolean b) {
                     super.updateItem(date, b);
@@ -314,8 +301,6 @@ public class ShowStudentsController extends Application implements Initializable
                         this.setText(format.format(date));
                     }
                 }
-            };
-            return cell;
         });
         courseDate.setCellValueFactory(new PropertyValueFactory<>("registrationDate"));
         courseLecture.setCellValueFactory(new PropertyValueFactory<>("studyDirector"));
@@ -332,10 +317,7 @@ public class ShowStudentsController extends Application implements Initializable
 
                 String lowerCaseFilter = newValue.toLowerCase();
 
-                if (course.getName().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                }
-                return false;
+                return course.getName().toLowerCase().contains(lowerCaseFilter);
             });
         });
         SortedList<Course> sortedCourses = new SortedList<>(filteredCourse2);
@@ -358,10 +340,7 @@ public class ShowStudentsController extends Application implements Initializable
 
                 String lowerCaseFilter = newValue.toLowerCase();
 
-                if (course.getName().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                }
-                return false;
+                return course.getName().toLowerCase().contains(lowerCaseFilter);
             });
         });
         SortedList<Company> sortedCompany2 = new SortedList<>(filteredCompany2);
@@ -370,7 +349,7 @@ public class ShowStudentsController extends Application implements Initializable
     }
 
     @FXML
-    public Button addFunction(Button button, Object object, String file) throws IOException {
+    public Button addFunction(Button button, Object object, String file) {
         button.setOnAction((ActionEvent event) -> {
             try {
                 if (object instanceof DualStudent) this.student = (DualStudent)object;

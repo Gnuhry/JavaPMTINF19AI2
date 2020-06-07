@@ -98,7 +98,7 @@ public class InsertStudentController {
     }
 
     @FXML
-    private void generateSN() throws IOException {
+    private void generateSN() {
         while (true) {
             int studentNumber = (100000+(int)(Math.random()*900000));
             if (!Check.checkSNContains(studentNumber)) {
@@ -109,7 +109,7 @@ public class InsertStudentController {
     }
 
     @FXML
-    private void generateMN() throws IOException {
+    private void generateMN() {
         while(true) {
             int matriculationNumber = (1000000+(int)(Math.random()*9000000));
             if (!Check.checkMNContains(matriculationNumber)) {
@@ -120,7 +120,7 @@ public class InsertStudentController {
     }
 
     @FXML
-    private void showSlider() throws IOException {
+    private void showSlider() {
         javaKnowledgeLabel.setText("" + (int)javaKnowledgeSlider.getValue());
     }
 
@@ -133,7 +133,7 @@ public class InsertStudentController {
     }
 
     @FXML
-    private void showCourse() throws IOException {
+    private void showCourse() {
         Course course = courseName.getValue();
         courseType.setText("" + course.getStudyCourse());
         courseDate.setValue(convertToLocalDateViaSqlDate(course.getRegistrationDate()));

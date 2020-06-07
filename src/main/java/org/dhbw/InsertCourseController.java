@@ -13,16 +13,9 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 
 public class InsertCourseController {
-
-    ObservableList<Person> chooseCourseRepresentOptions = FXCollections.observableArrayList(
-            University.getStudents()
-            //new Person("Silas", "Wessely", "")
-    );
 
     ObservableList<Docent> chooseCourseDirectorOptions = FXCollections.observableArrayList(
             University.getDocents()
@@ -75,7 +68,7 @@ public class InsertCourseController {
                         courseType.getValue(),
                         courseDirector.getValue(),
                         courseRDate,
-                        (CourseRoom)courseRoom.getValue()
+                        courseRoom.getValue()
                 );
                 University.addCourse(course);
                 backToOverview();
