@@ -19,6 +19,10 @@ public class App extends Application {
 
     private static Scene scene;
 
+    /**
+     * opening the app stage with parameters
+     * @param stage new stage show new window
+     */
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("primary"));
@@ -30,15 +34,27 @@ public class App extends Application {
         stage.setOnCloseRequest(windowEvent -> Database.closeConnection());
     }
 
+    /**
+     * changing the root-fxml-file in the App stage
+     * @param fxml filename to switch to
+     */
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
 
+    /**
+     * link the new file to the current stage which is the parent
+     * @param fxml filename to switch to
+     * @return parent object of the new file
+     */
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
     }
 
+    /**
+     * starting the application
+     */
     public static void main(String[] args) {
         launch();
     }

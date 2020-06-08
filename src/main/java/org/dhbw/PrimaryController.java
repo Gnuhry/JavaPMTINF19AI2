@@ -15,23 +15,6 @@ import java.util.ResourceBundle;
 
 public class PrimaryController implements Initializable {
 
-    Class<?> clazz = this.getClass();
-    InputStream addStudentStream = clazz.getResourceAsStream("/org/dhbw/images/addStudentHat.png");
-    Image addStudentImage = new Image(addStudentStream);
-    ImageView addStudentImageView = new ImageView(addStudentImage);
-    InputStream addLectureStream = clazz.getResourceAsStream("/org/dhbw/images/addLecture.png");
-    Image addLectureImage = new Image(addLectureStream);
-    ImageView addLectureImageView = new ImageView(addLectureImage);
-    InputStream addCourseStream = clazz.getResourceAsStream("/org/dhbw/images/addCourse.png");
-    Image addCourseImage = new Image(addCourseStream);
-    ImageView addCourseImageView = new ImageView(addCourseImage);
-    InputStream addCompanyStream = clazz.getResourceAsStream("/org/dhbw/images/addCompany.png");
-    Image addCompanyImage = new Image(addCompanyStream);
-    ImageView addCompanyImageView = new ImageView(addCompanyImage);
-    InputStream showTableStream = clazz.getResourceAsStream("/org/dhbw/images/showTable.png");
-    Image showTableImage = new Image(showTableStream);
-    ImageView showTableImageView = new ImageView(showTableImage);
-
     @FXML
     private Button showTable;
     @FXML
@@ -52,39 +35,67 @@ public class PrimaryController implements Initializable {
     private Tooltip tooltipCompany;
 
 
-
+    /**
+     * changing the scene root in App to "showstudents.fxml"
+     */
     @FXML
     private void showStudents() throws  IOException {
         App.setRoot("showStudents");
     }
 
+    /**
+     * changing the scene root in App to "insertStudent.fxml"
+     */
     @FXML
     private void insertStudent() throws IOException {
         App.setRoot("insertStudent");
     }
 
+    /**
+     * changing the scene root in App to "insertLecture.fxml"
+     */
     @FXML
     private void insertLecture() throws IOException {
         App.setRoot("insertLecture");
     }
 
+    /**
+     * changing the scene root in App to "insertCompany.fxml"
+     */
     @FXML
     private void insertCompany() throws IOException {
         App.setRoot("insertCompany");
     }
 
+    /**
+     * changing the scene root in App to "insertCourse.fxml"
+     */
     @FXML
     private void insertCourse() throws IOException {
         App.setRoot("insertCourse");
     }
 
-    @FXML
-    private void editStudent() throws IOException{
-        App.setRoot("editStudent");
-    }
-
+    /**
+     * initializing each menu-button with an image and tooltip
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        Class<?> clazz = this.getClass();
+        InputStream addStudentStream = clazz.getResourceAsStream("/org/dhbw/images/addStudentHat.png");
+        Image addStudentImage = new Image(addStudentStream);
+        ImageView addStudentImageView = new ImageView(addStudentImage);
+        InputStream addLectureStream = clazz.getResourceAsStream("/org/dhbw/images/addLecture.png");
+        Image addLectureImage = new Image(addLectureStream);
+        ImageView addLectureImageView = new ImageView(addLectureImage);
+        InputStream addCourseStream = clazz.getResourceAsStream("/org/dhbw/images/addCourse.png");
+        Image addCourseImage = new Image(addCourseStream);
+        ImageView addCourseImageView = new ImageView(addCourseImage);
+        InputStream addCompanyStream = clazz.getResourceAsStream("/org/dhbw/images/addCompany.png");
+        Image addCompanyImage = new Image(addCompanyStream);
+        ImageView addCompanyImageView = new ImageView(addCompanyImage);
+        InputStream showTableStream = clazz.getResourceAsStream("/org/dhbw/images/showTable.png");
+        Image showTableImage = new Image(showTableStream);
+        ImageView showTableImageView = new ImageView(showTableImage);
         showTableImageView.setFitHeight(30);
         showTableImageView.setFitWidth(30);
         showTable.setGraphic(showTableImageView);

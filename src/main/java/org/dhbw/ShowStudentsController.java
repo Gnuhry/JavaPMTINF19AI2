@@ -141,11 +141,17 @@ public class ShowStudentsController extends Application implements Initializable
     @FXML
     private TableColumn<Company, Void> companyD;
 
+    /**
+     * changing the scene root in App to "primary.fxml"
+     */
     @FXML
     private void backToOverview() throws IOException {
         App.setRoot("primary");
     }
 
+    /**
+     * refreshing all four tables
+     */
     @FXML
     public void refresh() {
         studentTable.setItems(FXCollections.observableArrayList(University.getStudents()));
@@ -158,7 +164,10 @@ public class ShowStudentsController extends Application implements Initializable
         companyTable.refresh();
     }
 
-
+    /**
+     * initializing every column of the table with the data from other classes
+     * adding filter functions for lecture table, course table and company table (input from searchboxes)
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         studentNumber.setCellValueFactory(new PropertyValueFactory<>("studentNumber"));
@@ -301,6 +310,13 @@ public class ShowStudentsController extends Application implements Initializable
         companyTable.setItems(sortedCompany2);
     }
 
+    /**
+     * adding the start() method on each button
+     * @param button button where function should be added
+     * @param object object which should be changed or deleted
+     * @param file fxml filename to setup next scene
+     * @return button with new function
+     */
     @FXML
     public Button addFunction(Button button, Object object, String file) {
         button.setOnAction((ActionEvent event) -> {
@@ -319,6 +335,10 @@ public class ShowStudentsController extends Application implements Initializable
         return button;
     }
 
+    /**
+     * opening a new javafx stage to edit or delete an object
+     * @param stage new stage show new window
+     */
     @Override
     public void start(Stage stage) throws Exception {
         String resourcePath = file + ".fxml";
@@ -360,6 +380,11 @@ public class ShowStudentsController extends Application implements Initializable
         stage.show();
     }
 
+    /**
+     * initializing change and delete button with image and addFunction
+     * @param function
+     * @param image imagename of the image for the button
+     */
     private <T> Callback<TableColumn<T, Void>, TableCell<T, Void>> getCallback(String function, String image) {
         return new Callback<>() {
             @Override
@@ -384,6 +409,12 @@ public class ShowStudentsController extends Application implements Initializable
         };
     }
 
+    /**
+     * filtering the studenttable with inputtext from searchboxes and comboboxes
+     * @param newValue
+     * @param person person of database table which gets checked on input
+     * @return true if input is the same as the forename, name, studentID or matriculationNumber from person, true if not
+     */
     private boolean checkFilterStudent(Object newValue, DualStudent person) {
         boolean erg = true;
         String search;

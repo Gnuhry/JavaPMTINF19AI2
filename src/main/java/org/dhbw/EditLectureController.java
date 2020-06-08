@@ -42,11 +42,17 @@ public class EditLectureController {
     @FXML
     private Button cancelButton;
 
+    /**
+     * converting a Date to a LocalDate
+     * @param dateToConvert given Date to convert
+     * @return LocalDate with the same value as the dateToConvert
+     */
+    private LocalDate convertToLocalDateViaSqlDate(Date dateToConvert) { return new java.sql.Date(dateToConvert.getTime()).toLocalDate(); }
 
-    private LocalDate convertToLocalDateViaSqlDate(Date dateToConvert) {
-        return new java.sql.Date(dateToConvert.getTime()).toLocalDate();
-    }
-
+    /**
+     * visualizing all information about the lecture in the textfields
+     * @param lecture student which gets changed
+     */
     public void initVariables(Docent lecture) {
         this.lecture = lecture;
         if (!lecture.getForename().isEmpty()) lectureFirstName.setText(lecture.getForename());
@@ -63,12 +69,21 @@ public class EditLectureController {
         if (lecture.getDocentNumber() != 0)lectureNumberField.setText("" + lecture.getDocentNumber());
     }
 
+    /**
+     * changing the scene root in App to "primary.fxml" and close stage
+     */
     @FXML
     private void backToOverview() throws IOException {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * reading the textfields
+     * checking validation of emails, postal code and date
+     * generating a new lecture with the entered information and adding the new lecture to the database
+     * catching NullPointerException to give a visual feedback to the user
+     */
     @FXML
     private void submit() throws IOException {
 

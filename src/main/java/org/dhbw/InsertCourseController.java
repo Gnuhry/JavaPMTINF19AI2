@@ -36,6 +36,9 @@ public class InsertCourseController {
     private DialogPane showNullPointer;
 
 
+    /**
+     * initializing comboBoxes with object lists
+     */
     @FXML
     private void initialize() {
         courseType.getItems().setAll(FXCollections.observableArrayList(StudyCourse.values()));
@@ -43,12 +46,20 @@ public class InsertCourseController {
         courseDirector.getItems().setAll(FXCollections.observableArrayList(chooseCourseDirectorOptions));
     }
 
-
+    /**
+     * changing the scene root in App to "primary.fxml"
+     */
     @FXML
     private void backToOverview() throws IOException {
         App.setRoot("primary");
     }
 
+
+    /**
+     * reading the textfields
+     * generating a new course with the entered information and adding the new course to the database
+     * catching NullPointerException to give a visual feedback to the user
+     */
     @FXML
     private void submit() {
 
@@ -60,8 +71,6 @@ public class InsertCourseController {
                 LocalDate localDateCourseBirth = courseDate.getValue();
                 Instant instantCourseBirth = Instant.from(localDateCourseBirth.atStartOfDay(ZoneId.systemDefault()));
                 Date courseRDate = Date.from(instantCourseBirth);
-
-
 
                 Course course = new Course(
                         courseName.getText(),
