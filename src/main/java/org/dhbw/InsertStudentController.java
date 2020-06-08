@@ -90,6 +90,7 @@ public class InsertStudentController {
     private void initialize() {
         companyChoose.setItems(chooseCompanyOptions);
         courseName.setItems(chooseCourseOptions);
+        javaKnowledgeLabel.setText("0");
     }
 
     @FXML

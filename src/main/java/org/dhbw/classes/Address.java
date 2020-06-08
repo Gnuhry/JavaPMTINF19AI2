@@ -40,8 +40,6 @@ public class Address {
     }
 
     //-----------------------------------Setter-----------------------------------------------
-
-
     public void setStreet(String street) {
         this.street = street;
     }

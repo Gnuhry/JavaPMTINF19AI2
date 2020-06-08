@@ -3,7 +3,7 @@ package org.dhbw.classes;
 import java.util.Date;
 import java.util.Objects;
 
-public class Docent extends Person{
+public class Docent extends Person {
     private int docentNumber;
 
     public Docent(String name, String forename, Date birthday, Address address) {
@@ -14,13 +14,13 @@ public class Docent extends Person{
         super(name, forename, birthday, address, email);
         this.docentNumber = docentNumber;
     }
+
     //----------------------Getter--------------------------------
     public int getDocentNumber() {
         return docentNumber;
     }
 
     //---------------------Overrides---------------------------
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
