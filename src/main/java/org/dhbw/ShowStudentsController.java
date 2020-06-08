@@ -23,20 +23,22 @@ import org.dhbw.classes.*;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ShowStudentsController extends Application implements Initializable {
-    private ObservableList<DualStudent> students = FXCollections.observableArrayList(
+    private final ObservableList<DualStudent> students = FXCollections.observableArrayList(
             University.getStudents()
     );
-    private ObservableList<Docent> docents = FXCollections.observableArrayList(
+    private final ObservableList<Docent> docents = FXCollections.observableArrayList(
             University.getDocents()
     );
-    private ObservableList<Course> courses = FXCollections.observableArrayList(
+    private final ObservableList<Course> courses = FXCollections.observableArrayList(
             University.getCourses()
     );
-    private ObservableList<Company> companies = FXCollections.observableArrayList(
+    private final ObservableList<Company> companies = FXCollections.observableArrayList(
             University.getCompanies()
     );
 
@@ -47,6 +49,8 @@ public class ShowStudentsController extends Application implements Initializable
     private Company company;
     private Course course;
     private final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+    private final Company allCompany = new Company("Alle Unternehmen", null, null);
+    private final Course allCourse = new Course("Alle Kurse", null, null);
 
 
     @FXML
@@ -183,8 +187,16 @@ public class ShowStudentsController extends Application implements Initializable
         studentD.setCellFactory(getCallback("acceptDelete", "deleteButton"));
         studentTable.setItems(students);
         studentTable.requestFocus();
-        courseFilterBox.getItems().setAll(courses);
-        companyFilterBox.getItems().setAll(companies);
+        List<Course> courseList = new ArrayList<>();
+        courseList.add(allCourse);
+        courseList.addAll(courses);
+        courseFilterBox.getItems().setAll(courseList);
+        courseFilterBox.setValue(allCourse);
+        List<Company> companyList = new ArrayList<>();
+        companyList.add(allCompany);
+        companyList.addAll(companies);
+        companyFilterBox.getItems().setAll(companyList);
+        companyFilterBox.setValue(allCompany);
         FilteredList<DualStudent> filteredName = new FilteredList<>(students, p -> true);
         searchBox.textProperty().addListener((observable, oldValue, newValue) -> filteredName.setPredicate(person -> checkFilterStudent(newValue, person)));
         companyFilterBox.valueProperty().addListener((observable, oldValue, newValue) -> filteredName.setPredicate(person -> checkFilterStudent(newValue, person)));
@@ -395,7 +407,7 @@ public class ShowStudentsController extends Application implements Initializable
             company = (Company) newValue;
         else
             company = companyFilterBox.getValue();
-        if (company != null)
+        if (company != null && !company.equals(allCompany))
             erg &= company.equals(person.getCompany());
 
         Course course;
@@ -403,7 +415,7 @@ public class ShowStudentsController extends Application implements Initializable
             course = (Course) newValue;
         else
             course = courseFilterBox.getValue();
-        if (course != null)
+        if (course != null && !course.equals(allCourse))
             erg &= course.equals(person.getCourse());
         return erg;
     }
