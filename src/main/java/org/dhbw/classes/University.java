@@ -1,14 +1,11 @@
 package org.dhbw.classes;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class University {
 
 
-    //-----------------------------Getter---------------------
+    //-----------------------------GetObject---------------------
 
     public static List<Docent> getDocents() {
         return Database.getDocents();
@@ -27,7 +24,7 @@ public class University {
     }
 
 
-    //-------------------------------Add------------------------
+    //-------------------------------AddObject------------------------
 
     public static void addDocent(Docent d) {
         Database.addDocent(d);
@@ -45,24 +42,7 @@ public class University {
         Database.addCompany(c);
     }
 
-    //-------------------------------IS-------------------------
-    public static boolean isDocent(Docent d) {
-        return false;
-    }
-
-    public static boolean isStudent(DualStudent s) {
-        return false;
-    }
-
-    public static boolean isCourse(Course c) {
-        return false;
-    }
-
-    public static boolean isCompany(Company company) throws ClassNotFoundException {
-        return false;
-    }
-
-    //-----------------------------Remove----------------------
+    //-----------------------------RemoveObject----------------------
     public static void removeDocent(Docent d) {
         Database.deleteDocent(d);
     }
@@ -79,7 +59,7 @@ public class University {
         Database.deleteCompany(c);
     }
 
-    //------------------------------Update-----------------
+    //------------------------------UpdateObject-----------------
     public static void updateDocent(Docent d, Docent old) {
         Database.updateDocent(d, old);
     }

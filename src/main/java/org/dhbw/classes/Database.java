@@ -12,6 +12,7 @@ public class Database {
     private static PreparedStatement statement;
     private static ResultSet resultSet;
     private static SimpleDateFormat dateFormat;
+
     private static List<DualStudent> dualStudents;
     private static List<Course> courses;
     private static List<Docent> docents;
@@ -19,38 +20,75 @@ public class Database {
     private static List<Company> companies;
     private static List<Person> persons;
 
-    //----------------------------------------General----------------------------
+    //----------------------------------------GetObjects----------------------------
+
+    /**
+     * get all courses
+     *
+     * @return List of all courses
+     */
     public static List<Course> getCourses() {
         updateCourse();
         return courses;
     }
 
+    /**
+     * get all courses
+     *
+     * @return List of all courses
+     */
     public static List<Docent> getDocents() {
         updateDocent();
         return docents;
     }
 
+    /**
+     * get all addresses
+     *
+     * @return List of all addresses
+     */
     public static List<Address> getAddresses() {
         updateAddress();
         return addresses;
     }
 
+    /**
+     * get all companies
+     *
+     * @return List of all companies
+     */
     public static List<Company> getCompanies() {
         updateCompany();
         return companies;
     }
 
+    /**
+     * get all persons
+     *
+     * @return List of all persons
+     */
     public static List<Person> getPersons() {
         updatePerson();
         return persons;
     }
 
+    /**
+     * get all students
+     *
+     * @return List of all students
+     */
     public static List<DualStudent> getStudents() {
         updateStudent();
         return dualStudents;
     }
 
     //--------------------------------------------AddObject-----------------------------------------------------------------
+
+    /**
+     * add a student to the database
+     *
+     * @param student the adding student
+     */
     public static void addStudent(DualStudent student) {
         if (student == null) return;
         if (hasID("student", "student_id", student.getStudentNumber())) return;
@@ -74,6 +112,12 @@ public class Database {
         }
     }
 
+    /**
+     * add a docent to the database
+     *
+     * @param docent the adding docent
+     * @return id of docent if success, Integer.Min_Value if not
+     */
     public static int addDocent(Docent docent) {
         if (docent == null) return Integer.MIN_VALUE;
         if (hasID("docent", "docent_id", docent.getDocentNumber())) return docent.getDocentNumber();
@@ -95,6 +139,12 @@ public class Database {
         return Integer.MIN_VALUE;
     }
 
+    /**
+     * add a course to the database
+     *
+     * @param course the adding course
+     * @return id of course if success, Integer.Min_Value if not
+     */
     public static int addCourse(Course course) {
         if (course == null) return Integer.MIN_VALUE;
         int id = getCourseId(course);
@@ -121,6 +171,12 @@ public class Database {
         return Integer.MIN_VALUE;
     }
 
+    /**
+     * add a person to the database
+     *
+     * @param person the adding person
+     * @return id of person if success, Integer.Min_Value if not
+     */
     public static int addPerson(Person person) {
         if (person == null) return Integer.MIN_VALUE;
         int id = getPersonId(person);
@@ -142,6 +198,12 @@ public class Database {
         return Integer.MIN_VALUE;
     }
 
+    /**
+     * add a company to the database
+     *
+     * @param company the adding company
+     * @return id of company if success, Integer.Min_Value if not
+     */
     public static int addCompany(Company company) {
         if (company == null) return Integer.MIN_VALUE;
         int id = getCompanyId(company);
@@ -166,6 +228,12 @@ public class Database {
         return Integer.MIN_VALUE;
     }
 
+    /**
+     * add a address to the database
+     *
+     * @param address the adding address
+     * @return id of address if success, Integer.Min_Value if not
+     */
     public static int addAddress(Address address) {
         if (address == null) return Integer.MIN_VALUE;
         int id = getAddressId(address);
@@ -187,6 +255,13 @@ public class Database {
     }
 
     //-------------------------------------updateObject-------------------------------------------------------
+
+    /**
+     * update student in the database
+     *
+     * @param student student with the new data
+     * @param old     student with the old data
+     */
     public static void updateStudent(DualStudent student, DualStudent old) {
         if (student == null) return;
         int person_id = updatePerson(student, old);
@@ -208,6 +283,13 @@ public class Database {
         }
     }
 
+    /**
+     * update docent in the database
+     *
+     * @param docent docent with the new data
+     * @param old    docent with the old data
+     * @return id if exists, Integer.Min_Value if not
+     */
     public static int updateDocent(Docent docent, Docent old) {
         if (docent == null) return Integer.MIN_VALUE;
         int person_id = updatePerson(docent, old);
@@ -226,6 +308,13 @@ public class Database {
         return Integer.MIN_VALUE;
     }
 
+    /**
+     * update course in the database
+     *
+     * @param course course with the new data
+     * @param old    course with the old data
+     * @return id if exists, Integer.Min_Value if not
+     */
     public static int updateCourse(Course course, Course old) {
         if (course == null) return Integer.MIN_VALUE;
         int id = getCourseId(old);
@@ -249,6 +338,13 @@ public class Database {
         return Integer.MIN_VALUE;
     }
 
+    /**
+     * update person in the database
+     *
+     * @param person person with the new data
+     * @param old    person with the old data
+     * @return id if exists, Integer.Min_Value if not
+     */
     public static int updatePerson(Person person, Person old) {
         if (person == null) return Integer.MIN_VALUE;
         if (countUsedPerson(person) > 1) return addPerson(person);
@@ -271,6 +367,13 @@ public class Database {
         return Integer.MIN_VALUE;
     }
 
+    /**
+     * update company in the database
+     *
+     * @param company company with the new data
+     * @param old     company with the old data
+     * @return id if exists, Integer.Min_Value if not
+     */
     public static int updateCompany(Company company, Company old) {
         if (company == null) return Integer.MIN_VALUE;
         int id = getCompanyId(old);
@@ -295,6 +398,13 @@ public class Database {
         return Integer.MIN_VALUE;
     }
 
+    /**
+     * update address in the database
+     *
+     * @param address address with the new data
+     * @param old     address with the old data
+     * @return id if exists, Integer.Min_Value if not
+     */
     public static int updateAddress(Address address, Address old) {
         if (address == null) return Integer.MIN_VALUE;
         if (countUsedAddress(address) > 1) return addAddress(address);
@@ -317,6 +427,12 @@ public class Database {
     }
 
     //----------------------------------------DeleteObject----------------------------------
+
+    /**
+     * delete a student from the database
+     *
+     * @param student the student to delete
+     */
     public static void deleteStudent(DualStudent student) {
         try {
             initialize();
@@ -325,13 +441,17 @@ public class Database {
             statement.execute();
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
-
         } finally {
             closeConnection();
         }
         deletePerson(student);
     }
 
+    /**
+     * delete a docent from the database
+     *
+     * @param docent the docent to delete
+     */
     public static void deleteDocent(Docent docent) {
         try {
             initialize();
@@ -340,13 +460,17 @@ public class Database {
             statement.execute();
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
-
         } finally {
             closeConnection();
         }
         deletePerson(docent);
     }
 
+    /**
+     * delete a course from the database
+     *
+     * @param course the course to delete
+     */
     public static void deleteCourse(Course course) {
         try {
             initialize();
@@ -359,12 +483,16 @@ public class Database {
             statement.execute();
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
-
         } finally {
             closeConnection();
         }
     }
 
+    /**
+     * delete a company from the database
+     *
+     * @param company the student to company
+     */
     public static void deleteCompany(Company company) {
         int id = getCompanyId(company);
         try {
@@ -374,7 +502,6 @@ public class Database {
             statement.execute();
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
-
         } finally {
             closeConnection();
         }
@@ -383,6 +510,11 @@ public class Database {
         deleteStudentByCompanyId(id);
     }
 
+    /**
+     * delete a person from the database
+     *
+     * @param person the person to delete
+     */
     public static void deletePerson(Person person) {
         if (countUsedPerson(person) > 0)
             return;
@@ -393,7 +525,6 @@ public class Database {
             statement.execute();
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
-
         } finally {
             closeConnection();
         }
@@ -401,6 +532,11 @@ public class Database {
             deleteAddress(person.getAddress());
     }
 
+    /**
+     * delete a address from the database
+     *
+     * @param address the address to delete
+     */
     public static void deleteAddress(Address address) {
         if (countUsedAddress(address) > 0)
             return;
@@ -411,13 +547,18 @@ public class Database {
             statement.execute();
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
-
         } finally {
             closeConnection();
         }
     }
 
     //------------------------------------------getIDS---------------------------------------------------
+
+    /**
+     * get all student ids
+     *
+     * @return int list of student ids
+     */
     public static List<Integer> getStudentIDs() {
         try {
             List<Integer> erg = new ArrayList<>();
@@ -432,9 +573,14 @@ public class Database {
         } finally {
             closeConnection();
         }
-        return  new ArrayList<>();
+        return new ArrayList<>();
     }
 
+    /**
+     * get all student marticulationnumbers
+     *
+     * @return int list of all marticulationnumbers
+     */
     public static List<Integer> getMatriculationNumbers() {
         try {
             List<Integer> erg = new ArrayList<>();
@@ -449,9 +595,14 @@ public class Database {
         } finally {
             closeConnection();
         }
-        return  new ArrayList<>();
+        return new ArrayList<>();
     }
 
+    /**
+     * get all docent ids
+     *
+     * @return int list of docent ids
+     */
     public static List<Integer> getDocentIDs() {
         try {
             List<Integer> erg = new ArrayList<>();
@@ -466,13 +617,20 @@ public class Database {
         } finally {
             closeConnection();
         }
-        return  new ArrayList<>();
+        return new ArrayList<>();
     }
 
     //---------------------------------------private...........................................
+
+    /**
+     * get amount of connection to the address
+     *
+     * @param address where the amount of connection is going to count
+     * @return amount of connection
+     */
     private static int countUsedAddress(Address address) {
+        int counter = 0;
         try {
-            int counter = 0;
             initialize();
             statement = connection.prepareStatement("SELECT company_id, person_id FROM address LEFT JOIN company c on address.address_id = c.address_id LEFT JOIN person p on address.address_id = p.address_id WHERE street = ? AND number = ? AND postal_code = ? AND city = ? AND country = ?");
             addAddressToStatement(address);
@@ -481,37 +639,42 @@ public class Database {
                 if (resultSet.getInt("company_id") > 0 || resultSet.getInt("person_id") > 0)
                     counter++;
             }
-            return counter;
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
 
         } finally {
             closeConnection();
         }
-        return 0;
+        return counter;
     }
 
+    /**
+     * get amount of connection to the person
+     *
+     * @param person where the amount of connection is going to count
+     * @return amount of connection
+     */
     private static int countUsedPerson(Person person) {
+        int counter = 0;
         try {
-            int counter = 0;
             initialize();
             statement = connection.prepareStatement("SELECT student_id,docent_id,company.company_id FROM person LEFT JOIN student s on person.person_id = s.person_id LEFT JOIN docent d on person.person_id = d.person_id LEFT JOIN company ON contact_person_id=person.person_id WHERE email = ?");
             statement.setString(1, person.getEmail());
             resultSet = statement.executeQuery();
-            while (resultSet.next()) {
+            while (resultSet.next())
                 if (resultSet.getInt("company_id") > 0 || resultSet.getInt("student_id") > 0 || resultSet.getInt("company_id") > 0)
                     counter++;
-            }
-            return counter;
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
             closeConnection();
         }
-        return 0;
+        return counter;
     }
 
-
+    /**
+     * initialize to use the database connection
+     */
     private static void initialize() throws ClassNotFoundException, SQLException {
         if (connection == null || connection.isClosed()) {
             Class.forName("com.mysql.jdbc.Driver");
@@ -534,6 +697,9 @@ public class Database {
             persons = new ArrayList<>();
     }
 
+    /**
+     * compare student list with database and updating the list
+     */
     private static void updateStudent() {
         //checkListStudent();
         try {
@@ -567,6 +733,9 @@ public class Database {
         }
     }
 
+    /**
+     * compare docent list with database and updating the list
+     */
     private static void updateDocent() {
 //        checkListDocents();
         try {
@@ -595,6 +764,9 @@ public class Database {
         }
     }
 
+    /**
+     * compare course list with database and updating the list
+     */
     private static void updateCourse() {
         try {
             initialize();
@@ -621,6 +793,9 @@ public class Database {
         }
     }
 
+    /**
+     * compare address list with database and updating the list
+     */
     private static void updateAddress() {
         try {
             initialize();
@@ -642,12 +817,14 @@ public class Database {
             }
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
-
         } finally {
             closeConnection();
         }
     }
 
+    /**
+     * compare company list with database and updating the list
+     */
     private static void updateCompany() {
         try {
             initialize();
@@ -672,6 +849,9 @@ public class Database {
         }
     }
 
+    /**
+     * compare person list with database and updating the list
+     */
     private static void updatePerson() {
 //        checkListPerson();
         try {
@@ -692,7 +872,6 @@ public class Database {
             }
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
-
         } finally {
             closeConnection();
         }
@@ -749,6 +928,12 @@ public class Database {
 //        }
 //    }
 
+    /**
+     * get the database id from course
+     *
+     * @param course the data from the id row
+     * @return id if exist, Integer.Minvalue if not
+     */
     private static int getCourseId(Course course) {
         try {
             initialize();
@@ -773,6 +958,12 @@ public class Database {
         return Integer.MIN_VALUE;
     }
 
+    /**
+     * get the database id from company
+     *
+     * @param company the data from the id row
+     * @return id if exist, Integer.Minvalue if not
+     */
     private static int getCompanyId(Company company) {
         int address_id = getAddressId(company.getAddress());
         int person_id = getPersonId(company.getContactPerson());
@@ -793,6 +984,12 @@ public class Database {
         return Integer.MIN_VALUE;
     }
 
+    /**
+     * get the database id from person
+     *
+     * @param person the data from the id row
+     * @return id if exist, Integer.Minvalue if not
+     */
     private static int getPersonId(Person person) {
         try {
             initialize();
@@ -803,13 +1000,18 @@ public class Database {
                 return resultSet.getInt(1);
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
-
         } finally {
             closeConnection();
         }
         return Integer.MIN_VALUE;
     }
 
+    /**
+     * get the database id from address
+     *
+     * @param address the data from the id row
+     * @return id if exist, Integer.Minvalue if not
+     */
     private static int getAddressId(Address address) {
         try {
             initialize();
@@ -820,14 +1022,20 @@ public class Database {
                 return resultSet.getInt(1);
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
-
         } finally {
             closeConnection();
         }
         return Integer.MIN_VALUE;
     }
 
-
+    /**
+     * search in database if id exist
+     *
+     * @param table  the table where to search
+     * @param column the column from the id
+     * @param id     the id you want to search for if its exist
+     * @return {true} if id exist, {false} if not
+     */
     private static boolean hasID(String table, String column, int id) {
         try {
             initialize();
@@ -843,30 +1051,36 @@ public class Database {
         return false;
     }
 
+    /**
+     * function to close java conform the connections to the database
+     */
     private static void closeConnection() {
-        if (resultSet != null) {
+        if (resultSet != null)
             try {
                 resultSet.close();
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
-        }
-        if (statement != null) {
+        if (statement != null)
             try {
                 statement.close();
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
-        }
-        if (connection != null) {
+        if (connection != null)
             try {
                 connection.close();
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
-        }
     }
 
+    /**
+     * get the id from the enum CourseRoom
+     *
+     * @param room the CourseRoom you need the id
+     * @return Integer.MinValue if room not exist. id if exists
+     */
     private static int getRoomID(CourseRoom room) {
         CourseRoom[] rooms = CourseRoom.values();
         for (int f = 0; f < rooms.length; f++)
@@ -875,6 +1089,12 @@ public class Database {
         return Integer.MIN_VALUE;
     }
 
+    /**
+     * get the id from the enum StudyCourse
+     *
+     * @param course the StudyCourse you need the id
+     * @return Integer.MinValue if room not exist. id if exists
+     */
     private static int getCourseTypeID(StudyCourse course) {
         StudyCourse[] courses = StudyCourse.values();
         for (int f = 0; f < courses.length; f++)
@@ -883,22 +1103,51 @@ public class Database {
         return Integer.MIN_VALUE;
     }
 
+    /**
+     * get the CoureRoom from the id
+     *
+     * @param id from the CourseRoom
+     * @return CourseRoom if exists, null if not
+     */
     private static CourseRoom getRoomById(int id) {
         return id < 0 || id >= CourseRoom.values().length ? null : CourseRoom.values()[id];
     }
 
+    /**
+     * get the StudyCourse from the id
+     *
+     * @param id from the StudyCourse
+     * @return StudyCourse if exists, null if not
+     */
     private static StudyCourse getCourseTypeById(int id) {
         return id < 0 || id >= StudyCourse.values().length ? null : StudyCourse.values()[id];
     }
 
+    /**
+     * convert sql.Date to util.Date
+     *
+     * @param date sql.Date to convert
+     * @return converted util.Date
+     */
     private static Date convertDate(java.sql.Date date) {
         return date == null ? null : new Date(date.getTime());
     }
 
+    /**
+     * convert util.Date to sql.Date
+     *
+     * @param date util.Date to convert
+     * @return converted sql.Date
+     */
     private static java.sql.Date convertDate(Date date) {
         return date == null ? null : new java.sql.Date(date.getTime());
     }
 
+    /**
+     * delete all students, who are in the company with the company id
+     *
+     * @param id of the company
+     */
     private static void deleteStudentByCompanyId(int id) {
         List<String> emails = new ArrayList<>();
         List<Integer> studentIDs = new ArrayList<>();
@@ -922,12 +1171,15 @@ public class Database {
         } finally {
             closeConnection();
         }
-        for (int f = 0; f < emails.size() && f < studentIDs.size() && f < addresses1.size(); f++) {
+        for (int f = 0; f < emails.size() && f < studentIDs.size() && f < addresses1.size(); f++)
             deleteStudent(new DualStudent(-1, studentIDs.get(f), null, null, null, addresses1.get(f), emails.get(f), null, 0, null));
-        }
-
     }
 
+    /**
+     * help function to add address attributes to sql statement
+     *
+     * @param address address object with the attributes
+     */
     private static void addAddressToStatement(Address address) throws SQLException {
         statement.setString(1, address.getStreet());
         statement.setString(2, address.getNumber());
@@ -936,6 +1188,11 @@ public class Database {
         statement.setString(5, address.getCountry());
     }
 
+    /**
+     * help function to add person attributes to sql statement
+     *
+     * @param person person object with the attributes
+     */
     private static void addPersonToStatment(Person person, int address_id) throws SQLException {
         statement.setString(1, person.getForename());
         statement.setString(2, person.getName());

@@ -6,7 +6,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,8 +17,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.Window;
-import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import org.dhbw.classes.*;
 
@@ -27,7 +24,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class ShowStudentsController extends Application implements Initializable {
@@ -52,18 +48,13 @@ public class ShowStudentsController extends Application implements Initializable
     private Course course;
     private final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
-    @FXML
-    private Label courseFilter;
-    @FXML
-    private Label companyFilter;
+
     @FXML
     private TextField searchBox;
     @FXML
     private ComboBox<Course> courseFilterBox;
     @FXML
     private ComboBox<Company> companyFilterBox;
-    @FXML
-    private Button filterButton;
     @FXML
     public TableView<DualStudent> studentTable;
     @FXML
@@ -414,4 +405,6 @@ public class ShowStudentsController extends Application implements Initializable
             erg &= course.equals(person.getCourse());
         return erg;
     }
+
+
 }

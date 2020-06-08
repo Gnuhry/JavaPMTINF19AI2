@@ -1,10 +1,7 @@
 package org.dhbw.classes;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Person {
 
@@ -12,10 +9,10 @@ public class Person {
     private String name, forename, email;
     private Address address;
 
-    public Person (String name, String forename, String email) {
+    public Person(String name, String forename, String email) {
         this.name = name;
         this.forename = forename;
-        this.email=email;
+        this.email = email;
     }
 
     public Person(String name, String forename, Date birthday, Address address) {
@@ -75,7 +72,6 @@ public class Person {
     }
 
     //-----------------------------------Overrides--------------------
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -92,18 +88,9 @@ public class Person {
         return Objects.hash(birthday, name, forename, address);
     }
 
-//    @Override
-//    public String toString() {
-//        return "Person{" +
-//                "birthday=" + birthday +
-//                ", name='" + name + '\'' +
-//                ", forename='" + forename + '\'' +
-//                ", email='" + email + '\'' +
-//                ", address=" + address +
-//                '}';
-//    }
-
 
     @Override
-    public String toString() {return name + ", " + forename + " , " + email; }
+    public String toString() {
+        return name + ", " + forename + " , " + email;
+    }
 }

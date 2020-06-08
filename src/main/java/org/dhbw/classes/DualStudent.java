@@ -1,7 +1,5 @@
 package org.dhbw.classes;
 
-import javafx.scene.control.Button;
-
 import java.util.Date;
 import java.util.Objects;
 
@@ -60,7 +58,6 @@ public class DualStudent extends Person {
     }
 
     //-------------------Overrides--------------
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

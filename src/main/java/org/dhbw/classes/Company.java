@@ -1,13 +1,5 @@
 package org.dhbw.classes;
 
-import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import org.dhbw.ShowStudentsController;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Objects;
 
 public class Company {
@@ -33,8 +25,8 @@ public class Company {
     public Person getContactPerson() {
         return contactPerson;
     }
-    //--------------------------Setter-------------------------------
 
+    //--------------------------Setter-------------------------------
     public void setName(String name) {
         this.name = name;
     }
@@ -48,8 +40,6 @@ public class Company {
     }
 
     //---------------------Override-----------------------------
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
