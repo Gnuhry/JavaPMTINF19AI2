@@ -210,21 +210,9 @@ public class ShowStudentsController extends Application implements Initializable
         companyFilterBox.getItems().setAll(companies);
 
         FilteredList<DualStudent> filteredName = new FilteredList<>(students, p -> true);
-        searchBox.textProperty().addListener((observable, oldValue, newValue) -> filteredName.setPredicate(person -> {
-            if (newValue == null || newValue.isEmpty()) {
-                return true;
-            }
-
-            String lowerCaseFilter = newValue.toLowerCase();
-
-            if (person.getForename().toLowerCase().contains(lowerCaseFilter)) {
-                return true;
-            } else if (person.getName().toLowerCase().contains(lowerCaseFilter)) {
-                return true;
-            } else if (("" + person.getStudentNumber()).toLowerCase().contains(lowerCaseFilter)) {
-                return true;
-            } else return ("" + person.getMatriculationNumber()).toLowerCase().contains(lowerCaseFilter);
-        }));
+        searchBox.textProperty().addListener((observable, oldValue, newValue) -> filteredName.setPredicate(person -> checkFilterStudent(newValue, person)));
+        companyFilterBox.valueProperty().addListener((observable, oldValue, newValue) -> filteredName.setPredicate(person -> checkFilterStudent(newValue, person)));
+        courseFilterBox.valueProperty().addListener((observable, oldValue, newValue) -> filteredName.setPredicate(person -> checkFilterStudent(newValue, person)));
         SortedList<DualStudent> sortedName = new SortedList<>(filteredName);
         sortedName.comparatorProperty().bind(studentTable.comparatorProperty());
         studentTable.setItems(sortedName);
@@ -404,5 +392,47 @@ public class ShowStudentsController extends Application implements Initializable
                 };
             }
         };
+    }
+
+    private boolean checkFilterStudent(Object newValue, DualStudent person) {
+        boolean erg = true;
+        String search;
+        if (newValue instanceof String)
+            search = ((String) newValue);
+        else
+            search = searchBox.getText();
+        if (search != null && !search.isEmpty()) {
+            search = search.trim().toLowerCase();
+            if (person.getForename().toLowerCase().contains(search))
+                erg = true;
+            else if (person.getName().toLowerCase().contains(search))
+                erg = true;
+            else if (("" + person.getStudentNumber()).toLowerCase().contains(search))
+                erg = true;
+            else if (person.getAddress().toString().toLowerCase().contains(search))
+                erg=true;
+            else if (person.getEmail().toLowerCase().contains(search))
+                erg=true;
+            else if (format.format(person.getBirthday()).toLowerCase().contains(search))
+                erg=true;
+            else
+                erg = ("" + person.getMatriculationNumber()).toLowerCase().contains(search);
+        }
+        Company company;
+        if (newValue instanceof Company)
+            company = (Company) newValue;
+        else
+            company = companyFilterBox.getValue();
+        if (company != null)
+            erg &= company.equals(person.getCompany());
+
+        Course course;
+        if (newValue instanceof Course)
+            course = (Course) newValue;
+        else
+            course = courseFilterBox.getValue();
+        if (course != null)
+            erg &= course.equals(person.getCourse());
+        return erg;
     }
 }
