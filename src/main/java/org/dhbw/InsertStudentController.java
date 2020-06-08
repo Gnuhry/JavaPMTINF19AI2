@@ -80,7 +80,7 @@ public class InsertStudentController {
     @FXML
     private TextField courseRoom;
     @FXML
-    private Label javaKnowledgeLabel;
+    private TextField javaKnowledgeLabel;
     @FXML
     private Slider javaKnowledgeSlider;
     @FXML
@@ -198,29 +198,23 @@ public class InsertStudentController {
                     errorMessage.setText(errorMessage.getText() + " Unternehmen-Postleitzahl ");
                 } else companyPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
                 if (!Check.validateBirthdate(convertToDateViaSqlDate(studentBirth.getValue()))) {
-                    studentPostalCode.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
-                    if (focusStage == 1 || focusStage == 2 || focusStage == 3) focusStage = 4;
+                    studentBirth.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
+                    if (!(focusStage == 1 || focusStage == 2 || focusStage == 3)) focusStage = 4;
                     errorMessage.setText(errorMessage.getText() + " Student-Geburtstag ");
-                }
+                } else studentBirth.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
+                if (!Check.validateEmail(companyPersonEmail.getText())) {
+                    companyPersonEmail.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
+                    if (!(focusStage == 1 || focusStage == 2 || focusStage == 3 || focusStage == 4)) focusStage = 5;
+                    errorMessage.setText(errorMessage.getText() + " Ansprechperson-Email ");
+                } else companyPersonEmail.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
 
-                if (focusStage == 1) {
-                    studentEmail.requestFocus();
-                    scrollPane.setVvalue(0);
-                    errorMessage.setVisible(true);
-                    allRight = false;
-                } else if (focusStage == 2) {
-                    studentPostalCode.requestFocus();
-                    scrollPane.setVvalue(0);
-                    errorMessage.setVisible(true);
-                    allRight = false;
-                } else if (focusStage == 3) {
-                    companyPostalCode.requestFocus();
-                    scrollPane.setVvalue(100);
-                    errorMessage.setVisible(true);
-                    allRight = false;
-                } else {
-                    errorMessage.setVisible(false);
-                    allRight = true;
+                switch (focusStage) {
+                    case 1: studentEmail.requestFocus(); scrollPane.setVvalue(0); errorMessage.setVisible(true); allRight = false; break;
+                    case 2: studentPostalCode.requestFocus(); scrollPane.setVvalue(0); errorMessage.setVisible(true); allRight = false; break;
+                    case 3: companyPostalCode.requestFocus(); scrollPane.setVvalue(100); errorMessage.setVisible(true); allRight = false; break;
+                    case 4: studentBirth.requestFocus(); scrollPane.setVvalue(0); errorMessage.setVisible(true); allRight = false; break;
+                    case 5: companyPersonEmail.requestFocus(); scrollPane.setVvalue(100); errorMessage.setVisible(true); allRight = false; break;
+                    default: errorMessage.setVisible(false); allRight = true; break;
                 }
 
                 if (allRight) {

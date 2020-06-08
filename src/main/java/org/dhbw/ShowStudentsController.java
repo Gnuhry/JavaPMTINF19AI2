@@ -32,7 +32,6 @@ import java.util.ResourceBundle;
 
 public class ShowStudentsController extends Application implements Initializable {
     private ObservableList<DualStudent> students = FXCollections.observableArrayList(
-            //new DualStudent(123456, 1234567, "Silas", "Wessely", new Date(100, 5,27), new Address("Birkenauer Straße", "51", "68309", "Mannheim", "Deutschland"), "silas.wessely@gmx.de", new Course("TINF19AI2", StudyCourse.AInformatik, new Date(119, Calendar.OCTOBER, 1)), 75, new Company("Alnatura", new Address("Test", "1", "12345", "Test", "Test"), new Person("Hofmann", "Janina"))).
             University.getStudents()
     );
     private ObservableList<Docent> docents = FXCollections.observableArrayList(
@@ -43,7 +42,6 @@ public class ShowStudentsController extends Application implements Initializable
     );
     private ObservableList<Company> companies = FXCollections.observableArrayList(
             University.getCompanies()
-            //new Company("Alnatura", new Address("Test", "1", "12345", "Test", "Test"), new Person("Hofmann", "Janina", ""))
     );
 
     private String file;
@@ -154,18 +152,6 @@ public class ShowStudentsController extends Application implements Initializable
     }
 
     @FXML
-    private void filter() {
-        if (courseFilterBox.getValue() != null) {
-            courseFilter.setText(courseFilterBox.getValue().getName());
-            courseFilter.setVisible(true);
-        }
-        if (companyFilterBox.getValue() != null) {
-            companyFilter.setText(companyFilterBox.getValue().getName());
-            companyFilter.setVisible(true);
-        }
-    }
-
-    @FXML
     public void refresh() {
         studentTable.setItems(FXCollections.observableArrayList(University.getStudents()));
         studentTable.refresh();
@@ -208,7 +194,6 @@ public class ShowStudentsController extends Application implements Initializable
         studentTable.requestFocus();
         courseFilterBox.getItems().setAll(courses);
         companyFilterBox.getItems().setAll(companies);
-
         FilteredList<DualStudent> filteredName = new FilteredList<>(students, p -> true);
         searchBox.textProperty().addListener((observable, oldValue, newValue) -> filteredName.setPredicate(person -> checkFilterStudent(newValue, person)));
         companyFilterBox.valueProperty().addListener((observable, oldValue, newValue) -> filteredName.setPredicate(person -> checkFilterStudent(newValue, person)));
@@ -409,12 +394,6 @@ public class ShowStudentsController extends Application implements Initializable
                 erg = true;
             else if (("" + person.getStudentNumber()).toLowerCase().contains(search))
                 erg = true;
-            else if (person.getAddress().toString().toLowerCase().contains(search))
-                erg=true;
-            else if (person.getEmail().toLowerCase().contains(search))
-                erg=true;
-            else if (format.format(person.getBirthday()).toLowerCase().contains(search))
-                erg=true;
             else
                 erg = ("" + person.getMatriculationNumber()).toLowerCase().contains(search);
         }

@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -12,7 +11,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
 
 <TabPane fx:id="tabPane" maxWidth="1250.0" minWidth="1250.0" prefHeight="600.0" prefWidth="1250.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.ShowStudentsController">
   <tabs>
@@ -23,28 +21,12 @@
                   <ToolBar prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
                      <items>
                         <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Zurück" />
-                        <VBox translateX="50.0">
-                           <children>
-                              <HBox>
-                                 <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" - Kurs - " />
-                                    <Label fx:id="courseFilter" prefHeight="18.0" prefWidth="275.0" text="Label " translateX="78.0" visible="false" />
-                                 </children>
-                              </HBox>
-                              <HBox prefHeight="18.0" prefWidth="373.0">
-                                 <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Unternehmen - " wrappingWidth="93.267578125" />
-                                    <Label fx:id="companyFilter" prefHeight="18.0" prefWidth="273.0" text="Label " translateX="30.0" visible="false" />
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
+                        <VBox translateX="50.0" />
                         <HBox />
-                        <TextField fx:id="searchBox" promptText="Suchen" stylesheets="@css/application.css" translateX="150.0" />
-                        <ComboBox fx:id="courseFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0" promptText="Kurs wählen" stylesheets="@css/application.css" translateX="150.0" />
-                        <ComboBox fx:id="companyFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" promptText="Unternehmen wählen" stylesheets="@css/application.css" translateX="150.0" />
-                        <Button fx:id="filterButton" mnemonicParsing="false" onAction="#filter" stylesheets="@css/application.css" text="Filtern" translateX="150.0" />
-                        <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="Refresh" translateX="150.0" />
+                        <TextField fx:id="searchBox" promptText="Suchen" stylesheets="@css/application.css" translateX="550.0" />
+                        <ComboBox fx:id="courseFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0" promptText="Kurs wählen" stylesheets="@css/application.css" translateX="550.0" />
+                        <ComboBox fx:id="companyFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" promptText="Unternehmen wählen" stylesheets="@css/application.css" translateX="550.0" />
+                        <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="Refresh" translateX="550.0" />
                      </items>
                   </ToolBar>
                   <TableView fx:id="studentTable" editable="true" focusTraversable="false" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0" stylesheets="@css/application.css" tableMenuButtonVisible="true">
