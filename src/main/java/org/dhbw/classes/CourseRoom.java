@@ -1,5 +1,13 @@
 package org.dhbw.classes;
 
-public enum CourseRoom {
-    A234,A222;
+public class CourseRoom {
+    private final String name;
+
+    public CourseRoom(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

@@ -58,7 +58,7 @@ public class EditCourseController {
     @FXML
     private void initialize() {
         courseType.getItems().setAll(FXCollections.observableArrayList(StudyCourse.values()));
-        courseRoom.getItems().setAll(FXCollections.observableArrayList(CourseRoom.values()));
+        courseRoom.getItems().setAll(FXCollections.observableArrayList(University.getRooms()));
         courseDirector.getItems().setAll(FXCollections.observableArrayList(chooseCourseDirectorOptions));
     }
 

@@ -23,6 +23,9 @@ public class University {
         return Database.getCompanies();
     }
 
+    public static List<CourseRoom> getRooms() {
+        return Database.getRooms();
+    }
 
     //-------------------------------AddObject------------------------
 
