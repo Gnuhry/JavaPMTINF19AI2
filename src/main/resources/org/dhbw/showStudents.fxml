@@ -59,8 +59,8 @@
                       <TableColumn fx:id="lectureFirstName" prefWidth="75.0" text="Vorname" />
                       <TableColumn fx:id="lectureLastName" prefWidth="75.0" text="Nachname" />
                         <TableColumn fx:id="lectureBirth" prefWidth="75.0" text="Geburtstag" />
-                        <TableColumn fx:id="lectureEmail" prefWidth="140.0" text="Email" />
-                        <TableColumn fx:id="lectureAddress" prefWidth="124.0" text="Addresse" />
+                        <TableColumn fx:id="lectureEmail" prefWidth="150.0" text="Email" />
+                        <TableColumn fx:id="lectureAddress" prefWidth="200.0" text="Addresse" />
                         <TableColumn fx:id="lectureC" prefWidth="40.0" resizable="false" />
                         <TableColumn fx:id="lectureD" prefWidth="40.0" resizable="false" />
                     </columns>
@@ -89,7 +89,7 @@
                   <TableView fx:id="courseTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0" stylesheets="@css/application.css" tableMenuButtonVisible="true">
                     <columns>
                       <TableColumn fx:id="courseName" prefWidth="115.0" text="Kursbezeichnung" />
-                        <TableColumn fx:id="courseType" prefWidth="97.0" text="Kursart" />
+                        <TableColumn fx:id="courseType" prefWidth="120.0" text="Kursart" />
                         <TableColumn fx:id="courseRoom" prefWidth="90.0" text="Kursraum" />
                         <TableColumn fx:id="courseDate" prefWidth="123.0" text="Registrierungsdatum" />
                         <TableColumn fx:id="courseLecture" prefWidth="200.0" text="Studiengangsleitung" />

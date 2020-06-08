@@ -64,7 +64,7 @@
             </Label>
             <HBox alignment="TOP_CENTER" spacing="30.0">
                <children>
-                  <Button id="gui_button" fx:id="addStudent" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#insertStudent" prefHeight="40.0" prefWidth="110.0" stylesheets="@css/application.css">
+                  <Button id="gui_button" fx:id="addStudent" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#insertStudent" prefHeight="50.0" prefWidth="110.0" stylesheets="@css/application.css">
                      <font>
                         <Font name="Comic Sans MS" size="14.0" />
                      </font>
@@ -75,7 +75,7 @@
                         <Tooltip fx:id="tooltipStudent" text="Studierende" />
                      </tooltip>
                   </Button>
-                  <Button id="gui_button" fx:id="addLecture" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#insertLecture" prefHeight="40.0" prefWidth="110.0" stylesheets="@css/application.css">
+                  <Button id="gui_button" fx:id="addLecture" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#insertLecture" prefHeight="50.0" prefWidth="110.0" stylesheets="@css/application.css">
                      <font>
                         <Font name="Comic Sans MS" size="14.0" />
                      </font>
@@ -90,7 +90,7 @@
             </HBox>
             <HBox alignment="TOP_CENTER" spacing="30.0">
                <children>
-                  <Button id="gui_button" fx:id="addCourse" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#insertCourse" prefHeight="40.0" prefWidth="110.0" stylesheets="@css/application.css">
+                  <Button id="gui_button" fx:id="addCourse" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#insertCourse" prefHeight="50.0" prefWidth="110.0" stylesheets="@css/application.css">
                      <font>
                         <Font name="Comic Sans MS" size="14.0" />
                      </font>
@@ -101,7 +101,7 @@
                         <Tooltip fx:id="tooltipCourse" text="Kurs" />
                      </tooltip>
                   </Button>
-                  <Button id="gui_button" fx:id="addCompany" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#insertCompany" prefHeight="40.0" prefWidth="110.0" stylesheets="@css/application.css">
+                  <Button id="gui_button" fx:id="addCompany" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#insertCompany" prefHeight="50.0" prefWidth="110.0" stylesheets="@css/application.css">
                      <font>
                         <Font name="Comic Sans MS" size="14.0" />
                      </font>

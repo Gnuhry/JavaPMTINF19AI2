@@ -108,7 +108,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
     }
 
@@ -134,7 +134,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
         return Integer.MIN_VALUE;
     }
@@ -166,7 +166,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
         return Integer.MIN_VALUE;
     }
@@ -193,7 +193,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
         return Integer.MIN_VALUE;
     }
@@ -223,7 +223,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
         return Integer.MIN_VALUE;
     }
@@ -249,7 +249,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
         return Integer.MIN_VALUE;
     }
@@ -279,7 +279,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
     }
 
@@ -303,7 +303,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
         return Integer.MIN_VALUE;
     }
@@ -332,7 +332,7 @@ public class Database {
             } catch (SQLException | ClassNotFoundException exception) {
                 exception.printStackTrace();
             } finally {
-                closeConnection();
+                closeStatement();
             }
         }
         return Integer.MIN_VALUE;
@@ -361,7 +361,7 @@ public class Database {
             } catch (SQLException | ClassNotFoundException exception) {
                 exception.printStackTrace();
             } finally {
-                closeConnection();
+                closeStatement();
             }
         }
         return Integer.MIN_VALUE;
@@ -392,7 +392,7 @@ public class Database {
             } catch (SQLException | ClassNotFoundException exception) {
                 exception.printStackTrace();
             } finally {
-                closeConnection();
+                closeStatement();
             }
         }
         return Integer.MIN_VALUE;
@@ -420,7 +420,7 @@ public class Database {
             } catch (SQLException | ClassNotFoundException exception) {
                 exception.printStackTrace();
             } finally {
-                closeConnection();
+                closeStatement();
             }
         }
         return Integer.MIN_VALUE;
@@ -442,7 +442,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
         deletePerson(student);
     }
@@ -461,7 +461,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
         deletePerson(docent);
     }
@@ -484,7 +484,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
     }
 
@@ -503,7 +503,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
         deletePerson(company.getContactPerson());
         deleteAddress(company.getAddress());
@@ -526,7 +526,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
         if (person.getAddress() != null && person.getAddress().getNumber() != null)
             deleteAddress(person.getAddress());
@@ -548,7 +548,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
     }
 
@@ -571,7 +571,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
         return new ArrayList<>();
     }
@@ -593,7 +593,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
         return new ArrayList<>();
     }
@@ -615,7 +615,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
         return new ArrayList<>();
     }
@@ -643,7 +643,7 @@ public class Database {
             exception.printStackTrace();
 
         } finally {
-            closeConnection();
+            closeStatement();
         }
         return counter;
     }
@@ -667,7 +667,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
         return counter;
     }
@@ -729,7 +729,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
     }
 
@@ -760,7 +760,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
     }
 
@@ -789,7 +789,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
     }
 
@@ -818,7 +818,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
     }
 
@@ -845,7 +845,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
     }
 
@@ -873,7 +873,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
     }
 
@@ -953,7 +953,7 @@ public class Database {
             exception.printStackTrace();
 
         } finally {
-            closeConnection();
+            closeStatement();
         }
         return Integer.MIN_VALUE;
     }
@@ -979,7 +979,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
         return Integer.MIN_VALUE;
     }
@@ -1001,7 +1001,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
         return Integer.MIN_VALUE;
     }
@@ -1023,7 +1023,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
         return Integer.MIN_VALUE;
     }
@@ -1046,15 +1046,15 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
         return false;
     }
 
     /**
-     * function to close java conform the connections to the database
+     * function to close java conform the statement
      */
-    private static void closeConnection() {
+    private static void closeStatement() {
         if (resultSet != null)
             try {
                 resultSet.close();
@@ -1067,6 +1067,12 @@ public class Database {
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
+    }
+
+    /**
+     * function to close java conform the connection to the database
+     */
+    public static void closeConnection(){
         if (connection != null)
             try {
                 connection.close();
@@ -1169,7 +1175,7 @@ public class Database {
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
-            closeConnection();
+            closeStatement();
         }
         for (int f = 0; f < emails.size() && f < studentIDs.size() && f < addresses1.size(); f++)
             deleteStudent(new DualStudent(-1, studentIDs.get(f), null, null, null, addresses1.get(f), emails.get(f), null, 0, null));
