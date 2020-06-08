@@ -5,21 +5,15 @@ import java.util.Objects;
 
 public class Person {
 
-    private Date birthday;
+    private final Date birthday;
     private String name, forename, email;
     private Address address;
 
-    public Person(String name, String forename, String email) {
+    public Person(String name, String forename, String email){
         this.name = name;
         this.forename = forename;
+        this.birthday = null;
         this.email = email;
-    }
-
-    public Person(String name, String forename, Date birthday, Address address) {
-        this.name = name;
-        this.forename = forename;
-        this.birthday = birthday;
-        this.address = address;
     }
 
     public Person(String name, String forename, Date birthday, Address address, String email) {
@@ -60,14 +54,11 @@ public class Person {
         this.email = email;
     }
 
-    /**
-     * To change the name of the person
-     *
-     * @param name     New name of the person
-     * @param forename New forename of the person
-     */
-    public void rename(String name, String forename) {
+    public void setName(String name) {
         this.name = name;
+    }
+
+    public void setForename(String forename) {
         this.forename = forename;
     }
 

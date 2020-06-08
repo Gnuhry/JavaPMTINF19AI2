@@ -6,16 +6,10 @@ import java.util.Objects;
 public class DualStudent extends Person {
 
     private final Company company;
-    private int matriculationNumber;
-    private int studentNumber;
+    private final int matriculationNumber;
+    private final int studentNumber;
     private Course course;
     private int javaKnowledge;
-
-    public DualStudent(String name, String forename, Date birthday, Address address, Company company) {
-        super(name, forename, birthday, address);
-        this.company = company;
-        javaKnowledge = 0;
-    }
 
     public DualStudent(int matriculationNumber, int studentNumber, String name, String forename, Date birthday, Address address, String email, Course course, int javaKnowledge, Company company) {
         super(name, forename, birthday, address, email);
