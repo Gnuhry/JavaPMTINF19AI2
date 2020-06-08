@@ -4,11 +4,7 @@ import java.util.Date;
 import java.util.Objects;
 
 public class Docent extends Person {
-    private int docentNumber;
-
-    public Docent(String name, String forename, Date birthday, Address address) {
-        super(name, forename, birthday, address);
-    }
+    private final int docentNumber;
 
     public Docent(String name, String forename, Date birthday, Address address, String email, int docentNumber) {
         super(name, forename, birthday, address, email);
