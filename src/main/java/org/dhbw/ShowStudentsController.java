@@ -6,7 +6,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,8 +17,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.Window;
-import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import org.dhbw.classes.*;
 
@@ -27,12 +24,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class ShowStudentsController extends Application implements Initializable {
     private ObservableList<DualStudent> students = FXCollections.observableArrayList(
-            //new DualStudent(123456, 1234567, "Silas", "Wessely", new Date(100, 5,27), new Address("Birkenauer Straße", "51", "68309", "Mannheim", "Deutschland"), "silas.wessely@gmx.de", new Course("TINF19AI2", StudyCourse.AInformatik, new Date(119, Calendar.OCTOBER, 1)), 75, new Company("Alnatura", new Address("Test", "1", "12345", "Test", "Test"), new Person("Hofmann", "Janina"))).
             University.getStudents()
     );
     private ObservableList<Docent> docents = FXCollections.observableArrayList(
@@ -43,7 +38,6 @@ public class ShowStudentsController extends Application implements Initializable
     );
     private ObservableList<Company> companies = FXCollections.observableArrayList(
             University.getCompanies()
-            //new Company("Alnatura", new Address("Test", "1", "12345", "Test", "Test"), new Person("Hofmann", "Janina", ""))
     );
 
     private String file;
@@ -54,18 +48,13 @@ public class ShowStudentsController extends Application implements Initializable
     private Course course;
     private final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
-    @FXML
-    private Label courseFilter;
-    @FXML
-    private Label companyFilter;
+
     @FXML
     private TextField searchBox;
     @FXML
     private ComboBox<Course> courseFilterBox;
     @FXML
     private ComboBox<Company> companyFilterBox;
-    @FXML
-    private Button filterButton;
     @FXML
     public TableView<DualStudent> studentTable;
     @FXML
@@ -154,18 +143,6 @@ public class ShowStudentsController extends Application implements Initializable
     }
 
     @FXML
-    private void filter() {
-        if (courseFilterBox.getValue() != null) {
-            courseFilter.setText(courseFilterBox.getValue().getName());
-            courseFilter.setVisible(true);
-        }
-        if (companyFilterBox.getValue() != null) {
-            companyFilter.setText(companyFilterBox.getValue().getName());
-            companyFilter.setVisible(true);
-        }
-    }
-
-    @FXML
     public void refresh() {
         studentTable.setItems(FXCollections.observableArrayList(University.getStudents()));
         studentTable.refresh();
@@ -208,23 +185,10 @@ public class ShowStudentsController extends Application implements Initializable
         studentTable.requestFocus();
         courseFilterBox.getItems().setAll(courses);
         companyFilterBox.getItems().setAll(companies);
-
         FilteredList<DualStudent> filteredName = new FilteredList<>(students, p -> true);
-        searchBox.textProperty().addListener((observable, oldValue, newValue) -> filteredName.setPredicate(person -> {
-            if (newValue == null || newValue.isEmpty()) {
-                return true;
-            }
-
-            String lowerCaseFilter = newValue.toLowerCase();
-
-            if (person.getForename().toLowerCase().contains(lowerCaseFilter)) {
-                return true;
-            } else if (person.getName().toLowerCase().contains(lowerCaseFilter)) {
-                return true;
-            } else if (("" + person.getStudentNumber()).toLowerCase().contains(lowerCaseFilter)) {
-                return true;
-            } else return ("" + person.getMatriculationNumber()).toLowerCase().contains(lowerCaseFilter);
-        }));
+        searchBox.textProperty().addListener((observable, oldValue, newValue) -> filteredName.setPredicate(person -> checkFilterStudent(newValue, person)));
+        companyFilterBox.valueProperty().addListener((observable, oldValue, newValue) -> filteredName.setPredicate(person -> checkFilterStudent(newValue, person)));
+        courseFilterBox.valueProperty().addListener((observable, oldValue, newValue) -> filteredName.setPredicate(person -> checkFilterStudent(newValue, person)));
         SortedList<DualStudent> sortedName = new SortedList<>(filteredName);
         sortedName.comparatorProperty().bind(studentTable.comparatorProperty());
         studentTable.setItems(sortedName);
@@ -405,4 +369,42 @@ public class ShowStudentsController extends Application implements Initializable
             }
         };
     }
+
+    private boolean checkFilterStudent(Object newValue, DualStudent person) {
+        boolean erg = true;
+        String search;
+        if (newValue instanceof String)
+            search = ((String) newValue);
+        else
+            search = searchBox.getText();
+        if (search != null && !search.isEmpty()) {
+            search = search.trim().toLowerCase();
+            if (person.getForename().toLowerCase().contains(search))
+                erg = true;
+            else if (person.getName().toLowerCase().contains(search))
+                erg = true;
+            else if (("" + person.getStudentNumber()).toLowerCase().contains(search))
+                erg = true;
+            else
+                erg = ("" + person.getMatriculationNumber()).toLowerCase().contains(search);
+        }
+        Company company;
+        if (newValue instanceof Company)
+            company = (Company) newValue;
+        else
+            company = companyFilterBox.getValue();
+        if (company != null)
+            erg &= company.equals(person.getCompany());
+
+        Course course;
+        if (newValue instanceof Course)
+            course = (Course) newValue;
+        else
+            course = courseFilterBox.getValue();
+        if (course != null)
+            erg &= course.equals(person.getCourse());
+        return erg;
+    }
+
+
 }

@@ -136,12 +136,14 @@
                   <HBox fx:id="companyPerson" prefHeight="26.0" prefWidth="752.0" spacing="30.0">
                      <children>
                         <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="Ansprechperson" />
-                        <TextField fx:id="companyPersonFirstName" prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
-                        <TextField fx:id="companyPersonLastName" prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
+                        <Label prefHeight="26.0" prefWidth="126.0" text="Vorname, Nachname" translateX="-20.0" />
+                        <TextField fx:id="companyPersonFirstName" prefWidth="200.0" stylesheets="@css/application.css" translateX="-30.0" />
+                        <TextField fx:id="companyPersonLastName" prefWidth="200.0" stylesheets="@css/application.css" translateX="-30.0" />
                      </children>
                   </HBox>
-                  <HBox layoutX="270.0">
+                  <HBox layoutX="126.0" translateX="-144.0">
                      <children>
+                        <Label prefHeight="26.0" prefWidth="146.0" text="Email" />
                         <TextField fx:id="companyPersonEmail" maxWidth="301.0" prefHeight="26.0" prefWidth="301.0" stylesheets="@css/application.css" />
                      </children>
                      <VBox.margin>
@@ -175,9 +177,9 @@
             <HBox layoutX="197.0" layoutY="943.0" prefHeight="26.0" prefWidth="835.0" spacing="30.0">
                <children>
                   <ComboBox fx:id="courseName" onAction="#showCourse" prefHeight="26.0" prefWidth="177.0" promptText="Kurs auswählen" stylesheets="@css/application.css" />
-                  <TextField fx:id="courseType" editable="false" promptText="Fachbereich" stylesheets="@css/application.css" translateX="63.0" />
-                  <DatePicker fx:id="courseDate" editable="false" promptText="Registrierungsdatum" stylesheets="@css/application.css" translateX="63.0" />
-                  <TextField fx:id="courseRoom" stylesheets="@css/application.css">
+                  <TextField fx:id="courseType" disable="true" editable="false" promptText="Fachbereich" stylesheets="@css/application.css" translateX="63.0" />
+                  <DatePicker fx:id="courseDate" disable="true" editable="false" promptText="Registrierungsdatum" stylesheets="@css/application.css" translateX="63.0" />
+                  <TextField fx:id="courseRoom" disable="true" stylesheets="@css/application.css">
                      <HBox.margin>
                         <Insets left="60.0" />
                      </HBox.margin>
@@ -190,7 +192,7 @@
                   <Label prefHeight="25.0" text="0" translateX="135.0" />
                   <Slider fx:id="javaKnowledgeSlider" onMouseClicked="#showSlider" onMouseDragged="#showSlider" prefHeight="25.0" translateX="135.0" />
                   <Label prefHeight="25.0" text="100" translateX="135.0" />
-                  <Label fx:id="javaKnowledgeLabel" prefHeight="25.6" text="0" translateX="155.0" />
+                  <TextField fx:id="javaKnowledgeLabel" prefWidth="40.0" stylesheets="@css/application.css" translateX="135.0" />
                </children>
             </HBox>
             <Button id="backToOverview" fx:id="backToOverview" focusTraversable="false" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Zurück zur Übersicht" />

@@ -13,36 +13,85 @@ public class Check {
     private static final Pattern VALID_POSTAL_CODE_REGEX =
             Pattern.compile("^[0-9]{5}$");
 
+    /**
+     * validate if date is before today
+     *
+     * @param date the date to validate
+     * @return {true} if date is before today, {false} if after or equal today
+     */
     public static boolean validateDateBefore(Date date) {
         return date.before(Calendar.getInstance().getTime());
     }
 
+    /**
+     * validate if date can be a birthday date. (means before today and max 150 years before)
+     *
+     * @param date the date to validate
+     * @return {true} if date can be a birth date, {false} if not
+     */
     public static boolean validateBirthdate(Date date) {
         return Check.validateDateBefore(date) && Calendar.getInstance().getTime().getTime() - date.getTime() < 11826000000000L; //150 Jahre in Millisekunden
     }
 
-    public static boolean validateAfterBirthday(Date d, Person p) {
-        return p.getBirthday().before(d);
+    /**
+     * validate if date is after birth date
+     *
+     * @param date the date to validate
+     * @param p    the person with the birth date to cpmpare
+     * @return {true} if date is before birth date, {false} if after or equal birth date
+     */
+    public static boolean validateAfterBirthday(Date date, Person p) {
+        return p.getBirthday().before(date);
     }
 
+    /**
+     * validate if string is an email address
+     *
+     * @param emailStr string to validate
+     * @return {true} if is an email address, {false} if not
+     */
     public static boolean validateEmail(String emailStr) {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
         return matcher.find();
     }
 
+    /**
+     * validate if string is an postal code
+     *
+     * @param postalCodeStr string to validate
+     * @return {true} if is an postal code, {false} if not
+     */
     public static boolean validatePostalCode(String postalCodeStr) {
         Matcher matcher = VALID_POSTAL_CODE_REGEX.matcher(postalCodeStr);
         return matcher.find();
     }
 
+    /**
+     * validate if studentNumber is not occupied
+     *
+     * @param studentNumber number to validate
+     * @return {true} if number is free, {false} if not
+     */
     public static boolean checkSNContains(int studentNumber) {
         return Database.getStudentIDs().contains(studentNumber);
     }
 
+    /**
+     * validate if matriculationNumber is not occupied
+     *
+     * @param matriculationNumber number to validate
+     * @return {true} if number is free, {false} if not
+     */
     public static boolean checkMNContains(int matriculationNumber) {
         return Database.getMatriculationNumbers().contains(matriculationNumber);
     }
 
+    /**
+     * validate if docentNumber is not occupied
+     *
+     * @param docentNumber number to validate
+     * @return {true} if number is free, {false} if not
+     */
     public static boolean checkDNContains(int docentNumber) {
         return Database.getDocentIDs().contains(docentNumber);
     }
