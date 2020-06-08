@@ -343,6 +343,8 @@ public class ShowStudentsController extends Application implements Initializable
         stage.setOnHidden(windowEvent -> refresh());
         stage.initOwner(studentTable.getScene().getWindow());
         stage.initModality(Modality.WINDOW_MODAL);
+        stage.setTitle("DHBW Datenverwaltung");
+        stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/DHBW_Logo_quadrat.png")));
         stage.show();
     }
 

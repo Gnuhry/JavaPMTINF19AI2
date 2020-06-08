@@ -4,6 +4,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.dhbw.classes.Database;
 import org.dhbw.classes.University;
@@ -22,6 +24,8 @@ public class App extends Application {
         scene = new Scene(loadFXML("primary"));
         stage.setScene(scene);
         stage.setResizable(false);
+        stage.setTitle("DHBW Datenverwaltung");
+        stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/DHBW_Logo_quadrat.png")));
         stage.show();
         stage.setOnCloseRequest(windowEvent -> Database.closeConnection());
     }
