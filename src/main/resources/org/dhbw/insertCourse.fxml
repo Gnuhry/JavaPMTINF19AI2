@@ -83,7 +83,7 @@
             <HBox spacing="150.0">
                <children>
                   <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@css/application.css" text="Registrierungsdatum" />
-                  <DatePicker fx:id="courseDate" editable="false" promptText="dd.mm.yyyy" stylesheets="@css/application.css" />
+                  <DatePicker fx:id="courseDate" promptText="dd.mm.yyyy" stylesheets="@css/application.css" />
                </children>
             </HBox>
             <HBox spacing="150.0">
