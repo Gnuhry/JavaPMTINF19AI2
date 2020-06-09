@@ -29,6 +29,8 @@ public class InsertCourseController {
     @FXML
     private ComboBox<CourseRoom> courseRoom;
     @FXML
+    private TextField insertRoom;
+    @FXML
     private DatePicker courseDate;
     @FXML
     private ComboBox<Docent> courseDirector;
