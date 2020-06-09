@@ -3,6 +3,7 @@ module org.dhbw {
     requires javafx.fxml;
     requires javafx.controls;
     requires java.sql;
+    requires mysql.connector.java;
     opens org.dhbw to javafx.fxml;
     opens org.dhbw.classes to javafx.base;
     exports org.dhbw.classes;

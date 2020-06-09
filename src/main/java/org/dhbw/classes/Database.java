@@ -1077,7 +1077,7 @@ public class Database {
             statement.setString(2, course.getName());
             statement.setDate(3, convertDate(course.getRegistrationDate()));
             statement.setInt(4, getCourseTypeID(course.getStudyCourse()));
-            if (course.getStudyDirector() == null || (course.getStudyDirector()!=null&&course.getStudyDirector().getDocentNumber() == 0))
+            if (course.getStudyDirector() == null || course.getStudyDirector().getDocentNumber() == 0)
                 statement.setInt(5, Integer.MIN_VALUE);
             else
                 statement.setInt(5, course.getStudyDirector().getDocentNumber());
