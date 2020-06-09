@@ -1,6 +1,7 @@
 package org.dhbw;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.dhbw.classes.*;
@@ -30,14 +31,14 @@ public class InsertCompanyController {
     private TextField companyContactPersonLastName;
     @FXML
     private TextField companyContactPersonEmail;
+    @FXML
+    private DialogPane showNullPointer;
 
     /**
      * changing the scene root in App to "primary.fxml"
      */
     @FXML
-    private void backToOverview() throws IOException {
-        App.setRoot("primary");
-    }
+    private void backToOverview() throws IOException {App.setRoot("primary");}
 
     /**
      * reading the textfields
@@ -51,7 +52,8 @@ public class InsertCompanyController {
             boolean allRight = true;
 
             if (companyName.getText().trim().isEmpty() || companyStreet.getText().trim().isEmpty() || companyHomeNumber.getText().trim().isEmpty() || companyPostalCode.getText().trim().isEmpty() || companyCity.getText().trim().isEmpty() || companyCountry.getText().trim().isEmpty() || companyContactPersonFirstName.getText().trim().isEmpty() || companyContactPersonLastName.getText().trim().isEmpty()) {
-                System.out.println("Fehler");
+                showNullPointer.setVisible(true);
+                System.out.println("NPE2 found");
             } else {
                 Person contactPerson = new Person(companyContactPersonLastName.getText(), companyContactPersonFirstName.getText(), companyContactPersonEmail.getText());
                 errorMessage.setText("Bitte korrigieren Sie die Fehler in folgenden Feldern");
@@ -80,7 +82,8 @@ public class InsertCompanyController {
                 }
             }
         } catch (NullPointerException | IOException npe) {
-            System.out.println("Fehler");
+            showNullPointer.setVisible(true);
+            System.out.println("NPE found");
         }
     }
 

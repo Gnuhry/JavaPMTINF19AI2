@@ -183,7 +183,7 @@ public class EditStudentController {
      * visualizing information about the chosen course
      */
     @FXML
-    private void showCourse() throws IOException {
+    private void showCourse() {
         Course course = courseName.getValue();
         courseType.setText("" + course.getStudyCourse());
         courseDate.setValue(convertToLocalDateViaSqlDate(course.getRegistrationDate()));
@@ -214,12 +214,12 @@ public class EditStudentController {
      * catching NullPointerException to give a visual feedback to the user
      */
     @FXML
-    private void submit() throws IOException {
+    private void submit() {
         try {
             boolean allRight;
             if (studentFirstName.getText().trim().isEmpty() || studentLastName.getText().trim().isEmpty() || studentBirth.getValue() == null || studentEmail.getText().trim().isEmpty() || studentStreet.getText().trim().isEmpty() || studentHomeNumber.getText().trim().isEmpty() || studentPostalCode.getText().trim().isEmpty() || studentCity.getText().trim().isEmpty() || studentCountry.getText().trim().isEmpty() || studentNumberField.getText().trim().isEmpty() || matriculationNumberField.getText().trim().isEmpty() || companyName.getText().trim().isEmpty() || companyStreet.getText().trim().isEmpty() || companyHomeNumber.getText().trim().isEmpty() || companyPostalCode.getText().trim().isEmpty() || companyCity.getText().trim().isEmpty() || companyCountry.getText().trim().isEmpty() || companyPersonFirstName.getText().trim().isEmpty() || companyPersonLastName.getText().trim().isEmpty() || courseName.getEditor().getText().equals("Kurs auswählen") || javaKnowledgeLabel.getText().trim().isEmpty()){
                 showNullPointer.setVisible(true);
-                System.out.println("NPE2 found");    // LOG Datei?
+                System.out.println("NPE2 found");
             } else {
                 Company company;
                 Person contactPerson = new Person(companyPersonLastName.getText(), companyPersonFirstName.getText(), companyPersonEmail.getText());
@@ -289,7 +289,7 @@ public class EditStudentController {
             }
         } catch (NumberFormatException npe) {
             showNullPointer.setVisible(true);
-            System.out.println("NPE found");    // LOG Datei?
+            System.out.println("NPE found");
         }
     }
 }

@@ -36,44 +36,18 @@ public class PrimaryController implements Initializable {
 
 
     /**
-     * changing the scene root in App to "showstudents.fxml"
+     * changing the scene root in App
      */
     @FXML
-    private void showStudents() throws  IOException {
-        App.setRoot("showStudents");
-    }
-
-    /**
-     * changing the scene root in App to "insertStudent.fxml"
-     */
+    private void showStudents() throws  IOException {App.setRoot("showStudents");}
     @FXML
-    private void insertStudent() throws IOException {
-        App.setRoot("insertStudent");
-    }
-
-    /**
-     * changing the scene root in App to "insertLecture.fxml"
-     */
+    private void insertStudent() throws IOException {App.setRoot("insertStudent");}
     @FXML
-    private void insertLecture() throws IOException {
-        App.setRoot("insertLecture");
-    }
-
-    /**
-     * changing the scene root in App to "insertCompany.fxml"
-     */
+    private void insertLecture() throws IOException {App.setRoot("insertLecture");}
     @FXML
-    private void insertCompany() throws IOException {
-        App.setRoot("insertCompany");
-    }
-
-    /**
-     * changing the scene root in App to "insertCourse.fxml"
-     */
+    private void insertCompany() throws IOException {App.setRoot("insertCompany");}
     @FXML
-    private void insertCourse() throws IOException {
-        App.setRoot("insertCourse");
-    }
+    private void insertCourse() throws IOException {App.setRoot("insertCourse");}
 
     /**
      * initializing each menu-button with an image and tooltip

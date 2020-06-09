@@ -70,7 +70,7 @@ public class EditCourseController {
      * changing the scene root in App to "primary.fxml" and close stage
      */
     @FXML
-    private void backToOverview() throws IOException {
+    private void backToOverview() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
@@ -86,7 +86,7 @@ public class EditCourseController {
         try {
             if (courseName.getText().trim().isEmpty() || courseType.getValue() == null || courseRoom.getValue() == null || courseDate.getValue() == null || courseDirector.getValue() == null) {
                 showNullPointer.setVisible(true);
-                System.out.println("NPE2 found");    // LOG Datei?
+                System.out.println("NPE2 found");
             } else {
                 LocalDate localDateCourseBirth = courseDate.getValue();
                 Instant instantCourseBirth = Instant.from(localDateCourseBirth.atStartOfDay(ZoneId.systemDefault()));
@@ -102,9 +102,9 @@ public class EditCourseController {
                 University.updateCourse(course, course_old);
                 backToOverview();
             }
-        } catch (NullPointerException | IOException npe) {
+        } catch (NullPointerException npe) {
             showNullPointer.setVisible(true);
-            System.out.println("NPE2 found");    // LOG Datei?
+            System.out.println("NPE2 found");
         }
 
 

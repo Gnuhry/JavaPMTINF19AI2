@@ -73,7 +73,7 @@ public class EditLectureController {
      * changing the scene root in App to "primary.fxml" and close stage
      */
     @FXML
-    private void backToOverview() throws IOException {
+    private void backToOverview() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
@@ -85,14 +85,14 @@ public class EditLectureController {
      * catching NullPointerException to give a visual feedback to the user
      */
     @FXML
-    private void submit() throws IOException {
+    private void submit() {
 
         try {
             boolean allRight;
 
             if (lectureFirstName.getText().trim().isEmpty() || lectureLastName.getText().trim().isEmpty() || lectureBirthday.getValue() == null || lectureEmail.getText().trim().isEmpty() || lectureStreet.getText().trim().isEmpty() || lectureHomeNumber.getText().trim().isEmpty() || lecturePostalCode.getText().trim().isEmpty() || lectureCity.getText().trim().isEmpty() || lectureCountry.getText().trim().isEmpty() || lectureNumberField.getText().trim().isEmpty()) {
                 showNullPointer.setVisible(true);
-                System.out.println("NPE2 found");    // LOG Datei?
+                System.out.println("NPE2 found");
             } else {
                 LocalDate localDateLectureBirth = lectureBirthday.getValue();
                 Instant instantLectureBirth = Instant.from(localDateLectureBirth.atStartOfDay(ZoneId.systemDefault()));
@@ -140,7 +140,7 @@ public class EditLectureController {
             }
         } catch (NullPointerException npe) {
             showNullPointer.setVisible(true);
-            System.out.println("NPE2 found");    // LOG Datei?
+            System.out.println("NPE2 found");
         }
 
     }

@@ -38,9 +38,7 @@ public class App extends Application {
      * changing the root-fxml-file in the App stage
      * @param fxml filename to switch to
      */
-    static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
-    }
+    static void setRoot(String fxml) throws IOException {scene.setRoot(loadFXML(fxml));}
 
     /**
      * link the new file to the current stage which is the parent

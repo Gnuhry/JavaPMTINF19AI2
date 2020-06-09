@@ -89,7 +89,7 @@ public class InsertStudentController {
     @FXML
     private DialogPane showNullPointer;
 
-    private static Company noCompany = new Company("neues Unternehmen", new Address("", "", "", "", ""), new Person("", "", ""));
+    private static final Company noCompany = new Company("neues Unternehmen", new Address("", "", "", "", ""), new Person("", "", ""));
 
     /**
      * converting a Date to a LocalDate
@@ -122,9 +122,7 @@ public class InsertStudentController {
      * changing the scene root in App to "primary.fxml"
      */
     @FXML
-    private void backToOverview() throws IOException {
-        App.setRoot("primary");
-    }
+    private void backToOverview() throws IOException {App.setRoot("primary");}
 
     /**
      * generating a random number and adding it as the studentNumber if it is not taken yet

@@ -19,7 +19,6 @@ public class InsertCourseController {
 
     ObservableList<Docent> chooseCourseDirectorOptions = FXCollections.observableArrayList(
             University.getDocents()
-            //new Docent("Stroetmann", "Karl", new Date(70, Calendar.JANUARY, 1), new Address("Test", "1", "12345", "Test", "Test"))
     );
 
     @FXML
@@ -52,9 +51,7 @@ public class InsertCourseController {
      * changing the scene root in App to "primary.fxml"
      */
     @FXML
-    private void backToOverview() throws IOException {
-        App.setRoot("primary");
-    }
+    private void backToOverview() throws IOException {App.setRoot("primary");}
 
 
     /**
@@ -64,11 +61,10 @@ public class InsertCourseController {
      */
     @FXML
     private void submit() {
-
         try {
             if (courseName.getText().trim().isEmpty() || courseType.getValue() == null || courseDate.getValue() == null || courseDirector.getValue() == null) {
                 showNullPointer.setVisible(true);
-                System.out.println("NPE2 found");    // LOG Datei?
+                System.out.println("NPE2 found");
             } else {
                 LocalDate localDateCourseBirth = courseDate.getValue();
                 Instant instantCourseBirth = Instant.from(localDateCourseBirth.atStartOfDay(ZoneId.systemDefault()));
@@ -90,10 +86,7 @@ public class InsertCourseController {
             }
         } catch (NullPointerException | IOException npe) {
             showNullPointer.setVisible(true);
-            System.out.println("NPE2 found");    // LOG Datei?
+            System.out.println("NPE found");
         }
-
-
     }
-
 }

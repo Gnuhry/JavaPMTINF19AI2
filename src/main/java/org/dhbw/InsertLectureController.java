@@ -44,13 +44,6 @@ public class InsertLectureController {
     private DialogPane showNullPointer;
 
     /**
-     * converting a Date to a LocalDate
-     * @param dateToConvert given Date to convert
-     * @return LocalDate with the same value as the dateToConvert
-     */
-    private LocalDate convertToLocalDateViaSqlDate(Date dateToConvert) { return new java.sql.Date(dateToConvert.getTime()).toLocalDate(); }
-
-    /**
      * changing the scene root in App to "primary.fxml"
      */
     @FXML
@@ -85,7 +78,7 @@ public class InsertLectureController {
 
             if (lectureFirstName.getText().trim().isEmpty() || lectureLastName.getText().trim().isEmpty() || lectureBirthday.getValue() == null || lectureEmail.getText().trim().isEmpty() || lectureStreet.getText().trim().isEmpty() || lectureHomeNumber.getText().trim().isEmpty() || lecturePostalCode.getText().trim().isEmpty() || lectureCity.getText().trim().isEmpty() || lectureCountry.getText().trim().isEmpty() || lectureNumberField.getText().trim().isEmpty()) {
                 showNullPointer.setVisible(true);
-                System.out.println("NPE2 found");    // LOG Datei?
+                System.out.println("NPE2 found");
             } else {
                 LocalDate localDateLectureBirth = lectureBirthday.getValue();
                 Instant instantLectureBirth = Instant.from(localDateLectureBirth.atStartOfDay(ZoneId.systemDefault()));
@@ -135,7 +128,7 @@ public class InsertLectureController {
             }
         } catch (NullPointerException npe) {
             showNullPointer.setVisible(true);
-            System.out.println("NPE2 found");    // LOG Datei?
+            System.out.println("NPE2 found");
         }
 
     }
