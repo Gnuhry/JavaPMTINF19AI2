@@ -78,16 +78,22 @@
                   <TextField fx:id="companyCountry" prefWidth="200.0" stylesheets="@css/application.css" text="Deutschland" translateX="125.0" />
                </children>
             </HBox>
-            <HBox prefHeight="23.0" prefWidth="955.0" spacing="100.0">
+            <HBox prefHeight="23.0" prefWidth="955.0" spacing="20.0">
                <children>
                   <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@css/application.css" text="Ansprechperson" />
-                  <TextField fx:id="companyContactPersonFirstName" prefWidth="200.0" stylesheets="@css/application.css" translateX="50.0" />
+                  <Label prefHeight="28.0" prefWidth="111.0" text="Vorname, Nachname" />
+                  <TextField fx:id="companyContactPersonFirstName" prefWidth="200.0" stylesheets="@css/application.css" />
                   <TextField fx:id="companyContactPersonLastName" prefWidth="200.0" stylesheets="@css/application.css" />
+               </children>
+            </HBox>
+            <HBox prefHeight="23.0" prefWidth="955.0" spacing="100.0">
+               <children>
+                  <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@css/application.css" text="E-Mail" translateX="140.0" />
+                  <TextField fx:id="companyContactPersonEmail" prefHeight="23.0" prefWidth="170.0" stylesheets="@css/application.css" translateX="50.0" />
                </children>
             </HBox>
          </children>
       </VBox>
-      <TextField fx:id="companyContactPersonEmail" layoutX="467.0" layoutY="315.0" prefHeight="23.0" prefWidth="170.0" stylesheets="@css/application.css" />
       <Label ellipsisString="" layoutX="197.0" layoutY="110.0" prefHeight="26.0" prefWidth="278.0" text="Unternehmensinformationen" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" AnchorPane.leftAnchor="197.0" AnchorPane.rightAnchor="606.0">
          <font>
             <Font name="Comic Sans MS Bold Italic" size="18.0" />

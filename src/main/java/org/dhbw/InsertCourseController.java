@@ -66,7 +66,7 @@ public class InsertCourseController {
     private void submit() {
 
         try {
-            if (courseName.getText().trim().isEmpty() || courseType.getValue() == null || courseRoom.getValue() == null || courseDate.getValue() == null || courseDirector.getValue() == null) {
+            if (courseName.getText().trim().isEmpty() || courseType.getValue() == null || courseDate.getValue() == null || courseDirector.getValue() == null) {
                 showNullPointer.setVisible(true);
                 System.out.println("NPE2 found");    // LOG Datei?
             } else {
@@ -74,12 +74,16 @@ public class InsertCourseController {
                 Instant instantCourseBirth = Instant.from(localDateCourseBirth.atStartOfDay(ZoneId.systemDefault()));
                 Date courseRDate = Date.from(instantCourseBirth);
 
+                CourseRoom room;
+                if (courseRoom.getValue() != null || !courseRoom.getEditor().getText().isEmpty()) room = courseRoom.getValue();
+                else room = new CourseRoom(insertRoom.getText());
+
                 Course course = new Course(
                         courseName.getText(),
                         courseType.getValue(),
                         courseDirector.getValue(),
                         courseRDate,
-                        courseRoom.getValue()
+                        room
                 );
                 University.addCourse(course);
                 backToOverview();
