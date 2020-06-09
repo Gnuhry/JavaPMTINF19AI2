@@ -17,6 +17,9 @@ public class AcceptDeleteController {
     @FXML
     private Button cancelButton;
 
+    /**
+     * initializing student, lecture, course or company with object value; the choose which object gets initialized depends on the type of the over given object
+     */
     public void initVariables(Object object) {
         if (object instanceof DualStudent) {
             this.student = (DualStudent) object;
@@ -30,6 +33,9 @@ public class AcceptDeleteController {
         this.object = object;
     }
 
+    /**
+     * deleting the object from the database; the choose which object gets initialized depends on the type of the over given object
+     */
     @FXML
     private void acceptDelete() {
         if (object instanceof DualStudent) {
@@ -44,6 +50,9 @@ public class AcceptDeleteController {
         cancel();
     }
 
+    /**
+     * closing the stage / window
+     */
     @FXML
     private void cancel() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();

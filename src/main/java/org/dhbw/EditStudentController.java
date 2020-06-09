@@ -93,6 +93,26 @@ public class EditStudentController {
     @FXML
     private DialogPane showNullPointer;
 
+    /**
+     * converting a Date to a LocalDate
+     * @param dateToConvert given Date to convert
+     * @return LocalDate with the same value as the dateToConvert
+     */
+    private LocalDate convertToLocalDateViaSqlDate(Date dateToConvert) { return new java.sql.Date(dateToConvert.getTime()).toLocalDate(); }
+
+    /**
+     * converting a LocalDate to a Date
+     * @param dateToConvert given LocalDate to convert
+     * @return Date with the same value as the dateToConvert
+     */
+    private Date convertToDateViaSqlDate(LocalDate dateToConvert) {
+        return java.sql.Date.valueOf(dateToConvert);
+    }
+
+    /**
+     * visualizing all information about the student in the textfields
+     * @param student student which gets changed
+     */
     public void initVariables(DualStudent student) {
         this.student_old = student;
         if (!student.getForename().isEmpty()) studentFirstName.setText(student.getForename());
@@ -135,31 +155,33 @@ public class EditStudentController {
         }
     }
 
+    /**
+     * initializing comboBoxes with object list
+     */
     @FXML
     private void initialize() {
         companyChoose.setItems(chooseCompanyOptions);
         courseName.setItems(chooseCourseOptions);
     }
 
+    /**
+     * changing the scene root in App to "primary.fxml" and close stage
+     */
     @FXML
-    private void backToOverview() throws IOException {
+    private void backToOverview() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * visualizing the value of the javaKnowledgeSlider in the javaKnowledgeLabel
+     */
     @FXML
-    private void showSlider() throws IOException {
-        javaKnowledgeLabel.setText("" + (int)javaKnowledgeSlider.getValue());
-    }
+    private void showSlider() { javaKnowledgeLabel.setText("" + (int)javaKnowledgeSlider.getValue()); }
 
-    private LocalDate convertToLocalDateViaSqlDate(Date dateToConvert) {
-        return new java.sql.Date(dateToConvert.getTime()).toLocalDate();
-    }
-
-    private Date convertToDateViaSqlDate(LocalDate dateToConvert) {
-        return java.sql.Date.valueOf(dateToConvert);
-    }
-
+    /**
+     * visualizing information about the chosen course
+     */
     @FXML
     private void showCourse() throws IOException {
         Course course = courseName.getValue();
@@ -168,6 +190,9 @@ public class EditStudentController {
         courseRoom.setText("" + course.getRoom());
     }
 
+    /**
+     * visualizing information about the chosen company
+     */
     @FXML
     private void showCompany() {
         Company company = companyChoose.getValue();
@@ -182,14 +207,12 @@ public class EditStudentController {
         companyPersonEmail.setText(company.getContactPerson().getEmail());
     }
 
-    @FXML
-    private void acceptTab(KeyEvent keyEvent) {
-            System.out.println("test");
-            if (keyEvent.getCode() == KeyCode.TAB) {
-                System.out.println("Hallo" + studentBirth.getEditor().getText());
-            }
-    }
-
+    /**
+     * reading the textfields
+     * checking validation of emails, postal code and date
+     * generating a new student with the entered information and adding the new student to the database
+     * catching NullPointerException to give a visual feedback to the user
+     */
     @FXML
     private void submit() throws IOException {
         try {

@@ -31,11 +31,20 @@ public class InsertCompanyController {
     @FXML
     private TextField companyContactPersonEmail;
 
+    /**
+     * changing the scene root in App to "primary.fxml"
+     */
     @FXML
     private void backToOverview() throws IOException {
         App.setRoot("primary");
     }
 
+    /**
+     * reading the textfields
+     * checking validation of emails and postal code
+     * generating a new company with the entered information and adding the new company to the database
+     * catching NullPointerException to give a visual feedback to the user
+     */
     @FXML
     private void submit() {
         try {

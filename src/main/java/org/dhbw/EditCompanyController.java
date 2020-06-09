@@ -36,6 +36,10 @@ public class EditCompanyController {
     @FXML
     private TextField companyContactPersonEmail;
 
+    /**
+     * visualizing all information about the company in the textfields
+     * @param company student which gets changed
+     */
     public void initVariables(Company company) {
         this.company_old = company;
         if (!company.getName().isEmpty()) companyName.setText(company.getName());
@@ -53,12 +57,21 @@ public class EditCompanyController {
         }
     }
 
+    /**
+     * changing the scene root in App to "primary.fxml" and close stage
+     */
     @FXML
-    private void backToOverview() throws IOException {
+    private void backToOverview() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * reading the textfields
+     * checking validation of emails and postal code
+     * generating a new company with the entered information and adding the new company to the database
+     * catching NullPointerException to give a visual feedback to the user
+     */
     @FXML
     private void submit() {
         try {
@@ -93,7 +106,7 @@ public class EditCompanyController {
                     backToOverview();
                 }
             }
-        } catch (NullPointerException | IOException npe) {
+        } catch (NullPointerException npe) {
             System.out.println("Fehler");
         }
     }

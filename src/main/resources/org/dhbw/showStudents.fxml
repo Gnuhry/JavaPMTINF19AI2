@@ -23,10 +23,10 @@
                         <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Zurück" />
                         <VBox translateX="50.0" />
                         <HBox />
-                        <TextField fx:id="searchBox" promptText="Suchen" stylesheets="@css/application.css" translateX="550.0" />
-                        <ComboBox fx:id="courseFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0" promptText="Kurs wählen" stylesheets="@css/application.css" translateX="550.0" />
-                        <ComboBox fx:id="companyFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" promptText="Unternehmen wählen" stylesheets="@css/application.css" translateX="550.0" />
-                        <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="Refresh" translateX="550.0" />
+                        <TextField fx:id="searchBox" promptText="Suchen" stylesheets="@css/application.css" translateX="450.0" />
+                        <ComboBox fx:id="courseFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0" promptText="Kurs wählen" stylesheets="@css/application.css" translateX="450.0" />
+                        <ComboBox fx:id="companyFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" promptText="Unternehmen wählen" stylesheets="@css/application.css" translateX="450.0" />
+                        <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="Refresh" translateX="450.0" />
                      </items>
                   </ToolBar>
                   <TableView fx:id="studentTable" editable="true" focusTraversable="false" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0" stylesheets="@css/application.css" tableMenuButtonVisible="true">

@@ -43,16 +43,22 @@ public class InsertLectureController {
     @FXML
     private DialogPane showNullPointer;
 
+    /**
+     * converting a Date to a LocalDate
+     * @param dateToConvert given Date to convert
+     * @return LocalDate with the same value as the dateToConvert
+     */
+    private LocalDate convertToLocalDateViaSqlDate(Date dateToConvert) { return new java.sql.Date(dateToConvert.getTime()).toLocalDate(); }
 
-    private LocalDate convertToLocalDateViaSqlDate(Date dateToConvert) {
-        return new java.sql.Date(dateToConvert.getTime()).toLocalDate();
-    }
-
+    /**
+     * changing the scene root in App to "primary.fxml"
+     */
     @FXML
-    private void backToOverview() throws IOException {
-        App.setRoot("primary");
-    }
+    private void backToOverview() throws IOException { App.setRoot("primary"); }
 
+    /**
+     * generating a random number and adding it as the lectureNumber if it is not taken yet
+     */
     @FXML
     private void generateLN() {
         while(true) {
@@ -64,6 +70,12 @@ public class InsertLectureController {
         }
     }
 
+    /**
+     * reading the textfields
+     * checking validation of emails, postal code and date
+     * generating a new lecture with the entered information and adding the new lecture to the database
+     * catching NullPointerException to give a visual feedback to the user
+     */
     @FXML
     private void submit() throws IOException {
 

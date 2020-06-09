@@ -15,14 +15,8 @@ import java.util.Date;
 
 public class EditCourseController {
 
-    ObservableList<Person> chooseCourseRepresentOptions = FXCollections.observableArrayList(
-            University.getStudents()
-            //new Person("Silas", "Wessely", "")
-    );
-
     ObservableList<Docent> chooseCourseDirectorOptions = FXCollections.observableArrayList(
             University.getDocents()
-            //new Docent("Stroetmann", "Karl", new Date(70, Calendar.JANUARY, 1), new Address("Test", "1", "12345", "Test", "Test"))
     );
 
     private Course course_old;
@@ -42,6 +36,17 @@ public class EditCourseController {
     @FXML
     private DialogPane showNullPointer;
 
+    /**
+     * converting a Date to a LocalDate
+     * @param dateToConvert given Date to convert
+     * @return LocalDate with the same value as the dateToConvert
+     */
+    private LocalDate convertToLocalDateViaSqlDate(Date dateToConvert) { return new java.sql.Date(dateToConvert.getTime()).toLocalDate(); }
+
+    /**
+     * visualizing all information about the course in the textfields
+     * @param course student which gets changed
+     */
     public void initVariables(Course course) {
         this.course_old = course;
         if (!course.getName().isEmpty()) courseName.setText(course.getName());
@@ -51,10 +56,9 @@ public class EditCourseController {
         if (course.getStudyDirector() != null) courseDirector.setValue(course.getStudyDirector());
     }
 
-    private LocalDate convertToLocalDateViaSqlDate(Date dateToConvert) {
-        return new java.sql.Date(dateToConvert.getTime()).toLocalDate();
-    }
-
+    /**
+     * initializing comboBoxes with object list
+     */
     @FXML
     private void initialize() {
         courseType.getItems().setAll(FXCollections.observableArrayList(StudyCourse.values()));
@@ -62,13 +66,20 @@ public class EditCourseController {
         courseDirector.getItems().setAll(FXCollections.observableArrayList(chooseCourseDirectorOptions));
     }
 
-
+    /**
+     * changing the scene root in App to "primary.fxml" and close stage
+     */
     @FXML
     private void backToOverview() throws IOException {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * reading the textfields
+     * generating a new course with the entered information and adding the new course to the database
+     * catching NullPointerException to give a visual feedback to the user
+     */
     @FXML
     private void submit() {
 
