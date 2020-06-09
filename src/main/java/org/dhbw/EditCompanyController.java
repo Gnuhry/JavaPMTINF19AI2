@@ -7,8 +7,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.dhbw.classes.*;
 
-import java.io.IOException;
-
 public class EditCompanyController {
 
     private Company company_old;
