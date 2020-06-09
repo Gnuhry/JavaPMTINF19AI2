@@ -29,7 +29,7 @@ public class InsertLectureController {
     @FXML
     private TextField lectureLastName;
     @FXML
-    private DatePicker lectureBirthday;
+    private DatePicker lectureBirth;
     @FXML
     private TextField lectureEmail;
     @FXML
@@ -47,17 +47,28 @@ public class InsertLectureController {
     @FXML
     private DialogPane showNullPointer;
 
+
+    /**
+     * converting a LocalDate to a Date
+     *
+     * @param dateToConvert given LocalDate to convert
+     * @return Date with the same value as the dateToConvert
+     */
+    private Date convertToDateViaSqlDate(LocalDate dateToConvert) {
+        return java.sql.Date.valueOf(dateToConvert);
+    }
+
     /**
      * initializing javaKnowlage textfield and the comboboxes with object lists
      */
     @FXML
     private void initialize() {
-        lectureBirthday.setOnKeyReleased(keyEvent -> {
-            String text = lectureBirthday.getEditor().getText();
+        lectureBirth.setOnKeyReleased(keyEvent -> {
+            String text = lectureBirth.getEditor().getText();
             if (text.length() < 10 || text.split("\\.").length != 3) return;
             try {
                 Date date = format.parse(text);
-                lectureBirthday.setValue(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+                lectureBirth.setValue(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
             } catch (ParseException ignored) {
             }
         });
@@ -98,11 +109,11 @@ public class InsertLectureController {
 
             boolean allRight;
 
-            if (lectureFirstName.getText().trim().isEmpty() || lectureLastName.getText().trim().isEmpty() || lectureBirthday.getValue() == null || lectureEmail.getText().trim().isEmpty() || lectureStreet.getText().trim().isEmpty() || lectureHomeNumber.getText().trim().isEmpty() || lecturePostalCode.getText().trim().isEmpty() || lectureCity.getText().trim().isEmpty() || lectureCountry.getText().trim().isEmpty() || lectureNumberField.getText().trim().isEmpty()) {
+            if (lectureFirstName.getText().trim().isEmpty() || lectureLastName.getText().trim().isEmpty() || lectureBirth.getValue() == null || lectureEmail.getText().trim().isEmpty() || lectureStreet.getText().trim().isEmpty() || lectureHomeNumber.getText().trim().isEmpty() || lecturePostalCode.getText().trim().isEmpty() || lectureCity.getText().trim().isEmpty() || lectureCountry.getText().trim().isEmpty() || lectureNumberField.getText().trim().isEmpty()) {
                 showNullPointer.setVisible(true);
                 System.out.println("NPE2 found");
             } else {
-                LocalDate localDateLectureBirth = lectureBirthday.getValue();
+                LocalDate localDateLectureBirth = lectureBirth.getValue();
                 Instant instantLectureBirth = Instant.from(localDateLectureBirth.atStartOfDay(ZoneId.systemDefault()));
                 Date lectureBirthday = Date.from(instantLectureBirth);
                 int focusStage = 0;
@@ -121,17 +132,27 @@ public class InsertLectureController {
                     errorMessage.setText(errorMessage.getText() + " Postleitzahl ");
                 } else
                     lecturePostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgba(43, 56, 112, 0.9) rgba(0,0,0,0)");
+                if (!Check.validateBirthdate(convertToDateViaSqlDate(lectureBirth.getValue()))) {
+                    lectureBirth.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
+                    if (!(focusStage == 1 || focusStage == 2)) focusStage = 3;
+                    errorMessage.setText(errorMessage.getText() + " Geburtstag ");
+                } else
+                    lectureBirth.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
 
                 if (focusStage == 1) {
                     lectureEmail.requestFocus();
                     errorMessage.setVisible(true);
                     allRight = false;
-
                 } else if (focusStage == 2) {
                     lecturePostalCode.requestFocus();
                     errorMessage.setVisible(true);
                     allRight = false;
-                } else {
+                } else if (focusStage == 3) {
+                    lectureBirth.requestFocus();
+                    errorMessage.setVisible(true);
+                    allRight = false;
+                }
+                else {
                     errorMessage.setVisible(false);
                     allRight = true;
                 }
