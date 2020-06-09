@@ -84,14 +84,14 @@
                <children>
                   <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@css/application.css" text="Ansprechperson" />
                   <Label prefHeight="28.0" prefWidth="111.0" text="Vorname, Nachname" />
-                  <TextField fx:id="companyContactPersonFirstName1" prefWidth="200.0" stylesheets="@css/application.css" />
-                  <TextField fx:id="companyContactPersonLastName1" prefWidth="200.0" stylesheets="@css/application.css" />
+                  <TextField fx:id="companyContactPersonFirstName" prefWidth="200.0" stylesheets="@css/application.css" />
+                  <TextField fx:id="companyContactPersonLastName" prefWidth="200.0" stylesheets="@css/application.css" />
                </children>
             </HBox>
             <HBox prefHeight="23.0" prefWidth="955.0" spacing="100.0">
                <children>
                   <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@css/application.css" text="E-Mail" translateX="140.0" />
-                  <TextField fx:id="companyContactPersonEmail1" prefHeight="23.0" prefWidth="170.0" stylesheets="@css/application.css" translateX="50.0" />
+                  <TextField fx:id="companyContactPersonEmail" prefHeight="23.0" prefWidth="170.0" stylesheets="@css/application.css" translateX="50.0" />
                </children>
             </HBox>
          </children>

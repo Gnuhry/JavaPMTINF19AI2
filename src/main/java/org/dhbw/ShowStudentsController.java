@@ -221,7 +221,7 @@ public class ShowStudentsController extends Application implements Initializable
             @Override
             protected void updateItem(Date date, boolean b) {
                 super.updateItem(date, b);
-                if (b) {
+                if (b||date==null) {
                     setText(null);
                 } else {
                     this.setText(format.format(date));

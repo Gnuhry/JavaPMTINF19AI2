@@ -771,7 +771,8 @@ public class Database {
             statement = connection.prepareStatement("SELECT COUNT(room_id) FROM room WHERE name = ?");
             statement.setString(1, room.getName());
             resultSet = statement.executeQuery();
-            counter = resultSet.getInt(1);
+            if (resultSet.next())
+                counter = resultSet.getInt(1);
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
@@ -1067,7 +1068,8 @@ public class Database {
      * @return id if exist, Integer.Minvalue if not
      */
     private static int getCourseId(Course course) {
-        int room_id=getRoomID(course.getRoom());
+        if (course == null) return Integer.MIN_VALUE;
+        int room_id = getRoomID(course.getRoom());
         try {
             initialize();
             statement = connection.prepareStatement("SELECT course_id FROM course WHERE room_id = ? AND name = ? AND registry_date = ? AND course_type = ? AND study_director_id = ?");
@@ -1075,7 +1077,7 @@ public class Database {
             statement.setString(2, course.getName());
             statement.setDate(3, convertDate(course.getRegistrationDate()));
             statement.setInt(4, getCourseTypeID(course.getStudyCourse()));
-            if (course.getStudyCourse() == null || course.getStudyDirector().getDocentNumber() == 0)
+            if (course.getStudyDirector() == null || (course.getStudyDirector()!=null&&course.getStudyDirector().getDocentNumber() == 0))
                 statement.setInt(5, Integer.MIN_VALUE);
             else
                 statement.setInt(5, course.getStudyDirector().getDocentNumber());
@@ -1098,6 +1100,7 @@ public class Database {
      * @return id if exist, Integer.Minvalue if not
      */
     private static int getCompanyId(Company company) {
+        if (company == null) return Integer.MIN_VALUE;
         int address_id = getAddressId(company.getAddress());
         int person_id = getPersonId(company.getContactPerson());
         try {
@@ -1124,6 +1127,7 @@ public class Database {
      * @return id if exist, Integer.Minvalue if not
      */
     private static int getPersonId(Person person) {
+        if (person == null) return Integer.MIN_VALUE;
         try {
             initialize();
             statement = connection.prepareStatement("SELECT person_id FROM person WHERE email = ?");
@@ -1146,6 +1150,7 @@ public class Database {
      * @return id if exist, Integer.Minvalue if not
      */
     private static int getAddressId(Address address) {
+        if (address == null) return Integer.MIN_VALUE;
         try {
             initialize();
             statement = connection.prepareStatement("SELECT address_id FROM address WHERE street = ? AND number = ? AND postal_code = ? AND city = ? AND country = ?");
@@ -1168,6 +1173,7 @@ public class Database {
      * @return id if exist, Integer.Minvalue if not
      */
     private static int getRoomID(CourseRoom room) {
+        if (room == null) return Integer.MIN_VALUE;
         try {
             initialize();
             statement = connection.prepareStatement("SELECT room_id FROM room WHERE name = ?");

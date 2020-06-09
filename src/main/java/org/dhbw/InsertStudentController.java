@@ -4,27 +4,25 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
 import org.dhbw.classes.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class InsertStudentController {
 
-    ObservableList<Company> chooseCompanyOptions = FXCollections.observableArrayList(
+    private final ObservableList<Company> chooseCompanyOptions = FXCollections.observableArrayList(
             University.getCompanies()
-            //new Company("Alnatura", new Address("Test", "1", "12345", "Test", "Test"), new Person("Janina", "Hofmann", ""))
     );
 
-    ObservableList<Course> chooseCourseOptions = FXCollections.observableArrayList(
+    private final ObservableList<Course> chooseCourseOptions = FXCollections.observableArrayList(
             University.getCourses()
     );
+
+    private final Company newCompany = new Company("neues Unternehmen", new Address("", "", "", "", ""), new Person("", "", ""));
+    private final Course noCourse = new Course("kein Kurs", null, null, null, null);
+
 
     @FXML
     private Label errorMessage;
@@ -67,8 +65,6 @@ public class InsertStudentController {
     @FXML
     private TextField companyCountry;
     @FXML
-    private HBox companyPerson;
-    @FXML
     private TextField companyPersonFirstName;
     @FXML
     private TextField companyPersonLastName;
@@ -89,17 +85,19 @@ public class InsertStudentController {
     @FXML
     private DialogPane showNullPointer;
 
-    private static final Company noCompany = new Company("neues Unternehmen", new Address("", "", "", "", ""), new Person("", "", ""));
-
     /**
      * converting a Date to a LocalDate
+     *
      * @param dateToConvert given Date to convert
      * @return LocalDate with the same value as the dateToConvert
      */
-    private LocalDate convertToLocalDateViaSqlDate(Date dateToConvert) { return new java.sql.Date(dateToConvert.getTime()).toLocalDate(); }
+    private LocalDate convertToLocalDateViaSqlDate(Date dateToConvert) {
+        return new java.sql.Date(dateToConvert.getTime()).toLocalDate();
+    }
 
     /**
      * converting a LocalDate to a Date
+     *
      * @param dateToConvert given LocalDate to convert
      * @return Date with the same value as the dateToConvert
      */
@@ -112,8 +110,9 @@ public class InsertStudentController {
      */
     @FXML
     private void initialize() {
-        chooseCompanyOptions.add(0, noCompany);
+        chooseCompanyOptions.add(0, newCompany);
         companyChoose.setItems(chooseCompanyOptions);
+        chooseCourseOptions.add(0, noCourse);
         courseName.setItems(chooseCourseOptions);
         javaKnowledgeLabel.setText("0");
     }
@@ -122,7 +121,9 @@ public class InsertStudentController {
      * changing the scene root in App to "primary.fxml"
      */
     @FXML
-    private void backToOverview() throws IOException {App.setRoot("primary");}
+    private void backToOverview() throws IOException {
+        App.setRoot("primary");
+    }
 
     /**
      * generating a random number and adding it as the studentNumber if it is not taken yet
@@ -166,8 +167,11 @@ public class InsertStudentController {
     @FXML
     private void showCourse() {
         Course course = courseName.getValue();
+        if (course.equals(noCourse))
+            courseDate.setValue(LocalDate.now());
+        else
+            courseDate.setValue(convertToLocalDateViaSqlDate(course.getRegistrationDate()));
         courseType.setText("" + course.getStudyCourse());
-        courseDate.setValue(convertToLocalDateViaSqlDate(course.getRegistrationDate()));
         courseRoom.setText("" + course.getRoom());
     }
 
@@ -177,7 +181,7 @@ public class InsertStudentController {
     @FXML
     private void showCompany() {
         Company company = companyChoose.getValue();
-        if (company.equals(noCompany))
+        if (company.equals(newCompany))
             companyName.setText("");
         else
             companyName.setText(company.getName());
@@ -285,7 +289,10 @@ public class InsertStudentController {
                 }
 
                 if (allRight) {
-                    DualStudent dualStudent = new DualStudent(
+                    Course course = courseName.getValue();
+                    if (course.equals(noCourse))
+                        course = new Course(null, null, null, null, null);
+                    University.addStudent(new DualStudent(
                             Integer.parseInt(matriculationNumberField.getText()),
                             Integer.parseInt(studentNumberField.getText().substring(1)),
                             studentLastName.getText(),
@@ -293,14 +300,10 @@ public class InsertStudentController {
                             convertToDateViaSqlDate(studentBirth.getValue()),
                             new Address(studentStreet.getText(), studentHomeNumber.getText(), studentPostalCode.getText(), studentCity.getText(), studentCountry.getText()),
                             studentEmail.getText(),
-                            courseName.getValue(),
+                            course,
                             Integer.parseInt(javaKnowledgeLabel.getText()),
                             company
-                    );
-                    if (companyChoose.getValue() == null) {
-                        University.addCompany(company);
-                    }
-                    University.addStudent(dualStudent);
+                    ));
                     backToOverview();
                 }
             }

@@ -7,8 +7,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.dhbw.classes.*;
 
-import java.io.IOException;
-
 public class EditCompanyController {
 
     private Company company_old;
@@ -36,8 +34,10 @@ public class EditCompanyController {
     @FXML
     private TextField companyContactPersonEmail;
 
+
     /**
      * visualizing all information about the company in the textfields
+     *
      * @param company student which gets changed
      */
     public void initVariables(Company company) {
@@ -88,21 +88,22 @@ public class EditCompanyController {
                     errorMessage.setText(errorMessage.getText() + " Student-Postleitzahl ");
                     errorMessage.setVisible(true);
                     allRight = false;
-                } else companyPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgba(0, 0, 0, 0.1) rgba(0,0,0,0)");
+                } else
+                    companyPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgba(0, 0, 0, 0.1) rgba(0,0,0,0)");
                 if (!Check.validateEmail(companyContactPersonEmail.getText())) {
                     companyContactPersonEmail.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
                     companyContactPersonEmail.requestFocus();
                     errorMessage.setText(errorMessage.getText() + " E-Mail-Adresse ");
                     allRight = false;
-                } else companyContactPersonEmail.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
+                } else
+                    companyContactPersonEmail.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
 
-                if(allRight) {
-                    Company company = new Company(
+                if (allRight) {
+                    University.updateCompany(new Company(
                             companyName.getText(),
                             new Address(companyStreet.getText(), companyHomeNumber.getText(), companyPostalCode.getText(), companyCity.getText(), companyCountry.getText()),
                             contactPerson
-                    );
-                    University.updateCompany(company, company_old);
+                    ), company_old);
                     backToOverview();
                 }
             }

@@ -17,9 +17,18 @@ import java.util.Date;
 
 public class InsertCourseController {
 
-    ObservableList<Docent> chooseCourseDirectorOptions = FXCollections.observableArrayList(
+    private final ObservableList<Docent> chooseCourseDirectorOptions = FXCollections.observableArrayList(
             University.getDocents()
     );
+    private final ObservableList<CourseRoom> chooseRoomOptions = FXCollections.observableArrayList(
+            University.getRooms()
+    );
+    private final ObservableList<StudyCourse> chooseTypeOptions = FXCollections.observableArrayList(
+            StudyCourse.values()
+    );
+
+    private final CourseRoom noRoom = new CourseRoom("kein Raum");
+    private final Docent noDocent = new Docent("kein Dozent", "", null, null, "", 0);
 
     @FXML
     private TextField courseName;
@@ -42,16 +51,42 @@ public class InsertCourseController {
      */
     @FXML
     private void initialize() {
-        courseType.getItems().setAll(FXCollections.observableArrayList(StudyCourse.values()));
-        courseRoom.getItems().setAll(FXCollections.observableArrayList(University.getRooms()));
-        courseDirector.getItems().setAll(FXCollections.observableArrayList(chooseCourseDirectorOptions));
+        courseType.getItems().setAll(chooseTypeOptions);
+        chooseRoomOptions.add(0, noRoom);
+        courseRoom.getItems().setAll(chooseRoomOptions);
+        chooseCourseDirectorOptions.add(0, noDocent);
+        courseDirector.getItems().setAll(chooseCourseDirectorOptions);
+    }
+
+    /**
+     * visualizing information about the chosen room
+     */
+    @FXML
+    private void showRooms() {
+        CourseRoom room = courseRoom.getValue();
+        if (room.equals(noRoom))
+            insertRoom.setText("");
+        else
+            insertRoom.setText(room.getName());
+    }
+
+    /**
+     * change choose room to new room, if typing own text
+     */
+    @FXML
+    private void editRoomText() {
+        String text = insertRoom.getText();
+        if (!courseRoom.getValue().getName().equals(text))
+            courseRoom.setValue(noRoom);
     }
 
     /**
      * changing the scene root in App to "primary.fxml"
      */
     @FXML
-    private void backToOverview() throws IOException {App.setRoot("primary");}
+    private void backToOverview() throws IOException {
+        App.setRoot("primary");
+    }
 
 
     /**
@@ -67,21 +102,24 @@ public class InsertCourseController {
                 System.out.println("NPE2 found");
             } else {
                 LocalDate localDateCourseBirth = courseDate.getValue();
-                Instant instantCourseBirth = Instant.from(localDateCourseBirth.atStartOfDay(ZoneId.systemDefault()));
-                Date courseRDate = Date.from(instantCourseBirth);
 
                 CourseRoom room;
-                if (courseRoom.getValue() != null || !courseRoom.getEditor().getText().isEmpty()) room = courseRoom.getValue();
+                if (courseRoom.getValue().equals(noRoom)) room = null;
+                else if (courseRoom.getValue() != null || !courseRoom.getEditor().getText().isEmpty())
+                    room = courseRoom.getValue();
                 else room = new CourseRoom(insertRoom.getText());
 
-                Course course = new Course(
+                Docent director = courseDirector.getValue();
+                if (courseDirector.getValue().equals(noDocent))
+                    director = null;
+
+                University.addCourse(new Course(
                         courseName.getText(),
                         courseType.getValue(),
-                        courseDirector.getValue(),
-                        courseRDate,
+                        director,
+                        Date.from(Instant.from(localDateCourseBirth.atStartOfDay(ZoneId.systemDefault()))),
                         room
-                );
-                University.addCourse(course);
+                ));
                 backToOverview();
             }
         } catch (NullPointerException | IOException npe) {

@@ -38,7 +38,9 @@ public class InsertCompanyController {
      * changing the scene root in App to "primary.fxml"
      */
     @FXML
-    private void backToOverview() throws IOException {App.setRoot("primary");}
+    private void backToOverview() throws IOException {
+        App.setRoot("primary");
+    }
 
     /**
      * reading the textfields
@@ -63,21 +65,22 @@ public class InsertCompanyController {
                     errorMessage.setText(errorMessage.getText() + " Student-Postleitzahl ");
                     errorMessage.setVisible(true);
                     allRight = false;
-                } else companyPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgba(0, 0, 0, 0.1) rgba(0,0,0,0)");
+                } else
+                    companyPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgba(0, 0, 0, 0.1) rgba(0,0,0,0)");
                 if (!Check.validateEmail(companyContactPersonEmail.getText())) {
                     companyContactPersonEmail.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
                     companyContactPersonEmail.requestFocus();
                     errorMessage.setText(errorMessage.getText() + " E-Mail-Adresse ");
                     allRight = false;
-                } else companyContactPersonEmail.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
+                } else
+                    companyContactPersonEmail.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
 
                 if (allRight) {
-                    Company company = new Company(
+                    University.addCompany(new Company(
                             companyName.getText(),
                             new Address(companyStreet.getText(), companyHomeNumber.getText(), companyPostalCode.getText(), companyCity.getText(), companyCountry.getText()),
                             contactPerson
-                    );
-                    University.addCompany(company);
+                    ));
                     backToOverview();
                 }
             }

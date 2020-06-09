@@ -3,9 +3,11 @@ package org.dhbw;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import org.dhbw.classes.*;
+import org.dhbw.classes.Address;
+import org.dhbw.classes.Check;
+import org.dhbw.classes.Docent;
+import org.dhbw.classes.University;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -44,21 +46,26 @@ public class EditLectureController {
 
     /**
      * converting a Date to a LocalDate
+     *
      * @param dateToConvert given Date to convert
      * @return LocalDate with the same value as the dateToConvert
      */
-    private LocalDate convertToLocalDateViaSqlDate(Date dateToConvert) { return new java.sql.Date(dateToConvert.getTime()).toLocalDate(); }
+    private LocalDate convertToLocalDateViaSqlDate(Date dateToConvert) {
+        return new java.sql.Date(dateToConvert.getTime()).toLocalDate();
+    }
 
     /**
      * visualizing all information about the lecture in the textfields
+     *
      * @param lecture student which gets changed
      */
     public void initVariables(Docent lecture) {
         this.lecture = lecture;
         if (!lecture.getForename().isEmpty()) lectureFirstName.setText(lecture.getForename());
-        if (!lecture.getName().isEmpty())lectureLastName.setText(lecture.getName());
-        if (lecture.getBirthday() != null)lectureBirthday.setValue(convertToLocalDateViaSqlDate(lecture.getBirthday()));
-        if (!lecture.getEmail().isEmpty())lectureEmail.setText(lecture.getEmail());
+        if (!lecture.getName().isEmpty()) lectureLastName.setText(lecture.getName());
+        if (lecture.getBirthday() != null)
+            lectureBirthday.setValue(convertToLocalDateViaSqlDate(lecture.getBirthday()));
+        if (!lecture.getEmail().isEmpty()) lectureEmail.setText(lecture.getEmail());
         if (lecture.getAddress() != null) {
             lectureStreet.setText(lecture.getAddress().getStreet());
             lectureHomeNumber.setText(lecture.getAddress().getNumber());
@@ -66,7 +73,7 @@ public class EditLectureController {
             lectureCity.setText(lecture.getAddress().getCity());
             lectureCountry.setText(lecture.getAddress().getCountry());
         }
-        if (lecture.getDocentNumber() != 0)lectureNumberField.setText("" + lecture.getDocentNumber());
+        if (lecture.getDocentNumber() != 0) lectureNumberField.setText("" + lecture.getDocentNumber());
     }
 
     /**
@@ -105,12 +112,14 @@ public class EditLectureController {
                     focusStage = 1;
                     errorMessage.setText(errorMessage.getText() + " E-mail-Adresse ");
 
-                } else lectureEmail.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgba(43, 56, 112, 0.9) rgba(0,0,0,0)");
+                } else
+                    lectureEmail.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgba(43, 56, 112, 0.9) rgba(0,0,0,0)");
                 if (!Check.validatePostalCode(lecturePostalCode.getText())) {
                     lecturePostalCode.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
                     if (focusStage != 1) focusStage = 2;
                     errorMessage.setText(errorMessage.getText() + " Postleitzahl ");
-                } else lecturePostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgba(43, 56, 112, 0.9) rgba(0,0,0,0)");
+                } else
+                    lecturePostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgba(43, 56, 112, 0.9) rgba(0,0,0,0)");
 
                 if (focusStage == 1) {
                     lectureEmail.requestFocus();
@@ -125,16 +134,15 @@ public class EditLectureController {
                     allRight = true;
                 }
 
-                if(allRight) {
-                    Docent docent = new Docent(
+                if (allRight) {
+                    University.updateDocent(new Docent(
                             lectureLastName.getText(),
                             lectureFirstName.getText(),
                             lectureBirthday,
                             new Address(lectureStreet.getText(), lectureHomeNumber.getText(), lecturePostalCode.getText(), lectureCity.getText(), lectureCountry.getText()),
                             lectureEmail.getText(),
                             Integer.parseInt(lectureNumberField.getText().substring(1))
-                    );
-                    University.updateDocent(docent, lecture);
+                    ), lecture);
                     backToOverview();
                 }
             }

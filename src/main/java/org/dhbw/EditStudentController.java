@@ -4,30 +4,27 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.dhbw.classes.*;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Date;
 
 public class EditStudentController {
 
-    ObservableList<Company> chooseCompanyOptions = FXCollections.observableArrayList(
+    private final ObservableList<Company> chooseCompanyOptions = FXCollections.observableArrayList(
             University.getCompanies()
     );
 
-    ObservableList<Course> chooseCourseOptions = FXCollections.observableArrayList(
+    private final ObservableList<Course> chooseCourseOptions = FXCollections.observableArrayList(
             University.getCourses()
     );
 
+    private final Company newCompany = new Company("neues Unternehmen", new Address("", "", "", "", ""), new Person("", "", ""));
+    private final Course noCourse = new Course("kein Kurs", null, null, null, null);
+
     private DualStudent student_old;
 
-    @FXML
-    private Button backToOverview;
     @FXML
     private Button cancelButton;
     @FXML
@@ -71,8 +68,6 @@ public class EditStudentController {
     @FXML
     private TextField companyCountry;
     @FXML
-    private HBox companyPerson;
-    @FXML
     private TextField companyPersonFirstName;
     @FXML
     private TextField companyPersonLastName;
@@ -95,13 +90,17 @@ public class EditStudentController {
 
     /**
      * converting a Date to a LocalDate
+     *
      * @param dateToConvert given Date to convert
      * @return LocalDate with the same value as the dateToConvert
      */
-    private LocalDate convertToLocalDateViaSqlDate(Date dateToConvert) { return new java.sql.Date(dateToConvert.getTime()).toLocalDate(); }
+    private LocalDate convertToLocalDateViaSqlDate(Date dateToConvert) {
+        return new java.sql.Date(dateToConvert.getTime()).toLocalDate();
+    }
 
     /**
      * converting a LocalDate to a Date
+     *
      * @param dateToConvert given LocalDate to convert
      * @return Date with the same value as the dateToConvert
      */
@@ -111,6 +110,7 @@ public class EditStudentController {
 
     /**
      * visualizing all information about the student in the textfields
+     *
      * @param student student which gets changed
      */
     public void initVariables(DualStudent student) {
@@ -127,7 +127,8 @@ public class EditStudentController {
             studentCountry.setText(student.getAddress().getCountry());
         }
         if (student.getStudentNumber() != 0) studentNumberField.setText("s" + student.getStudentNumber());
-        if (student.getMatriculationNumber() != 0) matriculationNumberField.setText("" + student.getMatriculationNumber());
+        if (student.getMatriculationNumber() != 0)
+            matriculationNumberField.setText("" + student.getMatriculationNumber());
         if (student.getCompany() != null) {
             companyChoose.setValue(student.getCompany());
             Company company = companyChoose.getValue();
@@ -160,7 +161,9 @@ public class EditStudentController {
      */
     @FXML
     private void initialize() {
+        chooseCompanyOptions.add(0, newCompany);
         companyChoose.setItems(chooseCompanyOptions);
+        chooseCourseOptions.add(0, noCourse);
         courseName.setItems(chooseCourseOptions);
     }
 
@@ -177,7 +180,9 @@ public class EditStudentController {
      * visualizing the value of the javaKnowledgeSlider in the javaKnowledgeLabel
      */
     @FXML
-    private void showSlider() { javaKnowledgeLabel.setText("" + (int)javaKnowledgeSlider.getValue()); }
+    private void showSlider() {
+        javaKnowledgeLabel.setText("" + (int) javaKnowledgeSlider.getValue());
+    }
 
     /**
      * visualizing information about the chosen course
@@ -217,7 +222,7 @@ public class EditStudentController {
     private void submit() {
         try {
             boolean allRight;
-            if (studentFirstName.getText().trim().isEmpty() || studentLastName.getText().trim().isEmpty() || studentBirth.getValue() == null || studentEmail.getText().trim().isEmpty() || studentStreet.getText().trim().isEmpty() || studentHomeNumber.getText().trim().isEmpty() || studentPostalCode.getText().trim().isEmpty() || studentCity.getText().trim().isEmpty() || studentCountry.getText().trim().isEmpty() || studentNumberField.getText().trim().isEmpty() || matriculationNumberField.getText().trim().isEmpty() || companyName.getText().trim().isEmpty() || companyStreet.getText().trim().isEmpty() || companyHomeNumber.getText().trim().isEmpty() || companyPostalCode.getText().trim().isEmpty() || companyCity.getText().trim().isEmpty() || companyCountry.getText().trim().isEmpty() || companyPersonFirstName.getText().trim().isEmpty() || companyPersonLastName.getText().trim().isEmpty() || courseName.getEditor().getText().equals("Kurs auswählen") || javaKnowledgeLabel.getText().trim().isEmpty()){
+            if (studentFirstName.getText().trim().isEmpty() || studentLastName.getText().trim().isEmpty() || studentBirth.getValue() == null || studentEmail.getText().trim().isEmpty() || studentStreet.getText().trim().isEmpty() || studentHomeNumber.getText().trim().isEmpty() || studentPostalCode.getText().trim().isEmpty() || studentCity.getText().trim().isEmpty() || studentCountry.getText().trim().isEmpty() || studentNumberField.getText().trim().isEmpty() || matriculationNumberField.getText().trim().isEmpty() || companyName.getText().trim().isEmpty() || companyStreet.getText().trim().isEmpty() || companyHomeNumber.getText().trim().isEmpty() || companyPostalCode.getText().trim().isEmpty() || companyCity.getText().trim().isEmpty() || companyCountry.getText().trim().isEmpty() || companyPersonFirstName.getText().trim().isEmpty() || companyPersonLastName.getText().trim().isEmpty() || courseName.getEditor().getText().equals("Kurs auswählen") || javaKnowledgeLabel.getText().trim().isEmpty()) {
                 showNullPointer.setVisible(true);
                 System.out.println("NPE2 found");
             } else {
@@ -233,17 +238,20 @@ public class EditStudentController {
                     studentEmail.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
                     focusStage = 1;
                     errorMessage.setText(errorMessage.getText() + " E-Mail-Adresse ");
-                } else studentEmail.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
+                } else
+                    studentEmail.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
                 if (!Check.validatePostalCode(studentPostalCode.getText())) {
                     studentPostalCode.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
                     if (focusStage != 1) focusStage = 2;
                     errorMessage.setText(errorMessage.getText() + " Student-Postleitzahl ");
-                } else studentPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
+                } else
+                    studentPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
                 if (!Check.validatePostalCode(companyPostalCode.getText())) {
                     companyPostalCode.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
                     if (!(focusStage == 1 || focusStage == 2)) focusStage = 3;
                     errorMessage.setText(errorMessage.getText() + " Unternehmen-Postleitzahl ");
-                } else companyPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
+                } else
+                    companyPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
                 if (!Check.validateBirthdate(convertToDateViaSqlDate(studentBirth.getValue()))) {
                     studentPostalCode.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
                     if (focusStage == 1 || focusStage == 2 || focusStage == 3) focusStage = 4;
@@ -270,8 +278,11 @@ public class EditStudentController {
                     allRight = true;
                 }
 
-                if(allRight) {
-                    DualStudent dualStudent = new DualStudent(
+                if (allRight) {
+                    Course course = courseName.getValue();
+                    if (course.equals(noCourse))
+                        course = new Course(null, null, null, null, null);
+                    University.updateStudent(new DualStudent(
                             Integer.parseInt(matriculationNumberField.getText()),
                             Integer.parseInt(studentNumberField.getText().substring(1)),
                             studentLastName.getText(),
@@ -279,11 +290,10 @@ public class EditStudentController {
                             convertToDateViaSqlDate(studentBirth.getValue()),
                             new Address(studentStreet.getText(), studentHomeNumber.getText(), studentPostalCode.getText(), studentCity.getText(), studentCountry.getText()),
                             studentEmail.getText(),
-                            courseName.getValue(),
+                            course,
                             Integer.parseInt(javaKnowledgeLabel.getText()),
                             company
-                    );
-                    University.updateStudent(dualStudent, student_old);
+                    ), student_old);
                     backToOverview();
                 }
             }

@@ -82,6 +82,8 @@ public class Person {
 
     @Override
     public String toString() {
+        if(forename == null || email == null || forename.equals("") && email.equals(""))
+            return name;
         return name + ", " + forename + " , " + email;
     }
 }

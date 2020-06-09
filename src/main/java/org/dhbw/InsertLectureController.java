@@ -47,15 +47,17 @@ public class InsertLectureController {
      * changing the scene root in App to "primary.fxml"
      */
     @FXML
-    private void backToOverview() throws IOException { App.setRoot("primary"); }
+    private void backToOverview() throws IOException {
+        App.setRoot("primary");
+    }
 
     /**
      * generating a random number and adding it as the lectureNumber if it is not taken yet
      */
     @FXML
     private void generateLN() {
-        while(true) {
-            int lectureNumber = (100000+(int)(Math.random()*999999));
+        while (true) {
+            int lectureNumber = (100000 + (int) (Math.random() * 999999));
             if (!Check.checkDNContains(lectureNumber)) {
                 lectureNumberField.setText("c" + lectureNumber);
                 break;
@@ -91,13 +93,15 @@ public class InsertLectureController {
                     lectureEmail.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
                     focusStage = 1;
                     errorMessage.setText(errorMessage.getText() + " E-mail-Adresse ");
-                } else lectureEmail.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgba(43, 56, 112, 0.9) rgba(0,0,0,0)");
+                } else
+                    lectureEmail.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgba(43, 56, 112, 0.9) rgba(0,0,0,0)");
                 System.out.println(!Check.validatePostalCode(lecturePostalCode.getText()));
                 if (!Check.validatePostalCode(lecturePostalCode.getText())) {
                     lecturePostalCode.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
                     if (focusStage != 1) focusStage = 2;
                     errorMessage.setText(errorMessage.getText() + " Postleitzahl ");
-                } else lecturePostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgba(43, 56, 112, 0.9) rgba(0,0,0,0)");
+                } else
+                    lecturePostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgba(43, 56, 112, 0.9) rgba(0,0,0,0)");
 
                 if (focusStage == 1) {
                     lectureEmail.requestFocus();
@@ -114,15 +118,14 @@ public class InsertLectureController {
                 }
 
                 if (allRight) {
-                    Docent docent = new Docent(
+                    University.addDocent(new Docent(
                             lectureLastName.getText(),
                             lectureFirstName.getText(),
                             lectureBirthday,
                             new Address(lectureStreet.getText(), lectureHomeNumber.getText(), lecturePostalCode.getText(), lectureCity.getText(), lectureCountry.getText()),
                             lectureEmail.getText(),
                             Integer.parseInt(lectureNumberField.getText().substring(1))
-                    );
-                    University.addDocent(docent);
+                    ));
                     backToOverview();
                 }
             }

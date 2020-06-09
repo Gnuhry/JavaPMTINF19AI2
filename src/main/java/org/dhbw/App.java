@@ -5,10 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.dhbw.classes.Database;
-import org.dhbw.classes.University;
 
 import java.io.IOException;
 
@@ -21,6 +19,7 @@ public class App extends Application {
 
     /**
      * opening the app stage with parameters
+     *
      * @param stage new stage show new window
      */
     @Override
@@ -36,12 +35,16 @@ public class App extends Application {
 
     /**
      * changing the root-fxml-file in the App stage
+     *
      * @param fxml filename to switch to
      */
-    static void setRoot(String fxml) throws IOException {scene.setRoot(loadFXML(fxml));}
+    static void setRoot(String fxml) throws IOException {
+        scene.setRoot(loadFXML(fxml));
+    }
 
     /**
      * link the new file to the current stage which is the parent
+     *
      * @param fxml filename to switch to
      * @return parent object of the new file
      */
