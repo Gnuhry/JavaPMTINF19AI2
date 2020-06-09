@@ -61,7 +61,6 @@ public class InsertCourseController {
                 Date date = format.parse(text);
                 courseDate.setValue(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
             } catch (ParseException ignored) {
-                System.out.println("Fehler");
             }
         });
         courseType.getItems().setAll(chooseTypeOptions);

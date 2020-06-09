@@ -123,7 +123,6 @@ public class InsertStudentController {
                 Date date = format.parse(text);
                 studentBirth.setValue(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
             } catch (ParseException ignored) {
-                System.out.println("Fehler");
             }
         });
         chooseCompanyOptions.add(0, newCompany);

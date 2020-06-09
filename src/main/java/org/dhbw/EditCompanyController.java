@@ -107,8 +107,7 @@ public class EditCompanyController {
                     backToOverview();
                 }
             }
-        } catch (NullPointerException npe) {
-            System.out.println("Fehler");
+        } catch (NullPointerException ignored) {
         }
     }
 

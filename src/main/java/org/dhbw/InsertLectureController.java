@@ -59,7 +59,6 @@ public class InsertLectureController {
                 Date date = format.parse(text);
                 lectureBirthday.setValue(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
             } catch (ParseException ignored) {
-                System.out.println("Fehler");
             }
         });
     }
@@ -109,14 +108,13 @@ public class InsertLectureController {
                 int focusStage = 0;
                 errorMessage.setText("Bitte korrigieren Sie die Fehler in folgenden Feldern");
 
-                System.out.println(!Check.validateEmail(lectureEmail.getText()));
                 if (!Check.validateEmail(lectureEmail.getText())) {
                     lectureEmail.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
                     focusStage = 1;
                     errorMessage.setText(errorMessage.getText() + " E-mail-Adresse ");
                 } else
                     lectureEmail.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgba(43, 56, 112, 0.9) rgba(0,0,0,0)");
-                System.out.println(!Check.validatePostalCode(lecturePostalCode.getText()));
+
                 if (!Check.validatePostalCode(lecturePostalCode.getText())) {
                     lecturePostalCode.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
                     if (focusStage != 1) focusStage = 2;

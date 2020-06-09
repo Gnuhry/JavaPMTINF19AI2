@@ -143,7 +143,6 @@ public class EditStudentController {
             companyPersonEmail.setText(company.getContactPerson().getEmail());
         }
         if (student.getCourse() != null && student.getCourse().getRegistrationDate() != null) {
-            System.out.println(student.getCourse());
             courseName.setValue(student.getCourse());
             Course course = student.getCourse();
             courseType.setText("" + course.getStudyCourse());
