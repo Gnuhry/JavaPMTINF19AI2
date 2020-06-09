@@ -278,6 +278,7 @@ public class Database {
         try {
             initialize();
             statement = connection.prepareStatement("INSERT INTO room (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, room.getName());
             statement.execute();
             resultSet = statement.getGeneratedKeys();
             if (resultSet.next())
