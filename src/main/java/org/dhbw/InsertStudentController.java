@@ -2,12 +2,18 @@ package org.dhbw;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.input.KeyCode;
 import org.dhbw.classes.*;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 
 public class InsertStudentController {
@@ -22,7 +28,7 @@ public class InsertStudentController {
 
     private final Company newCompany = new Company("neues Unternehmen", new Address("", "", "", "", ""), new Person("", "", ""));
     private final Course noCourse = new Course("kein Kurs", null, null, null, null);
-
+    private final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
     @FXML
     private Label errorMessage;
@@ -110,6 +116,16 @@ public class InsertStudentController {
      */
     @FXML
     private void initialize() {
+        studentBirth.setOnKeyReleased(keyEvent -> {
+            String text=studentBirth.getEditor().getText();
+            if(text.length()<10||text.split("\\.").length!=3) return;
+            try {
+                Date date = format.parse(text);
+                studentBirth.setValue(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+            } catch (ParseException ignored) {
+                System.out.println("Fehler");
+            }
+        });
         chooseCompanyOptions.add(0, newCompany);
         companyChoose.setItems(chooseCompanyOptions);
         chooseCourseOptions.add(0, noCourse);

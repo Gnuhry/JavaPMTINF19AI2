@@ -10,6 +10,8 @@ import javafx.scene.control.TextField;
 import org.dhbw.classes.*;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -29,6 +31,7 @@ public class InsertCourseController {
 
     private final CourseRoom noRoom = new CourseRoom("kein Raum");
     private final Docent noDocent = new Docent("kein Dozent", "", null, null, "", 0);
+    private final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
     @FXML
     private TextField courseName;
@@ -51,6 +54,16 @@ public class InsertCourseController {
      */
     @FXML
     private void initialize() {
+        courseDate.setOnKeyReleased(keyEvent -> {
+            String text=courseDate.getEditor().getText();
+            if(text.length()<10||text.split("\\.").length!=3) return;
+            try {
+                Date date = format.parse(text);
+                courseDate.setValue(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+            } catch (ParseException ignored) {
+                System.out.println("Fehler");
+            }
+        });
         courseType.getItems().setAll(chooseTypeOptions);
         chooseRoomOptions.add(0, noRoom);
         courseRoom.getItems().setAll(chooseRoomOptions);

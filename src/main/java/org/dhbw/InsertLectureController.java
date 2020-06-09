@@ -11,12 +11,16 @@ import org.dhbw.classes.Docent;
 import org.dhbw.classes.University;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
 public class InsertLectureController {
+
+    private final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
     @FXML
     private Label errorMessage;
@@ -42,6 +46,23 @@ public class InsertLectureController {
     private TextField lectureNumberField;
     @FXML
     private DialogPane showNullPointer;
+
+    /**
+     * initializing javaKnowlage textfield and the comboboxes with object lists
+     */
+    @FXML
+    private void initialize() {
+        lectureBirthday.setOnKeyReleased(keyEvent -> {
+            String text = lectureBirthday.getEditor().getText();
+            if (text.length() < 10 || text.split("\\.").length != 3) return;
+            try {
+                Date date = format.parse(text);
+                lectureBirthday.setValue(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+            } catch (ParseException ignored) {
+                System.out.println("Fehler");
+            }
+        });
+    }
 
     /**
      * changing the scene root in App to "primary.fxml"
