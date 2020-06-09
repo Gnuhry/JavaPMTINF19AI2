@@ -10,6 +10,7 @@ import org.dhbw.classes.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Comparator;
 import java.util.Date;
 
 public class EditCourseController {
@@ -22,7 +23,8 @@ public class EditCourseController {
     );
 
     private Course course_old;
-    private final CourseRoom noRoom = new CourseRoom("kein Raum");
+    private final CourseRoom noRoom = new CourseRoom("keiner Raum");
+    private final CourseRoom newRoom = new CourseRoom("neuer Raum");
     private final Docent noDocent = new Docent("kein Dozent", "", null, null, "", 0);
 
 
@@ -79,7 +81,9 @@ public class EditCourseController {
      */
     @FXML
     private void initialize() {
+        chooseRoomOptions.sort(Comparator.comparing(CourseRoom::getName));
         chooseRoomOptions.add(0, noRoom);
+        chooseRoomOptions.add(1, newRoom);
         courseRoom.getItems().setAll(chooseRoomOptions);
         chooseCourseDirectorOptions.add(0, noDocent);
         courseDirector.getItems().setAll(chooseCourseDirectorOptions);
@@ -91,10 +95,16 @@ public class EditCourseController {
     @FXML
     private void showRooms() {
         CourseRoom room = courseRoom.getValue();
-        if (room.equals(noRoom))
+        if (room.equals(noRoom)) {
             insertRoom.setText("");
-        else
+            insertRoom.setEditable(false);
+        } else if (room.equals(newRoom)) {
+            insertRoom.setText("");
+            insertRoom.setEditable(true);
+        } else {
+            insertRoom.setEditable(false);
             insertRoom.setText(room.getName());
+        }
     }
 
     /**
@@ -102,9 +112,7 @@ public class EditCourseController {
      */
     @FXML
     private void editRoomText() {
-        String text = insertRoom.getText();
-        if (!courseRoom.getValue().getName().equals(text))
-            courseRoom.setValue(noRoom);
+        courseRoom.setValue(newRoom);
     }
 
     /**
@@ -131,11 +139,11 @@ public class EditCourseController {
             } else {
                 LocalDate localDateCourseBirth = courseDate.getValue();
 
-                CourseRoom room;
-                if (courseRoom.getValue().equals(noRoom)) room = null;
-                else //if (courseRoom.getValue() != null || !courseRoom.getEditor().getText().isEmpty())
-                    room = courseRoom.getValue();
-//                else room = new CourseRoom(insertRoom.getText());
+                CourseRoom room = courseRoom.getValue();
+                if (room.equals(newRoom) && !courseRoom.getEditor().getText().isEmpty())
+                    room = new CourseRoom(insertRoom.getText());
+                else if (room.equals(noRoom) || room.equals(newRoom))
+                    room = null;
 
                 Docent director = courseDirector.getValue();
                 if (courseDirector.getValue().equals(noDocent))
@@ -154,8 +162,5 @@ public class EditCourseController {
             showNullPointer.setVisible(true);
             System.out.println("NPE2 found");
         }
-
-
     }
-
 }

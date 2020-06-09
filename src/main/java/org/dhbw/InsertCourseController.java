@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Comparator;
 import java.util.Date;
 
 public class InsertCourseController {
@@ -30,6 +31,7 @@ public class InsertCourseController {
     );
 
     private final CourseRoom noRoom = new CourseRoom("kein Raum");
+    private final CourseRoom newRoom = new CourseRoom("neuer Raum");
     private final Docent noDocent = new Docent("kein Dozent", "", null, null, "", 0);
     private final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -64,7 +66,9 @@ public class InsertCourseController {
             }
         });
         courseType.getItems().setAll(chooseTypeOptions);
+        chooseRoomOptions.sort(Comparator.comparing(CourseRoom::getName));
         chooseRoomOptions.add(0, noRoom);
+        chooseRoomOptions.add(1, newRoom);
         courseRoom.getItems().setAll(chooseRoomOptions);
         chooseCourseDirectorOptions.add(0, noDocent);
         courseDirector.getItems().setAll(chooseCourseDirectorOptions);
@@ -76,10 +80,16 @@ public class InsertCourseController {
     @FXML
     private void showRooms() {
         CourseRoom room = courseRoom.getValue();
-        if (room.equals(noRoom))
+        if (room.equals(noRoom)) {
             insertRoom.setText("");
-        else
+            insertRoom.setEditable(false);
+        } else if (room.equals(newRoom)) {
+            insertRoom.setText("");
+            insertRoom.setEditable(true);
+        } else {
+            insertRoom.setEditable(false);
             insertRoom.setText(room.getName());
+        }
     }
 
     /**
@@ -87,9 +97,7 @@ public class InsertCourseController {
      */
     @FXML
     private void editRoomText() {
-        String text = insertRoom.getText();
-        if (!courseRoom.getValue().getName().equals(text))
-            courseRoom.setValue(noRoom);
+        courseRoom.setValue(newRoom);
     }
 
     /**
@@ -115,11 +123,11 @@ public class InsertCourseController {
             } else {
                 LocalDate localDateCourseBirth = courseDate.getValue();
 
-                CourseRoom room;
-                if (courseRoom.getValue().equals(noRoom)) room = null;
-                else if (courseRoom.getValue() != null || !courseRoom.getEditor().getText().isEmpty())
-                    room = courseRoom.getValue();
-                else room = new CourseRoom(insertRoom.getText());
+                CourseRoom room = courseRoom.getValue();
+                if (room.equals(newRoom) && !courseRoom.getEditor().getText().isEmpty())
+                    room = new CourseRoom(insertRoom.getText());
+                else if (room.equals(noRoom) || room.equals(newRoom))
+                    room = null;
 
                 Docent director = courseDirector.getValue();
                 if (courseDirector.getValue().equals(noDocent))
