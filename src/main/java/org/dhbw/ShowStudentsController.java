@@ -312,9 +312,10 @@ public class ShowStudentsController extends Application implements Initializable
 
     /**
      * adding the start() method on each button
+     *
      * @param button button where function should be added
      * @param object object which should be changed or deleted
-     * @param file fxml filename to setup next scene
+     * @param file   fxml filename to setup next scene
      * @return button with new function
      */
     @FXML
@@ -337,6 +338,7 @@ public class ShowStudentsController extends Application implements Initializable
 
     /**
      * opening a new javafx stage to edit or delete an object
+     *
      * @param stage new stage show new window
      */
     @Override
@@ -382,8 +384,9 @@ public class ShowStudentsController extends Application implements Initializable
 
     /**
      * initializing change and delete button with image and addFunction
-     * @param function
-     * @param image imagename of the image for the button
+     *
+     * @param function thefxml function which the button should trigger
+     * @param image    image name of the image for the button
      */
     private <T> Callback<TableColumn<T, Void>, TableCell<T, Void>> getCallback(String function, String image) {
         return new Callback<>() {
@@ -410,10 +413,11 @@ public class ShowStudentsController extends Application implements Initializable
     }
 
     /**
-     * filtering the studenttable with inputtext from searchboxes and comboboxes
-     * @param newValue
-     * @param person person of database table which gets checked on input
-     * @return true if input is the same as the forename, name, studentID or matriculationNumber from person, true if not
+     * filtering the student table with input text from search boxes and combo boxes
+     *
+     * @param newValue value which get changed (String, Company or Course)
+     * @param person   person of database table which gets checked on input
+     * @return true if person has the configure attributes from the filters, false if not
      */
     private boolean checkFilterStudent(Object newValue, DualStudent person) {
         boolean erg = true;
