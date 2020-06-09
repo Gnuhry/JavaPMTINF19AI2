@@ -802,6 +802,8 @@ public class Database {
             companies = new ArrayList<>();
         if (persons == null)
             persons = new ArrayList<>();
+        if (rooms == null)
+            rooms = new ArrayList<>();
     }
 
     /**
@@ -824,7 +826,7 @@ public class Database {
                                 convertDate(resultSet.getDate("birthdate")),
                                 new Address(resultSet.getString("student_street"), resultSet.getString("student_number"), resultSet.getString("student_postal_code"), resultSet.getString("student_city"), resultSet.getString("student_country")),
                                 resultSet.getString("student_email"),
-                                new Course(resultSet.getString("name"), getCourseTypeById(resultSet.getInt("course_type")), new Docent(resultSet.getString("docent_last_name"), resultSet.getString("docent_first_name"), convertDate(resultSet.getDate("docent_birthdate")), new Address(resultSet.getString("docent_street"), resultSet.getString("docent_number"), resultSet.getString("docent_postal_code"), resultSet.getString("docent_city"), resultSet.getString("docent_country")), resultSet.getString("docent_email"), resultSet.getInt("study_director_id")), convertDate(resultSet.getDate("registry_date")), new CourseRoom(resultSet.getString("r.name"))),
+                                new Course(resultSet.getString("name"), getCourseTypeById(resultSet.getInt("course_type")), new Docent(resultSet.getString("docent_last_name"), resultSet.getString("docent_first_name"), convertDate(resultSet.getDate("docent_birthdate")), new Address(resultSet.getString("docent_street"), resultSet.getString("docent_number"), resultSet.getString("docent_postal_code"), resultSet.getString("docent_city"), resultSet.getString("docent_country")), resultSet.getString("docent_email"), resultSet.getInt("study_director_id")), convertDate(resultSet.getDate("registry_date")), new CourseRoom(resultSet.getString("room"))),
                                 resultSet.getInt("java_knowlage"),
                                 new Company(resultSet.getString("company_name"), new Address(resultSet.getString("street"), resultSet.getString("number"), resultSet.getString("postal_code"), resultSet.getString("city"), resultSet.getString("country")), new Person(resultSet.getString("last_name"), resultSet.getString("first_name"), resultSet.getString("email"))));
 //                int id = dualStudents.indexOf(dualStudent);
@@ -882,11 +884,11 @@ public class Database {
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Course course =
-                        new Course(resultSet.getString("name"),
+                        new Course(resultSet.getString("course_name"),
                                 getCourseTypeById(resultSet.getInt("course_type")),
                                 new Docent(resultSet.getString("last_name"), resultSet.getString("first_name"), convertDate(resultSet.getDate("birthdate")), new Address(resultSet.getString("street"), resultSet.getString("number"), resultSet.getString("postal_code"), resultSet.getString("city"), resultSet.getString("country")), resultSet.getString("email"), resultSet.getInt("docent_id")),
                                 convertDate(resultSet.getDate("registry_date")),
-                                new CourseRoom(resultSet.getString("r.name")));
+                                new CourseRoom(resultSet.getString("room")));
 //                int id = courses.indexOf(course);
 //                if (id >= 0)
 //                    courses.set(id, course);

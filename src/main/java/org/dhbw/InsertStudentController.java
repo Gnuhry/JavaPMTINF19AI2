@@ -8,9 +8,12 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import org.dhbw.classes.*;
+
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class InsertStudentController {
 
@@ -86,8 +89,11 @@ public class InsertStudentController {
     @FXML
     private DialogPane showNullPointer;
 
+    private static Company noCompany = new Company("neues Unternehmen", new Address("", "", "", "", ""), new Person("", "", ""));
+
     @FXML
     private void initialize() {
+        chooseCompanyOptions.add(0, noCompany);
         companyChoose.setItems(chooseCompanyOptions);
         courseName.setItems(chooseCourseOptions);
         javaKnowledgeLabel.setText("0");
@@ -101,7 +107,7 @@ public class InsertStudentController {
     @FXML
     private void generateSN() {
         while (true) {
-            int studentNumber = (100000+(int)(Math.random()*900000));
+            int studentNumber = (100000 + (int) (Math.random() * 900000));
             if (!Check.checkSNContains(studentNumber)) {
                 studentNumberField.setText("s" + studentNumber);
                 break;
@@ -111,8 +117,8 @@ public class InsertStudentController {
 
     @FXML
     private void generateMN() {
-        while(true) {
-            int matriculationNumber = (1000000+(int)(Math.random()*9000000));
+        while (true) {
+            int matriculationNumber = (1000000 + (int) (Math.random() * 9000000));
             if (!Check.checkMNContains(matriculationNumber)) {
                 matriculationNumberField.setText("" + matriculationNumber);
                 break;
@@ -122,7 +128,7 @@ public class InsertStudentController {
 
     @FXML
     private void showSlider() {
-        javaKnowledgeLabel.setText("" + (int)javaKnowledgeSlider.getValue());
+        javaKnowledgeLabel.setText("" + (int) javaKnowledgeSlider.getValue());
     }
 
     private LocalDate convertToLocalDateViaSqlDate(Date dateToConvert) {
@@ -144,7 +150,10 @@ public class InsertStudentController {
     @FXML
     private void showCompany() {
         Company company = companyChoose.getValue();
-        companyName.setText(company.getName());
+        if (company.equals(noCompany))
+            companyName.setText("");
+        else
+            companyName.setText(company.getName());
         companyStreet.setText(company.getAddress().getStreet());
         companyHomeNumber.setText(company.getAddress().getNumber());
         companyPostalCode.setText(company.getAddress().getPostcode());
@@ -157,10 +166,10 @@ public class InsertStudentController {
 
     @FXML
     private void acceptTab(KeyEvent keyEvent) {
-            System.out.println("test");
-            if (keyEvent.getCode() == KeyCode.TAB) {
-                System.out.println("Hallo" + studentBirth.getEditor().getText());
-            }
+        System.out.println("test");
+        if (keyEvent.getCode() == KeyCode.TAB) {
+            System.out.println("Hallo" + studentBirth.getEditor().getText());
+        }
     }
 
     @FXML
@@ -169,7 +178,7 @@ public class InsertStudentController {
 
             boolean allRight;
 
-            if (studentFirstName.getText().trim().isEmpty() || studentLastName.getText().trim().isEmpty() || studentBirth.getValue() == null || studentEmail.getText().trim().isEmpty() || studentStreet.getText().trim().isEmpty() || studentHomeNumber.getText().trim().isEmpty() || studentPostalCode.getText().trim().isEmpty() || studentCity.getText().trim().isEmpty() || studentCountry.getText().trim().isEmpty() || studentNumberField.getText().trim().isEmpty() || matriculationNumberField.getText().trim().isEmpty() || companyName.getText().trim().isEmpty() || companyStreet.getText().trim().isEmpty() || companyHomeNumber.getText().trim().isEmpty() || companyPostalCode.getText().trim().isEmpty() || companyCity.getText().trim().isEmpty() || companyCountry.getText().trim().isEmpty() || companyPersonFirstName.getText().trim().isEmpty() || companyPersonLastName.getText().trim().isEmpty() || courseName.getEditor().getText().equals("Kurs auswählen") || javaKnowledgeLabel.getText().trim().isEmpty()){
+            if (studentFirstName.getText().trim().isEmpty() || studentLastName.getText().trim().isEmpty() || studentBirth.getValue() == null || studentEmail.getText().trim().isEmpty() || studentStreet.getText().trim().isEmpty() || studentHomeNumber.getText().trim().isEmpty() || studentPostalCode.getText().trim().isEmpty() || studentCity.getText().trim().isEmpty() || studentCountry.getText().trim().isEmpty() || studentNumberField.getText().trim().isEmpty() || matriculationNumberField.getText().trim().isEmpty() || companyName.getText().trim().isEmpty() || companyStreet.getText().trim().isEmpty() || companyHomeNumber.getText().trim().isEmpty() || companyPostalCode.getText().trim().isEmpty() || companyCity.getText().trim().isEmpty() || companyCountry.getText().trim().isEmpty() || companyPersonFirstName.getText().trim().isEmpty() || companyPersonLastName.getText().trim().isEmpty() || courseName.getEditor().getText().equals("Kurs auswählen") || javaKnowledgeLabel.getText().trim().isEmpty()) {
                 showNullPointer.setVisible(true);
                 System.out.println("NPE2 found");    // LOG Datei?
             } else {
@@ -192,30 +201,62 @@ public class InsertStudentController {
                     studentPostalCode.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
                     if (focusStage != 1) focusStage = 2;
                     errorMessage.setText(errorMessage.getText() + " Student-Postleitzahl ");
-                } else studentPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
+                } else
+                    studentPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
                 if (!Check.validatePostalCode(companyPostalCode.getText())) {
                     companyPostalCode.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
                     if (!(focusStage == 1 || focusStage == 2)) focusStage = 3;
                     errorMessage.setText(errorMessage.getText() + " Unternehmen-Postleitzahl ");
-                } else companyPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
+                } else
+                    companyPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
                 if (!Check.validateBirthdate(convertToDateViaSqlDate(studentBirth.getValue()))) {
                     studentBirth.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
                     if (!(focusStage == 1 || focusStage == 2 || focusStage == 3)) focusStage = 4;
                     errorMessage.setText(errorMessage.getText() + " Student-Geburtstag ");
-                } else studentBirth.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
+                } else
+                    studentBirth.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
                 if (!Check.validateEmail(companyPersonEmail.getText())) {
                     companyPersonEmail.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
                     if (!(focusStage == 1 || focusStage == 2 || focusStage == 3 || focusStage == 4)) focusStage = 5;
                     errorMessage.setText(errorMessage.getText() + " Ansprechperson-Email ");
-                } else companyPersonEmail.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
+                } else
+                    companyPersonEmail.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
 
                 switch (focusStage) {
-                    case 1: studentEmail.requestFocus(); scrollPane.setVvalue(0); errorMessage.setVisible(true); allRight = false; break;
-                    case 2: studentPostalCode.requestFocus(); scrollPane.setVvalue(0); errorMessage.setVisible(true); allRight = false; break;
-                    case 3: companyPostalCode.requestFocus(); scrollPane.setVvalue(100); errorMessage.setVisible(true); allRight = false; break;
-                    case 4: studentBirth.requestFocus(); scrollPane.setVvalue(0); errorMessage.setVisible(true); allRight = false; break;
-                    case 5: companyPersonEmail.requestFocus(); scrollPane.setVvalue(100); errorMessage.setVisible(true); allRight = false; break;
-                    default: errorMessage.setVisible(false); allRight = true; break;
+                    case 1:
+                        studentEmail.requestFocus();
+                        scrollPane.setVvalue(0);
+                        errorMessage.setVisible(true);
+                        allRight = false;
+                        break;
+                    case 2:
+                        studentPostalCode.requestFocus();
+                        scrollPane.setVvalue(0);
+                        errorMessage.setVisible(true);
+                        allRight = false;
+                        break;
+                    case 3:
+                        companyPostalCode.requestFocus();
+                        scrollPane.setVvalue(100);
+                        errorMessage.setVisible(true);
+                        allRight = false;
+                        break;
+                    case 4:
+                        studentBirth.requestFocus();
+                        scrollPane.setVvalue(0);
+                        errorMessage.setVisible(true);
+                        allRight = false;
+                        break;
+                    case 5:
+                        companyPersonEmail.requestFocus();
+                        scrollPane.setVvalue(100);
+                        errorMessage.setVisible(true);
+                        allRight = false;
+                        break;
+                    default:
+                        errorMessage.setVisible(false);
+                        allRight = true;
+                        break;
                 }
 
                 if (allRight) {
