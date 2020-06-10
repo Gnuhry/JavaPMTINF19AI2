@@ -122,7 +122,7 @@
             <Insets right="50.0" />
          </padding>
       </ButtonBar>
-      <Label fx:id="errorMessage" layoutX="197.0" layoutY="81.0" text="Bitte korregieren Sie die Fehler in folgenden Feldern: " textFill="#870606" visible="false" />
+      <Label fx:id="errorMessage" layoutX="197.0" layoutY="81.0" textFill="#870606" visible="false" />
       <DialogPane fx:id="showNullPointer" layoutX="146.0" layoutY="440.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="142.0" prefWidth="482.0" style="-fx-background-color: lightgray;" visible="false">
          <header>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="113.0" prefWidth="482.0">

@@ -130,6 +130,6 @@
             <Insets right="50.0" />
          </padding>
       </ButtonBar>
-      <Label fx:id="errorMessage" layoutX="207.0" layoutY="91.0" text="Bitte korregieren Sie die Fehler in folgenden Feldern: " textFill="#870606" visible="false" />
+      <Label fx:id="errorMessage" layoutX="207.0" layoutY="91.0" textFill="#870606" visible="false" />
    </children>
 </AnchorPane>

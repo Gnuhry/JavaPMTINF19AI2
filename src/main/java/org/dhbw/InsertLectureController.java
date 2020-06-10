@@ -1,14 +1,8 @@
 package org.dhbw;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.DialogPane;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import org.dhbw.classes.Address;
-import org.dhbw.classes.Check;
-import org.dhbw.classes.Docent;
-import org.dhbw.classes.University;
+import javafx.scene.control.*;
+import org.dhbw.classes.*;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -16,7 +10,10 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 public class InsertLectureController {
 
@@ -44,8 +41,6 @@ public class InsertLectureController {
     private TextField lectureCountry;
     @FXML
     private TextField lectureNumberField;
-    @FXML
-    private DialogPane showNullPointer;
 
 
     /**
@@ -55,7 +50,7 @@ public class InsertLectureController {
      * @return Date with the same value as the dateToConvert
      */
     private Date convertToDateViaSqlDate(LocalDate dateToConvert) {
-        return java.sql.Date.valueOf(dateToConvert);
+        return dateToConvert == null ? null : java.sql.Date.valueOf(dateToConvert);
     }
 
     /**
@@ -72,6 +67,7 @@ public class InsertLectureController {
             } catch (ParseException ignored) {
             }
         });
+        generateLN();
     }
 
     /**
@@ -87,13 +83,22 @@ public class InsertLectureController {
      */
     @FXML
     private void generateLN() {
-        while (true) {
-            int lectureNumber = (100000 + (int) (Math.random() * 999999));
-            if (!Check.checkDNContains(lectureNumber)) {
-                lectureNumberField.setText("c" + lectureNumber);
+        int maxiteration = 100000;
+        Random random = new Random();
+        Check check = new Check();
+        while (--maxiteration > 0) {
+            int docentid = random.nextInt(9000000) + 1000000;
+            if (check.checkDNContains(docentid)) {
+                lectureNumberField.setText("" + docentid);
                 break;
             }
         }
+        int number = 100000;
+        while (number < 10000000)
+            if (check.checkDNContains(number++)) {
+                lectureNumberField.setText("" + number);
+                break;
+            }
     }
 
     /**
@@ -105,7 +110,116 @@ public class InsertLectureController {
     @FXML
     private void submit() throws IOException {
 
-        try {
+        final String styleRight = "-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)";
+        List<String> errorMessageL = new ArrayList<>();
+        String text = lectureFirstName.getText().trim();
+        Date date;
+        boolean focus = false;
+        if (text.isEmpty()) {
+            wrongField(focus, lectureFirstName);
+            focus = true;
+            errorMessageL.add("Vorname fehlt");
+        } else
+            lectureFirstName.setStyle(styleRight);
+
+        text = lectureLastName.getText().trim();
+        if (text.isEmpty()) {
+            wrongField(focus, lectureLastName);
+            focus = true;
+            errorMessageL.add("Nachname fehlt");
+        } else
+            lectureLastName.setStyle(styleRight);
+
+        date = convertToDateViaSqlDate(lectureBirth.getValue());
+        if (date == null) {
+            wrongField(focus, lectureBirth);
+            focus = true;
+            errorMessageL.add("Geburtstag fehlt");
+        } else if (!Check.validateBirthdate(date)) {
+            wrongField(focus, lectureBirth);
+            focus = true;
+            errorMessageL.add("Geburtstag ist falsch");
+        } else
+            lectureBirth.setStyle(styleRight);
+
+        text = lectureEmail.getText().trim();
+        if (text.isEmpty()) {
+            wrongField(focus, lectureEmail);
+            focus = true;
+            errorMessageL.add("E-Mail fehlt");
+        } else if (Check.validateEmail(text)) {
+            wrongField(focus, lectureEmail);
+            focus = true;
+            errorMessageL.add("E-Mail ist falsch");
+        } else
+            lectureEmail.setStyle(styleRight);
+
+        text = lectureStreet.getText().trim();
+        if (text.isEmpty()) {
+            wrongField(focus, lectureStreet);
+            focus = true;
+            errorMessageL.add("Straße fehlt");
+        } else
+            lectureStreet.setStyle(styleRight);
+
+        text = lectureHomeNumber.getText().trim();
+        if (text.isEmpty()) {
+            wrongField(focus, lectureHomeNumber);
+            focus = true;
+            errorMessageL.add("Hausnummer fehlt");
+        } else
+            lectureHomeNumber.setStyle(styleRight);
+
+        text = lecturePostalCode.getText().trim();
+        if (text.isEmpty()) {
+            wrongField(focus, lecturePostalCode);
+            focus = true;
+            errorMessageL.add("Postleitzahl fehlt");
+        } else if (!Check.validatePostalCode(text)) {
+            wrongField(focus, lecturePostalCode);
+            focus = true;
+            errorMessageL.add("Postleitzahl ist falsch");
+        } else
+            lecturePostalCode.setStyle(styleRight);
+
+        text = lectureCity.getText().trim();
+        if (text.isEmpty()) {
+            wrongField(focus, lectureCity);
+            focus = true;
+            errorMessageL.add("Stadt fehlt");
+        } else
+            lectureCity.setStyle(styleRight);
+
+        text = lectureCountry.getText().trim();
+        if (text.isEmpty()) {
+            wrongField(focus, lectureCountry);
+            focus = true;
+            errorMessageL.add("Land fehlt");
+        } else
+            lectureCountry.setStyle(styleRight);
+
+        if (focus) {
+            StringBuilder sb = new StringBuilder(errorMessageL.remove(0));
+            for (String s : errorMessageL)
+                sb.append(", ").append(s);
+            for (int f = 190; f < sb.length(); f += 190)
+                sb.insert(f, "\n");
+            errorMessage.setText(sb.toString());
+            errorMessage.setVisible(true);
+        } else {
+            errorMessage.setVisible(false);
+            University.addDocent(new Docent(
+                    lectureLastName.getText(),
+                    lectureFirstName.getText(),
+                    convertToDateViaSqlDate(lectureBirth.getValue()),
+                    new Address(lectureStreet.getText(), lectureHomeNumber.getText(), lecturePostalCode.getText(), lectureCity.getText(), lectureCountry.getText()),
+                    lectureEmail.getText(),
+                    Integer.parseInt(lectureNumberField.getText())
+            ));
+            backToOverview();
+        }
+
+        /*try {
 
             boolean allRight;
 
@@ -172,8 +286,21 @@ public class InsertLectureController {
         } catch (NullPointerException npe) {
             showNullPointer.setVisible(true);
             System.out.println("NPE2 found");
-        }
+        }*/
 
+    }
+
+    /**
+     * visualize the wrong fields
+     * @param focus has any field requested focus
+     * @param control control to mark visualized
+     */
+    private void wrongField(boolean focus, Control control) {
+        final String styleWrong = "-fx-text-fill: darkred; -fx-border-color: darkred";
+        control.setStyle(styleWrong);
+        if (!focus) {
+            control.requestFocus();
+        }
     }
 
 }

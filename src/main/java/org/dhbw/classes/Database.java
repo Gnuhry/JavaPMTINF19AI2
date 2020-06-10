@@ -301,6 +301,7 @@ public class Database {
      */
     public static void updateStudent(DualStudent student, DualStudent old) {
         if (student == null) return;
+        if (student.equals(old)) return;
         int person_id = updatePerson(student, old);
         int course_id = updateCourse(student.getCourse(), old.getCourse());
         int company_id = updateCompany(student.getCompany(), old.getCompany());
@@ -329,6 +330,7 @@ public class Database {
      */
     public static int updateDocent(Docent docent, Docent old) {
         if (docent == null) return Integer.MIN_VALUE;
+        if (docent.equals(old)) return old.getDocentNumber();
         int person_id = updatePerson(docent, old);
         try {
             initialize();
@@ -355,6 +357,7 @@ public class Database {
     public static int updateCourse(Course course, Course old) {
         if (course == null) return Integer.MIN_VALUE;
         int id = getCourseId(old);
+        if (course.equals(old)) return id;
         if (id >= 0) {
             int docent_id = updateDocent(course.getStudyDirector(), old.getStudyDirector());
             int room_id = updateRoom(course.getRoom(), old.getRoom());
@@ -385,8 +388,9 @@ public class Database {
      */
     public static int updatePerson(Person person, Person old) {
         if (person == null) return Integer.MIN_VALUE;
-        if (countUsedPerson(old) > 1) return addPerson(person);
         int id = getPersonId(old);
+        if (person.equals(old)) return id;
+        if (countUsedPerson(old) > 1) return addPerson(person);
         if (id >= 0) {
             int address_id = updateAddress(person.getAddress(), old.getAddress());
             try {
@@ -415,6 +419,7 @@ public class Database {
     public static int updateCompany(Company company, Company old) {
         if (company == null) return Integer.MIN_VALUE;
         int id = getCompanyId(old);
+        if (company.equals(old)) return id;
         if (id >= 0) {
             int address_id = updateAddress(company.getAddress(), old.getAddress());
             int person_id = updatePerson(company.getContactPerson(), old.getContactPerson());
@@ -445,8 +450,9 @@ public class Database {
      */
     public static int updateAddress(Address address, Address old) {
         if (address == null) return Integer.MIN_VALUE;
-        if (countUsedAddress(old) > 1) return addAddress(address);
         int id = getAddressId(old);
+        if (address.equals(old)) return id;
+        if (countUsedAddress(old) > 1) return addAddress(address);
         if (id >= 0) {
             try {
                 initialize();
@@ -473,8 +479,9 @@ public class Database {
      */
     public static int updateRoom(CourseRoom room, CourseRoom old) {
         if (room == null) return Integer.MIN_VALUE;
-        if (countUsedRoom(old) > 1) return addRoom(room);
         int id = getRoomID(old);
+        if (room.equals(old)) return id;
+        if (countUsedRoom(old) > 1) return addRoom(room);
         if (id >= 0) {
             try {
                 initialize();

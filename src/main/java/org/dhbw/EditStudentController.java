@@ -8,7 +8,9 @@ import javafx.stage.Stage;
 import org.dhbw.classes.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class EditStudentController {
 
@@ -82,11 +84,9 @@ public class EditStudentController {
     @FXML
     private TextField courseRoom;
     @FXML
-    private Label javaKnowledgeLabel;
+    private TextField javaKnowledgeLabel;
     @FXML
     private Slider javaKnowledgeSlider;
-    @FXML
-    private DialogPane showNullPointer;
 
     /**
      * converting a Date to a LocalDate
@@ -95,7 +95,7 @@ public class EditStudentController {
      * @return LocalDate with the same value as the dateToConvert
      */
     private LocalDate convertToLocalDateViaSqlDate(Date dateToConvert) {
-        return new java.sql.Date(dateToConvert.getTime()).toLocalDate();
+        return dateToConvert == null ? null : new java.sql.Date(dateToConvert.getTime()).toLocalDate();
     }
 
     /**
@@ -105,7 +105,7 @@ public class EditStudentController {
      * @return Date with the same value as the dateToConvert
      */
     private Date convertToDateViaSqlDate(LocalDate dateToConvert) {
-        return java.sql.Date.valueOf(dateToConvert);
+        return dateToConvert == null ? null : java.sql.Date.valueOf(dateToConvert);
     }
 
     /**
@@ -211,6 +211,24 @@ public class EditStudentController {
         companyPersonEmail.setText(company.getContactPerson().getEmail());
     }
 
+
+    /**
+     * set value from text box to java knowledge slider
+     */
+    @FXML
+    public void javaKnowledgeLabelKeyReleased() {
+        String text = javaKnowledgeLabel.getText();
+        try {
+            int number = Integer.parseInt(text);
+            if (number > 0 && number < 100)
+                javaKnowledgeSlider.setValue(number);
+            else if (number <= 0)
+                javaKnowledgeSlider.setValue(0);
+            else javaKnowledgeSlider.setValue(100);
+        } catch (NumberFormatException ignored) {
+        }
+    }
+
     /**
      * reading the textfields
      * checking validation of emails, postal code and date
@@ -219,86 +237,148 @@ public class EditStudentController {
      */
     @FXML
     private void submit() {
+        final String styleRight = "-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)";
+        List<String> errorMessageL = new ArrayList<>();
+        String text = studentFirstName.getText().trim();
+        Date date;
+        boolean focus = false;
+        if (text.isEmpty()) {
+            wrongField(focus, studentFirstName, 0);
+            focus = true;
+            errorMessageL.add("Vorname fehlt");
+        } else
+            studentFirstName.setStyle(styleRight);
+
+        text = studentLastName.getText().trim();
+        if (text.isEmpty()) {
+            wrongField(focus, studentLastName, 0);
+            focus = true;
+            errorMessageL.add("Nachname fehlt");
+        } else
+            studentLastName.setStyle(styleRight);
+
+        text = studentEmail.getText().trim();
+        if (text.isEmpty()) {
+            wrongField(focus, studentEmail, 0);
+            focus = true;
+            errorMessageL.add("E-Mail fehlt");
+        } else if (!Check.validateEmail(text)) {
+            wrongField(focus, studentEmail, 0);
+            focus = true;
+            errorMessageL.add("E-Mail ist falsch");
+        } else
+            studentEmail.setStyle(styleRight);
+
+        text = studentStreet.getText().trim();
+        if (text.isEmpty()) {
+            wrongField(focus, studentStreet, 0);
+            focus = true;
+            errorMessageL.add("Straße fehlt");
+        } else
+            studentStreet.setStyle(styleRight);
+
+        text = studentHomeNumber.getText().trim();
+        if (text.isEmpty()) {
+            wrongField(focus, studentHomeNumber, 0);
+            focus = true;
+            errorMessageL.add("Hausnummer fehlt");
+        } else
+            studentHomeNumber.setStyle(styleRight);
+
+        text = studentPostalCode.getText().trim();
+        if (text.isEmpty()) {
+            wrongField(focus, studentPostalCode, 0);
+            focus = true;
+            errorMessageL.add("Postleitzahl fehlt");
+        } else if (!Check.validatePostalCode(text)) {
+            wrongField(focus, studentPostalCode, 0);
+            focus = true;
+            errorMessageL.add("Postleitzahl ist falsch");
+        } else
+            studentPostalCode.setStyle(styleRight);
+
+        text = studentCity.getText().trim();
+        if (text.isEmpty()) {
+            wrongField(focus, studentCity, 0);
+            focus = true;
+            errorMessageL.add("Stadt fehlt");
+        } else
+            studentCity.setStyle(styleRight);
+
+        text = studentCountry.getText().trim();
+        if (text.isEmpty()) {
+            wrongField(focus, studentCountry, 0);
+            focus = true;
+            errorMessageL.add("Land fehlt");
+        } else
+            studentCountry.setStyle(styleRight);
+
+        Course course = courseName.getValue();
+        if (course == null) {
+            wrongField(focus, courseName, 100);
+            focus = true;
+            errorMessageL.add("Kurs nicht ausgewählt");
+        } else
+            courseName.setStyle(styleRight);
+
+        text = javaKnowledgeLabel.getText().trim();
         try {
-            boolean allRight;
-            if (studentFirstName.getText().trim().isEmpty() || studentLastName.getText().trim().isEmpty() || studentBirth.getValue() == null || studentEmail.getText().trim().isEmpty() || studentStreet.getText().trim().isEmpty() || studentHomeNumber.getText().trim().isEmpty() || studentPostalCode.getText().trim().isEmpty() || studentCity.getText().trim().isEmpty() || studentCountry.getText().trim().isEmpty() || studentNumberField.getText().trim().isEmpty() || matriculationNumberField.getText().trim().isEmpty() || companyName.getText().trim().isEmpty() || companyStreet.getText().trim().isEmpty() || companyHomeNumber.getText().trim().isEmpty() || companyPostalCode.getText().trim().isEmpty() || companyCity.getText().trim().isEmpty() || companyCountry.getText().trim().isEmpty() || companyPersonFirstName.getText().trim().isEmpty() || companyPersonLastName.getText().trim().isEmpty() || courseName.getEditor().getText().equals("Kurs auswählen") || javaKnowledgeLabel.getText().trim().isEmpty()) {
-                showNullPointer.setVisible(true);
-                System.out.println("NPE2 found");
-            } else {
-                Company company;
-                Person contactPerson = new Person(companyPersonLastName.getText(), companyPersonFirstName.getText(), companyPersonEmail.getText());
-                Address companyAddress = new Address(companyStreet.getText(), companyHomeNumber.getText(), companyPostalCode.getText(), companyCity.getText(), companyCountry.getText());
-
-                int focusStage = 0;
-                errorMessage.setText("Bitte korrigieren Sie die Fehler in folgenden Feldern");
-                company = new Company(companyName.getText(), companyAddress, contactPerson);
-
-                if (!Check.validateEmail(studentEmail.getText())) {
-                    studentEmail.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
-                    focusStage = 1;
-                    errorMessage.setText(errorMessage.getText() + " E-Mail-Adresse ");
-                } else
-                    studentEmail.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
-                if (!Check.validatePostalCode(studentPostalCode.getText())) {
-                    studentPostalCode.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
-                    if (focusStage != 1) focusStage = 2;
-                    errorMessage.setText(errorMessage.getText() + " Student-Postleitzahl ");
-                } else
-                    studentPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
-                if (!Check.validatePostalCode(companyPostalCode.getText())) {
-                    companyPostalCode.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
-                    if (!(focusStage == 1 || focusStage == 2)) focusStage = 3;
-                    errorMessage.setText(errorMessage.getText() + " Unternehmen-Postleitzahl ");
-                } else
-                    companyPostalCode.setStyle("-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)");
-                if (!Check.validateBirthdate(convertToDateViaSqlDate(studentBirth.getValue()))) {
-                    studentPostalCode.setStyle("-fx-text-fill: darkred; -fx-border-color: darkred");
-                    if (focusStage == 1 || focusStage == 2 || focusStage == 3) focusStage = 4;
-                    errorMessage.setText(errorMessage.getText() + " Student-Geburtstag ");
-                }
-
-                if (focusStage == 1) {
-                    studentEmail.requestFocus();
-                    scrollPane.setVvalue(0);
-                    errorMessage.setVisible(true);
-                    allRight = false;
-                } else if (focusStage == 2) {
-                    studentPostalCode.requestFocus();
-                    scrollPane.setVvalue(0);
-                    errorMessage.setVisible(true);
-                    allRight = false;
-                } else if (focusStage == 3) {
-                    companyPostalCode.requestFocus();
-                    scrollPane.setVvalue(100);
-                    errorMessage.setVisible(true);
-                    allRight = false;
-                } else {
-                    errorMessage.setVisible(false);
-                    allRight = true;
-                }
-
-                if (allRight) {
-                    Course course = courseName.getValue();
-                    if (course.equals(noCourse))
-                        course = new Course(null, null, null, null, null);
-                    University.updateStudent(new DualStudent(
-                            Integer.parseInt(matriculationNumberField.getText()),
-                            Integer.parseInt(studentNumberField.getText().substring(1)),
-                            studentLastName.getText(),
-                            studentFirstName.getText(),
-                            convertToDateViaSqlDate(studentBirth.getValue()),
-                            new Address(studentStreet.getText(), studentHomeNumber.getText(), studentPostalCode.getText(), studentCity.getText(), studentCountry.getText()),
-                            studentEmail.getText(),
-                            course,
-                            Integer.parseInt(javaKnowledgeLabel.getText()),
-                            company
-                    ), student_old);
-                    backToOverview();
-                }
+            int number = Integer.parseInt(text);
+            if (number < 0 || number > 100) {
+                wrongField(focus, javaKnowledgeLabel, 100);
+                focus = true;
+                errorMessageL.add("Java-Wissen Index ist falsch");
             }
-        } catch (NumberFormatException npe) {
-            showNullPointer.setVisible(true);
-            System.out.println("NPE found");
+        } catch (NumberFormatException ignored) {
+            wrongField(focus, javaKnowledgeLabel, 100);
+            focus = true;
+            errorMessageL.add("Java-Wissen Index ist falsch");
+        }
+
+        if (focus) {
+            StringBuilder sb = new StringBuilder(errorMessageL.remove(0));
+            for (String s : errorMessageL)
+                sb.append(", ").append(s);
+            for (int f = 190; f < sb.length(); f += 190)
+                sb.insert(f, "\n");
+            errorMessage.setText(sb.toString());
+            errorMessage.setVisible(true);
+        } else {
+            errorMessage.setVisible(false);
+            course = courseName.getValue();
+            if (course.equals(noCourse))
+                course = new Course(null, null, null, null, null);
+            University.updateStudent(new DualStudent(
+                    Integer.parseInt(matriculationNumberField.getText()),
+                    Integer.parseInt(studentNumberField.getText().substring(1)),
+                    studentLastName.getText(),
+                    studentFirstName.getText(),
+                    convertToDateViaSqlDate(studentBirth.getValue()),
+                    new Address(studentStreet.getText(), studentHomeNumber.getText(), studentPostalCode.getText(), studentCity.getText(), studentCountry.getText()),
+                    studentEmail.getText(),
+                    course,
+                    Integer.parseInt(javaKnowledgeLabel.getText()),
+                    new Company(companyName.getText(), new Address(companyStreet.getText(), companyHomeNumber.getText(), companyPostalCode.getText(), companyCity.getText(), companyCountry.getText()), new Person(companyPersonLastName.getText(), companyPersonFirstName.getText(), companyPersonEmail.getText()))
+            ), student_old);
+            backToOverview();
+        }
+
+    }
+
+
+    /**
+     * visualize the wrong fields
+     *
+     * @param focus   has any field requested focus
+     * @param control control to mark visualized
+     * @param scroll  scroll procent to show control
+     */
+    private void wrongField(boolean focus, Control control, int scroll) {
+        final String styleWrong = "-fx-text-fill: darkred; -fx-border-color: darkred";
+        control.setStyle(styleWrong);
+        if (!focus) {
+            control.requestFocus();
+            scrollPane.setVvalue(scroll);
         }
     }
 }

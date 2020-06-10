@@ -119,9 +119,10 @@
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="320.0" />
          </expandableContent>
       </DialogPane>
+      <Label fx:id="errorMessage" layoutX="197.0" layoutY="81.0" textFill="#870606" visible="false" />
       <ButtonBar layoutX="-28.0" layoutY="530.0" prefHeight="52.0" prefWidth="1080.0" AnchorPane.leftAnchor="-28.0" AnchorPane.rightAnchor="28.0">
         <buttons>
-          <Button alignment="CENTER" mnemonicParsing="false" onAction="#submit" onMouseClicked="#backToOverview" stylesheets="@css/application.css" text="Eintragen" />
+          <Button alignment="CENTER" mnemonicParsing="false" onAction="#submit" stylesheets="@css/application.css" text="Eintragen" />
             <Button alignment="CENTER" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="Abbrechen" />
         </buttons>
          <padding>

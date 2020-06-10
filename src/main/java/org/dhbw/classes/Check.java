@@ -2,6 +2,7 @@ package org.dhbw.classes;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,6 +12,7 @@ public class Check {
 
     private static final Pattern VALID_POSTAL_CODE_REGEX =
             Pattern.compile("^[0-9]{5}$");
+    private List<Integer> studentids, docentids, matriculationids;
 
     /**
      * validate if date is before today
@@ -66,13 +68,25 @@ public class Check {
     }
 
     /**
+     * validate if string is a room
+     *
+     * @param text string to validate
+     * @return {true} if is a room, {false} if not
+     */
+    public static boolean validateRoom(String text) {
+        return !text.contains(" ");
+    }
+
+    /**
      * validate if studentNumber is not occupied
      *
      * @param studentNumber number to validate
      * @return {true} if number is free, {false} if not
      */
-    public static boolean checkSNContains(int studentNumber) {
-        return Database.getStudentIDs().contains(studentNumber);
+    public boolean checkSNContains(int studentNumber) {
+        if (studentids == null)
+            studentids = Database.getStudentIDs();
+        return studentids.contains(studentNumber);
     }
 
     /**
@@ -81,8 +95,10 @@ public class Check {
      * @param matriculationNumber number to validate
      * @return {true} if number is free, {false} if not
      */
-    public static boolean checkMNContains(int matriculationNumber) {
-        return Database.getMatriculationNumbers().contains(matriculationNumber);
+    public boolean checkMNContains(int matriculationNumber) {
+        if (matriculationids == null)
+            matriculationids = Database.getMatriculationNumbers();
+        return matriculationids.contains(matriculationNumber);
     }
 
     /**
@@ -91,7 +107,11 @@ public class Check {
      * @param docentNumber number to validate
      * @return {true} if number is free, {false} if not
      */
-    public static boolean checkDNContains(int docentNumber) {
-        return Database.getDocentIDs().contains(docentNumber);
+    public boolean checkDNContains(int docentNumber) {
+        if (docentids == null)
+            docentids = Database.getDocentIDs();
+        return docentids.contains(docentNumber);
     }
+
+
 }

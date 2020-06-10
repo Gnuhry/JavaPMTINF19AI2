@@ -7,11 +7,11 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.dhbw.classes.*;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 public class EditCourseController {
 
@@ -43,7 +43,7 @@ public class EditCourseController {
     @FXML
     private ComboBox<Docent> courseDirector;
     @FXML
-    private DialogPane showNullPointer;
+    private Label errorMessage;
 
     /**
      * converting a Date to a LocalDate
@@ -52,7 +52,7 @@ public class EditCourseController {
      * @return LocalDate with the same value as the dateToConvert
      */
     private LocalDate convertToLocalDateViaSqlDate(Date dateToConvert) {
-        return new java.sql.Date(dateToConvert.getTime()).toLocalDate();
+        return dateToConvert == null ? null : new java.sql.Date(dateToConvert.getTime()).toLocalDate();
     }
 
     /**
@@ -132,35 +132,87 @@ public class EditCourseController {
     @FXML
     private void submit() {
 
-        try {
-            if (courseName.getText().trim().isEmpty() || courseType.getValue() == null || courseRoom.getValue() == null || courseDate.getValue() == null || courseDirector.getValue() == null) {
-                showNullPointer.setVisible(true);
-                System.out.println("NPE2 found");
+        final String styleRight = "-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)";
+        List<String> errorMessageL = new ArrayList<>();
+        String text = courseName.getText().trim();
+        boolean focus = false;
+        if (text.isEmpty()) {
+            wrongField(focus, courseName);
+            focus = true;
+            errorMessageL.add("Name fehlt");
+        } else
+            courseName.setStyle(styleRight);
+
+        CourseRoom room = courseRoom.getValue();
+        if (room == null) {
+            wrongField(focus, courseRoom);
+            focus = true;
+            errorMessageL.add("Kursraum nicht ausgewählt");
+        } else if (room.equals(newRoom)) {
+            text = insertRoom.getText().trim();
+            if (text.isEmpty()) {
+                wrongField(focus, insertRoom);
+                focus = true;
+                errorMessageL.add("Kursraum fehlt");
+            } else if (!Check.validateRoom(text)) {
+                wrongField(focus, insertRoom);
+                focus = true;
+                errorMessageL.add("Kursraum ist falsch");
             } else {
-                LocalDate localDateCourseBirth = courseDate.getValue();
-
-                CourseRoom room = courseRoom.getValue();
-                if (room.equals(newRoom) && !courseRoom.getEditor().getText().isEmpty())
-                    room = new CourseRoom(insertRoom.getText());
-                else if (room.equals(noRoom) || room.equals(newRoom))
-                    room = null;
-
-                Docent director = courseDirector.getValue();
-                if (courseDirector.getValue().equals(noDocent))
-                    director = null;
-
-                University.updateCourse(new Course(
-                        courseName.getText(),
-                        courseType.getValue(),
-                        director,
-                        Date.from(Instant.from(localDateCourseBirth.atStartOfDay(ZoneId.systemDefault()))),
-                        room
-                ), course_old);
-                backToOverview();
+                insertRoom.setStyle(styleRight);
+                courseRoom.setStyle(styleRight);
             }
-        } catch (NullPointerException npe) {
-            showNullPointer.setVisible(true);
-            System.out.println("NPE2 found");
+        } else
+            courseRoom.setStyle(styleRight);
+
+        Docent docent = courseDirector.getValue();
+        if (docent == null) {
+            wrongField(focus, courseDirector);
+            focus = true;
+            errorMessageL.add("Kursdirektor nicht ausgewählt");
+        } else
+            courseDirector.setStyle(styleRight);
+
+        if (focus) {
+            StringBuilder sb = new StringBuilder(errorMessageL.remove(0));
+            for (String s : errorMessageL)
+                sb.append(", ").append(s);
+            for (int f = 190; f < sb.length(); f += 190)
+                sb.insert(f, "\n");
+            errorMessage.setText(sb.toString());
+            errorMessage.setVisible(true);
+        } else {
+            errorMessage.setVisible(false);
+            room = courseRoom.getValue();
+            if (room.equals(newRoom) && !courseRoom.getEditor().getText().isEmpty())
+                room = new CourseRoom(insertRoom.getText());
+            else if (room.equals(noRoom) || room.equals(newRoom))
+                room = null;
+
+            Docent director = courseDirector.getValue();
+            if (courseDirector.getValue().equals(noDocent))
+                director = null;
+            University.updateCourse(new Course(
+                    courseName.getText(),
+                    course_old.getStudyCourse(),
+                    director,
+                    course_old.getRegistrationDate(),
+                    room
+            ), course_old);
+            backToOverview();
+        }
+    }
+
+    /**
+     * visualize the wrong fields
+     * @param focus has any field requested focus
+     * @param control control to mark visualized
+     */
+    private void wrongField(boolean focus, Control control) {
+        final String styleWrong = "-fx-text-fill: darkred; -fx-border-color: darkred";
+        control.setStyle(styleWrong);
+        if (!focus) {
+            control.requestFocus();
         }
     }
 }
