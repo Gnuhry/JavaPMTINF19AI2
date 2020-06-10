@@ -544,15 +544,11 @@ public class Database {
      * @param course the course to delete
      */
     public static void deleteCourse(Course course) {
-        int room_id = getRoomID(course.getRoom());
+        int course_id = getCourseId(course);
         try {
             initialize();
-            statement = connection.prepareStatement("DELETE FROM course WHERE room_id = ? AND name = ? AND registry_date = ? AND course_type = ? AND study_director_id = ?");
-            statement.setInt(1, room_id);
-            statement.setString(2, course.getName());
-            statement.setDate(3, convertDate(course.getRegistrationDate()));
-            statement.setInt(4, getCourseTypeID(course.getStudyCourse()));
-            statement.setInt(5, course.getStudyDirector().getDocentNumber());
+            statement = connection.prepareStatement("DELETE FROM course WHERE course_id = ?");
+            statement.setInt(1, course_id);
             statement.execute();
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
