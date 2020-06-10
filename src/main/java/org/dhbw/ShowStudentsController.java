@@ -221,7 +221,7 @@ public class ShowStudentsController extends Application implements Initializable
             @Override
             protected void updateItem(Date date, boolean b) {
                 super.updateItem(date, b);
-                if (b||date==null) {
+                if (b || date == null) {
                     setText(null);
                 } else {
                     this.setText(format.format(date));
@@ -238,7 +238,9 @@ public class ShowStudentsController extends Application implements Initializable
 
         FilteredList<Docent> filteredLecture = new FilteredList<>(docents, p -> true);
         searchBoxLecture.textProperty().addListener((observable, oldValue, newValue) -> filteredLecture.setPredicate(person -> {
-            if (newValue == null || newValue.isEmpty()) {return true;}
+            if (newValue == null || newValue.isEmpty()) {
+                return true;
+            }
             String lowerCaseFilter = newValue.toLowerCase();
             if (person.getForename().toLowerCase().contains(lowerCaseFilter)) {
                 return true;
@@ -272,7 +274,9 @@ public class ShowStudentsController extends Application implements Initializable
 
         FilteredList<Course> filteredCourse2 = new FilteredList<>(courses, p -> true);
         searchBoxCourse.textProperty().addListener((observable, oldValue, newValue) -> filteredCourse2.setPredicate(course -> {
-            if (newValue == null || newValue.isEmpty()) {return true;}
+            if (newValue == null || newValue.isEmpty()) {
+                return true;
+            }
             String lowerCaseFilter = newValue.toLowerCase();
             return course.getName().toLowerCase().contains(lowerCaseFilter);
         }));
@@ -289,7 +293,9 @@ public class ShowStudentsController extends Application implements Initializable
 
         FilteredList<Company> filteredCompany2 = new FilteredList<>(companies, p -> true);
         searchBoxCompany.textProperty().addListener((observable, oldValue, newValue) -> filteredCompany2.setPredicate(course -> {
-            if (newValue == null || newValue.isEmpty()) {return true;}
+            if (newValue == null || newValue.isEmpty()) {
+                return true;
+            }
             String lowerCaseFilter = newValue.toLowerCase();
             return course.getName().toLowerCase().contains(lowerCaseFilter);
         }));
@@ -442,6 +448,4 @@ public class ShowStudentsController extends Application implements Initializable
             erg &= course.equals(person.getCourse());
         return erg;
     }
-
-
 }

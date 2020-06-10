@@ -2,7 +2,7 @@ package org.dhbw.classes;
 
 import java.util.Objects;
 
-public class Company {
+public class Company implements Comparable<Company>{
     private String name;
     private Address address;
     private Person contactPerson;
@@ -57,5 +57,10 @@ public class Company {
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public int compareTo(Company company) {
+        return name == null ? -1 : company.getName() == null ? 1 : name.toLowerCase().compareTo(company.name.toLowerCase());
     }
 }

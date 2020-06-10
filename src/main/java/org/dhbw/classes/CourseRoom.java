@@ -2,17 +2,19 @@ package org.dhbw.classes;
 
 import java.util.Objects;
 
-public class CourseRoom {
+public class CourseRoom implements Comparable<CourseRoom>{
     private final String name;
 
     public CourseRoom(String name) {
         this.name = name;
     }
 
+    //------------------Getter-----------------------
     public String getName() {
         return name;
     }
 
+    //------------------Overrides---------------------
     @Override
     public String toString() {
         return name;
@@ -29,5 +31,10 @@ public class CourseRoom {
     @Override
     public int hashCode() {
         return Objects.hash(name);
+    }
+
+    @Override
+    public int compareTo(CourseRoom o) {
+        return name == null ? -1 : o.getName() == null ? 1 : name.toLowerCase().compareTo(o.name.toLowerCase());
     }
 }

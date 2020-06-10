@@ -3,7 +3,7 @@ package org.dhbw.classes;
 import java.util.Date;
 import java.util.Objects;
 
-public class Docent extends Person {
+public class Docent extends Person implements Comparable<Person>{
     private final int docentNumber;
 
     public Docent(String name, String forename, Date birthday, Address address, String email, int docentNumber) {
@@ -34,5 +34,10 @@ public class Docent extends Person {
     @Override
     public String toString() {
         return super.toString();
+    }
+
+    @Override
+    public int compareTo(Person o) {
+        return super.compareTo(o);
     }
 }

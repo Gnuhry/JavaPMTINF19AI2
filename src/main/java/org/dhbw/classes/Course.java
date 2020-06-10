@@ -3,7 +3,7 @@ package org.dhbw.classes;
 import java.util.Date;
 import java.util.Objects;
 
-public class Course {
+public class Course implements Comparable<Course> {
     private final Date registrationDate;
     private final StudyCourse studyCourse;
     private String name;
@@ -68,7 +68,7 @@ public class Course {
         return Objects.equals(registrationDate, course.registrationDate) &&
                 studyCourse == course.studyCourse &&
                 Objects.equals(name, course.name) &&
-                room == course.room;
+                Objects.equals(room, course.room);
     }
 
     @Override
@@ -80,5 +80,11 @@ public class Course {
     @Override
     public String toString() {
         return name;
+    }
+
+
+    @Override
+    public int compareTo(Course course) {
+        return name == null ? -1 : course.getName() == null ? 1 : name.toLowerCase().compareTo(course.name.toLowerCase());
     }
 }

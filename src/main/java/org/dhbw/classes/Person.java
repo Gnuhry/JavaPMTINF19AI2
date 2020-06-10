@@ -3,13 +3,13 @@ package org.dhbw.classes;
 import java.util.Date;
 import java.util.Objects;
 
-public class Person {
+public class Person implements Comparable<Person> {
 
     private final Date birthday;
     private String name, forename, email;
     private Address address;
 
-    public Person(String name, String forename, String email){
+    public Person(String name, String forename, String email) {
         this.name = name;
         this.forename = forename;
         this.birthday = null;
@@ -82,8 +82,18 @@ public class Person {
 
     @Override
     public String toString() {
-        if(forename == null || email == null || forename.equals("") && email.equals(""))
+        if (forename == null || email == null || forename.equals("") && email.equals(""))
             return name;
         return name + ", " + forename + " , " + email;
+    }
+
+    @Override
+    public int compareTo(Person o) {
+        if (name == null)
+            return -1;
+        if (o.getName() == null)
+            return -1;
+        int compare_name = name.toLowerCase().compareTo(o.name.toLowerCase());
+        return compare_name == 0 ? forename == null ? -1 : o.getForename() == null ? 1 : forename.toLowerCase().compareTo(o.getForename().toLowerCase()) : compare_name;
     }
 }
