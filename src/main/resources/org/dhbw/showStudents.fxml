@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<TabPane fx:id="tabPane" maxWidth="1250.0" minWidth="1250.0" prefHeight="600.0" prefWidth="1250.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.ShowStudentsController">
+<TabPane fx:id="tabPane" maxWidth="1250.0" minWidth="1250.0" prefHeight="600.0" prefWidth="1250.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.ShowStudentsController">
   <tabs>
     <Tab style="-fx-background-color: rgba(0,0,0,0.7); -fx-text-base-color: white;" text="Studierende">
       <content>
@@ -20,7 +29,7 @@
                         <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="Refresh" translateX="450.0" />
                      </items>
                   </ToolBar>
-                  <TableView fx:id="studentTable" editable="true" focusTraversable="false" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0" stylesheets="@css/application.css">
+                  <TableView fx:id="studentTable" editable="true" focusTraversable="false" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0" stylesheets="@css/application.css" tableMenuButtonVisible="true">
                     <columns>
                       <TableColumn fx:id="studentNumber" prefWidth="75.0" text="ID" />
                       <TableColumn fx:id="studentForename" prefWidth="75.0" text="Vorname" />
@@ -33,7 +42,7 @@
                         <TableColumn fx:id="studentCourse" prefWidth="88.0" text="Kurs" />
                         <TableColumn fx:id="studentJava" prefWidth="47.199951171875" text="Java" />
                         <TableColumn fx:id="studentC" editable="false" prefWidth="38.4000244140625" resizable="false" sortable="false" />
-                        <TableColumn fx:id="studentD" editable="false" prefWidth="45.5999755859375" resizable="false" sortable="false" />
+                        <TableColumn fx:id="studentD" editable="false" prefWidth="54.0" resizable="false" sortable="false" />
                     </columns>
                   </TableView>
                </children>
@@ -44,7 +53,7 @@
         <content>
           <AnchorPane maxWidth="1200.0" minHeight="0.0" minWidth="1200.0" prefHeight="600.0" prefWidth="1200.0">
                <children>
-                  <TableView fx:id="lectureTable" layoutY="50.0" prefHeight="521.0" prefWidth="1250.0" stylesheets="@css/application.css">
+                  <TableView fx:id="lectureTable" layoutY="50.0" prefHeight="521.0" prefWidth="1250.0" stylesheets="@css/application.css" tableMenuButtonVisible="true">
                     <columns>
                         <TableColumn fx:id="lectureNumber" prefWidth="75.0" text="DozentenID" />
                       <TableColumn fx:id="lectureFirstName" prefWidth="75.0" text="Vorname" />
@@ -53,7 +62,7 @@
                         <TableColumn fx:id="lectureEmail" prefWidth="150.0" text="Email" />
                         <TableColumn fx:id="lectureAddress" prefWidth="200.0" text="Addresse" />
                         <TableColumn fx:id="lectureC" editable="false" prefWidth="40.0" resizable="false" sortable="false" />
-                        <TableColumn fx:id="lectureD" editable="false" prefWidth="40.0" resizable="false" sortable="false" />
+                        <TableColumn fx:id="lectureD" editable="false" prefWidth="558.0" resizable="false" sortable="false" />
                     </columns>
                   </TableView>
                   <ToolBar prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
@@ -77,7 +86,7 @@
                         <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="Refresh" translateX="944.0" />
                      </items>
                   </ToolBar>
-                  <TableView fx:id="courseTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0" stylesheets="@css/application.css">
+                  <TableView fx:id="courseTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0" stylesheets="@css/application.css" tableMenuButtonVisible="true">
                     <columns>
                       <TableColumn fx:id="courseName" prefWidth="115.0" text="Kursbezeichnung" />
                         <TableColumn fx:id="courseType" prefWidth="120.0" text="Kursart" />
@@ -85,7 +94,7 @@
                         <TableColumn fx:id="courseDate" prefWidth="123.0" text="Registrierungsdatum" />
                         <TableColumn fx:id="courseLecture" prefWidth="200.0" text="Studiengangsleitung" />
                         <TableColumn fx:id="courseC" editable="false" prefWidth="40.0" resizable="false" sortable="false" />
-                        <TableColumn fx:id="courseD" editable="false" prefWidth="40.0" resizable="false" sortable="false" />
+                        <TableColumn fx:id="courseD" editable="false" prefWidth="560.0" resizable="false" sortable="false" />
                     </columns>
                   </TableView>
                </children></AnchorPane>
@@ -95,13 +104,13 @@
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <TableView fx:id="companyTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0" stylesheets="@css/application.css">
+                  <TableView fx:id="companyTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0" stylesheets="@css/application.css" tableMenuButtonVisible="true">
                     <columns>
                       <TableColumn fx:id="companyName" prefWidth="200.0" text="Unternehmenname" />
                         <TableColumn fx:id="companyAddress" prefWidth="200.0" text="Adresse" />
                         <TableColumn fx:id="companyPerson" prefWidth="250.0" text="Ansprechperson" />
                         <TableColumn fx:id="companyC" editable="false" prefWidth="40.0" resizable="false" sortable="false" />
-                        <TableColumn fx:id="companyD" editable="false" prefWidth="40.0" resizable="false" sortable="false" />
+                        <TableColumn fx:id="companyD" editable="false" prefWidth="558.0" resizable="false" sortable="false" />
                     </columns>
                   </TableView>
                   <ToolBar prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
