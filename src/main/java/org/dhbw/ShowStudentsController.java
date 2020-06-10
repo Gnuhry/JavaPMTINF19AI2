@@ -1,6 +1,5 @@
 package org.dhbw;
 
-import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -28,7 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ShowStudentsController extends Application implements Initializable {
+public class ShowStudentsController implements Initializable {
     private final ObservableList<DualStudent> students = FXCollections.observableArrayList(
             University.getStudents()
     );
@@ -335,7 +334,6 @@ public class ShowStudentsController extends Application implements Initializable
      *
      * @param stage new stage show new window
      */
-    @Override
     public void start(Stage stage) throws Exception {
         String resourcePath = file + ".fxml";
         URL location = getClass().getResource(resourcePath);
