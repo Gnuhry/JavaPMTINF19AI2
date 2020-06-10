@@ -87,10 +87,6 @@
     -fx-background-color: -fx-focus-color;
 }
 
-.table-view .table-cell:filled {
-    -fx-border-color: rgba(0,0,0,0.3);
-}
-
 .tab-pane
 {
     -fx-background-color: rgba(0,0,0,0.4);
