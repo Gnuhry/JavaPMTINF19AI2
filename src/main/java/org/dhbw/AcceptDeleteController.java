@@ -5,13 +5,11 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import org.dhbw.classes.*;
 
+import java.util.List;
+
 public class AcceptDeleteController {
 
-    private Object object;
-    private DualStudent student;
-    private Docent lecture;
-    private Course course;
-    private Company company;
+    private List<Object> object;
 
     @FXML
     private Button cancelButton;
@@ -19,16 +17,7 @@ public class AcceptDeleteController {
     /**
      * initializing student, lecture, course or company with object value; the choose which object gets initialized depends on the type of the over given object
      */
-    public void initVariables(Object object) {
-        if (object instanceof DualStudent) {
-            this.student = (DualStudent) object;
-        } else if (object instanceof Docent) {
-            this.lecture = (Docent) object;
-        } else if (object instanceof Course) {
-            this.course = (Course) object;
-        } else if (object instanceof Company) {
-            this.company = (Company) object;
-        }
+    public void initVariables(List<Object> object) {
         this.object = object;
     }
 
@@ -37,15 +26,15 @@ public class AcceptDeleteController {
      */
     @FXML
     private void acceptDelete() {
-        if (object instanceof DualStudent) {
-            University.removeStudent(student);
-        } else if (object instanceof Docent) {
-            University.removeDocent(lecture);
-        } else if (object instanceof Course) {
-            University.removeCourse(course);
-        } else if (object instanceof Company) {
-            University.removeCompany(company);
-        }
+        for (Object o : object)
+            if (o instanceof DualStudent)
+                University.removeStudent((DualStudent) o);
+            else if (o instanceof Docent)
+                University.removeDocent((Docent) o);
+            else if (o instanceof Course)
+                University.removeCourse((Course) o);
+            else if (o instanceof Company)
+                University.removeCompany((Company) o);
         cancel();
     }
 

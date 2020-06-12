@@ -14,6 +14,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -41,17 +43,20 @@ public class ShowStudentsController implements Initializable {
             University.getCompanies()
     );
 
-    private String file;
-    private Object object;
-    private DualStudent student;
-    private Docent lecture;
-    private Company company;
-    private Course course;
+    private FileType file;
+    private List<Object> object;
     private final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
     private final Company allCompany = new Company("Alle Unternehmen", null, null);
     private final Course allCourse = new Course("Alle Kurse", null, null);
 
-
+    @FXML
+    private AnchorPane studentAnchor;
+    @FXML
+    private AnchorPane lectureAnchor;
+    @FXML
+    private AnchorPane courseAnchor;
+    @FXML
+    private AnchorPane companyAnchor;
     @FXML
     private TextField searchBox;
     @FXML
@@ -169,6 +174,19 @@ public class ShowStudentsController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        ContextMenu refreshMenu = new ContextMenu();
+        MenuItem item = new MenuItem("refresh");
+        item.setOnAction(actionEvent -> refresh());
+        MenuItem item2 = new MenuItem("back");
+        item2.setOnAction(actionEvent -> {
+            try {
+                backToOverview();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        refreshMenu.getItems().add(item);
+        refreshMenu.getItems().add(item2);
         studentNumber.setCellValueFactory(new PropertyValueFactory<>("studentNumber"));
         studentName.setCellValueFactory(new PropertyValueFactory<>("name"));
         studentForename.setCellValueFactory(new PropertyValueFactory<>("forename"));
@@ -191,8 +209,8 @@ public class ShowStudentsController implements Initializable {
         studentCompany.setCellValueFactory(new PropertyValueFactory<>("company"));
         studentCourse.setCellValueFactory(new PropertyValueFactory<>("course"));
         studentJava.setCellValueFactory(new PropertyValueFactory<>("javaKnowledge"));
-        studentC.setCellFactory(getCallback("editStudent", "editButton"));
-        studentD.setCellFactory(getCallback("acceptDelete", "deleteButton"));
+        studentC.setCellFactory(getCallback(FileType.editStudent));
+        studentD.setCellFactory(getCallback(FileType.acceptDelete));
         studentTable.setItems(students);
         studentTable.requestFocus();
         List<Course> courseList = new ArrayList<>();
@@ -212,6 +230,30 @@ public class ShowStudentsController implements Initializable {
         SortedList<DualStudent> sortedName = new SortedList<>(filteredName);
         sortedName.comparatorProperty().bind(studentTable.comparatorProperty());
         studentTable.setItems(sortedName);
+        studentTable.setContextMenu(refreshMenu);
+        studentTable.getSelectionModel().setSelectionMode(
+                SelectionMode.MULTIPLE
+        );
+        studentAnchor.setOnKeyPressed(keyEvent -> {
+            final ObservableList<DualStudent> selectedItem = studentTable.getSelectionModel().getSelectedItems();
+            if (selectedItem != null)
+                if (keyEvent.getCode().equals(KeyCode.DELETE))
+                    try {
+                        this.file = FileType.acceptDelete;
+                        this.object = new ArrayList<>(selectedItem);
+                        start(new Stage());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                else if (keyEvent.getCode().equals(KeyCode.ENTER) && selectedItem.size() == 1)
+                    try {
+                        this.file = FileType.editStudent;
+                        this.object = new ArrayList<>(selectedItem);
+                        start(new Stage());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+        });
 
         lectureNumber.setCellValueFactory(new PropertyValueFactory<>("docentNumber"));
         lectureLastName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -231,9 +273,33 @@ public class ShowStudentsController implements Initializable {
         lectureEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         lectureAddress.setCellValueFactory(new PropertyValueFactory<>("Address"));
         lectureEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        lectureC.setCellFactory(getCallback("editLecture", "editButton"));
-        lectureD.setCellFactory(getCallback("acceptDelete", "deleteButton"));
+        lectureC.setCellFactory(getCallback(FileType.editLecture));
+        lectureD.setCellFactory(getCallback(FileType.acceptDelete));
         lectureTable.setItems(docents);
+        lectureTable.setContextMenu(refreshMenu);
+        lectureTable.getSelectionModel().setSelectionMode(
+                SelectionMode.MULTIPLE
+        );
+        lectureAnchor.setOnKeyPressed(keyEvent -> {
+            final ObservableList<Docent> selectedItem = lectureTable.getSelectionModel().getSelectedItems();
+            if (selectedItem != null)
+                if (keyEvent.getCode().equals(KeyCode.DELETE))
+                    try {
+                        this.file = FileType.acceptDelete;
+                        this.object = new ArrayList<>(selectedItem);
+                        start(new Stage());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                else if (keyEvent.getCode().equals(KeyCode.ENTER) && selectedItem.size() == 1)
+                    try {
+                        this.file = FileType.editLecture;
+                        this.object = new ArrayList<>(selectedItem);
+                        start(new Stage());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+        });
 
         FilteredList<Docent> filteredLecture = new FilteredList<>(docents, p -> true);
         searchBoxLecture.textProperty().addListener((observable, oldValue, newValue) -> filteredLecture.setPredicate(person -> {
@@ -267,9 +333,33 @@ public class ShowStudentsController implements Initializable {
         });
         courseDate.setCellValueFactory(new PropertyValueFactory<>("registrationDate"));
         courseLecture.setCellValueFactory(new PropertyValueFactory<>("studyDirector"));
-        courseC.setCellFactory(getCallback("editCourse", "editButton"));
-        courseD.setCellFactory(getCallback("acceptDelete", "deleteButton"));
+        courseC.setCellFactory(getCallback(FileType.editCourse));
+        courseD.setCellFactory(getCallback(FileType.acceptDelete));
         courseTable.setItems(courses);
+        courseTable.setContextMenu(refreshMenu);
+        courseTable.getSelectionModel().setSelectionMode(
+                SelectionMode.MULTIPLE
+        );
+        courseAnchor.setOnKeyPressed(keyEvent -> {
+            final ObservableList<Course> selectedItem = courseTable.getSelectionModel().getSelectedItems();
+            if (selectedItem != null)
+                if (keyEvent.getCode().equals(KeyCode.DELETE))
+                    try {
+                        this.file = FileType.acceptDelete;
+                        this.object = new ArrayList<>(selectedItem);
+                        start(new Stage());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                else if (keyEvent.getCode().equals(KeyCode.ENTER) && selectedItem.size() == 1)
+                    try {
+                        this.file = FileType.editCourse;
+                        this.object = new ArrayList<>(selectedItem);
+                        start(new Stage());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+        });
 
         FilteredList<Course> filteredCourse2 = new FilteredList<>(courses, p -> true);
         searchBoxCourse.textProperty().addListener((observable, oldValue, newValue) -> filteredCourse2.setPredicate(course -> {
@@ -286,8 +376,8 @@ public class ShowStudentsController implements Initializable {
         companyName.setCellValueFactory(new PropertyValueFactory<>("name"));
         companyAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
         companyPerson.setCellValueFactory(new PropertyValueFactory<>("contactPerson"));
-        companyC.setCellFactory(getCallback("editCompany", "editButton"));
-        companyD.setCellFactory(getCallback("acceptDelete", "deleteButton"));
+        companyC.setCellFactory(getCallback(FileType.editCompany));
+        companyD.setCellFactory(getCallback(FileType.acceptDelete));
         courseTable.setItems(courses);
 
         FilteredList<Company> filteredCompany2 = new FilteredList<>(companies, p -> true);
@@ -301,6 +391,30 @@ public class ShowStudentsController implements Initializable {
         SortedList<Company> sortedCompany2 = new SortedList<>(filteredCompany2);
         sortedCompany2.comparatorProperty().bind(companyTable.comparatorProperty());
         companyTable.setItems(sortedCompany2);
+        companyTable.setContextMenu(refreshMenu);
+        companyTable.getSelectionModel().setSelectionMode(
+                SelectionMode.MULTIPLE
+        );
+        companyAnchor.setOnKeyPressed(keyEvent -> {
+            final ObservableList<Company> selectedItem = companyTable.getSelectionModel().getSelectedItems();
+            if (selectedItem != null)
+                if (keyEvent.getCode().equals(KeyCode.DELETE))
+                    try {
+                        this.file = FileType.acceptDelete;
+                        this.object = new ArrayList<>(selectedItem);
+                        start(new Stage());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                else if (keyEvent.getCode().equals(KeyCode.ENTER) && selectedItem.size() == 1)
+                    try {
+                        this.file = FileType.editCompany;
+                        this.object = new ArrayList<>(selectedItem);
+                        start(new Stage());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+        });
     }
 
     /**
@@ -312,13 +426,9 @@ public class ShowStudentsController implements Initializable {
      * @return button with new function
      */
     @FXML
-    public Button addFunction(Button button, Object object, String file) {
+    public Button addFunction(Button button, List<Object> object, ShowStudentsController.FileType file) {
         button.setOnAction((ActionEvent event) -> {
             try {
-                if (object instanceof DualStudent) this.student = (DualStudent) object;
-                else if (object instanceof Docent) this.lecture = (Docent) object;
-                else if (object instanceof Company) this.company = (Company) object;
-                else if (object instanceof Course) this.course = (Course) object;
                 this.file = file;
                 this.object = object;
                 start(new Stage());
@@ -339,30 +449,32 @@ public class ShowStudentsController implements Initializable {
         URL location = getClass().getResource(resourcePath);
         FXMLLoader fxmlLoader = new FXMLLoader(location);
         Parent root = fxmlLoader.load();
-        if (file.equals("editStudent")) {
-            EditStudentController controller = fxmlLoader.getController();
-            controller.initVariables(student);
-        } else if (file.equals("editLecture")) {
-            EditLectureController controller = fxmlLoader.getController();
-            controller.initVariables(lecture);
-        } else if (file.equals("editCompany")) {
-            EditCompanyController controller = fxmlLoader.getController();
-            controller.initVariables(company);
-        } else if (file.equals("editCourse")) {
-            EditCourseController controller = fxmlLoader.getController();
-            controller.initVariables(course);
-        } else if (object instanceof DualStudent) {
-            AcceptDeleteController controller = fxmlLoader.getController();
-            controller.initVariables(student);
-        } else if (object instanceof Docent) {
-            AcceptDeleteController controller = fxmlLoader.getController();
-            controller.initVariables(lecture);
-        } else if (object instanceof Company) {
-            AcceptDeleteController controller = fxmlLoader.getController();
-            controller.initVariables(company);
-        } else if (object instanceof Course) {
-            AcceptDeleteController controller = fxmlLoader.getController();
-            controller.initVariables(course);
+        switch (file) {
+            case editStudent: {
+                EditStudentController controller = fxmlLoader.getController();
+                controller.initVariables((DualStudent) object.get(0));
+                break;
+            }
+            case editLecture: {
+                EditLectureController controller = fxmlLoader.getController();
+                controller.initVariables((Docent) object.get(0));
+                break;
+            }
+            case editCompany: {
+                EditCompanyController controller = fxmlLoader.getController();
+                controller.initVariables((Company) object.get(0));
+                break;
+            }
+            case editCourse: {
+                EditCourseController controller = fxmlLoader.getController();
+                controller.initVariables((Course) object.get(0));
+                break;
+            }
+            case acceptDelete: {
+                AcceptDeleteController controller = fxmlLoader.getController();
+                controller.initVariables(object);
+                break;
+            }
         }
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -378,9 +490,8 @@ public class ShowStudentsController implements Initializable {
      * initializing change and delete button with image and addFunction
      *
      * @param function thefxml function which the button should trigger
-     * @param image    image name of the image for the button
      */
-    private <T> Callback<TableColumn<T, Void>, TableCell<T, Void>> getCallback(String function, String image) {
+    private <T> Callback<TableColumn<T, Void>, TableCell<T, Void>> getCallback(FileType function) {
         return new Callback<>() {
             @Override
             public TableCell<T, Void> call(TableColumn<T, Void> dualStudentVoidTableColumn) {
@@ -393,10 +504,14 @@ public class ShowStudentsController implements Initializable {
                         if (b) {
                             setGraphic(null);
                         } else {
-                            btn = addFunction(btn, getTableView().getItems().get(getIndex()), function);
-                            btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/" + image + ".png"))));
+                            ArrayList<Object> a = new ArrayList<>();
+                            a.add(getTableView().getItems().get(getIndex()));
+                            btn = addFunction(btn, a, function);
+                            if (function.equals(FileType.acceptDelete))
+                                btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/deleteButton.png"))));
+                            else
+                                btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/editButton.png"))));
                             setGraphic(btn);
-
                         }
                     }
                 };
@@ -445,5 +560,9 @@ public class ShowStudentsController implements Initializable {
         if (course != null && !course.equals(allCourse))
             erg &= course.equals(person.getCourse());
         return erg;
+    }
+
+    public enum FileType {
+        editStudent, editLecture, editCourse, editCompany, acceptDelete
     }
 }

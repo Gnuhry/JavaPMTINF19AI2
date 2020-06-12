@@ -555,7 +555,6 @@ public class Database {
         } finally {
             closeStatement();
         }
-        deleteRoom(course.getRoom());
     }
 
     /**
@@ -633,6 +632,7 @@ public class Database {
         try {
             initialize();
             statement = connection.prepareStatement("DELETE FROM room WHERE name = ?");
+            statement.setString(1, courseRoom.getName());
             statement.execute();
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
@@ -1075,15 +1075,25 @@ public class Database {
         int room_id = getRoomID(course.getRoom());
         try {
             initialize();
-            statement = connection.prepareStatement("SELECT course_id FROM course WHERE room_id = ? AND name = ? AND registry_date = ? AND course_type = ? AND study_director_id = ?");
-            statement.setInt(1, room_id);
-            statement.setString(2, course.getName());
-            statement.setDate(3, convertDate(course.getRegistrationDate()));
-            statement.setInt(4, getCourseTypeID(course.getStudyCourse()));
-            if (course.getStudyDirector() == null || course.getStudyDirector().getDocentNumber() == 0)
-                statement.setInt(5, Integer.MIN_VALUE);
-            else
-                statement.setInt(5, course.getStudyDirector().getDocentNumber());
+            boolean director_b = course.getStudyDirector() != null && course.getStudyDirector().getDocentNumber() != 0;
+            String room = " AND room_id = ?";
+            String director = " AND study_director_id = ?";
+            String command = "SELECT course_id FROM course WHERE name = ? AND registry_date = ? AND course_type = ?";
+            if (course.getRoom() != null)
+                command += room;
+            if (director_b)
+                command += director;
+            statement = connection.prepareStatement(command);
+            statement.setString(1, course.getName());
+            statement.setDate(2, convertDate(course.getRegistrationDate()));
+            statement.setInt(3, getCourseTypeID(course.getStudyCourse()));
+            if (course.getRoom() != null)
+                statement.setInt(4, room_id);
+            if (director_b)
+                if (course.getRoom() != null)
+                    statement.setInt(5, course.getStudyDirector().getDocentNumber());
+                else
+                    statement.setInt(4, course.getStudyDirector().getDocentNumber());
             resultSet = statement.executeQuery();
             if (resultSet.next())
                 return resultSet.getInt(1);

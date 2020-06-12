@@ -62,6 +62,10 @@ public class University {
         Database.deleteCompany(c);
     }
 
+    public static void removeRoom(CourseRoom c) {
+        Database.deleteRoom(c);
+    }
+
     //------------------------------UpdateObject-----------------
     public static void updateDocent(Docent d, Docent old) {
         Database.updateDocent(d, old);
