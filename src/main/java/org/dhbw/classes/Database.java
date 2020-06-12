@@ -301,7 +301,7 @@ public class Database {
      */
     public static void updateStudent(DualStudent student, DualStudent old) {
         if (student == null) return;
-        if (student.equals(old)) return;
+        if (student == old) return;
         int person_id = updatePerson(student, old);
         int course_id = updateCourse(student.getCourse(), old.getCourse());
         int company_id = updateCompany(student.getCompany(), old.getCompany());
@@ -326,11 +326,10 @@ public class Database {
      *
      * @param docent docent with the new data
      * @param old    docent with the old data
-     * @return id if exists, Integer.Min_Value if not
      */
-    public static int updateDocent(Docent docent, Docent old) {
-        if (docent == null) return Integer.MIN_VALUE;
-        if (docent.equals(old)) return old.getDocentNumber();
+    public static void updateDocent(Docent docent, Docent old) {
+        if (docent == null) return;
+        if (docent == old) return;
         int person_id = updatePerson(docent, old);
         try {
             initialize();
@@ -338,13 +337,11 @@ public class Database {
             statement.setInt(1, person_id);
             statement.setInt(2, docent.getDocentNumber());
             statement.execute();
-            return docent.getDocentNumber();
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
             closeStatement();
         }
-        return Integer.MIN_VALUE;
     }
 
     /**
@@ -357,16 +354,15 @@ public class Database {
     public static int updateCourse(Course course, Course old) {
         if (course == null) return Integer.MIN_VALUE;
         int id = getCourseId(old);
-        if (course.equals(old)) return id;
+        if (course == old) return id;
         if (id >= 0) {
-            int docent_id = updateDocent(course.getStudyDirector(), old.getStudyDirector());
             int room_id = updateRoom(course.getRoom(), old.getRoom());
             try {
                 initialize();
-                statement = connection.prepareStatement("UPDATE course SET room_id=?, name=?, study_director=?, WHERE course_id=?", Statement.RETURN_GENERATED_KEYS);
+                statement = connection.prepareStatement("UPDATE course SET room_id=?, name=?, study_director_id=? WHERE course_id=?", Statement.RETURN_GENERATED_KEYS);
                 statement.setInt(1, room_id);
                 statement.setString(2, course.getName());
-                statement.setInt(3, docent_id);
+                statement.setInt(3, course.getStudyDirector().getDocentNumber());
                 statement.setInt(4, id);
                 statement.execute();
                 return id;
@@ -389,7 +385,7 @@ public class Database {
     public static int updatePerson(Person person, Person old) {
         if (person == null) return Integer.MIN_VALUE;
         int id = getPersonId(old);
-        if (person.equals(old)) return id;
+        if (person == old) return id;
         if (countUsedPerson(old) > 1) return addPerson(person);
         if (id >= 0) {
             int address_id = updateAddress(person.getAddress(), old.getAddress());
@@ -419,7 +415,7 @@ public class Database {
     public static int updateCompany(Company company, Company old) {
         if (company == null) return Integer.MIN_VALUE;
         int id = getCompanyId(old);
-        if (company.equals(old)) return id;
+        if (company == old) return id;
         if (id >= 0) {
             int address_id = updateAddress(company.getAddress(), old.getAddress());
             int person_id = updatePerson(company.getContactPerson(), old.getContactPerson());
@@ -451,7 +447,7 @@ public class Database {
     public static int updateAddress(Address address, Address old) {
         if (address == null) return Integer.MIN_VALUE;
         int id = getAddressId(old);
-        if (address.equals(old)) return id;
+        if (address == old) return id;
         if (countUsedAddress(old) > 1) return addAddress(address);
         if (id >= 0) {
             try {
@@ -480,13 +476,14 @@ public class Database {
     public static int updateRoom(CourseRoom room, CourseRoom old) {
         if (room == null) return Integer.MIN_VALUE;
         int id = getRoomID(old);
-        if (room.equals(old)) return id;
+        if (room == old) return id;
         if (countUsedRoom(old) > 1) return addRoom(room);
         if (id >= 0) {
             try {
                 initialize();
                 statement = connection.prepareStatement("UPDATE room SET name=? WHERE room_id=?", Statement.RETURN_GENERATED_KEYS);
-                statement.setInt(1, id);
+                statement.setString(1, room.getName());
+                statement.setInt(2, id);
                 statement.execute();
                 return id;
             } catch (SQLException | ClassNotFoundException exception) {

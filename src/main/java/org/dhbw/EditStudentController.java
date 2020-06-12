@@ -240,7 +240,6 @@ public class EditStudentController {
         final String styleRight = "-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)";
         List<String> errorMessageL = new ArrayList<>();
         String text = studentFirstName.getText().trim();
-        Date date;
         boolean focus = false;
         if (text.isEmpty()) {
             wrongField(focus, studentFirstName, 0);

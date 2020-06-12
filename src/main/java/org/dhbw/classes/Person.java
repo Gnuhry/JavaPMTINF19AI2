@@ -63,6 +63,8 @@ public class Person implements Comparable<Person> {
     }
 
     //-----------------------------------Overrides--------------------
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -71,14 +73,14 @@ public class Person implements Comparable<Person> {
         return Objects.equals(birthday, person.birthday) &&
                 Objects.equals(name, person.name) &&
                 Objects.equals(forename, person.forename) &&
+                Objects.equals(email, person.email) &&
                 Objects.equals(address, person.address);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(birthday, name, forename, address);
+        return Objects.hash(birthday, name, forename, email, address);
     }
-
 
     @Override
     public String toString() {
