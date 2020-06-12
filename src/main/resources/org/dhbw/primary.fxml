@@ -33,14 +33,14 @@
       </VBox>
       <VBox alignment="TOP_CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
          <children>
-            <ImageView fitHeight="72.0" fitWidth="152.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="91.0" fitWidth="212.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/DHBW_Logo.png" />
                </image>
             </ImageView>
          </children>
       </VBox>
-      <VBox alignment="CENTER" layoutY="26.899999618530273" spacing="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
+      <VBox alignment="CENTER" layoutY="26.899999618530273" spacing="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="120.0">
          <children>
             <Button id="gui_button" fx:id="showTable" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showStudents" prefHeight="40.0" prefWidth="250.0" stylesheets="@css/application.css" text="          Übersicht anzeigen" translateY="20.0">
                <font>
