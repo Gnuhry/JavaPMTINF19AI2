@@ -90,7 +90,7 @@ public class InsertLectureController {
             int docentid = random.nextInt(9000000) + 1000000;
             if (check.checkDNContains(docentid)) {
                 lectureNumberField.setText("" + docentid);
-                break;
+                return;
             }
         }
         int number = 100000;

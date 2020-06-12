@@ -86,7 +86,7 @@ public class Check {
     public boolean checkSNContains(int studentNumber) {
         if (studentids == null)
             studentids = Database.getStudentIDs();
-        return studentids.contains(studentNumber);
+        return !studentids.contains(studentNumber);
     }
 
     /**
@@ -98,7 +98,7 @@ public class Check {
     public boolean checkMNContains(int matriculationNumber) {
         if (matriculationids == null)
             matriculationids = Database.getMatriculationNumbers();
-        return matriculationids.contains(matriculationNumber);
+        return !matriculationids.contains(matriculationNumber);
     }
 
     /**
@@ -110,7 +110,7 @@ public class Check {
     public boolean checkDNContains(int docentNumber) {
         if (docentids == null)
             docentids = Database.getDocentIDs();
-        return docentids.contains(docentNumber);
+        return !docentids.contains(docentNumber);
     }
 
 

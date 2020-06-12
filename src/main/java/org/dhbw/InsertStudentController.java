@@ -152,7 +152,7 @@ public class InsertStudentController {
             int studentNumber = random.nextInt(9000000) + 1000000;
             if (check.checkSNContains(studentNumber)) {
                 studentNumberField.setText("s" + studentNumber);
-                break;
+                return;
             }
         }
         int number = 100000;
@@ -175,7 +175,7 @@ public class InsertStudentController {
             int matriculationnumber = random.nextInt(9000000) + 1000000;
             if (check.checkMNContains(matriculationnumber)) {
                 matriculationNumberField.setText("" + matriculationnumber);
-                break;
+                return;
             }
         }
         int number = 100000;
