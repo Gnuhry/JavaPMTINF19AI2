@@ -23,7 +23,7 @@ public class EditCourseController {
     );
 
     private Course course_old;
-    private final CourseRoom noRoom = new CourseRoom("keiner Raum");
+    private final CourseRoom noRoom = new CourseRoom("kein Raum");
     private final CourseRoom newRoom = new CourseRoom("neuer Raum");
     private final Docent noDocent = new Docent("kein Dozent", "", null, null, "", 0);
 
