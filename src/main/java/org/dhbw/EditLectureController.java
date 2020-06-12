@@ -120,7 +120,7 @@ public class EditLectureController {
             wrongField(focus, lectureEmail);
             focus = true;
             errorMessageL.add("E-Mail fehlt");
-        } else if (Check.validateEmail(text)) {
+        } else if (!Check.validateEmail(text)) {
             wrongField(focus, lectureEmail);
             focus = true;
             errorMessageL.add("E-Mail ist falsch");
