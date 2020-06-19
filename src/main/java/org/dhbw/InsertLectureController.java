@@ -87,9 +87,9 @@ public class InsertLectureController {
         Random random = new Random();
         Check check = new Check();
         while (--maxiteration > 0) {
-            int docentid = random.nextInt(9000000) + 1000000;
+            int docentid = random.nextInt(900000) + 100000;
             if (check.checkDNContains(docentid)) {
-                lectureNumberField.setText("" + docentid);
+                lectureNumberField.setText("d" + docentid);
                 return;
             }
         }

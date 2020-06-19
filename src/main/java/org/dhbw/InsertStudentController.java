@@ -149,7 +149,7 @@ public class InsertStudentController {
         Random random = new Random();
         Check check = new Check();
         while (--maxiteration > 0) {
-            int studentNumber = random.nextInt(9000000) + 1000000;
+            int studentNumber = random.nextInt(900000) + 100000;
             if (check.checkSNContains(studentNumber)) {
                 studentNumberField.setText("s" + studentNumber);
                 return;
