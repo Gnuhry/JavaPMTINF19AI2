@@ -245,14 +245,6 @@ public class ShowStudentsController implements Initializable {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                else if (keyEvent.getCode().equals(KeyCode.ENTER) && selectedItem.size() == 1)
-                    try {
-                        this.file = FileType.editStudent;
-                        this.object = new ArrayList<>(selectedItem);
-                        start(new Stage());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
         });
 
         lectureNumber.setCellValueFactory(new PropertyValueFactory<>("docentNumber"));
@@ -286,14 +278,6 @@ public class ShowStudentsController implements Initializable {
                 if (keyEvent.getCode().equals(KeyCode.DELETE))
                     try {
                         this.file = FileType.acceptDelete;
-                        this.object = new ArrayList<>(selectedItem);
-                        start(new Stage());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                else if (keyEvent.getCode().equals(KeyCode.ENTER) && selectedItem.size() == 1)
-                    try {
-                        this.file = FileType.editLecture;
                         this.object = new ArrayList<>(selectedItem);
                         start(new Stage());
                     } catch (Exception e) {
@@ -351,14 +335,6 @@ public class ShowStudentsController implements Initializable {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                else if (keyEvent.getCode().equals(KeyCode.ENTER) && selectedItem.size() == 1)
-                    try {
-                        this.file = FileType.editCourse;
-                        this.object = new ArrayList<>(selectedItem);
-                        start(new Stage());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
         });
 
         FilteredList<Course> filteredCourse2 = new FilteredList<>(courses, p -> true);
@@ -401,14 +377,6 @@ public class ShowStudentsController implements Initializable {
                 if (keyEvent.getCode().equals(KeyCode.DELETE))
                     try {
                         this.file = FileType.acceptDelete;
-                        this.object = new ArrayList<>(selectedItem);
-                        start(new Stage());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                else if (keyEvent.getCode().equals(KeyCode.ENTER) && selectedItem.size() == 1)
-                    try {
-                        this.file = FileType.editCompany;
                         this.object = new ArrayList<>(selectedItem);
                         start(new Stage());
                     } catch (Exception e) {

@@ -147,7 +147,7 @@ public class InsertLectureController {
             wrongField(focus, lectureEmail);
             focus = true;
             errorMessageL.add("E-Mail fehlt");
-        } else if (Check.validateEmail(text)) {
+        } else if (!Check.validateEmail(text)) {
             wrongField(focus, lectureEmail);
             focus = true;
             errorMessageL.add("E-Mail ist falsch");
@@ -292,7 +292,8 @@ public class InsertLectureController {
 
     /**
      * visualize the wrong fields
-     * @param focus has any field requested focus
+     *
+     * @param focus   has any field requested focus
      * @param control control to mark visualized
      */
     private void wrongField(boolean focus, Control control) {
