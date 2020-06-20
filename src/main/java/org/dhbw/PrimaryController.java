@@ -15,23 +15,9 @@ import java.util.ResourceBundle;
 public class PrimaryController implements Initializable {
 
     @FXML
-    private Button showTable;
+    private Button showTable, addStudent, addLecture, addCourse, addCompany;
     @FXML
-    private Button addStudent;
-    @FXML
-    private Button addLecture;
-    @FXML
-    private Button addCourse;
-    @FXML
-    private Button addCompany;
-    @FXML
-    private Tooltip tooltipStudent;
-    @FXML
-    private Tooltip tooltipLecture;
-    @FXML
-    private Tooltip tooltipCourse;
-    @FXML
-    private Tooltip tooltipCompany;
+    private Tooltip tooltipStudent, tooltipLecture, tooltipCourse, tooltipCompany;
 
 
     /**

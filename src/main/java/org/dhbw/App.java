@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.dhbw.classes.Database;
+import org.dhbw.classes.Help;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -29,8 +30,8 @@ public class App extends Application {
         scene = new Scene(loadFXML("primary"));
         stage.setScene(scene);
         stage.setResizable(false);
-        stage.setTitle("DHBW Datenverwaltung");
-        stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/DHBW_Logo_quadrat.png")));
+        stage.setTitle(Help.getRessourceBundle().getString("title"));
+        stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/dhbwLogoSquare.png")));
         stage.show();
         stage.setOnCloseRequest(windowEvent -> Database.closeConnection());
     }
@@ -51,7 +52,7 @@ public class App extends Application {
      * @return parent object of the new file
      */
     private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"), Help.getRessourceBundle());
         return fxmlLoader.load();
     }
 

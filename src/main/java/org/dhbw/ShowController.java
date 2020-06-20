@@ -24,10 +24,7 @@ import org.dhbw.classes.*;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class ShowController implements Initializable {
     private final ObservableList<DualStudent> students = FXCollections.observableArrayList(
@@ -46,8 +43,8 @@ public class ShowController implements Initializable {
     private FileType file;
     private List<Object> object;
     private final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-    private final Company allCompany = new Company("Alle Unternehmen", null, null);
-    private final Course allCourse = new Course("Alle Kurse", null, null);
+    private final Company allCompany = new Company(Help.getRessourceBundle().getString("all_company"), null, null);
+    private final Course allCourse = new Course(Help.getRessourceBundle().getString("all_course"), null, null);
 
     @FXML
     private AnchorPane studentAnchor, lectureAnchor, courseAnchor, companyAnchor;
@@ -138,7 +135,7 @@ public class ShowController implements Initializable {
 
     /**
      * initializing every column of the table with the data from other classes
-     * adding filter functions for lecture table, course table and company table (input from searchboxes)
+     * adding filter functions for lecture table, course table and company table (input from search boxes)
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -348,7 +345,7 @@ public class ShowController implements Initializable {
     public void start(Stage stage) throws Exception {
         String resourcePath = file.toString() + ".fxml";
         URL location = getClass().getResource(resourcePath);
-        FXMLLoader fxmlLoader = new FXMLLoader(location);
+        FXMLLoader fxmlLoader = new FXMLLoader(location, Help.getRessourceBundle());
         Parent root = fxmlLoader.load();
         switch (file) {
             case editStudents: {
@@ -382,15 +379,15 @@ public class ShowController implements Initializable {
         stage.setOnHidden(windowEvent -> refresh());
         stage.initOwner(studentTable.getScene().getWindow());
         stage.initModality(Modality.WINDOW_MODAL);
-        stage.setTitle("DHBW Datenverwaltung");
-        stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/DHBW_Logo_quadrat.png")));
+        stage.setTitle(Help.getRessourceBundle().getString("title"));
+        stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/dhbwLogoSquare.png")));
         stage.show();
     }
 
     /**
      * initializing change and delete button with image and addFunction
      *
-     * @param function thefxml function which the button should trigger
+     * @param function the fxml function which the button should trigger
      */
     private <T> Callback<TableColumn<T, Void>, TableCell<T, Void>> getCallback(FileType function) {
         return new Callback<>() {

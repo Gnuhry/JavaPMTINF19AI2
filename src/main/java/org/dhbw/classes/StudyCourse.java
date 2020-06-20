@@ -1,7 +1,7 @@
 package org.dhbw.classes;
 
 public enum StudyCourse {
-    AInformatik("Angewandte Informatik"), BWL("Betriebswirtschaftslehre"), WInformatik("Wirtschaftsinformatik");
+    AInfo("AInfo"), BWL("BWL"), WInfo("WInfo");
 
     private final String name;
 
@@ -12,6 +12,6 @@ public enum StudyCourse {
 
     @Override
     public String toString() {
-        return name;
+        return Help.getRessourceBundle().getString(name);
     }
 }

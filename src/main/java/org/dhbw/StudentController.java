@@ -25,8 +25,8 @@ public class StudentController {
             University.getCourses()
     );
 
-    private final Company newCompany = new Company("neues Unternehmen", new Address("", "", "", "", ""), new Person("", "", ""));
-    private final Course noCourse = new Course("kein Kurs", null, null, null, null);
+    private final Company newCompany = new Company(Help.getRessourceBundle().getString("new_company"), new Address("", "", "", "", ""), new Person("", "", ""));
+    private final Course noCourse = new Course(Help.getRessourceBundle().getString("no_course"), null, null, null, null);
     private DualStudent student_old;
 
     @FXML
@@ -62,7 +62,7 @@ public class StudentController {
     }
 
     /**
-     * setting the textfieds if there is a student to edit
+     * setting the textfield if there is a student to edit
      *
      * @param student edit student or null
      */
@@ -70,8 +70,8 @@ public class StudentController {
         this.student_old = student;
         if (student_old != null) {
             image.setImage(new Image(getClass().getResourceAsStream("images/addStudentHat.png")));
-            title.setText("Studierenden bearbeiten");
-            buttonDone.setText("Speichern");
+            title.setText(Help.getRessourceBundle().getString("title_student_edit"));
+            buttonDone.setText(Help.getRessourceBundle().getString("save"));
             Help.fillPersonToTextField(student, studentLastName, studentFirstName, studentBirth, studentEmail);
             Help.fillAddressesToTextField(student.getAddress(), studentStreet, studentHomeNumber, studentPostalCode, studentCity, studentCountry);
             studentNumberField.setText("s" + student_old.getStudentNumber());
@@ -109,7 +109,7 @@ public class StudentController {
     }
 
     /**
-     * initializing javaKnowlage textfield and the comboboxes with object lists
+     * initializing javaKnowledge textfield and the combobox with object lists
      */
     @FXML
     private void initialize() {
@@ -127,10 +127,10 @@ public class StudentController {
      */
     @FXML
     private void generateSN() {
-        int maxiteration = 100000;
+        int max_iteration = 100000;
         Random random = new Random();
         Help help = new Help();
-        while (--maxiteration > 0) {
+        while (--max_iteration > 0) {
             int studentNumber = random.nextInt(900000) + 100000;
             if (help.checkSNContains(studentNumber)) {
                 studentNumberField.setText("s" + studentNumber);
@@ -150,13 +150,13 @@ public class StudentController {
      */
     @FXML
     private void generateMN() {
-        int maxiteration = 100000;
+        int max_iteration = 100000;
         Random random = new Random();
         Help help = new Help();
-        while (--maxiteration > 0) {
-            int matriculationnumber = random.nextInt(9000000) + 1000000;
-            if (help.checkMNContains(matriculationnumber)) {
-                matriculationNumberField.setText("" + matriculationnumber);
+        while (--max_iteration > 0) {
+            int matriculation_number = random.nextInt(9000000) + 1000000;
+            if (help.checkMNContains(matriculation_number)) {
+                matriculationNumberField.setText("" + matriculation_number);
                 return;
             }
         }
@@ -227,7 +227,7 @@ public class StudentController {
     }
 
     /**
-     * reading the textfields
+     * reading the textfield
      * checking validation of emails, postal code and date
      * generating a new student or edit one with the entered information and adding the new or edited student to the database
      * catching NullPointerException to give a visual feedback to the user
@@ -242,7 +242,7 @@ public class StudentController {
             Help.markWrongField(false, studentFirstName);
             scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add("Vorname fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("forename"));
         } else
             studentFirstName.setStyle(Help.styleRight);
 
@@ -252,7 +252,7 @@ public class StudentController {
             if (!focus)
                 scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add("Nachname fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("last_name"));
         } else
             studentLastName.setStyle(Help.styleRight);
 
@@ -262,13 +262,13 @@ public class StudentController {
             if (!focus)
                 scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add("Geburtstag fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("birthday"));
         } else if (!Help.validateBirthdate(date)) {
             Help.markWrongField(focus, studentBirth);
             if (!focus)
                 scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add("Geburtstag ist falsch");
+            errorMessageL.add(Help.getRessourceBundleError().getString("birthday2"));
         } else
             studentBirth.setStyle(Help.styleRight);
 
@@ -278,13 +278,13 @@ public class StudentController {
             if (!focus)
                 scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add("E-Mail fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("email"));
         } else if (!Help.validateEmail(text)) {
             Help.markWrongField(focus, studentEmail);
             if (!focus)
                 scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add("E-Mail ist falsch");
+            errorMessageL.add(Help.getRessourceBundleError().getString("email2"));
         } else
             studentEmail.setStyle(Help.styleRight);
 
@@ -294,7 +294,7 @@ public class StudentController {
             if (!focus)
                 scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add("Straße fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("street"));
         } else
             studentStreet.setStyle(Help.styleRight);
 
@@ -304,7 +304,7 @@ public class StudentController {
             if (!focus)
                 scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add("Hausnummer fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("number"));
         } else
             studentHomeNumber.setStyle(Help.styleRight);
 
@@ -314,13 +314,13 @@ public class StudentController {
             if (!focus)
                 scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add("Postleitzahl fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("postcode"));
         } else if (!Help.validatePostalCode(text)) {
             Help.markWrongField(focus, studentPostalCode);
             if (!focus)
                 scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add("Postleitzahl ist falsch");
+            errorMessageL.add(Help.getRessourceBundleError().getString("postcode2"));
         } else
             studentPostalCode.setStyle(Help.styleRight);
 
@@ -330,7 +330,7 @@ public class StudentController {
             if (!focus)
                 scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add("Stadt fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("city"));
         } else
             studentCity.setStyle(Help.styleRight);
 
@@ -340,7 +340,7 @@ public class StudentController {
             if (!focus)
                 scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add("Land fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("country"));
         } else
             studentCountry.setStyle(Help.styleRight);
 
@@ -349,7 +349,7 @@ public class StudentController {
             Help.markWrongField(focus, companyName);
             scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add("Unternehmensname fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("company_name"));
         } else
             companyName.setStyle(Help.styleRight);
 
@@ -358,7 +358,7 @@ public class StudentController {
             Help.markWrongField(focus, companyStreet);
             scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add("Unternehmensstraße fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("company_street"));
         } else
             companyStreet.setStyle(Help.styleRight);
 
@@ -367,7 +367,7 @@ public class StudentController {
             Help.markWrongField(focus, companyHomeNumber);
             scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add("Unternehmenshausnummer fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("company_number"));
         } else
             companyHomeNumber.setStyle(Help.styleRight);
 
@@ -376,12 +376,12 @@ public class StudentController {
             Help.markWrongField(focus, companyPostalCode);
             scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add("Unternehmenspostleitzahl fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("company_postcode"));
         } else if (!Help.validatePostalCode(text)) {
             Help.markWrongField(focus, companyPostalCode);
             scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add("Unternehmenspostleitzahl ist falsch");
+            errorMessageL.add(Help.getRessourceBundleError().getString("company_postcode2"));
         } else
             companyPostalCode.setStyle(Help.styleRight);
 
@@ -390,7 +390,7 @@ public class StudentController {
             Help.markWrongField(focus, companyCity);
             scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add("Unternehmensstadt fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("company_city"));
         } else
             companyCity.setStyle(Help.styleRight);
 
@@ -399,7 +399,7 @@ public class StudentController {
             Help.markWrongField(focus, companyCountry);
             scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add("Unternehmensland fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("company_country"));
         } else
             companyCountry.setStyle(Help.styleRight);
 
@@ -408,7 +408,7 @@ public class StudentController {
             Help.markWrongField(focus, companyPersonFirstName);
             scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add("Kontaktvorname fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("contact_person_forename"));
         } else
             companyPersonFirstName.setStyle(Help.styleRight);
 
@@ -417,7 +417,7 @@ public class StudentController {
             Help.markWrongField(focus, companyPersonLastName);
             scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add("Kontaktname fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("contact_person_last_name"));
         } else
             companyPersonLastName.setStyle(Help.styleRight);
 
@@ -426,12 +426,12 @@ public class StudentController {
             Help.markWrongField(focus, companyPersonEmail);
             scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add("Kontaktemail fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("contact_person_email"));
         } else if (!Help.validateEmail(text)) {
             Help.markWrongField(focus, companyPersonEmail);
             scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add("Kontaktemail ist falsch");
+            errorMessageL.add(Help.getRessourceBundleError().getString("contact_person_email2"));
         } else
             companyPersonEmail.setStyle(Help.styleRight);
 
@@ -440,7 +440,7 @@ public class StudentController {
             Help.markWrongField(focus, courseName);
             scrollPane.setVvalue(100);
             focus = true;
-            errorMessageL.add("Kurs nicht ausgewählt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("course"));
         } else
             courseName.setStyle(Help.styleRight);
 
@@ -451,13 +451,13 @@ public class StudentController {
                 Help.markWrongField(focus, javaKnowledgeLabel);
                 scrollPane.setVvalue(100);
                 focus = true;
-                errorMessageL.add("Java-Wissen Index ist falsch");
+                errorMessageL.add(Help.getRessourceBundleError().getString("java"));
             }
         } catch (NumberFormatException ignored) {
             Help.markWrongField(focus, javaKnowledgeLabel);
             scrollPane.setVvalue(100);
             focus = true;
-            errorMessageL.add("Java-Wissen Index ist falsch");
+            errorMessageL.add(Help.getRessourceBundleError().getString("java"));
         }
 
         if (focus)

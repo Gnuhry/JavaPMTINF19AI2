@@ -45,7 +45,7 @@ public class DocentController {
     }
 
     /**
-     * setting the textfieds if there is a docent to edit
+     * setting the textfield if there is a docent to edit
      *
      * @param docent edit docent or null
      */
@@ -57,13 +57,13 @@ public class DocentController {
             docentNumberField.setText("d" + docent.getDocentNumber());
             buttonLN.setDisable(true);
             docentBirth.setDisable(true);
-            title.setText("Dozent*in bearbeiten");
-            buttonDone.setText("Speichern");
+            title.setText(Help.getRessourceBundle().getString("title_docent_edit"));
+            buttonDone.setText(Help.getRessourceBundle().getString("save"));
         }
     }
 
     /**
-     * initializing javaKnowlage textfield and the comboboxes with object lists
+     * initializing javaKnowledge textfield and the combobox with object lists
      */
     @FXML
     private void initialize() {
@@ -76,13 +76,13 @@ public class DocentController {
      */
     @FXML
     private void generateLN() {
-        int maxiteration = 100000;
+        int max_iteration = 100000;
         Random random = new Random();
         Help help = new Help();
-        while (--maxiteration > 0) {
-            int docentid = random.nextInt(900000) + 100000;
-            if (help.checkDNContains(docentid)) {
-                docentNumberField.setText("d" + docentid);
+        while (--max_iteration > 0) {
+            int docent_id = random.nextInt(900000) + 100000;
+            if (help.checkDNContains(docent_id)) {
+                docentNumberField.setText("d" + docent_id);
                 return;
             }
         }
@@ -95,7 +95,7 @@ public class DocentController {
     }
 
     /**
-     * reading the textfields
+     * reading the textfield
      * checking validation of emails, postal code and date
      * generating a new docent with the entered information and adding the new docent to the database
      * catching NullPointerException to give a visual feedback to the user
@@ -109,7 +109,7 @@ public class DocentController {
         if (text.isEmpty()) {
             Help.markWrongField(false, docentFirstName);
             focus = true;
-            errorMessageL.add("Vorname fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("forename"));
         } else
             docentFirstName.setStyle(Help.styleRight);
 
@@ -117,7 +117,7 @@ public class DocentController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, docentLastName);
             focus = true;
-            errorMessageL.add("Nachname fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("last_name"));
         } else
             docentLastName.setStyle(Help.styleRight);
 
@@ -125,11 +125,11 @@ public class DocentController {
         if (date == null) {
             Help.markWrongField(focus, docentBirth);
             focus = true;
-            errorMessageL.add("Geburtstag fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("birthday"));
         } else if (!Help.validateBirthdate(date)) {
             Help.markWrongField(focus, docentBirth);
             focus = true;
-            errorMessageL.add("Geburtstag ist falsch");
+            errorMessageL.add(Help.getRessourceBundleError().getString("birthday2"));
         } else
             docentBirth.setStyle(Help.styleRight);
 
@@ -137,11 +137,11 @@ public class DocentController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, docentEmail);
             focus = true;
-            errorMessageL.add("E-Mail fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("email"));
         } else if (!Help.validateEmail(text)) {
             Help.markWrongField(focus, docentEmail);
             focus = true;
-            errorMessageL.add("E-Mail ist falsch");
+            errorMessageL.add(Help.getRessourceBundleError().getString("email2"));
         } else
             docentEmail.setStyle(Help.styleRight);
 
@@ -149,7 +149,7 @@ public class DocentController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, docentStreet);
             focus = true;
-            errorMessageL.add("Straße fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("street"));
         } else
             docentStreet.setStyle(Help.styleRight);
 
@@ -157,7 +157,7 @@ public class DocentController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, docentHomeNumber);
             focus = true;
-            errorMessageL.add("Hausnummer fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("number"));
         } else
             docentHomeNumber.setStyle(Help.styleRight);
 
@@ -165,11 +165,11 @@ public class DocentController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, docentPostalCode);
             focus = true;
-            errorMessageL.add("Postleitzahl fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("postcode"));
         } else if (!Help.validatePostalCode(text)) {
             Help.markWrongField(focus, docentPostalCode);
             focus = true;
-            errorMessageL.add("Postleitzahl ist falsch");
+            errorMessageL.add(Help.getRessourceBundleError().getString("postcode2"));
         } else
             docentPostalCode.setStyle(Help.styleRight);
 
@@ -177,7 +177,7 @@ public class DocentController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, docentCity);
             focus = true;
-            errorMessageL.add("Stadt fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("city"));
         } else
             docentCity.setStyle(Help.styleRight);
 
@@ -185,7 +185,7 @@ public class DocentController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, docentCountry);
             focus = true;
-            errorMessageL.add("Land fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("country"));
         } else
             docentCountry.setStyle(Help.styleRight);
 

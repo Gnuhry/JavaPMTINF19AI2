@@ -43,8 +43,8 @@ public class CompanyController {
     public void initVariables(Company company) {
         company_old = company;
         if (company != null) {
-            title.setText("Unternehmen bearbeiten");
-            buttonDone.setText("Speichern");
+            title.setText(Help.getRessourceBundle().getString("title_company_edit"));
+            buttonDone.setText(Help.getRessourceBundle().getString("save"));
             companyName.setText(company.getName());
             Help.fillAddressesToTextField(company.getAddress(), companyStreet, companyHomeNumber, companyPostalCode, companyCity, companyCountry);
             Help.fillPersonToTextField(company.getContactPerson(), companyContactPersonLastName, companyContactPersonFirstName, companyContactPersonEmail);
@@ -65,7 +65,7 @@ public class CompanyController {
         if (text.isEmpty()) {
             Help.markWrongField(false, companyName);
             focus = true;
-            errorMessageL.add("Unternehmensname fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("company_name"));
         } else
             companyName.setStyle(Help.styleRight);
 
@@ -73,7 +73,7 @@ public class CompanyController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, companyStreet);
             focus = true;
-            errorMessageL.add("Unternehmensstraße fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("company_street"));
         } else
             companyStreet.setStyle(Help.styleRight);
 
@@ -81,7 +81,7 @@ public class CompanyController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, companyHomeNumber);
             focus = true;
-            errorMessageL.add("Unternehmenshausnummer fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("company_number"));
         } else
             companyHomeNumber.setStyle(Help.styleRight);
 
@@ -89,11 +89,11 @@ public class CompanyController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, companyPostalCode);
             focus = true;
-            errorMessageL.add("Unternehmenspostleitzahl fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("company_postcode"));
         } else if (!Help.validatePostalCode(text)) {
             Help.markWrongField(focus, companyPostalCode);
             focus = true;
-            errorMessageL.add("Unternehmenspostleitzahl ist falsch");
+            errorMessageL.add(Help.getRessourceBundleError().getString("company_postcode2"));
         } else
             companyPostalCode.setStyle(Help.styleRight);
 
@@ -101,7 +101,7 @@ public class CompanyController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, companyCity);
             focus = true;
-            errorMessageL.add("Unternehmensstadt fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("company_city"));
         } else
             companyCity.setStyle(Help.styleRight);
 
@@ -109,7 +109,7 @@ public class CompanyController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, companyCountry);
             focus = true;
-            errorMessageL.add("Unternehmensland fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("company_country"));
         } else
             companyCountry.setStyle(Help.styleRight);
 
@@ -117,7 +117,7 @@ public class CompanyController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, companyContactPersonFirstName);
             focus = true;
-            errorMessageL.add("Vorname fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("forename"));
         } else
             companyContactPersonFirstName.setStyle(Help.styleRight);
 
@@ -125,7 +125,7 @@ public class CompanyController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, companyContactPersonLastName);
             focus = true;
-            errorMessageL.add("Name fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("last_name"));
         } else
             companyContactPersonLastName.setStyle(Help.styleRight);
 
@@ -133,11 +133,11 @@ public class CompanyController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, companyContactPersonEmail);
             focus = true;
-            errorMessageL.add("Email fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("email"));
         } else if (!Help.validateEmail(text)) {
             Help.markWrongField(focus, companyContactPersonEmail);
             focus = true;
-            errorMessageL.add("E-Mail ist falsch");
+            errorMessageL.add(Help.getRessourceBundleError().getString("email2"));
         } else
             companyContactPersonEmail.setStyle(Help.styleRight);
 

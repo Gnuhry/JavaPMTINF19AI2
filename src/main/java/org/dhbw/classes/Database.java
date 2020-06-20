@@ -196,7 +196,7 @@ public class Database {
         try {
             initialize();
             statement = connection.prepareStatement("INSERT INTO person (first_name, last_name, birthdate, email, address_id) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-            addPersonToStatment(person, address_id);
+            addPersonToStatement(person, address_id);
             statement.execute();
             resultSet = statement.getGeneratedKeys();
             if (resultSet.next())
@@ -392,7 +392,7 @@ public class Database {
             try {
                 initialize();
                 statement = connection.prepareStatement("UPDATE person SET first_name=?, last_name=?, birthdate=?, email=?, address_id=? WHERE person_id=?", Statement.RETURN_GENERATED_KEYS);
-                addPersonToStatment(person, address_id);
+                addPersonToStatement(person, address_id);
                 statement.setInt(6, id);
                 statement.execute();
                 return id;
@@ -663,9 +663,9 @@ public class Database {
     }
 
     /**
-     * get all student marticulationnumbers
+     * get all student matriculation numbers
      *
-     * @return int list of all marticulationnumbers
+     * @return int list of all matriculation numbers
      */
     public static List<Integer> getMatriculationNumbers() {
         try {
@@ -1347,7 +1347,7 @@ public class Database {
      *
      * @param person person object with the attributes
      */
-    private static void addPersonToStatment(Person person, int address_id) throws SQLException {
+    private static void addPersonToStatement(Person person, int address_id) throws SQLException {
         statement.setString(1, person.getForename());
         statement.setString(2, person.getName());
         if (person.getBirthday() == null)

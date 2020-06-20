@@ -27,9 +27,9 @@ public class CourseController {
 
     private Course course_old;
 
-    private final CourseRoom noRoom = new CourseRoom("kein Raum");
-    private final CourseRoom newRoom = new CourseRoom("neuer Raum");
-    private final Docent noDocent = new Docent("kein Dozent", "", null, null, "", 0);
+    private final CourseRoom noRoom = new CourseRoom(Help.getRessourceBundle().getString("no_room"));
+    private final CourseRoom newRoom = new CourseRoom(Help.getRessourceBundle().getString("new_room"));
+    private final Docent noDocent = new Docent(Help.getRessourceBundle().getString("no_docent"), "", null, null, "", 0);
 
     @FXML
     private Label errorMessage, title;
@@ -75,15 +75,15 @@ public class CourseController {
     }
 
     /**
-     * setting the textfieds if there is a course to edit
+     * setting the textfield if there is a course to edit
      *
      * @param course edit course or null
      */
     public void initVariables(Course course) {
         course_old = course;
         if (course != null) {
-            title.setText("Kurs bearbeiten");
-            buttonDone.setText("Speichern");
+            title.setText(Help.getRessourceBundle().getString("title_course_edit"));
+            buttonDone.setText(Help.getRessourceBundle().getString("save"));
             courseName.setText(course.getName());
             if (course.getStudyCourse() != null) courseType.setValue(course.getStudyCourse());
             if (course.getRoom() != null) {
@@ -129,7 +129,7 @@ public class CourseController {
 
 
     /**
-     * reading the textfields
+     * reading the textfield
      * generating a new course with the entered information and adding the new course to the database
      * catching NullPointerException to give a visual feedback to the user
      */
@@ -142,7 +142,7 @@ public class CourseController {
         if (text.isEmpty()) {
             Help.markWrongField(false, courseName);
             focus = true;
-            errorMessageL.add("Name fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("name"));
         } else
             courseName.setStyle(Help.styleRight);
 
@@ -150,7 +150,7 @@ public class CourseController {
         if (course == null) {
             Help.markWrongField(focus, courseType);
             focus = true;
-            errorMessageL.add("Kursart nicht ausgewählt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("course_type"));
         } else
             courseType.setStyle(Help.styleRight);
 
@@ -158,17 +158,17 @@ public class CourseController {
         if (room == null) {
             Help.markWrongField(focus, courseRoom);
             focus = true;
-            errorMessageL.add("Kursraum nicht ausgewählt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("room"));
         } else if (room.equals(newRoom)) {
             text = insertRoom.getText().trim();
             if (text.isEmpty()) {
                 Help.markWrongField(focus, insertRoom);
                 focus = true;
-                errorMessageL.add("Kursraum fehlt");
+                errorMessageL.add(Help.getRessourceBundleError().getString("room2"));
             } else if (!Help.validateRoom(text)) {
                 Help.markWrongField(focus, insertRoom);
                 focus = true;
-                errorMessageL.add("Kursraum ist falsch");
+                errorMessageL.add(Help.getRessourceBundleError().getString("room3"));
             } else {
                 insertRoom.setStyle(Help.styleRight);
                 courseRoom.setStyle(Help.styleRight);
@@ -180,7 +180,7 @@ public class CourseController {
         if (date == null) {
             Help.markWrongField(focus, courseDate);
             focus = true;
-            errorMessageL.add("Datum fehlt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("day"));
         } else
             courseDate.setStyle(Help.styleRight);
 
@@ -188,7 +188,7 @@ public class CourseController {
         if (docent == null) {
             Help.markWrongField(focus, courseDirector);
             focus = true;
-            errorMessageL.add("Kursdirektor nicht ausgewählt");
+            errorMessageL.add(Help.getRessourceBundleError().getString("director"));
         } else
             courseDirector.setStyle(Help.styleRight);
 
