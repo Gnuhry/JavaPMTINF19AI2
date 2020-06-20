@@ -7,6 +7,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
+import org.dhbw.classes.Help;
 
 import java.io.IOException;
 import java.net.URL;
@@ -14,6 +15,8 @@ import java.util.ResourceBundle;
 
 public class PrimaryController implements Initializable {
 
+    @FXML
+    public Button buttonLanguage;
     @FXML
     private Button showTable, addStudent, addLecture, addCourse, addCompany;
     @FXML
@@ -46,6 +49,12 @@ public class PrimaryController implements Initializable {
     @FXML
     private void insertCourse() throws IOException {
         App.setRoot("course");
+    }
+
+    @FXML
+    private void toggleLanguage() throws IOException {
+        Help.toggleLocal();
+        App.setRoot("primary");
     }
 
     /**
@@ -83,5 +92,6 @@ public class PrimaryController implements Initializable {
         tooltipLecture.setShowDelay(new Duration(300));
         tooltipCourse.setShowDelay(new Duration(300));
         tooltipCompany.setShowDelay(new Duration(300));
+        buttonLanguage.setText(Help.locale.getLanguage());
     }
 }

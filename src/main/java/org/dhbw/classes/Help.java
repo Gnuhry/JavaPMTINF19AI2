@@ -244,10 +244,18 @@ public class Help {
         }
     }
 
-    public static ResourceBundle getRessourceBundle(){
+    public static ResourceBundle getRessourceBundle() {
         return ResourceBundle.getBundle(lang_file_path, locale);
     }
-    public static ResourceBundle getRessourceBundleError(){
+
+    public static ResourceBundle getRessourceBundleError() {
         return ResourceBundle.getBundle(lang_file_path_error, locale);
+    }
+
+    public static void toggleLocal() {
+        if (locale.getLanguage().equals("de"))
+            locale = new Locale("en");
+        else
+            locale = new Locale("de");
     }
 }
