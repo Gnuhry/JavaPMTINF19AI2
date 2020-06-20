@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import org.dhbw.classes.Database;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * JavaFX App
@@ -23,7 +24,8 @@ public class App extends Application {
      * @param stage new stage show new window
      */
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) throws IOException, SQLException, ClassNotFoundException {
+        Database.initialize();
         scene = new Scene(loadFXML("primary"));
         stage.setScene(scene);
         stage.setResizable(false);

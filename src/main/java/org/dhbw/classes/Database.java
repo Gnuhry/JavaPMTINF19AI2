@@ -706,6 +706,33 @@ public class Database {
         return new ArrayList<>();
     }
 
+    /**
+     * initialize to use the database connection
+     */
+    public static void initialize() throws ClassNotFoundException, SQLException {
+        if (connection == null || connection.isClosed()) {
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection(
+                    "jdbc:mysql://85.214.247.101:3306/dhbw?useSSL=false", "mlg_dhbw", "Reisebus1!");
+        }
+        if (dateFormat == null)
+            dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (dualStudents == null)
+            dualStudents = new ArrayList<>();
+        if (courses == null)
+            courses = new ArrayList<>();
+        if (docents == null)
+            docents = new ArrayList<>();
+        if (addresses == null)
+            addresses = new ArrayList<>();
+        if (companies == null)
+            companies = new ArrayList<>();
+        if (persons == null)
+            persons = new ArrayList<>();
+        if (rooms == null)
+            rooms = new ArrayList<>();
+    }
+
     //---------------------------------------private...........................................
 
     /**
@@ -779,33 +806,6 @@ public class Database {
             closeStatement();
         }
         return counter;
-    }
-
-    /**
-     * initialize to use the database connection
-     */
-    private static void initialize() throws ClassNotFoundException, SQLException {
-        if (connection == null || connection.isClosed()) {
-            Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection(
-                    "jdbc:mysql://85.214.247.101:3306/dhbw?useSSL=false", "mlg_dhbw", "Reisebus1!");
-        }
-        if (dateFormat == null)
-            dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if (dualStudents == null)
-            dualStudents = new ArrayList<>();
-        if (courses == null)
-            courses = new ArrayList<>();
-        if (docents == null)
-            docents = new ArrayList<>();
-        if (addresses == null)
-            addresses = new ArrayList<>();
-        if (companies == null)
-            companies = new ArrayList<>();
-        if (persons == null)
-            persons = new ArrayList<>();
-        if (rooms == null)
-            rooms = new ArrayList<>();
     }
 
     /**

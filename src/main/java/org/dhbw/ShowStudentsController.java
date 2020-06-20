@@ -50,15 +50,9 @@ public class ShowStudentsController implements Initializable {
     private final Course allCourse = new Course("Alle Kurse", null, null);
 
     @FXML
-    private AnchorPane studentAnchor;
+    private AnchorPane studentAnchor, lectureAnchor, courseAnchor, companyAnchor;
     @FXML
-    private AnchorPane lectureAnchor;
-    @FXML
-    private AnchorPane courseAnchor;
-    @FXML
-    private AnchorPane companyAnchor;
-    @FXML
-    private TextField searchBox;
+    private TextField searchBox, searchBoxLecture, searchBoxCourse, searchBoxCompany;
     @FXML
     private ComboBox<Course> courseFilterBox;
     @FXML
@@ -66,53 +60,33 @@ public class ShowStudentsController implements Initializable {
     @FXML
     public TableView<DualStudent> studentTable;
     @FXML
-    private TableColumn<DualStudent, Integer> studentNumber;
+    private TableColumn<DualStudent, Integer> studentNumber, matriculationNumber, studentJava;
     @FXML
-    private TableColumn<DualStudent, String> studentForename;
-    @FXML
-    private TableColumn<DualStudent, String> studentName;
+    private TableColumn<DualStudent, String> studentForename, studentName, studentEmail;
     @FXML
     private TableColumn<DualStudent, Date> studentBirth;
     @FXML
-    private TableColumn<DualStudent, String> studentEmail;
-    @FXML
     private TableColumn<DualStudent, Address> studentAddress;
-    @FXML
-    private TableColumn<DualStudent, Integer> matriculationNumber;
     @FXML
     private TableColumn<DualStudent, Company> studentCompany;
     @FXML
     private TableColumn<DualStudent, Course> studentCourse;
     @FXML
-    private TableColumn<DualStudent, Integer> studentJava;
-    @FXML
-    private TableColumn<DualStudent, Void> studentC;
-    @FXML
-    private TableColumn<DualStudent, Void> studentD;
+    private TableColumn<DualStudent, Void> studentC, studentD;
 
-    @FXML
-    private TextField searchBoxLecture;
     @FXML
     private TableView<Docent> lectureTable;
     @FXML
     private TableColumn<Docent, Integer> lectureNumber;
     @FXML
-    private TableColumn<Docent, String> lectureFirstName;
-    @FXML
-    private TableColumn<Docent, String> lectureLastName;
+    private TableColumn<Docent, String> lectureFirstName, lectureLastName, lectureEmail;
     @FXML
     private TableColumn<Docent, Date> lectureBirth;
     @FXML
-    private TableColumn<Docent, String> lectureEmail;
-    @FXML
     private TableColumn<Docent, Address> lectureAddress;
     @FXML
-    private TableColumn<Docent, Void> lectureC;
-    @FXML
-    private TableColumn<Docent, Void> lectureD;
+    private TableColumn<Docent, Void> lectureC, lectureD;
 
-    @FXML
-    private TextField searchBoxCourse;
     @FXML
     private TableView<Course> courseTable;
     @FXML
@@ -126,12 +100,8 @@ public class ShowStudentsController implements Initializable {
     @FXML
     private TableColumn<Course, Docent> courseLecture;
     @FXML
-    private TableColumn<Course, Void> courseC;
-    @FXML
-    private TableColumn<Course, Void> courseD;
+    private TableColumn<Course, Void> courseC, courseD;
 
-    @FXML
-    private TextField searchBoxCompany;
     @FXML
     private TableView<Company> companyTable;
     @FXML
@@ -141,9 +111,7 @@ public class ShowStudentsController implements Initializable {
     @FXML
     private TableColumn<Company, Person> companyPerson;
     @FXML
-    private TableColumn<Company, Void> companyC;
-    @FXML
-    private TableColumn<Company, Void> companyD;
+    private TableColumn<Company, Void> companyC, companyD;
 
     /**
      * changing the scene root in App to "primary.fxml"
@@ -175,18 +143,17 @@ public class ShowStudentsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ContextMenu refreshMenu = new ContextMenu();
-        MenuItem item = new MenuItem("refresh");
-        item.setOnAction(actionEvent -> refresh());
-        MenuItem item2 = new MenuItem("back");
-        item2.setOnAction(actionEvent -> {
+        MenuItem[] item = new MenuItem[]{new MenuItem("refresh"), new MenuItem("back")};
+        item[0].setOnAction(actionEvent -> refresh());
+        item[1].setOnAction(actionEvent -> {
             try {
                 backToOverview();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
-        refreshMenu.getItems().add(item);
-        refreshMenu.getItems().add(item2);
+        refreshMenu.getItems().addAll(item);
+
         studentNumber.setCellValueFactory(new PropertyValueFactory<>("studentNumber"));
         studentName.setCellValueFactory(new PropertyValueFactory<>("name"));
         studentForename.setCellValueFactory(new PropertyValueFactory<>("forename"));
@@ -194,11 +161,10 @@ public class ShowStudentsController implements Initializable {
             @Override
             protected void updateItem(Date date, boolean b) {
                 super.updateItem(date, b);
-                if (b) {
-                    setText(null);
-                } else {
+                if (b)
+                    this.setText(null);
+                else
                     this.setText(format.format(date));
-                }
             }
         });
         studentBirth.setCellValueFactory(new PropertyValueFactory<>("birthday"));
@@ -213,39 +179,32 @@ public class ShowStudentsController implements Initializable {
         studentD.setCellFactory(getCallback(FileType.acceptDelete));
         studentTable.setItems(students);
         studentTable.requestFocus();
+
         List<Course> courseList = new ArrayList<>();
         courseList.add(allCourse);
         courseList.addAll(courses);
         courseFilterBox.getItems().setAll(courseList);
         courseFilterBox.setValue(allCourse);
+
         List<Company> companyList = new ArrayList<>();
         companyList.add(allCompany);
         companyList.addAll(companies);
         companyFilterBox.getItems().setAll(companyList);
         companyFilterBox.setValue(allCompany);
+
         FilteredList<DualStudent> filteredName = new FilteredList<>(students, p -> true);
         searchBox.textProperty().addListener((observable, oldValue, newValue) -> filteredName.setPredicate(person -> checkFilterStudent(newValue, person)));
         companyFilterBox.valueProperty().addListener((observable, oldValue, newValue) -> filteredName.setPredicate(person -> checkFilterStudent(newValue, person)));
         courseFilterBox.valueProperty().addListener((observable, oldValue, newValue) -> filteredName.setPredicate(person -> checkFilterStudent(newValue, person)));
         SortedList<DualStudent> sortedName = new SortedList<>(filteredName);
         sortedName.comparatorProperty().bind(studentTable.comparatorProperty());
+
         studentTable.setItems(sortedName);
         studentTable.setContextMenu(refreshMenu);
         studentTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        studentAnchor.setOnKeyPressed(keyEvent -> {
-            final ObservableList<DualStudent> selectedItem = studentTable.getSelectionModel().getSelectedItems();
-            if (selectedItem != null)
-                if (keyEvent.getCode().equals(KeyCode.DELETE))
-                    try {
-                        this.file = FileType.acceptDelete;
-                        this.object = new ArrayList<>(selectedItem);
-                        start(new Stage());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-        });
+        addDeleteKey(studentAnchor, studentTable);
 
         lectureNumber.setCellValueFactory(new PropertyValueFactory<>("docentNumber"));
         lectureLastName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -254,11 +213,10 @@ public class ShowStudentsController implements Initializable {
             @Override
             protected void updateItem(Date date, boolean b) {
                 super.updateItem(date, b);
-                if (b || date == null) {
+                if (b || date == null)
                     setText(null);
-                } else {
+                else
                     this.setText(format.format(date));
-                }
             }
         });
         lectureBirth.setCellValueFactory(new PropertyValueFactory<>("birthday"));
@@ -267,35 +225,20 @@ public class ShowStudentsController implements Initializable {
         lectureEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         lectureC.setCellFactory(getCallback(FileType.editLecture));
         lectureD.setCellFactory(getCallback(FileType.acceptDelete));
+
         lectureTable.setItems(docents);
         lectureTable.setContextMenu(refreshMenu);
         lectureTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        lectureAnchor.setOnKeyPressed(keyEvent -> {
-            final ObservableList<Docent> selectedItem = lectureTable.getSelectionModel().getSelectedItems();
-            if (selectedItem != null)
-                if (keyEvent.getCode().equals(KeyCode.DELETE))
-                    try {
-                        this.file = FileType.acceptDelete;
-                        this.object = new ArrayList<>(selectedItem);
-                        start(new Stage());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-        });
+        addDeleteKey(lectureAnchor, lectureTable);
 
         FilteredList<Docent> filteredLecture = new FilteredList<>(docents, p -> true);
         searchBoxLecture.textProperty().addListener((observable, oldValue, newValue) -> filteredLecture.setPredicate(person -> {
-            if (newValue == null || newValue.isEmpty()) {
+            if (newValue == null || newValue.isEmpty())
                 return true;
-            }
             String lowerCaseFilter = newValue.toLowerCase();
-            if (person.getForename().toLowerCase().contains(lowerCaseFilter)) {
-                return true;
-            } else if (person.getName().toLowerCase().contains(lowerCaseFilter)) {
-                return true;
-            } else return ("" + person.getDocentNumber()).toLowerCase().contains(lowerCaseFilter);
+            return person.getForename().toLowerCase().contains(lowerCaseFilter) || (person.getName().toLowerCase().contains(lowerCaseFilter) || String.valueOf(person.getDocentNumber()).toLowerCase().contains(lowerCaseFilter));
         }));
         SortedList<Docent> sortedLecture = new SortedList<>(filteredLecture);
         sortedLecture.comparatorProperty().bind(lectureTable.comparatorProperty());
@@ -308,11 +251,10 @@ public class ShowStudentsController implements Initializable {
             @Override
             protected void updateItem(Date date, boolean b) {
                 super.updateItem(date, b);
-                if (b) {
+                if (b)
                     setText(null);
-                } else {
+                else
                     this.setText(format.format(date));
-                }
             }
         });
         courseDate.setCellValueFactory(new PropertyValueFactory<>("registrationDate"));
@@ -324,18 +266,7 @@ public class ShowStudentsController implements Initializable {
         courseTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        courseAnchor.setOnKeyPressed(keyEvent -> {
-            final ObservableList<Course> selectedItem = courseTable.getSelectionModel().getSelectedItems();
-            if (selectedItem != null)
-                if (keyEvent.getCode().equals(KeyCode.DELETE))
-                    try {
-                        this.file = FileType.acceptDelete;
-                        this.object = new ArrayList<>(selectedItem);
-                        start(new Stage());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-        });
+        addDeleteKey(courseAnchor, courseTable);
 
         FilteredList<Course> filteredCourse2 = new FilteredList<>(courses, p -> true);
         searchBoxCourse.textProperty().addListener((observable, oldValue, newValue) -> filteredCourse2.setPredicate(course -> {
@@ -343,7 +274,7 @@ public class ShowStudentsController implements Initializable {
                 return true;
             }
             String lowerCaseFilter = newValue.toLowerCase();
-            return course.getName().toLowerCase().contains(lowerCaseFilter);
+            return (course.getName().toLowerCase().contains(lowerCaseFilter)) || (course.getStudyCourse().toString().toLowerCase().contains(lowerCaseFilter));
         }));
         SortedList<Course> sortedCourses = new SortedList<>(filteredCourse2);
         sortedCourses.comparatorProperty().bind(courseTable.comparatorProperty());
@@ -357,12 +288,12 @@ public class ShowStudentsController implements Initializable {
         courseTable.setItems(courses);
 
         FilteredList<Company> filteredCompany2 = new FilteredList<>(companies, p -> true);
-        searchBoxCompany.textProperty().addListener((observable, oldValue, newValue) -> filteredCompany2.setPredicate(course -> {
+        searchBoxCompany.textProperty().addListener((observable, oldValue, newValue) -> filteredCompany2.setPredicate(company -> {
             if (newValue == null || newValue.isEmpty()) {
                 return true;
             }
             String lowerCaseFilter = newValue.toLowerCase();
-            return course.getName().toLowerCase().contains(lowerCaseFilter);
+            return company.getName().toLowerCase().contains(lowerCaseFilter);
         }));
         SortedList<Company> sortedCompany2 = new SortedList<>(filteredCompany2);
         sortedCompany2.comparatorProperty().bind(companyTable.comparatorProperty());
@@ -371,8 +302,32 @@ public class ShowStudentsController implements Initializable {
         companyTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        companyAnchor.setOnKeyPressed(keyEvent -> {
-            final ObservableList<Company> selectedItem = companyTable.getSelectionModel().getSelectedItems();
+        addDeleteKey(companyAnchor, companyTable);
+    }
+
+    /**
+     * adding the start() method on each button
+     *
+     * @param button button where function should be added
+     * @param object object which should be changed or deleted
+     * @param file   fxml filename to setup next scene
+     */
+    @FXML
+    public void addFunction(Button button, List<Object> object, ShowStudentsController.FileType file) {
+        button.setOnAction((ActionEvent event) -> {
+            try {
+                this.file = file;
+                this.object = object;
+                start(new Stage());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void addDeleteKey(AnchorPane anchorPane, TableView<?> table){
+        anchorPane.setOnKeyPressed(keyEvent -> {
+            final List<?> selectedItem = table.getSelectionModel().getSelectedItems();
             if (selectedItem != null)
                 if (keyEvent.getCode().equals(KeyCode.DELETE))
                     try {
@@ -383,28 +338,6 @@ public class ShowStudentsController implements Initializable {
                         e.printStackTrace();
                     }
         });
-    }
-
-    /**
-     * adding the start() method on each button
-     *
-     * @param button button where function should be added
-     * @param object object which should be changed or deleted
-     * @param file   fxml filename to setup next scene
-     * @return button with new function
-     */
-    @FXML
-    public Button addFunction(Button button, List<Object> object, ShowStudentsController.FileType file) {
-        button.setOnAction((ActionEvent event) -> {
-            try {
-                this.file = file;
-                this.object = object;
-                start(new Stage());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        return button;
     }
 
     /**
@@ -464,7 +397,7 @@ public class ShowStudentsController implements Initializable {
             @Override
             public TableCell<T, Void> call(TableColumn<T, Void> dualStudentVoidTableColumn) {
                 return new TableCell<>() {
-                    Button btn = new Button();
+                    final Button btn = new Button();
 
                     @Override
                     protected void updateItem(Void aVoid, boolean b) {
@@ -474,7 +407,7 @@ public class ShowStudentsController implements Initializable {
                         } else {
                             ArrayList<Object> a = new ArrayList<>();
                             a.add(getTableView().getItems().get(getIndex()));
-                            btn = addFunction(btn, a, function);
+                            addFunction(btn, a, function);
                             if (function.equals(FileType.acceptDelete))
                                 btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/deleteButton.png"))));
                             else
