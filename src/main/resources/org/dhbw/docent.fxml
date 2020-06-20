@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.BoxBlur?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<AnchorPane maxHeight="600.0" maxWidth="1250.0" minHeight="600.0" minWidth="1250.0" prefHeight="600.0"
+            prefWidth="1250.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.dhbw.DocentController">
+    <ImageView fitHeight="600.0" fitWidth="1250.0" focusTraversable="true" layoutX="10.0" layoutY="10.0" opacity="0.28"
+               pickOnBounds="true" smooth="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+               AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <effect>
+            <BoxBlur height="3.0" width="3.0"/>
+        </effect>
+        <viewport>
+            <Rectangle2D/>
+        </viewport>
+        <Image url="@images/DHBW_Verwaltungsgebäude.jpg"/>
+    </ImageView>
+    <Circle fill="#aebcca" layoutX="88.0" layoutY="123.0" radius="58.0" stroke="BLACK" strokeType="INSIDE"/>
+    <Button id="backToOverview" fx:id="backToOverview" focusTraversable="false" layoutX="20.0" layoutY="20.0"
+            mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css"
+            text="Zurück zur Übersicht"/>
+    <ImageView fitHeight="67.0" fitWidth="82.0" layoutX="54.0" layoutY="90.0" pickOnBounds="true" preserveRatio="true">
+        <Image url="@images/addDocent.png"/>
+    </ImageView>
+    <Label fx:id="title" ellipsisString="200" layoutX="394.0" layoutY="33.0" text="Neue*n Dozent*in anlegen"
+           textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" underline="true">
+        <font>
+            <Font name="Comic Sans MS" size="24.0"/>
+        </font>
+    </Label>
+    <VBox layoutX="197.0" layoutY="142.0" prefHeight="429.0" prefWidth="751.0" spacing="20.0"
+          AnchorPane.bottomAnchor="748.0" AnchorPane.leftAnchor="197.0" AnchorPane.rightAnchor="165.0"
+          AnchorPane.topAnchor="142.0">
+        <HBox focusTraversable="true" spacing="170.0">
+            <Label alignment="BASELINE_LEFT" prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css"
+                   text="Vorname"/>
+            <TextField fx:id="docentFirstName" prefWidth="250.0" stylesheets="@css/application.css"/>
+        </HBox>
+        <HBox spacing="170.0">
+            <Label prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="Nachname"/>
+            <TextField fx:id="docentLastName" prefWidth="250.0" stylesheets="@css/application.css"/>
+        </HBox>
+        <HBox spacing="170.0">
+            <Label prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="Geburtstag"/>
+            <DatePicker fx:id="docentBirth" promptText="dd.mm.yyyy" stylesheets="@css/application.css"/>
+        </HBox>
+        <HBox spacing="170.0">
+            <Label prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="E-Mail-Adresse"/>
+            <TextField fx:id="docentEmail" prefWidth="250.0" stylesheets="@css/application.css"/>
+        </HBox>
+        <HBox spacing="30.0">
+            <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="Straße, Hausnummer"/>
+            <TextField fx:id="docentStreet" prefWidth="250.0" stylesheets="@css/application.css" translateX="125.0"/>
+            <TextField fx:id="docentHomeNumber" prefWidth="50.0" stylesheets="@css/application.css"
+                       translateX="125.0"/>
+        </HBox>
+        <HBox prefHeight="26.0" prefWidth="746.0" spacing="30.0">
+            <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="PLZ, Wohnort, Land"/>
+            <TextField fx:id="docentPostalCode" prefWidth="100.0" stylesheets="@css/application.css"
+                       translateX="126.0"/>
+            <TextField fx:id="docentCity" prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0"/>
+            <TextField fx:id="docentCountry" prefWidth="200.0" stylesheets="@css/application.css" text="Deutschland"
+                       translateX="125.0"/>
+        </HBox>
+        <HBox spacing="100.0">
+            <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@css/application.css" text="Dozenten-Nummer"/>
+            <TextField fx:id="docentNumberField" editable="false" prefWidth="250.0"
+                       stylesheets="@css/application.css" translateX="50.0"/>
+            <Button fx:id="buttonLN" mnemonicParsing="false" onAction="#generateLN"
+                    stylesheets="@css/application.css" text="generieren"/>
+        </HBox>
+    </VBox>
+    <Label ellipsisString="200" layoutX="197.0" layoutY="110.0" text="Persönliche Informationen" textAlignment="CENTER"
+           textOverrun="CENTER_WORD_ELLIPSIS" AnchorPane.leftAnchor="197.0" AnchorPane.rightAnchor="656.6">
+        <font>
+            <Font name="Comic Sans MS Bold Italic" size="18.0"/>
+        </font>
+    </Label>
+    <ButtonBar layoutX="-32.0" layoutY="553.0" prefHeight="50.0" prefWidth="1113.0" AnchorPane.leftAnchor="-32.0"
+               AnchorPane.rightAnchor="32.0">
+        <buttons>
+            <Button fx:id="buttonDone" alignment="CENTER" mnemonicParsing="false" onAction="#submit"
+                    stylesheets="@css/application.css" text="Eintragen"/>
+            <Button fx:id="buttonCancel" alignment="CENTER" mnemonicParsing="false" onAction="#backToOverview"
+                    stylesheets="@css/application.css" text="Abbrechen"/>
+        </buttons>
+        <padding>
+            <Insets right="50.0"/>
+        </padding>
+    </ButtonBar>
+    <Label fx:id="errorMessage" layoutX="197.0" layoutY="81.0" textFill="#870606" visible="false"/>
+</AnchorPane>

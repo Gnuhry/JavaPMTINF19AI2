@@ -9,7 +9,6 @@ import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -40,27 +39,27 @@ public class PrimaryController implements Initializable {
      */
     @FXML
     private void showStudents() throws IOException {
-        App.setRoot("showStudents");
+        App.setRoot("show");
     }
 
     @FXML
     private void insertStudent() throws IOException {
-        App.setRoot("insertStudent");
+        App.setRoot("student");
     }
 
     @FXML
     private void insertLecture() throws IOException {
-        App.setRoot("insertLecture");
+        App.setRoot("docent");
     }
 
     @FXML
     private void insertCompany() throws IOException {
-        App.setRoot("insertCompany");
+        App.setRoot("company");
     }
 
     @FXML
     private void insertCourse() throws IOException {
-        App.setRoot("insertCourse");
+        App.setRoot("course");
     }
 
     /**
@@ -69,36 +68,31 @@ public class PrimaryController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Class<?> clazz = this.getClass();
-        InputStream addStudentStream = clazz.getResourceAsStream("/org/dhbw/images/addStudentHat.png");
-        Image addStudentImage = new Image(addStudentStream);
-        ImageView addStudentImageView = new ImageView(addStudentImage);
-        InputStream addLectureStream = clazz.getResourceAsStream("/org/dhbw/images/addLecture.png");
-        Image addLectureImage = new Image(addLectureStream);
-        ImageView addLectureImageView = new ImageView(addLectureImage);
-        InputStream addCourseStream = clazz.getResourceAsStream("/org/dhbw/images/addCourse.png");
-        Image addCourseImage = new Image(addCourseStream);
-        ImageView addCourseImageView = new ImageView(addCourseImage);
-        InputStream addCompanyStream = clazz.getResourceAsStream("/org/dhbw/images/addCompany.png");
-        Image addCompanyImage = new Image(addCompanyStream);
-        ImageView addCompanyImageView = new ImageView(addCompanyImage);
-        InputStream showTableStream = clazz.getResourceAsStream("/org/dhbw/images/showTable.png");
-        Image showTableImage = new Image(showTableStream);
-        ImageView showTableImageView = new ImageView(showTableImage);
-        showTableImageView.setFitHeight(30);
-        showTableImageView.setFitWidth(30);
-        showTable.setGraphic(showTableImageView);
+        ImageView addStudentImageView = new ImageView(new Image(clazz.getResourceAsStream("/org/dhbw/images/addStudentHat.png")));
         addStudentImageView.setFitHeight(50);
         addStudentImageView.setFitWidth(50);
         addStudent.setGraphic(addStudentImageView);
+
+        ImageView addLectureImageView = new ImageView(new Image(clazz.getResourceAsStream("/org/dhbw/images/addDocent.png")));
         addLectureImageView.setFitWidth(50);
         addLectureImageView.setFitHeight(50);
         addLecture.setGraphic(addLectureImageView);
+
+        ImageView addCourseImageView = new ImageView(new Image(clazz.getResourceAsStream("/org/dhbw/images/addCourse.png")));
         addCourseImageView.setFitHeight(50);
         addCourseImageView.setFitWidth(50);
         addCourse.setGraphic(addCourseImageView);
+
+        ImageView addCompanyImageView = new ImageView(new Image(clazz.getResourceAsStream("/org/dhbw/images/addCompany.png")));
         addCompanyImageView.setFitWidth(50);
         addCompanyImageView.setFitHeight(50);
         addCompany.setGraphic(addCompanyImageView);
+
+        ImageView showTableImageView = new ImageView(new Image(clazz.getResourceAsStream("/org/dhbw/images/showTable.png")));
+        showTableImageView.setFitHeight(30);
+        showTableImageView.setFitWidth(30);
+        showTable.setGraphic(showTableImageView);
+
         tooltipStudent.setShowDelay(new Duration(300));
         tooltipLecture.setShowDelay(new Duration(300));
         tooltipCourse.setShowDelay(new Duration(300));

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.BoxBlur?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<AnchorPane maxHeight="600.0" maxWidth="1250.0" minHeight="600.0" minWidth="1080.0" prefHeight="600.0"
+            prefWidth="1250.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.dhbw.CourseController">
+    <ImageView fitHeight="600.0" fitWidth="1250.0" layoutX="10.0" layoutY="10.0" opacity="0.28" pickOnBounds="true"
+               smooth="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+               AnchorPane.topAnchor="0.0">
+        <effect>
+            <BoxBlur height="3.0" width="3.0"/>
+        </effect>
+        <viewport>
+            <Rectangle2D/>
+        </viewport>
+        <Image url="@images/DHBW_Verwaltungsgebäude.jpg"/>
+    </ImageView>
+    <Circle fill="#aebcca" layoutX="88.0" layoutY="123.0" radius="58.0" stroke="BLACK" strokeType="INSIDE"/>
+    <Button id="backToOverview" fx:id="backToOverview" focusTraversable="false" layoutX="20.0" layoutY="20.0"
+            mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css"
+            text="Zurück zur Übersicht"/>
+    <ImageView fitHeight="67.0" fitWidth="82.0" layoutX="54.0" layoutY="90.0" pickOnBounds="true" preserveRatio="true">
+        <Image url="@images/addCourse.png"/>
+    </ImageView>
+    <Label fx:id="title" ellipsisString="200" layoutX="397.0" layoutY="33.0" text="Neuen Kurs anlegen"
+           textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" underline="true">
+        <font>
+            <Font name="Comic Sans MS" size="24.0"/>
+        </font>
+    </Label>
+    <VBox layoutX="197.0" layoutY="142.0" prefHeight="425.0" prefWidth="718.0" spacing="20.0"
+          AnchorPane.bottomAnchor="934.0" AnchorPane.leftAnchor="197.0" AnchorPane.rightAnchor="166.0"
+          AnchorPane.topAnchor="142.0">
+        <HBox spacing="170.0">
+            <Label alignment="BASELINE_LEFT" prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css"
+                   text="Bezeichnung"/>
+            <TextField fx:id="courseName" prefWidth="250.0" stylesheets="@css/application.css"/>
+        </HBox>
+        <HBox spacing="170.0">
+            <Label prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="Kursart"/>
+            <ComboBox fx:id="courseType" prefWidth="150.0" promptText="Kursart auswählen"
+                      stylesheets="@css/application.css"/>
+        </HBox>
+        <HBox prefHeight="26.0" prefWidth="746.0" spacing="30.0">
+            <Label prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="Raum"/>
+            <ComboBox fx:id="courseRoom" onAction="#showRooms" prefWidth="150.0" promptText="Raum auswählen"
+                      stylesheets="@css/application.css" translateX="140.0"/>
+            <TextField fx:id="insertRoom" onKeyReleased="#editRoomText" prefHeight="31.0" prefWidth="151.0"
+                       stylesheets="@css/application.css" translateX="140.0"/>
+        </HBox>
+        <HBox spacing="150.0">
+            <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@css/application.css"
+                   text="Registrierungsdatum"/>
+            <DatePicker fx:id="courseDate" promptText="dd.mm.yyyy" stylesheets="@css/application.css"/>
+        </HBox>
+        <HBox spacing="150.0">
+            <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@css/application.css"
+                   text="Studiengangsleitung"/>
+            <ComboBox fx:id="courseDirector" prefHeight="26.0" prefWidth="224.0"
+                      promptText="Studiengangsleitung auswählen" stylesheets="@css/application.css"/>
+        </HBox>
+    </VBox>
+    <Label ellipsisString="" layoutX="197.0" layoutY="110.0" prefHeight="26.0" prefWidth="278.0"
+           text="Kursinformationen"
+           textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" AnchorPane.leftAnchor="197.0"
+           AnchorPane.rightAnchor="606.0">
+        <font>
+            <Font name="Comic Sans MS Bold Italic" size="18.0"/>
+        </font>
+    </Label>
+    <Label fx:id="errorMessage" layoutX="197.0" layoutY="81.0" textFill="#870606" visible="false"/>
+    <ButtonBar layoutX="-28.0" layoutY="530.0" prefHeight="52.0" prefWidth="1080.0" AnchorPane.leftAnchor="-28.0"
+               AnchorPane.rightAnchor="28.0">
+        <buttons>
+            <Button fx:id="buttonDone" alignment="CENTER" mnemonicParsing="false" onAction="#submit"
+                    stylesheets="@css/application.css" text="Eintragen"/>
+            <Button fx:id="buttonCancel" alignment="CENTER" mnemonicParsing="false" onAction="#backToOverview"
+                    stylesheets="@css/application.css" text="Abbrechen"/>
+        </buttons>
+        <padding>
+            <Insets right="50.0"/>
+        </padding>
+    </ButtonBar>
+</AnchorPane>

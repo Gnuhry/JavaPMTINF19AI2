@@ -29,7 +29,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ShowStudentsController implements Initializable {
+public class ShowController implements Initializable {
     private final ObservableList<DualStudent> students = FXCollections.observableArrayList(
             University.getStudents()
     );
@@ -175,8 +175,8 @@ public class ShowStudentsController implements Initializable {
         studentCompany.setCellValueFactory(new PropertyValueFactory<>("company"));
         studentCourse.setCellValueFactory(new PropertyValueFactory<>("course"));
         studentJava.setCellValueFactory(new PropertyValueFactory<>("javaKnowledge"));
-        studentC.setCellFactory(getCallback(FileType.editStudent));
-        studentD.setCellFactory(getCallback(FileType.acceptDelete));
+        studentC.setCellFactory(getCallback(FileType.editStudents));
+        studentD.setCellFactory(getCallback(FileType.delete));
         studentTable.setItems(students);
         studentTable.requestFocus();
 
@@ -223,8 +223,8 @@ public class ShowStudentsController implements Initializable {
         lectureEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         lectureAddress.setCellValueFactory(new PropertyValueFactory<>("Address"));
         lectureEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        lectureC.setCellFactory(getCallback(FileType.editLecture));
-        lectureD.setCellFactory(getCallback(FileType.acceptDelete));
+        lectureC.setCellFactory(getCallback(FileType.editDocents));
+        lectureD.setCellFactory(getCallback(FileType.delete));
 
         lectureTable.setItems(docents);
         lectureTable.setContextMenu(refreshMenu);
@@ -260,7 +260,7 @@ public class ShowStudentsController implements Initializable {
         courseDate.setCellValueFactory(new PropertyValueFactory<>("registrationDate"));
         courseLecture.setCellValueFactory(new PropertyValueFactory<>("studyDirector"));
         courseC.setCellFactory(getCallback(FileType.editCourse));
-        courseD.setCellFactory(getCallback(FileType.acceptDelete));
+        courseD.setCellFactory(getCallback(FileType.delete));
         courseTable.setItems(courses);
         courseTable.setContextMenu(refreshMenu);
         courseTable.getSelectionModel().setSelectionMode(
@@ -284,7 +284,7 @@ public class ShowStudentsController implements Initializable {
         companyAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
         companyPerson.setCellValueFactory(new PropertyValueFactory<>("contactPerson"));
         companyC.setCellFactory(getCallback(FileType.editCompany));
-        companyD.setCellFactory(getCallback(FileType.acceptDelete));
+        companyD.setCellFactory(getCallback(FileType.delete));
         courseTable.setItems(courses);
 
         FilteredList<Company> filteredCompany2 = new FilteredList<>(companies, p -> true);
@@ -313,7 +313,7 @@ public class ShowStudentsController implements Initializable {
      * @param file   fxml filename to setup next scene
      */
     @FXML
-    public void addFunction(Button button, List<Object> object, ShowStudentsController.FileType file) {
+    public void addFunction(Button button, List<Object> object, ShowController.FileType file) {
         button.setOnAction((ActionEvent event) -> {
             try {
                 this.file = file;
@@ -331,7 +331,7 @@ public class ShowStudentsController implements Initializable {
             if (selectedItem != null)
                 if (keyEvent.getCode().equals(KeyCode.DELETE))
                     try {
-                        this.file = FileType.acceptDelete;
+                        this.file = FileType.delete;
                         this.object = new ArrayList<>(selectedItem);
                         start(new Stage());
                     } catch (Exception e) {
@@ -346,32 +346,32 @@ public class ShowStudentsController implements Initializable {
      * @param stage new stage show new window
      */
     public void start(Stage stage) throws Exception {
-        String resourcePath = file + ".fxml";
+        String resourcePath = file.toString() + ".fxml";
         URL location = getClass().getResource(resourcePath);
         FXMLLoader fxmlLoader = new FXMLLoader(location);
         Parent root = fxmlLoader.load();
         switch (file) {
-            case editStudent: {
-                EditStudentController controller = fxmlLoader.getController();
+            case editStudents: {
+                StudentController controller = fxmlLoader.getController();
                 controller.initVariables((DualStudent) object.get(0));
                 break;
             }
-            case editLecture: {
-                EditLectureController controller = fxmlLoader.getController();
+            case editDocents: {
+                DocentController controller = fxmlLoader.getController();
                 controller.initVariables((Docent) object.get(0));
                 break;
             }
             case editCompany: {
-                EditCompanyController controller = fxmlLoader.getController();
+                CompanyController controller = fxmlLoader.getController();
                 controller.initVariables((Company) object.get(0));
                 break;
             }
             case editCourse: {
-                EditCourseController controller = fxmlLoader.getController();
+                CourseController controller = fxmlLoader.getController();
                 controller.initVariables((Course) object.get(0));
                 break;
             }
-            case acceptDelete: {
+            case delete: {
                 AcceptDeleteController controller = fxmlLoader.getController();
                 controller.initVariables(object);
                 break;
@@ -408,7 +408,7 @@ public class ShowStudentsController implements Initializable {
                             ArrayList<Object> a = new ArrayList<>();
                             a.add(getTableView().getItems().get(getIndex()));
                             addFunction(btn, a, function);
-                            if (function.equals(FileType.acceptDelete))
+                            if (function.equals(FileType.delete))
                                 btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/deleteButton.png"))));
                             else
                                 btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/editButton.png"))));
@@ -464,6 +464,13 @@ public class ShowStudentsController implements Initializable {
     }
 
     public enum FileType {
-        editStudent, editLecture, editCourse, editCompany, acceptDelete
+        editStudents("student"), editDocents("docent"), editCourse("course"), editCompany("company"), delete("acceptDelete");
+        private final String name;
+        FileType(String name){this.name=name;}
+
+        @Override
+        public String toString() {
+            return name;
+        }
     }
 }
