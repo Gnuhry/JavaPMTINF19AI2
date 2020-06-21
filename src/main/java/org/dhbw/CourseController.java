@@ -47,7 +47,7 @@ public class CourseController {
     private Button buttonDone, buttonCancel;
 
     /**
-     * changing the scene root in App to "primary.fxml"
+     * changing the scene root in App to "primary.fxml" or closing pop up window
      */
     @FXML
     private void backToOverview() throws IOException {
@@ -60,7 +60,7 @@ public class CourseController {
     }
 
     /**
-     * initializing comboBoxes with object lists
+     * initializing comboBoxes and datepicker
      */
     @FXML
     private void initialize() {
@@ -75,9 +75,9 @@ public class CourseController {
     }
 
     /**
-     * setting the textfield if there is a course to edit
+     * filling the textfield with course attributes if course is not null
      *
-     * @param course edit course or null
+     * @param course course to fill in or null
      */
     public void initVariables(Course course) {
         course_old = course;
@@ -120,7 +120,7 @@ public class CourseController {
     }
 
     /**
-     * change choose room to new room, if typing own text
+     * change choose room to new room, if typing custom text
      */
     @FXML
     private void editRoomText() {
@@ -130,8 +130,8 @@ public class CourseController {
 
     /**
      * reading the textfield
-     * generating a new course with the entered information and adding the new course to the database
-     * catching NullPointerException to give a visual feedback to the user
+     * checking validation of textfield and mark wrong entries
+     * adding or editing the course to the database
      */
     @FXML
     private void submit() throws IOException {

@@ -32,7 +32,7 @@ public class DocentController {
 
 
     /**
-     * changing the scene root in App to "primary.fxml"
+     * changing the scene root in App to "primary.fxml" or closing pop up window
      */
     @FXML
     private void backToOverview() throws IOException {
@@ -45,9 +45,9 @@ public class DocentController {
     }
 
     /**
-     * setting the textfield if there is a docent to edit
+     * filling the textfield with docent attributes if docent is not null
      *
-     * @param docent edit docent or null
+     * @param docent docent to fill in or null
      */
     public void initVariables(Docent docent) {
         docent_old = docent;
@@ -63,7 +63,7 @@ public class DocentController {
     }
 
     /**
-     * initializing javaKnowledge textfield and the combobox with object lists
+     * initializing datepicker and docent number
      */
     @FXML
     private void initialize() {
@@ -72,7 +72,7 @@ public class DocentController {
     }
 
     /**
-     * generating a random number and adding it as the lectureNumber if it is not taken yet
+     * generating a random number and adding it as the docent number if it is not taken yet
      */
     @FXML
     private void generateLN() {
@@ -96,9 +96,8 @@ public class DocentController {
 
     /**
      * reading the textfield
-     * checking validation of emails, postal code and date
-     * generating a new docent with the entered information and adding the new docent to the database
-     * catching NullPointerException to give a visual feedback to the user
+     * checking validation of textfield and mark wrong entries
+     * adding or editing the docent to the database
      */
     @FXML
     private void submit() throws IOException {

@@ -23,7 +23,7 @@ public class CompanyController {
     private Button buttonDone, buttonCancel;
 
     /**
-     * changing the scene root in App to "primary.fxml"
+     * changing the scene root in App to "primary.fxml" or closing pop up window
      */
     @FXML
     private void backToOverview() throws IOException {
@@ -36,9 +36,9 @@ public class CompanyController {
     }
 
     /**
-     * setting the textfield if there is a company to edit
+     * filling the textfield with company attributes if company is not null
      *
-     * @param company edit company or null
+     * @param company company to fill in or null
      */
     public void initVariables(Company company) {
         company_old = company;
@@ -53,9 +53,8 @@ public class CompanyController {
 
     /**
      * reading the textfield
-     * checking validation of emails and postal code
-     * generating a new company with the entered information and adding the new company to the database
-     * catching NullPointerException to give a visual feedback to the user
+     * checking validation of textfield and mark wrong entries
+     * adding or editing the company to the database
      */
     @FXML
     private void submit() throws IOException {

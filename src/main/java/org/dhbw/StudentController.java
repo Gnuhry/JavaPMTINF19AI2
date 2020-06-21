@@ -25,7 +25,7 @@ public class StudentController {
             University.getCourses()
     );
 
-    private final Company newCompany = new Company(Help.getRessourceBundle().getString("new_company"), new Address("", "", "", "", ""), new Person("", "", ""));
+    private final Company newCompany = new Company(Help.getRessourceBundle().getString("new_company"), null, null);
     private final Course noCourse = new Course(Help.getRessourceBundle().getString("no_course"), null, null, null, null);
     private DualStudent student_old;
 
@@ -49,7 +49,7 @@ public class StudentController {
     private ImageView image;
 
     /**
-     * changing the scene root in App to "primary.fxml"
+     * changing the scene root in App to "primary.fxml" or closing pop up window
      */
     @FXML
     private void backToOverview() throws IOException {
@@ -62,9 +62,9 @@ public class StudentController {
     }
 
     /**
-     * setting the textfield if there is a student to edit
+     * filling the textfield with student attributes if student is not null
      *
-     * @param student edit student or null
+     * @param student student to fill in or null
      */
     public void initVariables(DualStudent student) {
         this.student_old = student;
@@ -109,7 +109,7 @@ public class StudentController {
     }
 
     /**
-     * initializing javaKnowledge textfield and the combobox with object lists
+     * initializing combo boxes, datepicker and matriculation/student number
      */
     @FXML
     private void initialize() {
@@ -123,7 +123,7 @@ public class StudentController {
     }
 
     /**
-     * generating a random number and adding it as the studentNumber if it is not taken yet
+     * generating a random number and adding it as the student number if it is not taken yet
      */
     @FXML
     private void generateSN() {
@@ -146,7 +146,7 @@ public class StudentController {
     }
 
     /**
-     * generating a random number and adding it as the matriculationNumber if it is not taken yet
+     * generating a random number and adding it as the matriculation number if it is not taken yet
      */
     @FXML
     private void generateMN() {
@@ -173,7 +173,7 @@ public class StudentController {
      */
     @FXML
     private void showSlider() {
-        javaKnowledgeLabel.setText("" + (int) javaKnowledgeSlider.getValue());
+        javaKnowledgeLabel.setText(String.valueOf((int) javaKnowledgeSlider.getValue()));
     }
 
     /**
@@ -228,9 +228,8 @@ public class StudentController {
 
     /**
      * reading the textfield
-     * checking validation of emails, postal code and date
-     * generating a new student or edit one with the entered information and adding the new or edited student to the database
-     * catching NullPointerException to give a visual feedback to the user
+     * checking validation of textfield and mark wrong entries
+     * adding or editing the student to the database
      */
     @FXML
     private void submit() throws IOException {

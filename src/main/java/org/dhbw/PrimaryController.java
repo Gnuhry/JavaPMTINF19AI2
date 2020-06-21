@@ -16,9 +16,7 @@ import java.util.ResourceBundle;
 public class PrimaryController implements Initializable {
 
     @FXML
-    public Button buttonLanguage;
-    @FXML
-    private Button showTable, addStudent, addLecture, addCourse, addCompany;
+    public Button buttonLanguage, showTable, addStudent, addLecture, addCourse, addCompany;
     @FXML
     private Tooltip tooltipStudent, tooltipLecture, tooltipCourse, tooltipCompany;
 
@@ -93,5 +91,7 @@ public class PrimaryController implements Initializable {
         tooltipCourse.setShowDelay(new Duration(300));
         tooltipCompany.setShowDelay(new Duration(300));
         buttonLanguage.setText(Help.locale.getLanguage());
+
+        showTable.requestFocus();
     }
 }

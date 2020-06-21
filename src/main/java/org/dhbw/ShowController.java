@@ -24,7 +24,10 @@ import org.dhbw.classes.*;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.ResourceBundle;
 
 public class ShowController implements Initializable {
     private final ObservableList<DualStudent> students = FXCollections.observableArrayList(
@@ -119,7 +122,7 @@ public class ShowController implements Initializable {
     }
 
     /**
-     * refreshing all four tables
+     * refreshing all tables
      */
     @FXML
     public void refresh() {
@@ -136,11 +139,12 @@ public class ShowController implements Initializable {
     /**
      * initializing every column of the table with the data from other classes
      * adding filter functions for lecture table, course table and company table (input from search boxes)
+     * creating contextmenu and adding functions to buttons and adding delete key
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ContextMenu refreshMenu = new ContextMenu();
-        MenuItem[] item = new MenuItem[]{new MenuItem("refresh"), new MenuItem("back")};
+        MenuItem[] item = new MenuItem[]{new MenuItem(Help.getRessourceBundle().getString("refresh")), new MenuItem(Help.getRessourceBundle().getString("back"))};
         item[0].setOnAction(actionEvent -> refresh());
         item[1].setOnAction(actionEvent -> {
             try {
@@ -303,11 +307,11 @@ public class ShowController implements Initializable {
     }
 
     /**
-     * adding the start() method on each button
+     * adding the start() method on the button
      *
      * @param button button where function should be added
      * @param object object which should be changed or deleted
-     * @param file   fxml filename to setup next scene
+     * @param file   FileType what should happen with the object
      */
     @FXML
     public void addFunction(Button button, List<Object> object, ShowController.FileType file) {
@@ -322,7 +326,7 @@ public class ShowController implements Initializable {
         });
     }
 
-    public void addDeleteKey(AnchorPane anchorPane, TableView<?> table){
+    public void addDeleteKey(AnchorPane anchorPane, TableView<?> table) {
         anchorPane.setOnKeyPressed(keyEvent -> {
             final List<?> selectedItem = table.getSelectionModel().getSelectedItems();
             if (selectedItem != null)
@@ -343,9 +347,7 @@ public class ShowController implements Initializable {
      * @param stage new stage show new window
      */
     public void start(Stage stage) throws Exception {
-        String resourcePath = file.toString() + ".fxml";
-        URL location = getClass().getResource(resourcePath);
-        FXMLLoader fxmlLoader = new FXMLLoader(location, Help.getRessourceBundle());
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(file.toString()), Help.getRessourceBundle());
         Parent root = fxmlLoader.load();
         switch (file) {
             case editStudents: {
@@ -385,11 +387,11 @@ public class ShowController implements Initializable {
     }
 
     /**
-     * initializing change and delete button with image and addFunction
+     * initializing change and delete button with image and adding function
      *
-     * @param function the fxml function which the button should trigger
+     * @param fileType the fileType what should happen when pressing on button
      */
-    private <T> Callback<TableColumn<T, Void>, TableCell<T, Void>> getCallback(FileType function) {
+    private <T> Callback<TableColumn<T, Void>, TableCell<T, Void>> getCallback(FileType fileType) {
         return new Callback<>() {
             @Override
             public TableCell<T, Void> call(TableColumn<T, Void> dualStudentVoidTableColumn) {
@@ -404,8 +406,8 @@ public class ShowController implements Initializable {
                         } else {
                             ArrayList<Object> a = new ArrayList<>();
                             a.add(getTableView().getItems().get(getIndex()));
-                            addFunction(btn, a, function);
-                            if (function.equals(FileType.delete))
+                            addFunction(btn, a, fileType);
+                            if (fileType.equals(FileType.delete))
                                 btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/deleteButton.png"))));
                             else
                                 btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/editButton.png"))));
@@ -420,9 +422,9 @@ public class ShowController implements Initializable {
     /**
      * filtering the student table with input text from search boxes and combo boxes
      *
-     * @param newValue value which get changed (String, Company or Course)
+     * @param newValue value which get changed (search string, Company or Course)
      * @param person   person of database table which gets checked on input
-     * @return true if person has the configure attributes from the filters, false if not
+     * @return {true} if person has the configure attributes from the filters, {false} if not
      */
     private boolean checkFilterStudent(Object newValue, DualStudent person) {
         boolean erg = true;
@@ -460,10 +462,16 @@ public class ShowController implements Initializable {
         return erg;
     }
 
+    /**
+     * Enum for button functions
+     */
     public enum FileType {
-        editStudents("student"), editDocents("docent"), editCourse("course"), editCompany("company"), delete("acceptDelete");
+        editStudents("student.fxml"), editDocents("docent.fxml"), editCourse("course.fxml"), editCompany("company.fxml"), delete("acceptDelete.fxml");
         private final String name;
-        FileType(String name){this.name=name;}
+
+        FileType(String name) {
+            this.name = name;
+        }
 
         @Override
         public String toString() {
