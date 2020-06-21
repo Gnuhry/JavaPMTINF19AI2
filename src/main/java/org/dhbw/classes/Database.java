@@ -712,6 +712,7 @@ public class Database {
     public static void initialize() throws ClassNotFoundException, SQLException {
         if (connection == null || connection.isClosed()) {
             Class.forName("com.mysql.jdbc.Driver");
+            //TODO store in file
             connection = DriverManager.getConnection(
                     "jdbc:mysql://85.214.247.101:3306/dhbw?useSSL=false", "mlg_dhbw", "Reisebus1!");
         }
