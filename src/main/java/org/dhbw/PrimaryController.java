@@ -90,7 +90,7 @@ public class PrimaryController implements Initializable {
         tooltipLecture.setShowDelay(new Duration(300));
         tooltipCourse.setShowDelay(new Duration(300));
         tooltipCompany.setShowDelay(new Duration(300));
-        buttonLanguage.setText(Help.locale.getLanguage());
+        buttonLanguage.setText(Help.getLocale().getLanguage());
 
         showTable.requestFocus();
     }
