@@ -45,6 +45,9 @@ public class ShowController implements Initializable {
     private final ObservableList<CourseRoom> rooms = FXCollections.observableArrayList(
             University.getRooms()
     );
+    private final ObservableList<Campus> campuses = FXCollections.observableArrayList(
+            Campus.values()
+    );
 
     private FileType file;
     private List<Object> object;
@@ -60,6 +63,8 @@ public class ShowController implements Initializable {
     private ComboBox<Course> courseFilterBox;
     @FXML
     private ComboBox<Company> companyFilterBox;
+    @FXML
+    private ComboBox<Campus> campusFilterBox;
     @FXML
     public TableView<DualStudent> studentTable;
     @FXML
@@ -129,11 +134,11 @@ public class ShowController implements Initializable {
     @FXML
     private TableColumn<CourseRoom, Integer> roomSeats;
     @FXML
-    private TableColumn<CourseRoom, Void> roomBeamer;
+    private TableColumn<CourseRoom, Boolean> roomBeamer;
     @FXML
-    private TableColumn<CourseRoom, Void> roomDocumentCamera;
+    private TableColumn<CourseRoom, Boolean> roomDocumentCamera;
     @FXML
-    private TableColumn<CourseRoom, Void> roomLaboratory;
+    private TableColumn<CourseRoom, Boolean> roomLaboratory;
     @FXML
     private TableColumn<CourseRoom, Void> roomC;
     @FXML
@@ -334,12 +339,24 @@ public class ShowController implements Initializable {
         addDeleteKey(companyAnchor, companyTable);
 
         roomName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        roomCampus.setCellValueFactory(new PropertyValueFactory<>("campus"));
+        roomBuilding.setCellValueFactory(new PropertyValueFactory<>("building"));
+        roomFloor.setCellValueFactory(new PropertyValueFactory<>("floor"));
+        roomSeats.setCellValueFactory(new PropertyValueFactory<>("seats"));
+        roomBeamer.setCellValueFactory(new PropertyValueFactory<>("beamer"));
+        roomDocumentCamera.setCellValueFactory(new PropertyValueFactory<>("documentCamera"));
+        roomLaboratory.setCellValueFactory(new PropertyValueFactory<>("laboratory"));
         roomC.setCellFactory(getCallback(FileType.editRoom));
         roomD.setCellFactory(getCallback(FileType.delete));
         roomTable.setItems(rooms);
 
+        List<Campus> campusList = new ArrayList<>();
+        campusList.addAll(campuses);
+        campusFilterBox.getItems().setAll(campusList);
+        campusFilterBox.setValue(Campus.AlleCampus);
         FilteredList<CourseRoom> filteredRoom = new FilteredList<>(rooms, p -> true);
-        searchBoxRoom.textProperty().addListener((observable, oldValue, newValue) -> filteredName.setPredicate(room -> checkFilterStudent(newValue, room)));
+        searchBoxRoom.textProperty().addListener((observable, oldValue, newValue) -> filteredRoom.setPredicate(room -> checkFilterRoom(newValue, room)));
+        campusFilterBox.valueProperty().addListener((observable, oldValue, newValue) -> filteredRoom.setPredicate(room -> checkFilterRoom(newValue, room)));
         SortedList<CourseRoom> sortedRooms = new SortedList<>(filteredRoom);
         sortedRooms.comparatorProperty().bind(roomTable.comparatorProperty());
         roomTable.setItems(sortedRooms);
@@ -466,6 +483,30 @@ public class ShowController implements Initializable {
                 };
             }
         };
+    }
+
+    /**
+     * filtering the room table with input text from search boxes and combo boxes
+     *
+     * @param newValue value which get changed (search string, Company or Course)
+     * @param room   room of database table which gets checked on input
+     * @return {true} if person has the configure attributes from the filters, {false} if not
+     */
+    private boolean checkFilterRoom(Object newValue, CourseRoom room) {
+        boolean erg = true;
+        String search;
+        if (newValue instanceof String)
+            search = ((String) newValue);
+        else
+            search = searchBoxRoom.getText();
+        if (search != null && !search.isEmpty()) {
+            search = search.trim().toLowerCase();
+            if (room.getName().toLowerCase().contains(search))
+                erg = true;
+            else
+                erg = ("" + room.getCampus()).toLowerCase().contains(search);
+        }
+        return erg;
     }
 
     /**

@@ -33,7 +33,7 @@
     <Circle fill="#aebcca" layoutX="88.0" layoutY="123.0" radius="58.0" stroke="BLACK" strokeType="INSIDE" />
     <Button id="backToOverview" fx:id="backToOverview" focusTraversable="false" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="%back_to_overview" />
     <ImageView fitHeight="67.0" fitWidth="82.0" layoutX="54.0" layoutY="90.0" pickOnBounds="true" preserveRatio="true">
-        <Image url="@images/addCompany.png" />
+        <Image url="@images/addRoom.png" />
     </ImageView>
     <Label fx:id="title" ellipsisString="200" layoutX="397.0" layoutY="33.0" text="%title_room_new" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" underline="true">
         <font>
@@ -46,10 +46,10 @@
             <TextField fx:id="roomName" prefWidth="250.0" stylesheets="@css/application.css" />
         </HBox>
         <HBox spacing="30.0">
-            <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="%campusBuildingFloor" />
-         <ComboBox fx:id="roomCampus" prefWidth="150.0" stylesheets="@css/application.css" translateX="125.0" />
-         <TextField fx:id="roomBuilding" prefHeight="23.0" prefWidth="181.0" stylesheets="@css/application.css" translateX="125.0" />
-            <TextField fx:id="roomFloor" prefWidth="50.0" stylesheets="@css/application.css" translateX="125.0" />
+            <Label prefHeight="26.0" prefWidth="190.0" stylesheets="@css/application.css" text="%campusBuildingFloor" />
+         <ComboBox fx:id="roomCampus" prefWidth="150.0" stylesheets="@css/application.css" translateX="50.0" />
+         <TextField fx:id="roomBuilding" prefHeight="23.0" prefWidth="50.0" stylesheets="@css/application.css" translateX="50.0" />
+            <TextField fx:id="roomFloor" prefWidth="50.0" stylesheets="@css/application.css" translateX="50.0" />
         </HBox>
         <HBox prefHeight="26.0" prefWidth="746.0" spacing="30.0">
             <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="%seats" />
@@ -69,9 +69,9 @@
                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
            </rowConstraints>
             <children>
-               <Label text="%beamer" />
-               <Label text="%documentCamera" GridPane.columnIndex="1" />
-               <Label text="%laboratory" GridPane.columnIndex="2" />
+               <Label text="%beamer" translateX="30.0" />
+               <Label text="%documentCamera" translateX="5.0" GridPane.columnIndex="1" />
+               <Label contentDisplay="CENTER" text="%laboratory" translateX="25.0" GridPane.columnIndex="2" />
                <CheckBox fx:id="roomBeamer" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="17.0" prefWidth="19.0" textAlignment="CENTER" translateX="50.0" GridPane.rowIndex="2" />
                <CheckBox fx:id="roomDocumentCamera" mnemonicParsing="false" translateX="50.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                <CheckBox fx:id="roomLaboratory" contentDisplay="CENTER" mnemonicParsing="false" translateX="50.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
