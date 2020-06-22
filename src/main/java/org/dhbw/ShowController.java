@@ -1,5 +1,6 @@
 package org.dhbw;
 
+import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -22,6 +23,7 @@ import javafx.util.Callback;
 import org.dhbw.classes.*;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ShowController implements Initializable {
+public class ShowController extends Application implements Initializable {
     private final ObservableList<DualStudent> students = FXCollections.observableArrayList(
             University.getStudents()
     );
@@ -100,7 +102,7 @@ public class ShowController implements Initializable {
     @FXML
     private TableColumn<Course, Docent> courseLecture;
     @FXML
-    private TableColumn<Course, Void> courseC, courseD;
+    private TableColumn<Course, Void> courseC, courseD, courseMail;
 
     @FXML
     private TableView<Company> companyTable;
@@ -262,6 +264,33 @@ public class ShowController implements Initializable {
         courseLecture.setCellValueFactory(new PropertyValueFactory<>("studyDirector"));
         courseC.setCellFactory(getCallback(FileType.editCourse));
         courseD.setCellFactory(getCallback(FileType.delete));
+        courseMail.setCellFactory(new Callback<>() {
+            @Override
+            public TableCell<Course, Void> call(TableColumn<Course, Void> courseVoidTableColumn) {
+                return new TableCell<>() {
+                    final Button btn = new Button();
+
+                    @Override
+                    protected void updateItem(Void aVoid, boolean b) {
+                        super.updateItem(aVoid, b);
+                        if (b) {
+                            setGraphic(null);
+                        } else {
+                            btn.setOnAction(actionEvent -> {
+                                StringBuilder sb=new StringBuilder("mailto:");
+                                String[] mails=University.getAllEmailFromCourse(getTableView().getItems().get(getIndex()));
+                                if(mails==null) return;
+                                for(String s:mails)
+                                    sb.append(s).append(", ");
+                                getHostServices().showDocument(sb.toString().substring(0, sb.toString().length()-2));
+                            });
+                            btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/mailButton.png"))));
+                            setGraphic(btn);
+                        }
+                    }
+                };
+            }
+        });
         courseTable.setItems(courses);
         courseTable.setContextMenu(refreshMenu);
         courseTable.getSelectionModel().setSelectionMode(

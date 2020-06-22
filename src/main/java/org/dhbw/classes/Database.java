@@ -734,6 +734,27 @@ public class Database {
             rooms = new ArrayList<>();
     }
 
+    public static String[] getAllEmailsFromCourse(Course course) {
+        int course_id = getCourseId(course);
+        if (course_id <= 0) return null;
+        try {
+            List<String> erg = new ArrayList<>();
+            initialize();
+            statement = connection.prepareStatement("SELECT email FROM person LEFT JOIN student s ON s.person_id=person.person_id WHERE s.course_id=?");
+            statement.setInt(1, course_id);
+            resultSet = statement.executeQuery();
+            while (resultSet.next())
+                erg.add(resultSet.getString("email"));
+            return erg.toArray(new String[0]);
+
+        } catch (SQLException | ClassNotFoundException exception) {
+            exception.printStackTrace();
+        } finally {
+            closeStatement();
+        }
+        return null;
+    }
+
     //---------------------------------------private...........................................
 
     /**

@@ -27,6 +27,8 @@ public class University {
         return Database.getRooms();
     }
 
+    public static String[] getAllEmailFromCourse(Course course) {return Database.getAllEmailsFromCourse(course);}
+
     //-------------------------------AddObject------------------------
 
     public static void addDocent(Docent d) {
