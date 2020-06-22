@@ -315,7 +315,6 @@ public class Help {
      */
     private static void setLanguageSetting() {
         try {
-            System.out.println(new File(settings_path).getPath());
             Properties props = new Properties();
             props.setProperty("lang", locale.getLanguage());
             FileWriter writer = new FileWriter(new File(settings_path));
