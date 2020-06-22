@@ -5,12 +5,9 @@ import java.util.Objects;
 public class CourseRoom implements Comparable<CourseRoom>{
     private final String name;
     private Campus campus;
-    private String building;
-    private String floor;
+    private String building, floor;
     private int seats;
-    private boolean beamer;
-    private boolean documentCamera;
-    private boolean laboratory;
+    private boolean beamer, documentCamera, laboratory;
 
     public CourseRoom(String name, Campus campus, String building, String floor, int seats, boolean beamer, boolean documentCamera, boolean laboratory) {
         this.name = name;
@@ -30,6 +27,10 @@ public class CourseRoom implements Comparable<CourseRoom>{
         return name;
     }
 
+    public Campus getCampus() {
+        return campus;
+    }
+
     public String getBuilding() {
         return building;
     }
@@ -38,8 +39,8 @@ public class CourseRoom implements Comparable<CourseRoom>{
         return floor;
     }
 
-    public int getSeatsAmount() {
-        return seatsAmount;
+    public int getSeats() {
+        return seats;
     }
 
     public boolean hasDocumentCamera() {
@@ -51,8 +52,8 @@ public class CourseRoom implements Comparable<CourseRoom>{
     }
 
     //-----------------------Setter-----------------
-    public void setSeatsAmount(int seatsAmount) {
-        this.seatsAmount = seatsAmount;
+    public void setSeats(int seats) {
+        this.seats = seats;
     }
 
     public void setDocumentCamera(boolean documentCamera) {
