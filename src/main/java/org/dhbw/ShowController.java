@@ -172,7 +172,7 @@ public class ShowController extends Application implements Initializable {
         studentBirth.setCellValueFactory(new PropertyValueFactory<>("birthday"));
 //        studentEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         studentEmail.setCellFactory(dualStudentVoidTableColumn -> {
-            TableCell<DualStudent, String> cell = new TableCell<DualStudent, String>() {
+            TableCell<DualStudent, String> cell = new TableCell<>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
@@ -180,9 +180,8 @@ public class ShowController extends Application implements Initializable {
                 }
             };
             cell.setOnMouseClicked(e -> {
-                if (!cell.isEmpty()) {
+                if (!cell.isEmpty())
                     getHostServices().showDocument("mailto:" + cell.getTableView().getItems().get(cell.getIndex()).getEmail());
-                }
             });
             return cell;
         });
@@ -287,9 +286,9 @@ public class ShowController extends Application implements Initializable {
                     @Override
                     protected void updateItem(Void aVoid, boolean b) {
                         super.updateItem(aVoid, b);
-                        if (b) {
+                        if (b)
                             setGraphic(null);
-                        } else {
+                        else {
                             btn.setOnAction(actionEvent -> {
                                 StringBuilder sb = new StringBuilder("mailto:");
                                 String[] mails = University.getAllEmailFromCourse(getTableView().getItems().get(getIndex()));
