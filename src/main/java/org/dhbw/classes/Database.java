@@ -1313,9 +1313,9 @@ public class Database {
     }
 
     /**
-     * get the id from the enum StudyCourse
+     * get the id from the enum campus
      *
-     * @param course the StudyCourse you need the id
+     * @param campus the campus you need the id
      * @return Integer.MinValue if course not exist. id if exists
      */
     private static int getCampusID(Campus campus) {
@@ -1327,10 +1327,10 @@ public class Database {
     }
 
     /**
-     * get the StudyCourse from the id
+     * get the campus from the id
      *
-     * @param id from the StudyCourse
-     * @return StudyCourse if exists, null if not
+     * @param id from the campus
+     * @return campus if exists, null if not
      */
     private static Campus getCampusById(int id) {
         return id < 0 || id >= Campus.values().length ? null : Campus.values()[id];
