@@ -27,6 +27,10 @@ public class University {
         return Database.getRooms();
     }
 
+    public static String[] getAllEmailFromCourse(Course course) {
+        return Database.getAllEmailsFromCourse(course);
+    }
+
     //-------------------------------AddObject------------------------
 
     public static void addDocent(Docent d) {
@@ -43,6 +47,10 @@ public class University {
 
     public static void addCompany(Company c) {
         Database.addCompany(c);
+    }
+
+    public static void addRoom(CourseRoom r) {
+        Database.addRoom(r);
     }
 
     //-----------------------------RemoveObject----------------------
@@ -81,5 +89,9 @@ public class University {
 
     public static void updateCompany(Company c, Company old) {
         Database.updateCompany(c, old);
+    }
+
+    public static void updateRoom(CourseRoom r, CourseRoom old) {
+        Database.updateRoom(r, old);
     }
 }

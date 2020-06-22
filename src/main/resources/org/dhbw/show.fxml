@@ -78,7 +78,8 @@
                     <TableColumn fx:id="courseDate" prefWidth="123.0" text="%registration_date" />
                     <TableColumn fx:id="courseLecture" prefWidth="200.0" text="%director" />
                     <TableColumn fx:id="courseC" editable="false" prefWidth="40.0" resizable="false" sortable="false" />
-                    <TableColumn fx:id="courseD" editable="false" prefWidth="560.0" resizable="false" sortable="false" />
+                    <TableColumn fx:id="courseMail" editable="false" prefWidth="40.0" resizable="false" sortable="false" />
+                    <TableColumn fx:id="courseD" editable="false" prefWidth="520.0" resizable="false" sortable="false" />
                 </columns>
             </TableView>
         </AnchorPane>

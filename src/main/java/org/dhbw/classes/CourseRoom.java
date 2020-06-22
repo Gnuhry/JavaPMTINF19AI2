@@ -30,8 +30,37 @@ public class CourseRoom implements Comparable<CourseRoom>{
         return name;
     }
 
-    public Campus getCampus() {
-        return campus;
+    public String getBuilding() {
+        return building;
+    }
+
+    public String getFloor() {
+        return floor;
+    }
+
+    public int getSeatsAmount() {
+        return seatsAmount;
+    }
+
+    public boolean hasDocumentCamera() {
+        return documentCamera;
+    }
+
+    public boolean isLaboratory() {
+        return laboratory;
+    }
+
+    //-----------------------Setter-----------------
+    public void setSeatsAmount(int seatsAmount) {
+        this.seatsAmount = seatsAmount;
+    }
+
+    public void setDocumentCamera(boolean documentCamera) {
+        this.documentCamera = documentCamera;
+    }
+
+    public void setLaboratory(boolean laboratory) {
+        this.laboratory = laboratory;
     }
 
     //------------------Overrides---------------------

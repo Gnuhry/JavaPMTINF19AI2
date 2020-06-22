@@ -277,8 +277,13 @@ public class Database {
         if (id >= 0) return id;
         try {
             initialize();
-            statement = connection.prepareStatement("INSERT INTO room (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
+            statement = connection.prepareStatement("INSERT INTO room (name, building, floor, seats, camera, laboratory) VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, room.getName());
+            statement.setString(2, room.getBuilding());
+            statement.setString(3, room.getFloor());
+            statement.setInt(4, room.getSeatsAmount());
+            statement.setBoolean(5, room.hasDocumentCamera());
+            statement.setBoolean(6, room.isLaboratory());
             statement.execute();
             resultSet = statement.getGeneratedKeys();
             if (resultSet.next())
@@ -481,9 +486,14 @@ public class Database {
         if (id >= 0) {
             try {
                 initialize();
-                statement = connection.prepareStatement("UPDATE room SET name=? WHERE room_id=?", Statement.RETURN_GENERATED_KEYS);
+                statement = connection.prepareStatement("UPDATE room SET name=?, building=?,floor=?, seats=?,camera=?,laboratory=?  WHERE room_id=?", Statement.RETURN_GENERATED_KEYS);
                 statement.setString(1, room.getName());
-                statement.setInt(2, id);
+                statement.setString(2, room.getBuilding());
+                statement.setString(3, room.getFloor());
+                statement.setInt(4, room.getSeatsAmount());
+                statement.setBoolean(5, room.hasDocumentCamera());
+                statement.setBoolean(6, room.isLaboratory());
+                statement.setInt(7, id);
                 statement.execute();
                 return id;
             } catch (SQLException | ClassNotFoundException exception) {
@@ -628,8 +638,10 @@ public class Database {
             return;
         try {
             initialize();
-            statement = connection.prepareStatement("DELETE FROM room WHERE name = ?");
+            statement = connection.prepareStatement("DELETE FROM room WHERE name = ? AND building = ? AND floor = ?");
             statement.setString(1, courseRoom.getName());
+            statement.setString(2, courseRoom.getBuilding());
+            statement.setString(3, courseRoom.getFloor());
             statement.execute();
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
@@ -734,6 +746,27 @@ public class Database {
             rooms = new ArrayList<>();
     }
 
+    public static String[] getAllEmailsFromCourse(Course course) {
+        int course_id = getCourseId(course);
+        if (course_id <= 0) return null;
+        try {
+            List<String> erg = new ArrayList<>();
+            initialize();
+            statement = connection.prepareStatement("SELECT email FROM person LEFT JOIN student s ON s.person_id=person.person_id WHERE s.course_id=?");
+            statement.setInt(1, course_id);
+            resultSet = statement.executeQuery();
+            while (resultSet.next())
+                erg.add(resultSet.getString("email"));
+            return erg.toArray(new String[0]);
+
+        } catch (SQLException | ClassNotFoundException exception) {
+            exception.printStackTrace();
+        } finally {
+            closeStatement();
+        }
+        return null;
+    }
+
     //---------------------------------------private...........................................
 
     /**
@@ -829,7 +862,7 @@ public class Database {
                                 convertDate(resultSet.getDate("birthdate")),
                                 new Address(resultSet.getString("student_street"), resultSet.getString("student_number"), resultSet.getString("student_postal_code"), resultSet.getString("student_city"), resultSet.getString("student_country")),
                                 resultSet.getString("student_email"),
-                                new Course(resultSet.getString("name"), getCourseTypeById(resultSet.getInt("course_type")), new Docent(resultSet.getString("docent_last_name"), resultSet.getString("docent_first_name"), convertDate(resultSet.getDate("docent_birthdate")), new Address(resultSet.getString("docent_street"), resultSet.getString("docent_number"), resultSet.getString("docent_postal_code"), resultSet.getString("docent_city"), resultSet.getString("docent_country")), resultSet.getString("docent_email"), resultSet.getInt("study_director_id")), convertDate(resultSet.getDate("registry_date")), new CourseRoom(resultSet.getString("room"))),
+                                new Course(resultSet.getString("name"), getCourseTypeById(resultSet.getInt("course_type")), new Docent(resultSet.getString("docent_last_name"), resultSet.getString("docent_first_name"), convertDate(resultSet.getDate("docent_birthdate")), new Address(resultSet.getString("docent_street"), resultSet.getString("docent_number"), resultSet.getString("docent_postal_code"), resultSet.getString("docent_city"), resultSet.getString("docent_country")), resultSet.getString("docent_email"), resultSet.getInt("study_director_id")), convertDate(resultSet.getDate("registry_date")), new CourseRoom(resultSet.getString("room"), resultSet.getString("building"), resultSet.getString("floor"), resultSet.getInt("seats"), resultSet.getBoolean("camera"), resultSet.getBoolean("laboratory"))),
                                 resultSet.getInt("java_knowlage"),
                                 new Company(resultSet.getString("company_name"), new Address(resultSet.getString("street"), resultSet.getString("number"), resultSet.getString("postal_code"), resultSet.getString("city"), resultSet.getString("country")), new Person(resultSet.getString("last_name"), resultSet.getString("first_name"), resultSet.getString("email"))));
 //                int id = dualStudents.indexOf(dualStudent);
@@ -891,7 +924,7 @@ public class Database {
                                 getCourseTypeById(resultSet.getInt("course_type")),
                                 new Docent(resultSet.getString("last_name"), resultSet.getString("first_name"), convertDate(resultSet.getDate("birthdate")), new Address(resultSet.getString("street"), resultSet.getString("number"), resultSet.getString("postal_code"), resultSet.getString("city"), resultSet.getString("country")), resultSet.getString("email"), resultSet.getInt("docent_id")),
                                 convertDate(resultSet.getDate("registry_date")),
-                                new CourseRoom(resultSet.getString("room")));
+                                new CourseRoom(resultSet.getString("room"), resultSet.getString("building"), resultSet.getString("floor"), resultSet.getInt("seats"), resultSet.getBoolean("camera"), resultSet.getBoolean("laboratory")));
 //                int id = courses.indexOf(course);
 //                if (id >= 0)
 //                    courses.set(id, course);
@@ -1001,7 +1034,7 @@ public class Database {
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 CourseRoom room =
-                        new CourseRoom(resultSet.getString("name"));
+                        new CourseRoom(resultSet.getString("name"), resultSet.getString("building"), resultSet.getString("floor"), resultSet.getInt("seats"), resultSet.getBoolean("camera"), resultSet.getBoolean("laboratory"));
                 rooms.add(room);
             }
         } catch (SQLException | ClassNotFoundException exception) {
@@ -1187,8 +1220,10 @@ public class Database {
         if (room == null) return Integer.MIN_VALUE;
         try {
             initialize();
-            statement = connection.prepareStatement("SELECT room_id FROM room WHERE name = ?");
+            statement = connection.prepareStatement("SELECT room_id FROM room WHERE name = ? AND building = ? AND floor = ?");
             statement.setString(1, room.getName());
+            statement.setString(2, room.getBuilding());
+            statement.setString(3, room.getFloor());
             resultSet = statement.executeQuery();
             if (resultSet.next())
                 return resultSet.getInt(1);
