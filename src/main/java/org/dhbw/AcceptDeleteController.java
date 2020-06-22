@@ -35,6 +35,8 @@ public class AcceptDeleteController {
                 University.removeCourse((Course) o);
             else if (o instanceof Company)
                 University.removeCompany((Company) o);
+            else if (o instanceof CourseRoom)
+                University.removeRoom((CourseRoom) o);
         cancel();
     }
 

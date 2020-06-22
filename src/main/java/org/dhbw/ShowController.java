@@ -135,7 +135,7 @@ public class ShowController extends Application implements Initializable {
     @FXML
     private TableColumn<CourseRoom, Integer> roomSeats;
     @FXML
-    private TableColumn<CourseRoom, Boolean> roomBeamer;
+    private TableColumn<CourseRoom, Boolean> roomProjector;
     @FXML
     private TableColumn<CourseRoom, Boolean> roomDocumentCamera;
     @FXML
@@ -385,17 +385,16 @@ public class ShowController extends Application implements Initializable {
         roomBuilding.setCellValueFactory(new PropertyValueFactory<>("building"));
         roomFloor.setCellValueFactory(new PropertyValueFactory<>("floor"));
         roomSeats.setCellValueFactory(new PropertyValueFactory<>("seats"));
-        roomBeamer.setCellValueFactory(new PropertyValueFactory<>("beamer"));
+        roomProjector.setCellValueFactory(new PropertyValueFactory<>("projector"));
         roomDocumentCamera.setCellValueFactory(new PropertyValueFactory<>("documentCamera"));
         roomLaboratory.setCellValueFactory(new PropertyValueFactory<>("laboratory"));
         roomC.setCellFactory(getCallback(FileType.editRoom));
         roomD.setCellFactory(getCallback(FileType.delete));
         roomTable.setItems(rooms);
 
-        List<Campus> campusList = new ArrayList<>();
-        campusList.addAll(campuses);
+        List<Campus> campusList = new ArrayList<>(campuses);
         campusFilterBox.getItems().setAll(campusList);
-        campusFilterBox.setValue(Campus.AlleCampus);
+        campusFilterBox.setValue(Campus.AllCampus);
         FilteredList<CourseRoom> filteredRoom = new FilteredList<>(rooms, p -> true);
         searchBoxRoom.textProperty().addListener((observable, oldValue, newValue) -> filteredRoom.setPredicate(room -> checkFilterRoom(newValue, room)));
         campusFilterBox.valueProperty().addListener((observable, oldValue, newValue) -> filteredRoom.setPredicate(room -> checkFilterRoom(newValue, room)));

@@ -102,34 +102,33 @@
             </ToolBar>
         </AnchorPane>
     </Tab>
-   <Tab style="-fx-background-color: rgba(0,0,0,0.5); -fx-text-base-color: white;" text="%rooms">
-      <content>
-         <AnchorPane fx:id="roomAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-            <children>
-               <TableView fx:id="roomTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0" stylesheets="@css/application.css" tableMenuButtonVisible="true">
-                  <columns>
-                     <TableColumn fx:id="roomName" prefWidth="117.0" text="%name" />
-                     <TableColumn fx:id="roomCampus" prefWidth="127.0" text="%campus" />
-                     <TableColumn fx:id="roomBuilding" prefWidth="199.0" text="%building" />
-                     <TableColumn fx:id="roomFloor" prefWidth="50.0" text="%floor" />
-                     <TableColumn fx:id="roomSeats" prefWidth="75.0" text="%seats" />
-                     <TableColumn fx:id="roomBeamer" prefWidth="75.0" text="%beamer" />
-                     <TableColumn fx:id="roomDocumentCamera" prefWidth="70.0" text="%documentCamera" />
-                     <TableColumn fx:id="roomLaboratory" prefWidth="70.0" text="%laboratory" />
-                     <TableColumn fx:id="roomC" editable="false" prefWidth="40.0" resizable="false" sortable="false" />
-                     <TableColumn fx:id="roomD" editable="false" prefWidth="40.0" resizable="false" sortable="false" />
-                  </columns>
-               </TableView>
-               <ToolBar prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
-                  <items>
-                     <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="%back" />
-                     <TextField fx:id="searchBoxRoom" promptText="%search" stylesheets="@css/application.css" translateX="670.0" />
-                     <ComboBox fx:id="campusFilterBox" layoutX="400.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" stylesheets="@css/application.css" translateX="670.0" />
-                     <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="%refresh" translateX="670.0" />
-                  </items>
-               </ToolBar>
-            </children>
-         </AnchorPane>
-      </content>
-   </Tab>
+    <Tab style="-fx-background-color: rgba(0,0,0,0.5); -fx-text-base-color: white;" text="%rooms">
+        <AnchorPane fx:id="roomAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+            <TableView fx:id="roomTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0"
+                       stylesheets="@css/application.css" tableMenuButtonVisible="true">
+                <columns>
+                    <TableColumn fx:id="roomName" prefWidth="117.0" text="%name"/>
+                    <TableColumn fx:id="roomCampus" prefWidth="127.0" text="%campus"/>
+                    <TableColumn fx:id="roomBuilding" prefWidth="199.0" text="%building"/>
+                    <TableColumn fx:id="roomFloor" prefWidth="50.0" text="%floor"/>
+                    <TableColumn fx:id="roomSeats" prefWidth="75.0" text="%seats"/>
+                    <TableColumn fx:id="roomProjector" prefWidth="75.0" text="%projector"/>
+                    <TableColumn fx:id="roomDocumentCamera" prefWidth="70.0" text="%documentCamera"/>
+                    <TableColumn fx:id="roomLaboratory" prefWidth="70.0" text="%laboratory"/>
+                    <TableColumn fx:id="roomC" editable="false" prefWidth="40.0" resizable="false" sortable="false"/>
+                    <TableColumn fx:id="roomD" editable="false" prefWidth="40.0" resizable="false" sortable="false"/>
+                </columns>
+            </TableView>
+            <ToolBar prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
+                <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css"
+                        text="%back"/>
+                <TextField fx:id="searchBoxRoom" promptText="%search" stylesheets="@css/application.css"
+                           translateX="670.0"/>
+                <ComboBox fx:id="campusFilterBox" layoutX="400.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0"
+                          prefWidth="204.0" stylesheets="@css/application.css" translateX="670.0"/>
+                <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css"
+                        text="%refresh" translateX="670.0"/>
+            </ToolBar>
+        </AnchorPane>
+    </Tab>
 </TabPane>

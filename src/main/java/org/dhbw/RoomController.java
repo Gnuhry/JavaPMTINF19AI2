@@ -5,11 +5,13 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import org.dhbw.classes.*;
+import org.dhbw.classes.Campus;
+import org.dhbw.classes.CourseRoom;
+import org.dhbw.classes.Help;
+import org.dhbw.classes.University;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class RoomController {
@@ -25,7 +27,7 @@ public class RoomController {
     @FXML
     private TextField roomName, roomBuilding, roomFloor, roomSeats;
     @FXML
-    private CheckBox roomBeamer, roomDocumentCamera, roomLaboratory;
+    private CheckBox roomProjector, roomDocumentCamera, roomLaboratory;
     @FXML
     private ComboBox<Campus> roomCampus;
     @FXML
@@ -45,21 +47,21 @@ public class RoomController {
     }
 
     /**
-     * filling the textfield with company attributes if company is not null
+     * filling the textfield with company attributes if room is not null
      *
-     * @param room company to fill in or null
+     * @param room room to fill in or null
      */
     public void initVariables(CourseRoom room) {
         room_old = room;
         if (room != null) {
-            title.setText(Help.getRessourceBundle().getString("title_company_edit"));
+            title.setText(Help.getRessourceBundle().getString("title_room_edit"));
             buttonDone.setText(Help.getRessourceBundle().getString("save"));
             roomName.setText(room.getName());
         }
     }
 
     /**
-     * initializing comboBoxes and datepicker
+     * initializing comboBoxes
      */
     @FXML
     private void initialize() {
@@ -69,7 +71,7 @@ public class RoomController {
     /**
      * reading the textfield
      * checking validation of textfield and mark wrong entries
-     * adding or editing the company to the database
+     * adding or editing the room to the database
      */
     @FXML
     private void submit() throws IOException {
@@ -79,14 +81,14 @@ public class RoomController {
         if (text.isEmpty()) {
             Help.markWrongField(false, roomName);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("company_name"));
+            errorMessageL.add(Help.getRessourceBundleError().getString("name"));
         } else
             roomName.setStyle(Help.styleRight);
         Campus campus = roomCampus.getValue();
         if (campus == null) {
             Help.markWrongField(focus, roomCampus);
             focus = true;
-            //errorMessageL.add(Help.getRessourceBundleError().getString("campus"));
+            errorMessageL.add(Help.getRessourceBundleError().getString("campus"));
         } else
             roomCampus.setStyle(Help.styleRight);
 
@@ -111,21 +113,30 @@ public class RoomController {
             Help.markWrongField(focus, roomSeats);
             focus = true;
             errorMessageL.add(Help.getRessourceBundleError().getString("seats"));
-        } else
-            roomSeats.setStyle(Help.styleRight);
+        } else {
+            try {
+                int x = Integer.parseInt(text);
+                if (x <= 0) {
+                    Help.markWrongField(focus, roomSeats);
+                    focus = true;
+                    errorMessageL.add(Help.getRessourceBundleError().getString("seats3"));
+                }
+                roomSeats.setStyle(Help.styleRight);
+            } catch (NumberFormatException ex) {
+                Help.markWrongField(focus, roomSeats);
+                focus = true;
+                errorMessageL.add(Help.getRessourceBundleError().getString("seats2"));
+            }
+        }
 
         if (focus)
             Help.setErrorMessage(errorMessageL, errorMessage);
         else {
             errorMessage.setVisible(false);
-            CourseRoom room_new = new CourseRoom(roomName.getText(), roomCampus.getValue(), roomBuilding.getText(), roomFloor.getText(), Integer.parseInt(roomSeats.getText()), roomBeamer.isSelected(), roomDocumentCamera.isSelected(), roomLaboratory.isSelected());
-            if (room_old != null) {
-                System.out.println(room_new);
-            }
-                //University.updateRoom(room_new, room_old);
+            if (room_old != null)
+                University.updateRoom(new CourseRoom(roomName.getText(), roomCampus.getValue(), roomBuilding.getText(), roomFloor.getText(), Integer.parseInt(roomSeats.getText()), roomProjector.isSelected(), roomDocumentCamera.isSelected(), roomLaboratory.isSelected()), room_old);
             else
-                System.out.println(room_new);
-                //University.addRoom(room_new);
+                University.addRoom(new CourseRoom(roomName.getText(), roomCampus.getValue(), roomBuilding.getText(), roomFloor.getText(), Integer.parseInt(roomSeats.getText()), roomProjector.isSelected(), roomDocumentCamera.isSelected(), roomLaboratory.isSelected()));
             backToOverview();
         }
     }
