@@ -23,7 +23,6 @@ import javafx.util.Callback;
 import org.dhbw.classes.*;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -171,7 +170,22 @@ public class ShowController extends Application implements Initializable {
             }
         });
         studentBirth.setCellValueFactory(new PropertyValueFactory<>("birthday"));
-        studentEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+//        studentEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        studentEmail.setCellFactory(dualStudentVoidTableColumn -> {
+            TableCell<DualStudent, String> cell = new TableCell<DualStudent, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty ? null : item);
+                }
+            };
+            cell.setOnMouseClicked(e -> {
+                if (!cell.isEmpty()) {
+                    getHostServices().showDocument("mailto:" + cell.getTableView().getItems().get(cell.getIndex()).getEmail());
+                }
+            });
+            return cell;
+        });
         studentAddress.setCellValueFactory(new PropertyValueFactory<>("Address"));
         matriculationNumber.setCellValueFactory(new PropertyValueFactory<>("matriculationNumber"));
         studentEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
@@ -277,12 +291,12 @@ public class ShowController extends Application implements Initializable {
                             setGraphic(null);
                         } else {
                             btn.setOnAction(actionEvent -> {
-                                StringBuilder sb=new StringBuilder("mailto:");
-                                String[] mails=University.getAllEmailFromCourse(getTableView().getItems().get(getIndex()));
-                                if(mails==null) return;
-                                for(String s:mails)
+                                StringBuilder sb = new StringBuilder("mailto:");
+                                String[] mails = University.getAllEmailFromCourse(getTableView().getItems().get(getIndex()));
+                                if (mails == null) return;
+                                for (String s : mails)
                                     sb.append(s).append(", ");
-                                getHostServices().showDocument(sb.toString().substring(0, sb.toString().length()-2));
+                                getHostServices().showDocument(sb.toString().substring(0, sb.toString().length() - 2));
                             });
                             btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/mailButton.png"))));
                             setGraphic(btn);
