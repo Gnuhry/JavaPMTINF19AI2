@@ -42,6 +42,9 @@ public class ShowController implements Initializable {
     private final ObservableList<Company> companies = FXCollections.observableArrayList(
             University.getCompanies()
     );
+    private final ObservableList<CourseRoom> rooms = FXCollections.observableArrayList(
+            University.getRooms()
+    );
 
     private FileType file;
     private List<Object> object;
@@ -50,9 +53,9 @@ public class ShowController implements Initializable {
     private final Course allCourse = new Course(Help.getRessourceBundle().getString("all_course"), null, null);
 
     @FXML
-    private AnchorPane studentAnchor, lectureAnchor, courseAnchor, companyAnchor;
+    private AnchorPane studentAnchor, lectureAnchor, courseAnchor, companyAnchor, roomAnchor;
     @FXML
-    private TextField searchBox, searchBoxLecture, searchBoxCourse, searchBoxCompany;
+    private TextField searchBox, searchBoxLecture, searchBoxCourse, searchBoxCompany, searchBoxRoom;
     @FXML
     private ComboBox<Course> courseFilterBox;
     @FXML
@@ -113,6 +116,29 @@ public class ShowController implements Initializable {
     @FXML
     private TableColumn<Company, Void> companyC, companyD;
 
+    @FXML
+    private TableView<CourseRoom> roomTable;
+    @FXML
+    private TableColumn<CourseRoom, String> roomName;
+    @FXML
+    private TableColumn<CourseRoom, String> roomCampus;
+    @FXML
+    private TableColumn<CourseRoom, String> roomBuilding;
+    @FXML
+    private TableColumn<CourseRoom, String> roomFloor;
+    @FXML
+    private TableColumn<CourseRoom, Integer> roomSeats;
+    @FXML
+    private TableColumn<CourseRoom, Void> roomBeamer;
+    @FXML
+    private TableColumn<CourseRoom, Void> roomDocumentCamera;
+    @FXML
+    private TableColumn<CourseRoom, Void> roomLaboratory;
+    @FXML
+    private TableColumn<CourseRoom, Void> roomC;
+    @FXML
+    private TableColumn<CourseRoom, Void> roomD;
+
     /**
      * changing the scene root in App to "primary.fxml"
      */
@@ -134,6 +160,8 @@ public class ShowController implements Initializable {
         courseTable.refresh();
         companyTable.setItems(FXCollections.observableArrayList(University.getCompanies()));
         companyTable.refresh();
+        roomTable.setItems(FXCollections.observableArrayList(University.getRooms()));
+        roomTable.refresh();
     }
 
     /**
@@ -304,6 +332,22 @@ public class ShowController implements Initializable {
                 SelectionMode.MULTIPLE
         );
         addDeleteKey(companyAnchor, companyTable);
+
+        roomName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        roomC.setCellFactory(getCallback(FileType.editRoom));
+        roomD.setCellFactory(getCallback(FileType.delete));
+        roomTable.setItems(rooms);
+
+        FilteredList<CourseRoom> filteredRoom = new FilteredList<>(rooms, p -> true);
+        searchBoxRoom.textProperty().addListener((observable, oldValue, newValue) -> filteredName.setPredicate(room -> checkFilterStudent(newValue, room)));
+        SortedList<CourseRoom> sortedRooms = new SortedList<>(filteredRoom);
+        sortedRooms.comparatorProperty().bind(roomTable.comparatorProperty());
+        roomTable.setItems(sortedRooms);
+        roomTable.setContextMenu(refreshMenu);
+        roomTable.getSelectionModel().setSelectionMode(
+                SelectionMode.MULTIPLE
+        );
+        addDeleteKey(roomAnchor, roomTable);
     }
 
     /**
@@ -368,6 +412,11 @@ public class ShowController implements Initializable {
             case editCourse: {
                 CourseController controller = fxmlLoader.getController();
                 controller.initVariables((Course) object.get(0));
+                break;
+            }
+            case editRoom: {
+                RoomController controller = fxmlLoader.getController();
+                controller.initVariables((CourseRoom) object.get(0));
                 break;
             }
             case delete: {
@@ -466,7 +515,7 @@ public class ShowController implements Initializable {
      * Enum for button functions
      */
     public enum FileType {
-        editStudents("student.fxml"), editDocents("docent.fxml"), editCourse("course.fxml"), editCompany("company.fxml"), delete("acceptDelete.fxml");
+        editStudents("student.fxml"), editDocents("docent.fxml"), editCourse("course.fxml"), editCompany("company.fxml"), editRoom("room.fxml"), delete("acceptDelete.fxml");
         private final String name;
 
         FileType(String name) {

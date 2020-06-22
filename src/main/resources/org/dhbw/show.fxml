@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<TabPane maxWidth="1250.0" minWidth="1250.0" prefHeight="600.0" prefWidth="1250.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.ShowController">
+<TabPane maxWidth="1250.0" minWidth="1250.0" prefHeight="600.0" prefWidth="1250.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.ShowController">
     <Tab style="-fx-background-color: rgba(0,0,0,0.7); -fx-text-base-color: white;" text="%students">
         <AnchorPane fx:id="studentAnchor" maxHeight="-Infinity" maxWidth="1250.0" minHeight="0.0" minWidth="1250.0" prefHeight="600.0" prefWidth="1250.0">
             <ToolBar prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
@@ -92,4 +101,35 @@
             </ToolBar>
         </AnchorPane>
     </Tab>
+   <Tab style="-fx-background-color: rgba(0,0,0,0.5); -fx-text-base-color: white;" text="%rooms">
+      <content>
+         <AnchorPane fx:id="roomAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+            <children>
+               <TableView fx:id="roomTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0" stylesheets="@css/application.css" tableMenuButtonVisible="true">
+                  <columns>
+                     <TableColumn fx:id="roomName" prefWidth="117.0" text="%name" />
+                     <TableColumn fx:id="roomCampus" prefWidth="127.0" text="%campus" />
+                     <TableColumn fx:id="roomBuilding" prefWidth="199.0" text="%building" />
+                     <TableColumn fx:id="roomFloor" prefWidth="50.0" text="%floor" />
+                     <TableColumn fx:id="roomSeats" prefWidth="75.0" text="%seats" />
+                     <TableColumn fx:id="roomBeamer" prefWidth="75.0" text="%beamer" />
+                     <TableColumn fx:id="roomDocumentCamera" prefWidth="70.0" text="%documentcamera" />
+                     <TableColumn fx:id="roomLaboratory" prefWidth="70.0" text="%laboratory" />
+                     <TableColumn fx:id="roomC" editable="false" prefWidth="40.0" resizable="false" sortable="false" />
+                     <TableColumn fx:id="roomD" editable="false" prefWidth="40.0" resizable="false" sortable="false" />
+                  </columns>
+               </TableView>
+               <ToolBar prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
+                  <items>
+                     <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="%back" />
+                     <TextField fx:id="searchBoxRoom" promptText="%search" stylesheets="@css/application.css" translateX="500.0" />
+                     <ComboBox fx:id="campusFilterBox" layoutX="400.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" stylesheets="@css/application.css" translateX="500.0" />
+                     <ComboBox fx:id="buildingFilterBox" layoutX="100.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" stylesheets="@css/application.css" translateX="500.0" />
+                     <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="%refresh" translateX="500.0" />
+                  </items>
+               </ToolBar>
+            </children>
+         </AnchorPane>
+      </content>
+   </Tab>
 </TabPane>

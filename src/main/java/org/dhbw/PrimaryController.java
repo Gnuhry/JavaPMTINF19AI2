@@ -16,9 +16,9 @@ import java.util.ResourceBundle;
 public class PrimaryController implements Initializable {
 
     @FXML
-    public Button buttonLanguage, showTable, addStudent, addLecture, addCourse, addCompany;
+    public Button buttonLanguage, showTable, addStudent, addLecture, addCourse, addCompany, addRoom;
     @FXML
-    private Tooltip tooltipStudent, tooltipLecture, tooltipCourse, tooltipCompany;
+    private Tooltip tooltipStudent, tooltipLecture, tooltipCourse, tooltipCompany, tooltipRoom;
 
 
     /**
@@ -47,6 +47,11 @@ public class PrimaryController implements Initializable {
     @FXML
     private void insertCourse() throws IOException {
         App.setRoot("course");
+    }
+
+    @FXML
+    private void insertRoom() throws IOException {
+        App.setRoot("room");
     }
 
     @FXML
@@ -81,6 +86,11 @@ public class PrimaryController implements Initializable {
         addCompanyImageView.setFitHeight(50);
         addCompany.setGraphic(addCompanyImageView);
 
+        ImageView addRoomImageView = new ImageView(new Image(clazz.getResourceAsStream("/org/dhbw/images/addRoom.png")));
+        addRoomImageView.setFitWidth(50);
+        addRoomImageView.setFitHeight(50);
+        addRoom.setGraphic(addRoomImageView);
+
         ImageView showTableImageView = new ImageView(new Image(clazz.getResourceAsStream("/org/dhbw/images/showTable.png")));
         showTableImageView.setFitHeight(30);
         showTableImageView.setFitWidth(30);
@@ -90,6 +100,7 @@ public class PrimaryController implements Initializable {
         tooltipLecture.setShowDelay(new Duration(300));
         tooltipCourse.setShowDelay(new Duration(300));
         tooltipCompany.setShowDelay(new Duration(300));
+        tooltipRoom.setShowDelay(new Duration(300));
         buttonLanguage.setText(Help.getLocale().getLanguage());
 
         showTable.requestFocus();
