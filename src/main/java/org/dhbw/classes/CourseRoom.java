@@ -85,7 +85,7 @@ public class CourseRoom implements Comparable<CourseRoom> {
 
     @Override
     public String toString() {
-        return name + ", " + campus;
+        return campus == null ? name : name + ", " + campus;
     }
 
     @Override

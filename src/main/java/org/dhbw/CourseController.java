@@ -109,6 +109,10 @@ public class CourseController {
             Help.markWrongField(false, courseName);
             focus = true;
             errorMessageL.add(Help.getRessourceBundleError().getString("name"));
+        } else if (text.length() >= Database.maxString) {
+            Help.markWrongField(false, courseName);
+            focus = true;
+            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
         } else
             courseName.setStyle(Help.styleRight);
 

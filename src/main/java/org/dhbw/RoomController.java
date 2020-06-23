@@ -5,10 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import org.dhbw.classes.Campus;
-import org.dhbw.classes.CourseRoom;
-import org.dhbw.classes.Help;
-import org.dhbw.classes.University;
+import org.dhbw.classes.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -89,6 +86,10 @@ public class RoomController {
             Help.markWrongField(false, roomName);
             focus = true;
             errorMessageL.add(Help.getRessourceBundleError().getString("name"));
+        } else if (text.length() >= Database.maxString) {
+            Help.markWrongField(false, roomName);
+            focus = true;
+            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
         } else
             roomName.setStyle(Help.styleRight);
         Campus campus = roomCampus.getValue();
@@ -96,6 +97,10 @@ public class RoomController {
             Help.markWrongField(focus, roomCampus);
             focus = true;
             errorMessageL.add(Help.getRessourceBundleError().getString("campus"));
+        } else if (text.length() >= Database.maxString) {
+            Help.markWrongField(false, roomCampus);
+            focus = true;
+            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
         } else
             roomCampus.setStyle(Help.styleRight);
 
@@ -104,6 +109,10 @@ public class RoomController {
             Help.markWrongField(focus, roomBuilding);
             focus = true;
             errorMessageL.add(Help.getRessourceBundleError().getString("building"));
+        } else if (text.length() >= Database.maxString) {
+            Help.markWrongField(false, roomBuilding);
+            focus = true;
+            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
         } else
             roomBuilding.setStyle(Help.styleRight);
 
@@ -112,6 +121,10 @@ public class RoomController {
             Help.markWrongField(focus, roomFloor);
             focus = true;
             errorMessageL.add(Help.getRessourceBundleError().getString("floor"));
+        } else if (text.length() >= Database.maxString) {
+            Help.markWrongField(false, roomFloor);
+            focus = true;
+            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
         } else
             roomFloor.setStyle(Help.styleRight);
 

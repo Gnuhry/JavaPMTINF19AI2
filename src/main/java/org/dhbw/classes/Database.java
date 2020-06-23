@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Database {
+    public static final int maxString = 45;
 
     private static Connection connection;
     private static PreparedStatement statement;
