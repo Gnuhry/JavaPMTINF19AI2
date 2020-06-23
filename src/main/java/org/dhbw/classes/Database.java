@@ -283,9 +283,9 @@ public class Database {
             statement.setInt(3, getCampusID(room.getCampus()));
             statement.setString(4, room.getFloor());
             statement.setInt(5, room.getSeats());
-            statement.setBoolean(6, room.hasProjector());
-            statement.setBoolean(7, room.hasDocumentCamera());
-            statement.setBoolean(8, room.isLaboratory());
+            statement.setBoolean(6, room.getProjector());
+            statement.setBoolean(7, room.getCamera());
+            statement.setBoolean(8, room.getLaboratory());
             statement.execute();
             resultSet = statement.getGeneratedKeys();
             if (resultSet.next())
@@ -490,8 +490,8 @@ public class Database {
                 initialize();
                 statement = connection.prepareStatement("UPDATE room SET seats=?,camera=?,laboratory=?  WHERE room_id=?", Statement.RETURN_GENERATED_KEYS);
                 statement.setInt(1, room.getSeats());
-                statement.setBoolean(2, room.hasDocumentCamera());
-                statement.setBoolean(3, room.isLaboratory());
+                statement.setBoolean(2, room.getCamera());
+                statement.setBoolean(3, room.getLaboratory());
                 statement.setInt(4, id);
                 statement.execute();
                 return id;

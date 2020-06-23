@@ -1,7 +1,7 @@
 package org.dhbw.classes;
 
 public enum Campus {
-    AllCampus(Help.getRessourceBundle().getString("all_campus")), Coblitzalle("Coblitzallee"), Kaefertal("Käfertal"), Eppelheim("Eppelheim");
+    Coblitzalle("Coblitzallee"), Kaefertal("Käfertal"), Eppelheim("Eppelheim");
 
     private final String name;
 

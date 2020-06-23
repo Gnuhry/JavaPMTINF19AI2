@@ -57,6 +57,13 @@ public class RoomController {
             title.setText(Help.getRessourceBundle().getString("title_room_edit"));
             buttonDone.setText(Help.getRessourceBundle().getString("save"));
             roomName.setText(room.getName());
+            roomBuilding.setText(room.getBuilding());
+            roomCampus.setValue(room.getCampus());
+            roomFloor.setText(room.getFloor());
+            roomSeats.setText(String.valueOf(room.getSeats()));
+            roomProjector.setSelected(room.getProjector());
+            roomDocumentCamera.setSelected(room.getCamera());
+            roomLaboratory.setSelected(room.getLaboratory());
         }
     }
 

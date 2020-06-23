@@ -50,15 +50,15 @@ public class CourseRoom implements Comparable<CourseRoom> {
         return seats;
     }
 
-    public boolean hasDocumentCamera() {
+    public boolean getCamera() {
         return documentCamera;
     }
 
-    public boolean isLaboratory() {
+    public boolean getLaboratory() {
         return laboratory;
     }
 
-    public boolean hasProjector() {
+    public boolean getProjector() {
         return projector;
     }
 
@@ -68,7 +68,7 @@ public class CourseRoom implements Comparable<CourseRoom> {
         this.seats = seats;
     }
 
-    public void setDocumentCamera(boolean documentCamera) {
+    public void setCamera(boolean documentCamera) {
         this.documentCamera = documentCamera;
     }
 
