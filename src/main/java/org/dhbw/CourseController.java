@@ -84,7 +84,7 @@ public class CourseController {
             buttonDone.setText(Help.getRessourceBundle().getString("save"));
             courseName.setText(course.getName());
             if (course.getStudyCourse() != null) courseType.setValue(course.getStudyCourse());
-            if (course.getRoom() != null) courseRoom.setValue(course.getRoom());
+            if (course.getRoom() != null && course.getRoom().getName() != null) courseRoom.setValue(course.getRoom());
             if (course.getRegistrationDate() != null)
                 courseDate.setValue(Help.convertLocalDateDate(course.getRegistrationDate()));
             if (course.getStudyDirector() != null) courseDirector.setValue(course.getStudyDirector());
@@ -159,12 +159,15 @@ public class CourseController {
             Docent director = courseDirector.getValue();
             if (courseDirector.getValue().equals(noDocent))
                 director = null;
+            CourseRoom room_ = courseRoom.getValue();
+            if (courseRoom.getValue().equals(noRoom))
+                room_ = null;
             Course new_course = new Course(
                     courseName.getText(),
                     course,
                     director,
                     date,
-                    room
+                    room_
             );
             if (course_old != null)
                 University.updateCourse(new_course, course_old);

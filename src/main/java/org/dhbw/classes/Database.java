@@ -273,7 +273,7 @@ public class Database {
      * @return id of room if success, Integer.Min_Value if not
      */
     public static int addRoom(CourseRoom room) {
-        if (room == null) return Integer.MIN_VALUE;
+        if (room == null || room.getName() == null) return Integer.MIN_VALUE;
         int id = getRoomID(room);
         if (id >= 0) return id;
         try {
@@ -311,7 +311,7 @@ public class Database {
         if (student == null) return;
         if (student == old) return;
         int person_id = updatePerson(student, old);
-        int course_id = updateCourse(student.getCourse(), old.getCourse());
+        int course_id = getCourseId(student.getCourse());
         int company_id = updateCompany(student.getCompany(), old.getCompany());
         try {
             initialize();
@@ -362,6 +362,7 @@ public class Database {
     public static int updateCourse(Course course, Course old) {
         if (course == null) return Integer.MIN_VALUE;
         int id = getCourseId(old);
+        if (id < 0 && (old == null || old.getRegistrationDate() == null)) return addCourse(course);
         if (course == old) return id;
         if (id >= 0) {
             int room_id = updateRoom(course.getRoom(), old.getRoom());
@@ -370,7 +371,10 @@ public class Database {
                 statement = connection.prepareStatement("UPDATE course SET room_id=?, name=?, study_director_id=? WHERE course_id=?", Statement.RETURN_GENERATED_KEYS);
                 statement.setInt(1, room_id);
                 statement.setString(2, course.getName());
-                statement.setInt(3, course.getStudyDirector().getDocentNumber());
+                if (course.getStudyDirector() != null)
+                    statement.setInt(3, course.getStudyDirector().getDocentNumber());
+                else
+                    statement.setInt(3, Integer.MIN_VALUE);
                 statement.setInt(4, id);
                 statement.execute();
                 return id;
@@ -423,6 +427,7 @@ public class Database {
     public static int updateCompany(Company company, Company old) {
         if (company == null) return Integer.MIN_VALUE;
         int id = getCompanyId(old);
+        if (id < 0 && (old == null || old.getName() == null)) return addCompany(company);
         if (company == old) return id;
         if (id >= 0) {
             int address_id = updateAddress(company.getAddress(), old.getAddress());
@@ -485,6 +490,7 @@ public class Database {
         if (room == null) return Integer.MIN_VALUE;
         int id = getRoomID(old);
         if (room == old) return id;
+        if (id < 0 && (old == null || old.getName() == null)) return addRoom(room);
         if (countUsedRoom(old) > 1) return addRoom(room);
         if (id >= 0) {
             try {
@@ -1109,7 +1115,7 @@ public class Database {
             String room = " AND room_id = ?";
             String director = " AND study_director_id = ?";
             String command = "SELECT course_id FROM course WHERE name = ? AND registry_date = ? AND course_type = ?";
-            if (course.getRoom() != null)
+            if (course.getRoom() != null && room_id > 0)
                 command += room;
             if (director_b)
                 command += director;
@@ -1117,13 +1123,14 @@ public class Database {
             statement.setString(1, course.getName());
             statement.setDate(2, convertDate(course.getRegistrationDate()));
             statement.setInt(3, getCourseTypeID(course.getStudyCourse()));
-            if (course.getRoom() != null)
+            if (course.getRoom() != null && room_id > 0)
                 statement.setInt(4, room_id);
             if (director_b)
-                if (course.getRoom() != null)
+                if (course.getRoom() != null && room_id > 0)
                     statement.setInt(5, course.getStudyDirector().getDocentNumber());
                 else
                     statement.setInt(4, course.getStudyDirector().getDocentNumber());
+            System.out.println(statement.toString());
             resultSet = statement.executeQuery();
             if (resultSet.next())
                 return resultSet.getInt(1);
@@ -1334,7 +1341,7 @@ public class Database {
      * @return campus if exists, null if not
      */
     private static Campus getCampusById(int id) {
-        return id < 0 || id >= Campus.values().length ? null : Campus.values()[id];
+        return id <= 0 || id >= Campus.values().length ? null : Campus.values()[id];
     }
 
     /**

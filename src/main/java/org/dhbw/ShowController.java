@@ -25,10 +25,7 @@ import org.dhbw.classes.*;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class ShowController extends Application implements Initializable {
     private final ObservableList<DualStudent> students = FXCollections.observableArrayList(
@@ -326,6 +323,7 @@ public class ShowController extends Application implements Initializable {
                                 StringBuilder sb = new StringBuilder("mailto:");
                                 String[] mails = University.getAllEmailFromCourse(getTableView().getItems().get(getIndex()));
                                 if (mails == null) return;
+                                System.out.println(Arrays.toString(mails));
                                 for (String s : mails)
                                     sb.append(s).append(", ");
                                 getHostServices().showDocument(sb.toString().substring(0, sb.toString().length() - 2));
