@@ -6,10 +6,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.dhbw.classes.Address;
-import org.dhbw.classes.Docent;
-import org.dhbw.classes.Help;
-import org.dhbw.classes.University;
+import org.dhbw.classes.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -109,6 +106,10 @@ public class DocentController {
             Help.markWrongField(false, docentFirstName);
             focus = true;
             errorMessageL.add(Help.getRessourceBundleError().getString("forename"));
+        } else if (text.length() >= Database.maxString) {
+            Help.markWrongField(false, docentFirstName);
+            focus = true;
+            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
         } else
             docentFirstName.setStyle(Help.styleRight);
 
@@ -117,6 +118,10 @@ public class DocentController {
             Help.markWrongField(focus, docentLastName);
             focus = true;
             errorMessageL.add(Help.getRessourceBundleError().getString("last_name"));
+        } else if (text.length() >= Database.maxString) {
+            Help.markWrongField(false, docentLastName);
+            focus = true;
+            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
         } else
             docentLastName.setStyle(Help.styleRight);
 
@@ -141,6 +146,10 @@ public class DocentController {
             Help.markWrongField(focus, docentEmail);
             focus = true;
             errorMessageL.add(Help.getRessourceBundleError().getString("email2"));
+        } else if (text.length() >= Database.maxString) {
+            Help.markWrongField(false, docentEmail);
+            focus = true;
+            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
         } else
             docentEmail.setStyle(Help.styleRight);
 
@@ -149,6 +158,10 @@ public class DocentController {
             Help.markWrongField(focus, docentStreet);
             focus = true;
             errorMessageL.add(Help.getRessourceBundleError().getString("street"));
+        } else if (text.length() >= Database.maxString) {
+            Help.markWrongField(false, docentStreet);
+            focus = true;
+            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
         } else
             docentStreet.setStyle(Help.styleRight);
 
@@ -157,6 +170,10 @@ public class DocentController {
             Help.markWrongField(focus, docentHomeNumber);
             focus = true;
             errorMessageL.add(Help.getRessourceBundleError().getString("number"));
+        } else if (text.length() >= Database.maxString) {
+            Help.markWrongField(false, docentHomeNumber);
+            focus = true;
+            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
         } else
             docentHomeNumber.setStyle(Help.styleRight);
 
@@ -169,6 +186,10 @@ public class DocentController {
             Help.markWrongField(focus, docentPostalCode);
             focus = true;
             errorMessageL.add(Help.getRessourceBundleError().getString("postcode2"));
+        } else if (text.length() >= Database.maxString) {
+            Help.markWrongField(false, docentPostalCode);
+            focus = true;
+            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
         } else
             docentPostalCode.setStyle(Help.styleRight);
 
@@ -177,6 +198,10 @@ public class DocentController {
             Help.markWrongField(focus, docentCity);
             focus = true;
             errorMessageL.add(Help.getRessourceBundleError().getString("city"));
+        } else if (text.length() >= Database.maxString) {
+            Help.markWrongField(false, docentCity);
+            focus = true;
+            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
         } else
             docentCity.setStyle(Help.styleRight);
 
@@ -185,6 +210,10 @@ public class DocentController {
             Help.markWrongField(focus, docentCountry);
             focus = true;
             errorMessageL.add(Help.getRessourceBundleError().getString("country"));
+        } else if (text.length() >= Database.maxString) {
+            Help.markWrongField(false, docentCountry);
+            focus = true;
+            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
         } else
             docentCountry.setStyle(Help.styleRight);
 

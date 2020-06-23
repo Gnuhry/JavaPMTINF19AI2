@@ -2,25 +2,32 @@ package org.dhbw.classes;
 
 import java.util.Objects;
 
-public class CourseRoom implements Comparable<CourseRoom>{
+public class CourseRoom implements Comparable<CourseRoom> {
     private final String name;
-    private Campus campus;
-    private String building, floor;
+    private final Campus campus;
+    private final String building, floor;
     private int seats;
-    private boolean beamer, documentCamera, laboratory;
+    private boolean projector, documentCamera, laboratory;
 
-    public CourseRoom(String name, Campus campus, String building, String floor, int seats, boolean beamer, boolean documentCamera, boolean laboratory) {
+    public CourseRoom(String name, Campus campus, String building, String floor, int seats, boolean projector, boolean documentCamera, boolean laboratory) {
         this.name = name;
         this.campus = campus;
         this.building = building;
         this.floor = floor;
         this.seats = seats;
-        this.beamer = beamer;
+        this.projector = projector;
         this.documentCamera = documentCamera;
         this.laboratory = laboratory;
     }
 
-    public CourseRoom(String name) {this.name = name;}
+    public CourseRoom(String name, Campus campus, String building, String floor) {
+        this.name = name;
+        this.campus = campus;
+        this.building = building;
+        this.floor = floor;
+        seats = 0;
+        projector = documentCamera = laboratory = false;
+    }
 
     //------------------Getter-----------------------
     public String getName() {
@@ -43,20 +50,25 @@ public class CourseRoom implements Comparable<CourseRoom>{
         return seats;
     }
 
-    public boolean hasDocumentCamera() {
+    public boolean getCamera() {
         return documentCamera;
     }
 
-    public boolean isLaboratory() {
+    public boolean getLaboratory() {
         return laboratory;
     }
+
+    public boolean getProjector() {
+        return projector;
+    }
+
 
     //-----------------------Setter-----------------
     public void setSeats(int seats) {
         this.seats = seats;
     }
 
-    public void setDocumentCamera(boolean documentCamera) {
+    public void setCamera(boolean documentCamera) {
         this.documentCamera = documentCamera;
     }
 
@@ -64,21 +76,16 @@ public class CourseRoom implements Comparable<CourseRoom>{
         this.laboratory = laboratory;
     }
 
+    public void setProjector(boolean projector) {
+        this.projector = projector;
+    }
+
     //------------------Overrides---------------------
 
 
     @Override
     public String toString() {
-        return "CourseRoom{" +
-                "name='" + name + '\'' +
-                ", campus=" + campus +
-                ", building='" + building + '\'' +
-                ", floor='" + floor + '\'' +
-                ", seats=" + seats +
-                ", beamer=" + beamer +
-                ", documentCamera=" + documentCamera +
-                ", laboratory=" + laboratory +
-                '}';
+        return campus == null ? name : name + ", " + campus;
     }
 
     @Override

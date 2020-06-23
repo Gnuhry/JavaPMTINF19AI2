@@ -25,10 +25,7 @@ import org.dhbw.classes.*;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class ShowController extends Application implements Initializable {
     private final ObservableList<DualStudent> students = FXCollections.observableArrayList(
@@ -65,7 +62,7 @@ public class ShowController extends Application implements Initializable {
     @FXML
     private ComboBox<Company> companyFilterBox;
     @FXML
-    private ComboBox<Campus> campusFilterBox;
+    private ComboBox<String> campusFilterBox;
     @FXML
     public TableView<DualStudent> studentTable;
     @FXML
@@ -135,7 +132,7 @@ public class ShowController extends Application implements Initializable {
     @FXML
     private TableColumn<CourseRoom, Integer> roomSeats;
     @FXML
-    private TableColumn<CourseRoom, Boolean> roomBeamer;
+    private TableColumn<CourseRoom, Boolean> roomProjector;
     @FXML
     private TableColumn<CourseRoom, Boolean> roomDocumentCamera;
     @FXML
@@ -326,6 +323,7 @@ public class ShowController extends Application implements Initializable {
                                 StringBuilder sb = new StringBuilder("mailto:");
                                 String[] mails = University.getAllEmailFromCourse(getTableView().getItems().get(getIndex()));
                                 if (mails == null) return;
+                                System.out.println(Arrays.toString(mails));
                                 for (String s : mails)
                                     sb.append(s).append(", ");
                                 getHostServices().showDocument(sb.toString().substring(0, sb.toString().length() - 2));
@@ -385,20 +383,22 @@ public class ShowController extends Application implements Initializable {
         roomBuilding.setCellValueFactory(new PropertyValueFactory<>("building"));
         roomFloor.setCellValueFactory(new PropertyValueFactory<>("floor"));
         roomSeats.setCellValueFactory(new PropertyValueFactory<>("seats"));
-        roomBeamer.setCellValueFactory(new PropertyValueFactory<>("beamer"));
-        roomDocumentCamera.setCellValueFactory(new PropertyValueFactory<>("documentCamera"));
+        roomProjector.setCellValueFactory(new PropertyValueFactory<>("projector"));
+        roomDocumentCamera.setCellValueFactory(new PropertyValueFactory<>("camera"));
         roomLaboratory.setCellValueFactory(new PropertyValueFactory<>("laboratory"));
         roomC.setCellFactory(getCallback(FileType.editRoom));
         roomD.setCellFactory(getCallback(FileType.delete));
         roomTable.setItems(rooms);
 
-        List<Campus> campusList = new ArrayList<>();
-        campusList.addAll(campuses);
+        List<String> campusList = new ArrayList<>();
+        campusList.add(Help.getRessourceBundle().getString("all_campus"));
+        for (Campus campus : campuses)
+            campusList.add(campus.toString());
         campusFilterBox.getItems().setAll(campusList);
-        campusFilterBox.setValue(Campus.AlleCampus);
+        campusFilterBox.setValue(Help.getRessourceBundle().getString("all_campus"));
         FilteredList<CourseRoom> filteredRoom = new FilteredList<>(rooms, p -> true);
-        searchBoxRoom.textProperty().addListener((observable, oldValue, newValue) -> filteredRoom.setPredicate(room -> checkFilterRoom(newValue, room)));
-        campusFilterBox.valueProperty().addListener((observable, oldValue, newValue) -> filteredRoom.setPredicate(room -> checkFilterRoom(newValue, room)));
+        searchBoxRoom.textProperty().addListener((observable, oldValue, newValue) -> filteredRoom.setPredicate(this::checkFilterRoom));
+        campusFilterBox.valueProperty().addListener((observable, oldValue, newValue) -> filteredRoom.setPredicate(this::checkFilterRoom));
         SortedList<CourseRoom> sortedRooms = new SortedList<>(filteredRoom);
         sortedRooms.comparatorProperty().bind(roomTable.comparatorProperty());
         roomTable.setItems(sortedRooms);
@@ -530,24 +530,17 @@ public class ShowController extends Application implements Initializable {
     /**
      * filtering the room table with input text from search boxes and combo boxes
      *
-     * @param newValue value which get changed (search string, Company or Course)
-     * @param room   room of database table which gets checked on input
+     * @param room room of database table which gets checked on input
      * @return {true} if person has the configure attributes from the filters, {false} if not
      */
-    private boolean checkFilterRoom(Object newValue, CourseRoom room) {
+    private boolean checkFilterRoom(CourseRoom room) {
         boolean erg = true;
-        String search;
-        if (newValue instanceof String)
-            search = ((String) newValue);
-        else
-            search = searchBoxRoom.getText();
-        if (search != null && !search.isEmpty()) {
-            search = search.trim().toLowerCase();
-            if (room.getName().toLowerCase().contains(search))
-                erg = true;
-            else
-                erg = ("" + room.getCampus()).toLowerCase().contains(search);
-        }
+        String search = searchBoxRoom.getText();
+        int id = campusFilterBox.getSelectionModel().getSelectedIndex() - 1;
+        if (id > -1 && (id >= Campus.values().length ? null : Campus.values()[id]) != room.getCampus())
+            return false;
+        if (!search.isEmpty())
+            erg = room.getName().toLowerCase().contains(search) || room.getCampus().toString().toLowerCase().contains(search);
         return erg;
     }
 

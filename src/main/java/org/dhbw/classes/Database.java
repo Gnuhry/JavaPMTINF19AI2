@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Database {
+    public static final int maxString = 45;
 
     private static Connection connection;
     private static PreparedStatement statement;
@@ -272,18 +273,20 @@ public class Database {
      * @return id of room if success, Integer.Min_Value if not
      */
     public static int addRoom(CourseRoom room) {
-        if (room == null) return Integer.MIN_VALUE;
+        if (room == null || room.getName() == null) return Integer.MIN_VALUE;
         int id = getRoomID(room);
         if (id >= 0) return id;
         try {
             initialize();
-            statement = connection.prepareStatement("INSERT INTO room (name, building, floor, seats, camera, laboratory) VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            statement = connection.prepareStatement("INSERT INTO room (name, building, campus, floor, seats,projector, camera, laboratory) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, room.getName());
             statement.setString(2, room.getBuilding());
-            statement.setString(3, room.getFloor());
-            statement.setInt(4, room.getSeats());
-            statement.setBoolean(5, room.hasDocumentCamera());
-            statement.setBoolean(6, room.isLaboratory());
+            statement.setInt(3, getCampusID(room.getCampus()));
+            statement.setString(4, room.getFloor());
+            statement.setInt(5, room.getSeats());
+            statement.setBoolean(6, room.getProjector());
+            statement.setBoolean(7, room.getCamera());
+            statement.setBoolean(8, room.getLaboratory());
             statement.execute();
             resultSet = statement.getGeneratedKeys();
             if (resultSet.next())
@@ -308,7 +311,7 @@ public class Database {
         if (student == null) return;
         if (student == old) return;
         int person_id = updatePerson(student, old);
-        int course_id = updateCourse(student.getCourse(), old.getCourse());
+        int course_id = getCourseId(student.getCourse());
         int company_id = updateCompany(student.getCompany(), old.getCompany());
         try {
             initialize();
@@ -359,6 +362,7 @@ public class Database {
     public static int updateCourse(Course course, Course old) {
         if (course == null) return Integer.MIN_VALUE;
         int id = getCourseId(old);
+        if (id < 0 && (old == null || old.getRegistrationDate() == null)) return addCourse(course);
         if (course == old) return id;
         if (id >= 0) {
             int room_id = updateRoom(course.getRoom(), old.getRoom());
@@ -367,7 +371,10 @@ public class Database {
                 statement = connection.prepareStatement("UPDATE course SET room_id=?, name=?, study_director_id=? WHERE course_id=?", Statement.RETURN_GENERATED_KEYS);
                 statement.setInt(1, room_id);
                 statement.setString(2, course.getName());
-                statement.setInt(3, course.getStudyDirector().getDocentNumber());
+                if (course.getStudyDirector() != null)
+                    statement.setInt(3, course.getStudyDirector().getDocentNumber());
+                else
+                    statement.setInt(3, Integer.MIN_VALUE);
                 statement.setInt(4, id);
                 statement.execute();
                 return id;
@@ -420,6 +427,7 @@ public class Database {
     public static int updateCompany(Company company, Company old) {
         if (company == null) return Integer.MIN_VALUE;
         int id = getCompanyId(old);
+        if (id < 0 && (old == null || old.getName() == null)) return addCompany(company);
         if (company == old) return id;
         if (id >= 0) {
             int address_id = updateAddress(company.getAddress(), old.getAddress());
@@ -482,18 +490,16 @@ public class Database {
         if (room == null) return Integer.MIN_VALUE;
         int id = getRoomID(old);
         if (room == old) return id;
+        if (id < 0 && (old == null || old.getName() == null)) return addRoom(room);
         if (countUsedRoom(old) > 1) return addRoom(room);
         if (id >= 0) {
             try {
                 initialize();
-                statement = connection.prepareStatement("UPDATE room SET name=?, building=?,floor=?, seats=?,camera=?,laboratory=?  WHERE room_id=?", Statement.RETURN_GENERATED_KEYS);
-                statement.setString(1, room.getName());
-                statement.setString(2, room.getBuilding());
-                statement.setString(3, room.getFloor());
-                statement.setInt(4, room.getSeats());
-                statement.setBoolean(5, room.hasDocumentCamera());
-                statement.setBoolean(6, room.isLaboratory());
-                statement.setInt(7, id);
+                statement = connection.prepareStatement("UPDATE room SET seats=?,camera=?,laboratory=?  WHERE room_id=?", Statement.RETURN_GENERATED_KEYS);
+                statement.setInt(1, room.getSeats());
+                statement.setBoolean(2, room.getCamera());
+                statement.setBoolean(3, room.getLaboratory());
+                statement.setInt(4, id);
                 statement.execute();
                 return id;
             } catch (SQLException | ClassNotFoundException exception) {
@@ -636,12 +642,11 @@ public class Database {
     public static void deleteRoom(CourseRoom courseRoom) {
         if (countUsedRoom(courseRoom) > 0)
             return;
+        int room_id = getRoomID(courseRoom);
         try {
             initialize();
-            statement = connection.prepareStatement("DELETE FROM room WHERE name = ? AND building = ? AND floor = ?");
-            statement.setString(1, courseRoom.getName());
-            statement.setString(2, courseRoom.getBuilding());
-            statement.setString(3, courseRoom.getFloor());
+            statement = connection.prepareStatement("DELETE FROM room WHERE room_id=?");
+            statement.setInt(1, room_id);
             statement.execute();
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
@@ -862,7 +867,7 @@ public class Database {
                                 convertDate(resultSet.getDate("birthdate")),
                                 new Address(resultSet.getString("student_street"), resultSet.getString("student_number"), resultSet.getString("student_postal_code"), resultSet.getString("student_city"), resultSet.getString("student_country")),
                                 resultSet.getString("student_email"),
-                                new Course(resultSet.getString("name"), getCourseTypeById(resultSet.getInt("course_type")), new Docent(resultSet.getString("docent_last_name"), resultSet.getString("docent_first_name"), convertDate(resultSet.getDate("docent_birthdate")), new Address(resultSet.getString("docent_street"), resultSet.getString("docent_number"), resultSet.getString("docent_postal_code"), resultSet.getString("docent_city"), resultSet.getString("docent_country")), resultSet.getString("docent_email"), resultSet.getInt("study_director_id")), convertDate(resultSet.getDate("registry_date")), new CourseRoom(resultSet.getString("room"), getCampusById(resultSet.getInt("campus")), resultSet.getString("building"), resultSet.getString("floor"), resultSet.getInt("seats"), resultSet.getBoolean("beamer"), resultSet.getBoolean("documentCamera"), resultSet.getBoolean("laboratory"))),
+                                new Course(resultSet.getString("name"), getCourseTypeById(resultSet.getInt("course_type")), new Docent(resultSet.getString("docent_last_name"), resultSet.getString("docent_first_name"), convertDate(resultSet.getDate("docent_birthdate")), new Address(resultSet.getString("docent_street"), resultSet.getString("docent_number"), resultSet.getString("docent_postal_code"), resultSet.getString("docent_city"), resultSet.getString("docent_country")), resultSet.getString("docent_email"), resultSet.getInt("study_director_id")), convertDate(resultSet.getDate("registry_date")), new CourseRoom(resultSet.getString("room"), getCampusById(resultSet.getInt("campus")), resultSet.getString("building"), resultSet.getString("floor"), resultSet.getInt("seats"), resultSet.getBoolean("projector"), resultSet.getBoolean("camera"), resultSet.getBoolean("laboratory"))),
                                 resultSet.getInt("java_knowlage"),
                                 new Company(resultSet.getString("company_name"), new Address(resultSet.getString("street"), resultSet.getString("number"), resultSet.getString("postal_code"), resultSet.getString("city"), resultSet.getString("country")), new Person(resultSet.getString("last_name"), resultSet.getString("first_name"), resultSet.getString("email"))));
 //                int id = dualStudents.indexOf(dualStudent);
@@ -924,7 +929,7 @@ public class Database {
                                 getCourseTypeById(resultSet.getInt("course_type")),
                                 new Docent(resultSet.getString("last_name"), resultSet.getString("first_name"), convertDate(resultSet.getDate("birthdate")), new Address(resultSet.getString("street"), resultSet.getString("number"), resultSet.getString("postal_code"), resultSet.getString("city"), resultSet.getString("country")), resultSet.getString("email"), resultSet.getInt("docent_id")),
                                 convertDate(resultSet.getDate("registry_date")),
-                                new CourseRoom(resultSet.getString("room"), getCampusById(resultSet.getInt("campus")), resultSet.getString("building"), resultSet.getString("floor"), resultSet.getInt("seats"), resultSet.getBoolean("beamer"), resultSet.getBoolean("documentCamera"), resultSet.getBoolean("laboratory")));
+                                new CourseRoom(resultSet.getString("room"), getCampusById(resultSet.getInt("campus")), resultSet.getString("building"), resultSet.getString("floor"), resultSet.getInt("seats"), resultSet.getBoolean("projector"), resultSet.getBoolean("camera"), resultSet.getBoolean("laboratory")));
 //                int id = courses.indexOf(course);
 //                if (id >= 0)
 //                    courses.set(id, course);
@@ -1034,7 +1039,7 @@ public class Database {
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 CourseRoom room =
-                        new CourseRoom(resultSet.getString("room"), getCampusById(resultSet.getInt("campus")), resultSet.getString("building"), resultSet.getString("floor"), resultSet.getInt("seats"), resultSet.getBoolean("beamer"), resultSet.getBoolean("documentCamera"), resultSet.getBoolean("laboratory"));
+                        new CourseRoom(resultSet.getString("name"), getCampusById(resultSet.getInt("campus")), resultSet.getString("building"), resultSet.getString("floor"), resultSet.getInt("seats"), resultSet.getBoolean("projector"), resultSet.getBoolean("camera"), resultSet.getBoolean("laboratory"));
                 rooms.add(room);
             }
         } catch (SQLException | ClassNotFoundException exception) {
@@ -1110,7 +1115,7 @@ public class Database {
             String room = " AND room_id = ?";
             String director = " AND study_director_id = ?";
             String command = "SELECT course_id FROM course WHERE name = ? AND registry_date = ? AND course_type = ?";
-            if (course.getRoom() != null)
+            if (course.getRoom() != null && room_id > 0)
                 command += room;
             if (director_b)
                 command += director;
@@ -1118,13 +1123,14 @@ public class Database {
             statement.setString(1, course.getName());
             statement.setDate(2, convertDate(course.getRegistrationDate()));
             statement.setInt(3, getCourseTypeID(course.getStudyCourse()));
-            if (course.getRoom() != null)
+            if (course.getRoom() != null && room_id > 0)
                 statement.setInt(4, room_id);
             if (director_b)
-                if (course.getRoom() != null)
+                if (course.getRoom() != null && room_id > 0)
                     statement.setInt(5, course.getStudyDirector().getDocentNumber());
                 else
                     statement.setInt(4, course.getStudyDirector().getDocentNumber());
+            System.out.println(statement.toString());
             resultSet = statement.executeQuery();
             if (resultSet.next())
                 return resultSet.getInt(1);
@@ -1220,10 +1226,11 @@ public class Database {
         if (room == null) return Integer.MIN_VALUE;
         try {
             initialize();
-            statement = connection.prepareStatement("SELECT room_id FROM room WHERE name = ? AND building = ? AND floor = ?");
+            statement = connection.prepareStatement("SELECT room_id FROM room WHERE name = ? AND building = ? AND floor = ? AND campus = ?");
             statement.setString(1, room.getName());
             statement.setString(2, room.getBuilding());
             statement.setString(3, room.getFloor());
+            statement.setInt(4, getCampusID(room.getCampus()));
             resultSet = statement.executeQuery();
             if (resultSet.next())
                 return resultSet.getInt(1);
@@ -1314,13 +1321,27 @@ public class Database {
     }
 
     /**
-     * get the Campus from the id
+     * get the id from the enum campus
      *
-     * @param id from the StudyCourse
-     * @return Campus if exists, null if not
+     * @param campus the campus you need the id
+     * @return Integer.MinValue if course not exist. id if exists
+     */
+    private static int getCampusID(Campus campus) {
+        Campus[] campuses = Campus.values();
+        for (int f = 0; f < campuses.length; f++)
+            if (campuses[f].equals(campus))
+                return f;
+        return Integer.MIN_VALUE;
+    }
+
+    /**
+     * get the campus from the id
+     *
+     * @param id from the campus
+     * @return campus if exists, null if not
      */
     private static Campus getCampusById(int id) {
-        return id < 0 || id >= Campus.values().length ? null : Campus.values()[id];
+        return id <= 0 || id >= Campus.values().length ? null : Campus.values()[id];
     }
 
     /**

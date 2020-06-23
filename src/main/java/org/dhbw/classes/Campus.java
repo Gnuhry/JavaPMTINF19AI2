@@ -1,7 +1,7 @@
 package org.dhbw.classes;
 
 public enum Campus {
-    AlleCampus("Alle Campus"), Coblitzalle("Coblitzallee"), Käfertal("Käfertal"), Eppelheim("Eppelheim");
+    Coblitzalle("Coblitzallee"), Kaefertal("Käfertal"), Eppelheim("Eppelheim");
 
     private final String name;
 
