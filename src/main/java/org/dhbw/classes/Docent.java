@@ -30,12 +30,6 @@ public class Docent extends Person implements Comparable<Person>{
         return Objects.hash(docentNumber);
     }
 
-
-    @Override
-    public String toString() {
-        return super.toString();
-    }
-
     @Override
     public int compareTo(Person o) {
         return super.compareTo(o);

@@ -1,5 +1,6 @@
 package org.dhbw;
 
+import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -24,12 +25,9 @@ import org.dhbw.classes.*;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
-public class ShowStudentsController implements Initializable {
+public class ShowController extends Application implements Initializable {
     private final ObservableList<DualStudent> students = FXCollections.observableArrayList(
             University.getStudents()
     );
@@ -42,21 +40,29 @@ public class ShowStudentsController implements Initializable {
     private final ObservableList<Company> companies = FXCollections.observableArrayList(
             University.getCompanies()
     );
+    private final ObservableList<CourseRoom> rooms = FXCollections.observableArrayList(
+            University.getRooms()
+    );
+    private final ObservableList<Campus> campuses = FXCollections.observableArrayList(
+            Campus.values()
+    );
 
     private FileType file;
     private List<Object> object;
     private final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-    private final Company allCompany = new Company("Alle Unternehmen", null, null);
-    private final Course allCourse = new Course("Alle Kurse", null, null);
+    private final Company allCompany = new Company(Help.getRessourceBundle().getString("all_company"), null, null);
+    private final Course allCourse = new Course(Help.getRessourceBundle().getString("all_course"), null, null);
 
     @FXML
-    private AnchorPane studentAnchor, lectureAnchor, courseAnchor, companyAnchor;
+    private AnchorPane studentAnchor, lectureAnchor, courseAnchor, companyAnchor, roomAnchor;
     @FXML
-    private TextField searchBox, searchBoxLecture, searchBoxCourse, searchBoxCompany;
+    private TextField searchBox, searchBoxLecture, searchBoxCourse, searchBoxCompany, searchBoxRoom;
     @FXML
     private ComboBox<Course> courseFilterBox;
     @FXML
     private ComboBox<Company> companyFilterBox;
+    @FXML
+    private ComboBox<String> campusFilterBox;
     @FXML
     public TableView<DualStudent> studentTable;
     @FXML
@@ -100,7 +106,7 @@ public class ShowStudentsController implements Initializable {
     @FXML
     private TableColumn<Course, Docent> courseLecture;
     @FXML
-    private TableColumn<Course, Void> courseC, courseD;
+    private TableColumn<Course, Void> courseC, courseD, courseMail;
 
     @FXML
     private TableView<Company> companyTable;
@@ -113,6 +119,29 @@ public class ShowStudentsController implements Initializable {
     @FXML
     private TableColumn<Company, Void> companyC, companyD;
 
+    @FXML
+    private TableView<CourseRoom> roomTable;
+    @FXML
+    private TableColumn<CourseRoom, String> roomName;
+    @FXML
+    private TableColumn<CourseRoom, String> roomCampus;
+    @FXML
+    private TableColumn<CourseRoom, String> roomBuilding;
+    @FXML
+    private TableColumn<CourseRoom, String> roomFloor;
+    @FXML
+    private TableColumn<CourseRoom, Integer> roomSeats;
+    @FXML
+    private TableColumn<CourseRoom, Boolean> roomProjector;
+    @FXML
+    private TableColumn<CourseRoom, Boolean> roomDocumentCamera;
+    @FXML
+    private TableColumn<CourseRoom, Boolean> roomLaboratory;
+    @FXML
+    private TableColumn<CourseRoom, Void> roomC;
+    @FXML
+    private TableColumn<CourseRoom, Void> roomD;
+
     /**
      * changing the scene root in App to "primary.fxml"
      */
@@ -122,7 +151,7 @@ public class ShowStudentsController implements Initializable {
     }
 
     /**
-     * refreshing all four tables
+     * refreshing all tables
      */
     @FXML
     public void refresh() {
@@ -134,16 +163,19 @@ public class ShowStudentsController implements Initializable {
         courseTable.refresh();
         companyTable.setItems(FXCollections.observableArrayList(University.getCompanies()));
         companyTable.refresh();
+        roomTable.setItems(FXCollections.observableArrayList(University.getRooms()));
+        roomTable.refresh();
     }
 
     /**
      * initializing every column of the table with the data from other classes
-     * adding filter functions for lecture table, course table and company table (input from searchboxes)
+     * adding filter functions for lecture table, course table and company table (input from search boxes)
+     * creating contextmenu and adding functions to buttons and adding delete key
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ContextMenu refreshMenu = new ContextMenu();
-        MenuItem[] item = new MenuItem[]{new MenuItem("refresh"), new MenuItem("back")};
+        MenuItem[] item = new MenuItem[]{new MenuItem(Help.getRessourceBundle().getString("refresh")), new MenuItem(Help.getRessourceBundle().getString("back"))};
         item[0].setOnAction(actionEvent -> refresh());
         item[1].setOnAction(actionEvent -> {
             try {
@@ -168,15 +200,29 @@ public class ShowStudentsController implements Initializable {
             }
         });
         studentBirth.setCellValueFactory(new PropertyValueFactory<>("birthday"));
-        studentEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+//        studentEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        studentEmail.setCellFactory(dualStudentVoidTableColumn -> {
+            TableCell<DualStudent, String> cell = new TableCell<>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty ? null : item);
+                }
+            };
+            cell.setOnMouseClicked(e -> {
+                if (!cell.isEmpty())
+                    getHostServices().showDocument("mailto:" + cell.getTableView().getItems().get(cell.getIndex()).getEmail());
+            });
+            return cell;
+        });
         studentAddress.setCellValueFactory(new PropertyValueFactory<>("Address"));
         matriculationNumber.setCellValueFactory(new PropertyValueFactory<>("matriculationNumber"));
         studentEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         studentCompany.setCellValueFactory(new PropertyValueFactory<>("company"));
         studentCourse.setCellValueFactory(new PropertyValueFactory<>("course"));
         studentJava.setCellValueFactory(new PropertyValueFactory<>("javaKnowledge"));
-        studentC.setCellFactory(getCallback(FileType.editStudent));
-        studentD.setCellFactory(getCallback(FileType.acceptDelete));
+        studentC.setCellFactory(getCallback(FileType.editStudents));
+        studentD.setCellFactory(getCallback(FileType.delete));
         studentTable.setItems(students);
         studentTable.requestFocus();
 
@@ -223,8 +269,8 @@ public class ShowStudentsController implements Initializable {
         lectureEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         lectureAddress.setCellValueFactory(new PropertyValueFactory<>("Address"));
         lectureEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        lectureC.setCellFactory(getCallback(FileType.editLecture));
-        lectureD.setCellFactory(getCallback(FileType.acceptDelete));
+        lectureC.setCellFactory(getCallback(FileType.editDocents));
+        lectureD.setCellFactory(getCallback(FileType.delete));
 
         lectureTable.setItems(docents);
         lectureTable.setContextMenu(refreshMenu);
@@ -260,7 +306,35 @@ public class ShowStudentsController implements Initializable {
         courseDate.setCellValueFactory(new PropertyValueFactory<>("registrationDate"));
         courseLecture.setCellValueFactory(new PropertyValueFactory<>("studyDirector"));
         courseC.setCellFactory(getCallback(FileType.editCourse));
-        courseD.setCellFactory(getCallback(FileType.acceptDelete));
+        courseD.setCellFactory(getCallback(FileType.delete));
+        courseMail.setCellFactory(new Callback<>() {
+            @Override
+            public TableCell<Course, Void> call(TableColumn<Course, Void> courseVoidTableColumn) {
+                return new TableCell<>() {
+                    final Button btn = new Button();
+
+                    @Override
+                    protected void updateItem(Void aVoid, boolean b) {
+                        super.updateItem(aVoid, b);
+                        if (b)
+                            setGraphic(null);
+                        else {
+                            btn.setOnAction(actionEvent -> {
+                                StringBuilder sb = new StringBuilder("mailto:");
+                                String[] mails = University.getAllEmailFromCourse(getTableView().getItems().get(getIndex()));
+                                if (mails == null) return;
+                                System.out.println(Arrays.toString(mails));
+                                for (String s : mails)
+                                    sb.append(s).append(", ");
+                                getHostServices().showDocument(sb.toString().substring(0, sb.toString().length() - 2));
+                            });
+                            btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/mailButton.png"))));
+                            setGraphic(btn);
+                        }
+                    }
+                };
+            }
+        });
         courseTable.setItems(courses);
         courseTable.setContextMenu(refreshMenu);
         courseTable.getSelectionModel().setSelectionMode(
@@ -284,7 +358,7 @@ public class ShowStudentsController implements Initializable {
         companyAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
         companyPerson.setCellValueFactory(new PropertyValueFactory<>("contactPerson"));
         companyC.setCellFactory(getCallback(FileType.editCompany));
-        companyD.setCellFactory(getCallback(FileType.acceptDelete));
+        companyD.setCellFactory(getCallback(FileType.delete));
         courseTable.setItems(courses);
 
         FilteredList<Company> filteredCompany2 = new FilteredList<>(companies, p -> true);
@@ -303,17 +377,47 @@ public class ShowStudentsController implements Initializable {
                 SelectionMode.MULTIPLE
         );
         addDeleteKey(companyAnchor, companyTable);
+
+        roomName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        roomCampus.setCellValueFactory(new PropertyValueFactory<>("campus"));
+        roomBuilding.setCellValueFactory(new PropertyValueFactory<>("building"));
+        roomFloor.setCellValueFactory(new PropertyValueFactory<>("floor"));
+        roomSeats.setCellValueFactory(new PropertyValueFactory<>("seats"));
+        roomProjector.setCellValueFactory(new PropertyValueFactory<>("projector"));
+        roomDocumentCamera.setCellValueFactory(new PropertyValueFactory<>("camera"));
+        roomLaboratory.setCellValueFactory(new PropertyValueFactory<>("laboratory"));
+        roomC.setCellFactory(getCallback(FileType.editRoom));
+        roomD.setCellFactory(getCallback(FileType.delete));
+        roomTable.setItems(rooms);
+
+        List<String> campusList = new ArrayList<>();
+        campusList.add(Help.getRessourceBundle().getString("all_campus"));
+        for (Campus campus : campuses)
+            campusList.add(campus.toString());
+        campusFilterBox.getItems().setAll(campusList);
+        campusFilterBox.setValue(Help.getRessourceBundle().getString("all_campus"));
+        FilteredList<CourseRoom> filteredRoom = new FilteredList<>(rooms, p -> true);
+        searchBoxRoom.textProperty().addListener((observable, oldValue, newValue) -> filteredRoom.setPredicate(this::checkFilterRoom));
+        campusFilterBox.valueProperty().addListener((observable, oldValue, newValue) -> filteredRoom.setPredicate(this::checkFilterRoom));
+        SortedList<CourseRoom> sortedRooms = new SortedList<>(filteredRoom);
+        sortedRooms.comparatorProperty().bind(roomTable.comparatorProperty());
+        roomTable.setItems(sortedRooms);
+        roomTable.setContextMenu(refreshMenu);
+        roomTable.getSelectionModel().setSelectionMode(
+                SelectionMode.MULTIPLE
+        );
+        addDeleteKey(roomAnchor, roomTable);
     }
 
     /**
-     * adding the start() method on each button
+     * adding the start() method on the button
      *
      * @param button button where function should be added
      * @param object object which should be changed or deleted
-     * @param file   fxml filename to setup next scene
+     * @param file   FileType what should happen with the object
      */
     @FXML
-    public void addFunction(Button button, List<Object> object, ShowStudentsController.FileType file) {
+    public void addFunction(Button button, List<Object> object, ShowController.FileType file) {
         button.setOnAction((ActionEvent event) -> {
             try {
                 this.file = file;
@@ -325,13 +429,13 @@ public class ShowStudentsController implements Initializable {
         });
     }
 
-    public void addDeleteKey(AnchorPane anchorPane, TableView<?> table){
+    public void addDeleteKey(AnchorPane anchorPane, TableView<?> table) {
         anchorPane.setOnKeyPressed(keyEvent -> {
             final List<?> selectedItem = table.getSelectionModel().getSelectedItems();
             if (selectedItem != null)
                 if (keyEvent.getCode().equals(KeyCode.DELETE))
                     try {
-                        this.file = FileType.acceptDelete;
+                        this.file = FileType.delete;
                         this.object = new ArrayList<>(selectedItem);
                         start(new Stage());
                     } catch (Exception e) {
@@ -346,32 +450,35 @@ public class ShowStudentsController implements Initializable {
      * @param stage new stage show new window
      */
     public void start(Stage stage) throws Exception {
-        String resourcePath = file + ".fxml";
-        URL location = getClass().getResource(resourcePath);
-        FXMLLoader fxmlLoader = new FXMLLoader(location);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(file.toString()), Help.getRessourceBundle());
         Parent root = fxmlLoader.load();
         switch (file) {
-            case editStudent: {
-                EditStudentController controller = fxmlLoader.getController();
+            case editStudents: {
+                StudentController controller = fxmlLoader.getController();
                 controller.initVariables((DualStudent) object.get(0));
                 break;
             }
-            case editLecture: {
-                EditLectureController controller = fxmlLoader.getController();
+            case editDocents: {
+                DocentController controller = fxmlLoader.getController();
                 controller.initVariables((Docent) object.get(0));
                 break;
             }
             case editCompany: {
-                EditCompanyController controller = fxmlLoader.getController();
+                CompanyController controller = fxmlLoader.getController();
                 controller.initVariables((Company) object.get(0));
                 break;
             }
             case editCourse: {
-                EditCourseController controller = fxmlLoader.getController();
+                CourseController controller = fxmlLoader.getController();
                 controller.initVariables((Course) object.get(0));
                 break;
             }
-            case acceptDelete: {
+            case editRoom: {
+                RoomController controller = fxmlLoader.getController();
+                controller.initVariables((CourseRoom) object.get(0));
+                break;
+            }
+            case delete: {
                 AcceptDeleteController controller = fxmlLoader.getController();
                 controller.initVariables(object);
                 break;
@@ -382,17 +489,17 @@ public class ShowStudentsController implements Initializable {
         stage.setOnHidden(windowEvent -> refresh());
         stage.initOwner(studentTable.getScene().getWindow());
         stage.initModality(Modality.WINDOW_MODAL);
-        stage.setTitle("DHBW Datenverwaltung");
-        stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/DHBW_Logo_quadrat.png")));
+        stage.setTitle(Help.getRessourceBundle().getString("title"));
+        stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/dhbwLogoSquare.png")));
         stage.show();
     }
 
     /**
-     * initializing change and delete button with image and addFunction
+     * initializing change and delete button with image and adding function
      *
-     * @param function thefxml function which the button should trigger
+     * @param fileType the fileType what should happen when pressing on button
      */
-    private <T> Callback<TableColumn<T, Void>, TableCell<T, Void>> getCallback(FileType function) {
+    private <T> Callback<TableColumn<T, Void>, TableCell<T, Void>> getCallback(FileType fileType) {
         return new Callback<>() {
             @Override
             public TableCell<T, Void> call(TableColumn<T, Void> dualStudentVoidTableColumn) {
@@ -407,8 +514,8 @@ public class ShowStudentsController implements Initializable {
                         } else {
                             ArrayList<Object> a = new ArrayList<>();
                             a.add(getTableView().getItems().get(getIndex()));
-                            addFunction(btn, a, function);
-                            if (function.equals(FileType.acceptDelete))
+                            addFunction(btn, a, fileType);
+                            if (fileType.equals(FileType.delete))
                                 btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/deleteButton.png"))));
                             else
                                 btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/editButton.png"))));
@@ -421,11 +528,28 @@ public class ShowStudentsController implements Initializable {
     }
 
     /**
+     * filtering the room table with input text from search boxes and combo boxes
+     *
+     * @param room room of database table which gets checked on input
+     * @return {true} if person has the configure attributes from the filters, {false} if not
+     */
+    private boolean checkFilterRoom(CourseRoom room) {
+        boolean erg = true;
+        String search = searchBoxRoom.getText();
+        int id = campusFilterBox.getSelectionModel().getSelectedIndex() - 1;
+        if (id > -1 && (id >= Campus.values().length ? null : Campus.values()[id]) != room.getCampus())
+            return false;
+        if (!search.isEmpty())
+            erg = room.getName().toLowerCase().contains(search) || room.getCampus().toString().toLowerCase().contains(search);
+        return erg;
+    }
+
+    /**
      * filtering the student table with input text from search boxes and combo boxes
      *
-     * @param newValue value which get changed (String, Company or Course)
+     * @param newValue value which get changed (search string, Company or Course)
      * @param person   person of database table which gets checked on input
-     * @return true if person has the configure attributes from the filters, false if not
+     * @return {true} if person has the configure attributes from the filters, {false} if not
      */
     private boolean checkFilterStudent(Object newValue, DualStudent person) {
         boolean erg = true;
@@ -463,7 +587,20 @@ public class ShowStudentsController implements Initializable {
         return erg;
     }
 
+    /**
+     * Enum for button functions
+     */
     public enum FileType {
-        editStudent, editLecture, editCourse, editCompany, acceptDelete
+        editStudents("student.fxml"), editDocents("docent.fxml"), editCourse("course.fxml"), editCompany("company.fxml"), editRoom("room.fxml"), delete("acceptDelete.fxml");
+        private final String name;
+
+        FileType(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
     }
 }

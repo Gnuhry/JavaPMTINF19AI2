@@ -14,106 +14,126 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.PrimaryController">
-   <children>
-      <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="600.0" prefWidth="1080.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <ImageView fitHeight="600.0" fitWidth="1250.0" opacity="0.75" pickOnBounds="true" smooth="false">
-               <image>
-                  <Image url="@images/DHBW_Verwaltungsgebäude.jpg" />
-               </image>
-               <effect>
-                  <BoxBlur height="3.0" width="3.0" />
-               </effect>
-               <viewport>
-                  <Rectangle2D />
-               </viewport>
-            </ImageView>
-         </children>
-      </VBox>
-      <VBox alignment="TOP_CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
-         <children>
-            <ImageView fitHeight="91.0" fitWidth="212.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@images/DHBW_Logo.png" />
-               </image>
-            </ImageView>
-         </children>
-      </VBox>
-      <VBox alignment="CENTER" layoutY="26.899999618530273" spacing="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="120.0">
-         <children>
-            <Button id="gui_button" fx:id="showTable" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showStudents" prefHeight="40.0" prefWidth="250.0" stylesheets="@css/application.css" text="          Übersicht anzeigen" translateY="20.0">
-               <font>
-                  <Font name="Comic Sans MS" size="14.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
+<AnchorPane focusTraversable="true" prefHeight="600.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.PrimaryController">
+    <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="600.0" prefWidth="1080.0" AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <ImageView fitHeight="600.0" fitWidth="1250.0" opacity="0.75" pickOnBounds="true" smooth="false">
+            <effect>
+                <BoxBlur height="3.0" width="3.0"/>
+            </effect>
+            <viewport>
+                <Rectangle2D/>
+            </viewport>
+            <Image url="@images/dhbwBuilding.jpg"/>
+        </ImageView>
+    </VBox>
+    <VBox alignment="TOP_CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+        <ImageView fitHeight="91.0" fitWidth="212.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@images/dhbwLogo.png"/>
+        </ImageView>
+    </VBox>
+    <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="500.0"
+          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <Button id="gui_button" fx:id="buttonLanguage" alignment="CENTER" mnemonicParsing="false"
+                onAction="#toggleLanguage" prefHeight="20.0" prefWidth="35.0" stylesheets="@css/application.css"
+                text="DE" translateY="20.0">
+            <font>
+                <Font name="Comic Sans MS Bold" size="11.0"/>
+            </font>
+            <HBox.margin>
+                <Insets right="10.0" top="-10.0"/>
+            </HBox.margin>
+        </Button>
+    </HBox>
+    <VBox alignment="CENTER" layoutY="26.899999618530273" spacing="30.0" AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="120.0">
+        <Button id="gui_button" fx:id="showTable" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
+                onAction="#showStudents" prefHeight="40.0" prefWidth="250.0" stylesheets="@css/application.css"
+                text="%show_overview" translateY="20.0">
+            <font>
+                <Font name="Comic Sans MS" size="14.0"/>
+            </font>
+            <cursor>
+                <Cursor fx:constant="HAND"/>
+            </cursor>
+            <opaqueInsets>
+                <Insets/>
+            </opaqueInsets>
+        </Button>
+        <Label text="%new_table_entry" translateY="20.0">
+            <font>
+                <Font name="Comic Sans MS Bold" size="22.0"/>
+            </font>
+            <VBox.margin>
+                <Insets/>
+            </VBox.margin>
+        </Label>
+        <HBox alignment="TOP_CENTER" spacing="30.0">
+            <Button id="gui_button" fx:id="addStudent" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
+                    onAction="#insertStudent" prefHeight="50.0" prefWidth="110.0" stylesheets="@css/application.css">
+                <font>
+                    <Font name="Comic Sans MS" size="14.0"/>
+                </font>
+                <cursor>
+                    <Cursor fx:constant="HAND"/>
+                </cursor>
+                <tooltip>
+                    <Tooltip fx:id="tooltipStudent" text="%student"/>
+                </tooltip>
             </Button>
-            <Label text="Neuer Tabelleneintrag:" translateY="20.0">
-               <font>
-                  <Font name="Comic Sans MS Bold" size="22.0" />
-               </font>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </Label>
-            <HBox alignment="TOP_CENTER" spacing="30.0">
-               <children>
-                  <Button id="gui_button" fx:id="addStudent" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#insertStudent" prefHeight="50.0" prefWidth="110.0" stylesheets="@css/application.css">
-                     <font>
-                        <Font name="Comic Sans MS" size="14.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                     <tooltip>
-                        <Tooltip fx:id="tooltipStudent" text="Studierende" />
-                     </tooltip>
-                  </Button>
-                  <Button id="gui_button" fx:id="addLecture" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#insertLecture" prefHeight="50.0" prefWidth="110.0" stylesheets="@css/application.css">
-                     <font>
-                        <Font name="Comic Sans MS" size="14.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                     <tooltip>
-                        <Tooltip fx:id="tooltipLecture" text="Dozent*in" />
-                     </tooltip>
-                  </Button>
-               </children>
-            </HBox>
-            <HBox alignment="TOP_CENTER" spacing="30.0">
-               <children>
-                  <Button id="gui_button" fx:id="addCourse" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#insertCourse" prefHeight="50.0" prefWidth="110.0" stylesheets="@css/application.css">
-                     <font>
-                        <Font name="Comic Sans MS" size="14.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                     <tooltip>
-                        <Tooltip fx:id="tooltipCourse" text="Kurs" />
-                     </tooltip>
-                  </Button>
-                  <Button id="gui_button" fx:id="addCompany" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#insertCompany" prefHeight="50.0" prefWidth="110.0" stylesheets="@css/application.css">
-                     <font>
-                        <Font name="Comic Sans MS" size="14.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                     <tooltip>
-                        <Tooltip fx:id="tooltipCompany" text="Unternehmen" />
-                     </tooltip>
-                  </Button>
-               </children>
-            </HBox>
-         </children>
-      </VBox>
-   </children>
+            <Button id="gui_button" fx:id="addLecture" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
+                    onAction="#insertLecture" prefHeight="50.0" prefWidth="110.0" stylesheets="@css/application.css">
+                <font>
+                    <Font name="Comic Sans MS" size="14.0"/>
+                </font>
+                <cursor>
+                    <Cursor fx:constant="HAND"/>
+                </cursor>
+                <tooltip>
+                    <Tooltip fx:id="tooltipLecture" text="%docent"/>
+                </tooltip>
+            </Button>
+        </HBox>
+        <HBox alignment="TOP_CENTER" spacing="30.0">
+            <Button id="gui_button" fx:id="addCourse" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
+                    onAction="#insertCourse" prefHeight="50.0" prefWidth="110.0" stylesheets="@css/application.css">
+                <font>
+                    <Font name="Comic Sans MS" size="14.0"/>
+                </font>
+                <cursor>
+                    <Cursor fx:constant="HAND"/>
+                </cursor>
+                <tooltip>
+                    <Tooltip fx:id="tooltipCourse" text="%course"/>
+                </tooltip>
+            </Button>
+            <Button id="gui_button" fx:id="addCompany" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
+                    onAction="#insertCompany" prefHeight="50.0" prefWidth="110.0" stylesheets="@css/application.css">
+                <font>
+                    <Font name="Comic Sans MS" size="14.0"/>
+                </font>
+                <cursor>
+                    <Cursor fx:constant="HAND"/>
+                </cursor>
+                <tooltip>
+                    <Tooltip fx:id="tooltipCompany" text="%company"/>
+                </tooltip>
+            </Button>
+        </HBox>
+        <HBox alignment="TOP_CENTER" spacing="30.0">
+            <Button id="gui_button" fx:id="addRoom" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
+                    onAction="#insertRoom" prefHeight="50.0" prefWidth="110.0" stylesheets="@css/application.css">
+                <font>
+                    <Font name="Comic Sans MS" size="14.0"/>
+                </font>
+                <cursor>
+                    <Cursor fx:constant="HAND"/>
+                </cursor>
+                <tooltip>
+                    <Tooltip fx:id="tooltipRoom" text="%room"/>
+                </tooltip>
+            </Button>
+        </HBox>
+    </VBox>
 </AnchorPane>

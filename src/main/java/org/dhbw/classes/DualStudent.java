@@ -66,11 +66,6 @@ public class DualStudent extends Person implements Comparable<Person> {
     }
 
     @Override
-    public String toString() {
-        return super.toString();
-    }
-
-    @Override
     public int compareTo(Person o) {
         return super.compareTo(o);
     }
