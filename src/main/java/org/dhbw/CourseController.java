@@ -159,15 +159,12 @@ public class CourseController {
             Docent director = courseDirector.getValue();
             if (courseDirector.getValue().equals(noDocent))
                 director = null;
-            CourseRoom room_ = courseRoom.getValue();
-            if (courseRoom.getValue().equals(noRoom))
-                room_ = null;
             Course new_course = new Course(
                     courseName.getText(),
                     course,
                     director,
                     date,
-                    room_
+                    room
             );
             if (course_old != null)
                 University.updateCourse(new_course, course_old);
