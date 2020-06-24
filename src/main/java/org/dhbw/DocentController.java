@@ -227,7 +227,7 @@ public class DocentController {
                     Help.convertLocalDateDate(docentBirth.getValue()),
                     new Address(docentStreet.getText(), docentHomeNumber.getText(), docentPostalCode.getText(), docentCity.getText(), docentCountry.getText()),
                     docentEmail.getText(),
-                    Integer.parseInt(docentNumberField.getText())
+                    Integer.parseInt(docentNumberField.getText().substring(1))
             );
             if (docent_old != null)
                 University.updateDocent(new_docent, docent_old);
