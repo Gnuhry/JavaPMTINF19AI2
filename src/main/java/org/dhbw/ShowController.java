@@ -446,40 +446,46 @@ public class ShowController extends Application implements Initializable {
      * @param table      row to delete
      */
     public void addDeleteKey(AnchorPane anchorPane, TableView<?> table, boolean u) {
-        if(u){
-        anchorPane.setOnKeyPressed(keyEvent -> {
-            final List<?> selectedItem = table.getSelectionModel().getSelectedItems();
-            if (selectedItem != null){
-                if (keyEvent.getCode().equals(KeyCode.DELETE))
-                    try {
-                        this.file = FileType.delete;
-                        this.object = new ArrayList<>(selectedItem);
-                        start(new Stage());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                else if (keyEvent.getCode().equals(KeyCode.U) && keyEvent.isControlDown())
-                    try {
-                        System.out.println("Test");
-                        for(Object o : selectedItem){
-                            if(o instanceof DualStudent){
-                                DualStudent d=new DualStudent((DualStudent)o);
+        if (u) {
+            anchorPane.setOnKeyPressed(keyEvent -> {
+                final List<?> selectedItem = table.getSelectionModel().getSelectedItems();
+                if (selectedItem != null) {
+                    if (keyEvent.getCode().equals(KeyCode.DELETE))
+                        try {
+                            this.file = FileType.delete;
+                            this.object = new ArrayList<>(selectedItem);
+                            start(new Stage());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    else if (keyEvent.getCode().equals(KeyCode.U) && keyEvent.isControlDown()) {
+                        for (Object o : selectedItem) {
+                            if (o instanceof DualStudent) {
+                                DualStudent d = new DualStudent((DualStudent) o);
                                 d.setEmail(Help.getStudentUniversityEmail(d));
-                                Database.updateStudent(d, (DualStudent)o);
-                            }
-                            else if(o instanceof Docent){
-                                Docent d=new Docent((Docent)o);
+                                Database.updateStudent(d, (DualStudent) o);
+                            } else if (o instanceof Docent) {
+                                Docent d = new Docent((Docent) o);
                                 d.setEmail(Help.getDocentUniversityEmail(d));
                                 Database.updateDocent(d, (Docent) o);
                             }
                         }
                         refresh();
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } else if (keyEvent.getCode().equals(KeyCode.M) && keyEvent.isControlDown()) {
+                        StringBuilder sb = new StringBuilder("mailto:");
+                        for (Object o : selectedItem) {
+                            if (o instanceof DualStudent)
+                                sb.append(((DualStudent) o).getEmail()).append(", ");
+                            else if (o instanceof Docent)
+                                sb.append(((Docent) o).getEmail()).append(", ");
+                        }
+                        if (!sb.toString().equals("mailto:"))
+                            getHostServices().showDocument(sb.toString().substring(0, sb.toString().length() - 2));
+                        table.getSelectionModel().clearSelection();
                     }
-            }
-        });
-        }        else{
+                }
+            });
+        } else {
             anchorPane.setOnKeyPressed(keyEvent -> {
                 final List<?> selectedItem = table.getSelectionModel().getSelectedItems();
                 if (selectedItem != null)

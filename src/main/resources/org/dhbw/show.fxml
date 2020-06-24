@@ -12,117 +12,148 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<TabPane maxWidth="1250.0" minWidth="1250.0" prefHeight="600.0" prefWidth="1250.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.ShowController">
+<TabPane maxWidth="1250.0" minWidth="1250.0" prefHeight="600.0" prefWidth="1250.0" tabClosingPolicy="UNAVAILABLE"
+         xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="org.dhbw.ShowController">
     <Tab style="-fx-background-color: rgba(0,0,0,0.7); -fx-text-base-color: white;" text="%students">
-        <AnchorPane fx:id="studentAnchor" maxHeight="-Infinity" maxWidth="1250.0" minHeight="0.0" minWidth="1250.0" prefHeight="600.0" prefWidth="1250.0">
-            <ToolBar prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
-                <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="%back" />
-                <VBox translateX="50.0" />
-                <HBox />
-                <TextField fx:id="searchBox" promptText="%search" stylesheets="@css/application.css" translateX="450.0" />
-                <ComboBox fx:id="courseFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0" stylesheets="@css/application.css" translateX="450.0" />
-                <ComboBox fx:id="companyFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" stylesheets="@css/application.css" translateX="450.0" />
-                <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="%refresh" translateX="450.0" />
-            </ToolBar>
-            <TableView fx:id="studentTable" editable="true" focusTraversable="false" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0" stylesheets="@css/application.css" tableMenuButtonVisible="true">
+        <AnchorPane fx:id="studentAnchor" maxHeight="-Infinity" maxWidth="1250.0" minHeight="0.0" minWidth="1250.0"
+                    prefHeight="600.0" prefWidth="1250.0">
+            <TableView fx:id="studentTable" layoutY="50.0" prefHeight="521.0" prefWidth="1250.0"
+                       stylesheets="@css/application.css" tableMenuButtonVisible="true">
                 <columns>
-                    <TableColumn fx:id="studentNumber" prefWidth="75.0" text="%id" />
-                    <TableColumn fx:id="studentForename" prefWidth="75.0" text="%forename" />
-                    <TableColumn fx:id="studentName" prefWidth="75.0" text="%last_name" />
-                    <TableColumn fx:id="studentBirth" prefWidth="107.0" text="%birthday" />
-                    <TableColumn fx:id="studentEmail" prefWidth="146.0" text="%email" />
-                    <TableColumn fx:id="studentAddress" prefWidth="299.0" text="%address" />
-                    <TableColumn fx:id="matriculationNumber" prefWidth="105.0" text="%matriculation_number" />
-                    <TableColumn fx:id="studentCompany" prefWidth="137.0" text="%company" />
-                    <TableColumn fx:id="studentCourse" prefWidth="88.0" text="%course" />
-                    <TableColumn fx:id="studentJava" prefWidth="47.199951171875" text="%java" />
-                    <TableColumn fx:id="studentC" editable="false" prefWidth="38.4000244140625" resizable="false" sortable="false" />
-                    <TableColumn fx:id="studentD" editable="false" prefWidth="54.0" resizable="false" sortable="false" />
+                    <TableColumn fx:id="studentNumber" prefWidth="75.0" text="%id"/>
+                    <TableColumn fx:id="studentForename" prefWidth="75.0" text="%forename"/>
+                    <TableColumn fx:id="studentName" prefWidth="75.0" text="%last_name"/>
+                    <TableColumn fx:id="studentBirth" prefWidth="107.0" text="%birthday"/>
+                    <TableColumn fx:id="studentEmail" prefWidth="146.0" text="%email"/>
+                    <TableColumn fx:id="studentAddress" prefWidth="299.0" text="%address"/>
+                    <TableColumn fx:id="matriculationNumber" prefWidth="105.0" text="%matriculation_number"/>
+                    <TableColumn fx:id="studentCompany" prefWidth="137.0" text="%company"/>
+                    <TableColumn fx:id="studentCourse" prefWidth="88.0" text="%course"/>
+                    <TableColumn fx:id="studentJava" prefWidth="47.199951171875" text="%java"/>
+                    <TableColumn fx:id="studentC" editable="false" prefWidth="38.4000244140625" resizable="false"
+                                 sortable="false"/>
+                    <TableColumn fx:id="studentD" editable="false" prefWidth="54.0" resizable="false" sortable="false"/>
                 </columns>
             </TableView>
+            <ToolBar prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
+                <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css"
+                        text="%back"/>
+                <VBox translateX="50.0"/>
+                <HBox/>
+                <TextField fx:id="searchBox" promptText="%search" stylesheets="@css/application.css"
+                           translateX="450.0"/>
+                <ComboBox fx:id="courseFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefWidth="150.0"
+                          stylesheets="@css/application.css" translateX="450.0"/>
+                <ComboBox fx:id="companyFilterBox" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0"
+                          stylesheets="@css/application.css" translateX="450.0"/>
+                <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="%refresh"
+                        translateX="450.0"/>
+            </ToolBar>
         </AnchorPane>
     </Tab>
     <Tab style="-fx-background-color: rgba(0,0,0,0.5); -fx-text-base-color: white;" text="%docents">
-        <AnchorPane fx:id="docentAnchor" maxWidth="1200.0" minHeight="0.0" minWidth="1200.0" prefHeight="600.0" prefWidth="1200.0">
-            <TableView fx:id="docentTable" layoutY="50.0" prefHeight="521.0" prefWidth="1250.0" stylesheets="@css/application.css" tableMenuButtonVisible="true">
+        <AnchorPane fx:id="docentAnchor" maxWidth="1200.0" minHeight="0.0" minWidth="1200.0" prefHeight="600.0"
+                    prefWidth="1200.0">
+            <TableView fx:id="docentTable" layoutY="50.0" prefHeight="521.0" prefWidth="1250.0"
+                       stylesheets="@css/application.css" tableMenuButtonVisible="true">
                 <columns>
-                    <TableColumn fx:id="docentNumber" prefWidth="75.0" text="%id" />
-                    <TableColumn fx:id="docentFirstName" prefWidth="75.0" text="%forename" />
-                    <TableColumn fx:id="docentLastName" prefWidth="75.0" text="%last_name" />
-                    <TableColumn fx:id="docentBirth" prefWidth="75.0" text="%birthday" />
-                    <TableColumn fx:id="docentEmail" prefWidth="150.0" text="%email" />
-                    <TableColumn fx:id="docentAddress" prefWidth="200.0" text="%address" />
-                    <TableColumn fx:id="docentC" editable="false" prefWidth="40.0" resizable="false" sortable="false" />
-                    <TableColumn fx:id="docentD" editable="false" prefWidth="558.0" resizable="false" sortable="false" />
+                    <TableColumn fx:id="docentNumber" prefWidth="75.0" text="%id"/>
+                    <TableColumn fx:id="docentFirstName" prefWidth="75.0" text="%forename"/>
+                    <TableColumn fx:id="docentLastName" prefWidth="75.0" text="%last_name"/>
+                    <TableColumn fx:id="docentBirth" prefWidth="75.0" text="%birthday"/>
+                    <TableColumn fx:id="docentEmail" prefWidth="150.0" text="%email"/>
+                    <TableColumn fx:id="docentAddress" prefWidth="200.0" text="%address"/>
+                    <TableColumn fx:id="docentC" editable="false" prefWidth="40.0" resizable="false" sortable="false"/>
+                    <TableColumn fx:id="docentD" editable="false" prefWidth="558.0" resizable="false" sortable="false"/>
                 </columns>
             </TableView>
             <ToolBar prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
-                <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="%back" />
-                <TextField fx:id="searchBoxDocent" promptText="%search" stylesheets="@css/application.css" translateX="944.0" />
-                <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="%refresh" translateX="944.0" />
+                <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css"
+                        text="%back"/>
+                <TextField fx:id="searchBoxDocent" promptText="%search" stylesheets="@css/application.css"
+                           translateX="944.0"/>
+                <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="%refresh"
+                        translateX="944.0"/>
             </ToolBar>
         </AnchorPane>
     </Tab>
     <Tab style="-fx-background-color: rgba(0,0,0,0.7); -fx-text-base-color: white;" text="%courses">
-        <AnchorPane fx:id="courseAnchor" maxWidth="1200.0" minHeight="0.0" minWidth="1200.0" prefHeight="600.0" prefWidth="1200.0">
+        <AnchorPane fx:id="courseAnchor" maxWidth="1200.0" minHeight="0.0" minWidth="1200.0" prefHeight="600.0"
+                    prefWidth="1200.0">
             <ToolBar prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
-                <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="%back" />
-                <TextField fx:id="searchBoxCourse" promptText="%search" stylesheets="@css/application.css" translateX="944.0" />
-                <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="%refresh" translateX="944.0" />
+                <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css"
+                        text="%back"/>
+                <TextField fx:id="searchBoxCourse" promptText="%search" stylesheets="@css/application.css"
+                           translateX="944.0"/>
+                <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="%refresh"
+                        translateX="944.0"/>
             </ToolBar>
-            <TableView fx:id="courseTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0" stylesheets="@css/application.css" tableMenuButtonVisible="true">
+            <TableView fx:id="courseTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0"
+                       stylesheets="@css/application.css" tableMenuButtonVisible="true">
                 <columns>
-                    <TableColumn fx:id="courseName" prefWidth="115.0" text="%name" />
-                    <TableColumn fx:id="courseType" prefWidth="120.0" text="%study_type" />
-                    <TableColumn fx:id="courseRoom" prefWidth="90.0" text="%room" />
-                    <TableColumn fx:id="courseDate" prefWidth="123.0" text="%registration_date" />
-                    <TableColumn fx:id="courseDocent" prefWidth="200.0" text="%director" />
-                    <TableColumn fx:id="courseC" editable="false" prefWidth="40.0" resizable="false" sortable="false" />
-                    <TableColumn fx:id="courseMail" editable="false" prefWidth="40.0" resizable="false" sortable="false" />
-                    <TableColumn fx:id="courseD" editable="false" prefWidth="520.0" resizable="false" sortable="false" />
+                    <TableColumn fx:id="courseName" prefWidth="115.0" text="%name"/>
+                    <TableColumn fx:id="courseType" prefWidth="120.0" text="%study_type"/>
+                    <TableColumn fx:id="courseRoom" prefWidth="90.0" text="%room"/>
+                    <TableColumn fx:id="courseDate" prefWidth="123.0" text="%registration_date"/>
+                    <TableColumn fx:id="courseDocent" prefWidth="200.0" text="%director"/>
+                    <TableColumn fx:id="courseC" editable="false" prefWidth="40.0" resizable="false" sortable="false"/>
+                    <TableColumn fx:id="courseMail" editable="false" prefWidth="40.0" resizable="false"
+                                 sortable="false"/>
+                    <TableColumn fx:id="courseD" editable="false" prefWidth="520.0" resizable="false" sortable="false"/>
                 </columns>
             </TableView>
         </AnchorPane>
     </Tab>
     <Tab style="-fx-background-color: rgba(0,0,0,0.5); -fx-text-base-color: white;" text="%companies">
         <AnchorPane fx:id="companyAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-            <TableView fx:id="companyTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0" stylesheets="@css/application.css" tableMenuButtonVisible="true">
+            <TableView fx:id="companyTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0"
+                       stylesheets="@css/application.css" tableMenuButtonVisible="true">
                 <columns>
-                    <TableColumn fx:id="companyName" prefWidth="200.0" text="%name" />
-                    <TableColumn fx:id="companyAddress" prefWidth="200.0" text="%address" />
-                    <TableColumn fx:id="companyPerson" prefWidth="250.0" text="%contact_person" />
-                    <TableColumn fx:id="companyC" editable="false" prefWidth="40.0" resizable="false" sortable="false" />
-                    <TableColumn fx:id="companyD" editable="false" prefWidth="558.0" resizable="false" sortable="false" />
+                    <TableColumn fx:id="companyName" prefWidth="200.0" text="%name"/>
+                    <TableColumn fx:id="companyAddress" prefWidth="200.0" text="%address"/>
+                    <TableColumn fx:id="companyPerson" prefWidth="250.0" text="%contact_person"/>
+                    <TableColumn fx:id="companyC" editable="false" prefWidth="40.0" resizable="false" sortable="false"/>
+                    <TableColumn fx:id="companyD" editable="false" prefWidth="558.0" resizable="false"
+                                 sortable="false"/>
                 </columns>
             </TableView>
             <ToolBar prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
-                <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="%back" />
-                <TextField fx:id="searchBoxCompany" promptText="%search" stylesheets="@css/application.css" translateX="944.0" />
-                <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="%refresh" translateX="944.0" />
+                <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css"
+                        text="%back"/>
+                <TextField fx:id="searchBoxCompany" promptText="%search" stylesheets="@css/application.css"
+                           translateX="944.0"/>
+                <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="%refresh"
+                        translateX="944.0"/>
             </ToolBar>
         </AnchorPane>
     </Tab>
     <Tab style="-fx-background-color: rgba(0,0,0,0.7); -fx-text-base-color: white;" text="%rooms">
         <AnchorPane fx:id="roomAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-            <TableView fx:id="roomTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0" stylesheets="@css/application.css" tableMenuButtonVisible="true">
+            <TableView fx:id="roomTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0"
+                       stylesheets="@css/application.css" tableMenuButtonVisible="true">
                 <columns>
-                    <TableColumn fx:id="roomName" prefWidth="117.0" text="%name" />
-                    <TableColumn fx:id="roomCampus" prefWidth="127.0" text="%campus" />
-                    <TableColumn fx:id="roomBuilding" prefWidth="100.0" text="%building" />
-                    <TableColumn fx:id="roomFloor" prefWidth="50.0" text="%floor" />
-                    <TableColumn fx:id="roomSeats" prefWidth="75.0" text="%seats" />
-                    <TableColumn fx:id="roomProjector" prefWidth="75.0" text="%projector" />
-                    <TableColumn fx:id="roomDocumentCamera" prefWidth="150.0" text="%documentCamera" />
-                    <TableColumn fx:id="roomLaboratory" prefWidth="70.0" text="%laboratory" />
-                    <TableColumn fx:id="roomC" editable="false" prefWidth="40.0" resizable="false" sortable="false" />
-                    <TableColumn fx:id="roomD" editable="false" prefWidth="40.0" resizable="false" sortable="false" />
+                    <TableColumn fx:id="roomName" prefWidth="117.0" text="%name"/>
+                    <TableColumn fx:id="roomCampus" prefWidth="127.0" text="%campus"/>
+                    <TableColumn fx:id="roomBuilding" prefWidth="100.0" text="%building"/>
+                    <TableColumn fx:id="roomFloor" prefWidth="50.0" text="%floor"/>
+                    <TableColumn fx:id="roomSeats" prefWidth="75.0" text="%seats"/>
+                    <TableColumn fx:id="roomProjector" prefWidth="75.0" text="%projector"/>
+                    <TableColumn fx:id="roomDocumentCamera" prefWidth="150.0" text="%documentCamera"/>
+                    <TableColumn fx:id="roomLaboratory" prefWidth="70.0" text="%laboratory"/>
+                    <TableColumn fx:id="roomC" editable="false" prefWidth="40.0" resizable="false" sortable="false"/>
+                    <TableColumn fx:id="roomD" editable="false" prefWidth="40.0" resizable="false" sortable="false"/>
                 </columns>
             </TableView>
             <ToolBar prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
-                <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="%back" />
-                <TextField fx:id="searchBoxRoom" promptText="%search" stylesheets="@css/application.css" translateX="670.0" />
-                <ComboBox fx:id="campusFilterBox" layoutX="400.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" stylesheets="@css/application.css" translateX="670.0" />
-                <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="%refresh" translateX="670.0" />
+                <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css"
+                        text="%back"/>
+                <TextField fx:id="searchBoxRoom" promptText="%search" stylesheets="@css/application.css"
+                           translateX="670.0"/>
+                <ComboBox fx:id="campusFilterBox" layoutX="400.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0"
+                          prefWidth="204.0" stylesheets="@css/application.css" translateX="670.0"/>
+                <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="%refresh"
+                        translateX="670.0"/>
             </ToolBar>
         </AnchorPane>
     </Tab>
