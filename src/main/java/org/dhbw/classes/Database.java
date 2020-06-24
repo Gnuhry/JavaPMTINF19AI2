@@ -357,13 +357,15 @@ public class Database {
      *
      * @param course course with the new data
      * @param old    course with the old data
-     * @return id if exists, Integer.Min_Value if not
      */
-    public static int updateCourse(Course course, Course old) {
-        if (course == null) return Integer.MIN_VALUE;
+    public static void updateCourse(Course course, Course old) {
+        if (course == null) return;
         int id = getCourseId(old);
-        if (id < 0 && (old == null || old.getRegistrationDate() == null)) return addCourse(course);
-        if (course == old) return id;
+        if (id < 0 && (old == null || old.getRegistrationDate() == null)) {
+            addCourse(course);
+            return;
+        }
+        if (course == old) return;
         if (id >= 0) {
             int room_id = updateRoom(course.getRoom(), old.getRoom());
             try {
@@ -377,14 +379,12 @@ public class Database {
                     statement.setInt(3, Integer.MIN_VALUE);
                 statement.setInt(4, id);
                 statement.execute();
-                return id;
             } catch (SQLException | ClassNotFoundException exception) {
                 exception.printStackTrace();
             } finally {
                 closeStatement();
             }
         }
-        return Integer.MIN_VALUE;
     }
 
     /**

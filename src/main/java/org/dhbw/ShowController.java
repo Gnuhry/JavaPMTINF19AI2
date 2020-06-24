@@ -25,7 +25,10 @@ import org.dhbw.classes.*;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.ResourceBundle;
 
 public class ShowController extends Application implements Initializable {
     private final ObservableList<DualStudent> students = FXCollections.observableArrayList(
@@ -200,7 +203,6 @@ public class ShowController extends Application implements Initializable {
             }
         });
         studentBirth.setCellValueFactory(new PropertyValueFactory<>("birthday"));
-//        studentEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         studentEmail.setCellFactory(dualStudentVoidTableColumn -> {
             TableCell<DualStudent, String> cell = new TableCell<>() {
                 @Override
@@ -268,7 +270,20 @@ public class ShowController extends Application implements Initializable {
         lectureBirth.setCellValueFactory(new PropertyValueFactory<>("birthday"));
         lectureEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         lectureAddress.setCellValueFactory(new PropertyValueFactory<>("Address"));
-        lectureEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        lectureEmail.setCellFactory(lectureVoidTableColumn -> {
+            TableCell<Docent, String> cell = new TableCell<>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty ? null : item);
+                }
+            };
+            cell.setOnMouseClicked(e -> {
+                if (!cell.isEmpty())
+                    getHostServices().showDocument("mailto:" + cell.getTableView().getItems().get(cell.getIndex()).getEmail());
+            });
+            return cell;
+        });
         lectureC.setCellFactory(getCallback(FileType.editDocents));
         lectureD.setCellFactory(getCallback(FileType.delete));
 
@@ -323,7 +338,6 @@ public class ShowController extends Application implements Initializable {
                                 StringBuilder sb = new StringBuilder("mailto:");
                                 String[] mails = University.getAllEmailFromCourse(getTableView().getItems().get(getIndex()));
                                 if (mails == null) return;
-                                System.out.println(Arrays.toString(mails));
                                 for (String s : mails)
                                     sb.append(s).append(", ");
                                 getHostServices().showDocument(sb.toString().substring(0, sb.toString().length() - 2));
@@ -429,6 +443,12 @@ public class ShowController extends Application implements Initializable {
         });
     }
 
+    /**
+     * add the delete key to delete rows
+     *
+     * @param anchorPane controller to bind the key
+     * @param table      row to delete
+     */
     public void addDeleteKey(AnchorPane anchorPane, TableView<?> table) {
         anchorPane.setOnKeyPressed(keyEvent -> {
             final List<?> selectedItem = table.getSelectionModel().getSelectedItems();
