@@ -1,11 +1,18 @@
 package org.dhbw.classes;
 
+import javafx.event.EventHandler;
 import javafx.scene.control.Control;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -187,13 +194,49 @@ public class Help {
      * @param datePicker the datepicker to add teh Listener
      */
     public static void addKeyEventDatePicker(DatePicker datePicker) {
-        datePicker.setOnKeyReleased(keyEvent -> {
-            String text = datePicker.getEditor().getText();
-            if (text.length() < 10 || text.split("\\.").length != 3) return;
-            try {
-                Date date = format.parse(text);
-                datePicker.setValue(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-            } catch (ParseException ignored) {
+//        datePicker.setOnKeyReleased(keyEvent -> {
+//            String text = datePicker.getEditor().getText();
+//            if (text.length() < 10 || text.split("\\.").length != 3) return;
+//            try {
+//                Date date = format.parse(text);
+//                datePicker.setValue(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+//            } catch (ParseException ignored) {
+//            }
+//        });
+
+        datePicker.addEventFilter(KeyEvent.ANY, new EventHandler<>() {
+            private boolean willConsume = false;
+
+            @Override
+            public void handle(KeyEvent event) {
+                if (willConsume)
+                    event.consume();
+
+                if (event.isControlDown()) {
+                    if (event.getEventType() == KeyEvent.KEY_PRESSED)
+                        if (event.getCode() == KeyCode.V)
+                            try {
+                                String s = Clipboard.getSystemClipboard().getString();
+                                format.parse(s);
+                                datePicker.getEditor().setText(s);
+                            } catch (ParseException ignored) {
+                            } finally {
+                                event.consume();
+                            }
+                } else if (!event.getCode().isNavigationKey() && !event.getCode().isDigitKey() && !(event.getCode() == KeyCode.PERIOD) && !(event.getCode() == KeyCode.TAB) && !(event.getCode() == KeyCode.DELETE) && !(event.getCode() == KeyCode.BACK_SPACE)) {
+                    if (event.getEventType() == KeyEvent.KEY_PRESSED)
+                        willConsume = true;
+                    else if (event.getEventType() == KeyEvent.KEY_RELEASED)
+                        willConsume = false;
+                } else if (event.getEventType() == KeyEvent.KEY_RELEASED) {
+                    String text = datePicker.getEditor().getText();
+                    if (text.length() < 10 || text.split("\\.").length != 3) return;
+                    try {
+                        Date date = format.parse(text);
+                        datePicker.setValue(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+                    } catch (ParseException ignored) {
+                    }
+                }
             }
         });
     }
@@ -292,6 +335,7 @@ public class Help {
     }
 
     //------------------------------settings---------------------------------
+
     /**
      * read settings file and set location
      */
