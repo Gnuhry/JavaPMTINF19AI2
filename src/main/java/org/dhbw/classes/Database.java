@@ -1012,7 +1012,7 @@ public class Database {
             while (resultSet.next()) {
                 Person person =
                         new Person(resultSet.getString("last_name"),
-                                resultSet.getString("fore_name"),
+                                resultSet.getString("first_name"),
                                 resultSet.getString("email"));
 //                int id = persons.indexOf(person);
 //                if (id >= 0)
