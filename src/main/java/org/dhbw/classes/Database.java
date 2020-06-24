@@ -1231,6 +1231,7 @@ public class Database {
             statement.setString(2, room.getBuilding());
             statement.setString(3, room.getFloor());
             statement.setInt(4, getCampusID(room.getCampus()));
+            System.out.println(statement);
             resultSet = statement.executeQuery();
             if (resultSet.next())
                 return resultSet.getInt(1);
@@ -1327,10 +1328,12 @@ public class Database {
      * @return Integer.MinValue if course not exist. id if exists
      */
     private static int getCampusID(Campus campus) {
+        System.out.println(campus);
+        if (campus == null) return Integer.MIN_VALUE;
         Campus[] campuses = Campus.values();
         for (int f = 0; f < campuses.length; f++)
-            if (campuses[f].equals(campus))
-                return f;
+            if (campuses[f].toString().equals(campus.toString()))
+                return f + 1;
         return Integer.MIN_VALUE;
     }
 
@@ -1341,7 +1344,8 @@ public class Database {
      * @return campus if exists, null if not
      */
     private static Campus getCampusById(int id) {
-        return id <= 0 || id >= Campus.values().length ? null : Campus.values()[id];
+        id--;
+        return id < 0 || id >= Campus.values().length ? null : Campus.values()[id];
     }
 
     /**
