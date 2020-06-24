@@ -31,22 +31,22 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class ShowController extends Application implements Initializable {
-    private final ObservableList<DualStudent> students = FXCollections.observableArrayList(
+    private ObservableList<DualStudent> students = FXCollections.observableArrayList(
             University.getStudents()
     );
-    private final ObservableList<Docent> docents = FXCollections.observableArrayList(
+    private ObservableList<Docent> docents = FXCollections.observableArrayList(
             University.getDocents()
     );
-    private final ObservableList<Course> courses = FXCollections.observableArrayList(
+    private ObservableList<Course> courses = FXCollections.observableArrayList(
             University.getCourses()
     );
-    private final ObservableList<Company> companies = FXCollections.observableArrayList(
+    private ObservableList<Company> companies = FXCollections.observableArrayList(
             University.getCompanies()
     );
-    private final ObservableList<CourseRoom> rooms = FXCollections.observableArrayList(
+    private ObservableList<CourseRoom> rooms = FXCollections.observableArrayList(
             University.getRooms()
     );
-    private final ObservableList<Campus> campuses = FXCollections.observableArrayList(
+    private ObservableList<Campus> campuses = FXCollections.observableArrayList(
             Campus.values()
     );
 
@@ -158,16 +158,16 @@ public class ShowController extends Application implements Initializable {
      */
     @FXML
     public void refresh() {
-        studentTable.setItems(FXCollections.observableArrayList(University.getStudents()));
-        studentTable.refresh();
-        lectureTable.setItems(FXCollections.observableArrayList(University.getDocents()));
-        lectureTable.refresh();
-        courseTable.setItems(FXCollections.observableArrayList(University.getCourses()));
-        courseTable.refresh();
-        companyTable.setItems(FXCollections.observableArrayList(University.getCompanies()));
-        companyTable.refresh();
-        roomTable.setItems(FXCollections.observableArrayList(University.getRooms()));
-        roomTable.refresh();
+        students.clear();
+        students.addAll( University.getStudents());
+        docents.clear();
+        docents.addAll( University.getDocents());
+        courses.clear();
+        courses.addAll( University.getCourses());
+        companies.clear();
+        companies.addAll( University.getCompanies());
+        rooms.clear();
+        rooms.addAll( University.getRooms());
     }
 
     /**
@@ -225,7 +225,6 @@ public class ShowController extends Application implements Initializable {
         studentJava.setCellValueFactory(new PropertyValueFactory<>("javaKnowledge"));
         studentC.setCellFactory(getCallback(FileType.editStudents));
         studentD.setCellFactory(getCallback(FileType.delete));
-        studentTable.setItems(students);
         studentTable.requestFocus();
 
         List<Course> courseList = new ArrayList<>();
@@ -287,7 +286,6 @@ public class ShowController extends Application implements Initializable {
         lectureC.setCellFactory(getCallback(FileType.editDocents));
         lectureD.setCellFactory(getCallback(FileType.delete));
 
-        lectureTable.setItems(docents);
         lectureTable.setContextMenu(refreshMenu);
         lectureTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
@@ -349,7 +347,6 @@ public class ShowController extends Application implements Initializable {
                 };
             }
         });
-        courseTable.setItems(courses);
         courseTable.setContextMenu(refreshMenu);
         courseTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
@@ -362,7 +359,7 @@ public class ShowController extends Application implements Initializable {
                 return true;
             }
             String lowerCaseFilter = newValue.toLowerCase();
-            return (course.getName().toLowerCase().contains(lowerCaseFilter)) || (course.getStudyCourse().toString().toLowerCase().contains(lowerCaseFilter));
+            return course.getName().toLowerCase().contains(lowerCaseFilter) || course.getStudyCourse().toString().toLowerCase().contains(lowerCaseFilter);
         }));
         SortedList<Course> sortedCourses = new SortedList<>(filteredCourse2);
         sortedCourses.comparatorProperty().bind(courseTable.comparatorProperty());
@@ -373,7 +370,6 @@ public class ShowController extends Application implements Initializable {
         companyPerson.setCellValueFactory(new PropertyValueFactory<>("contactPerson"));
         companyC.setCellFactory(getCallback(FileType.editCompany));
         companyD.setCellFactory(getCallback(FileType.delete));
-        courseTable.setItems(courses);
 
         FilteredList<Company> filteredCompany2 = new FilteredList<>(companies, p -> true);
         searchBoxCompany.textProperty().addListener((observable, oldValue, newValue) -> filteredCompany2.setPredicate(company -> {
@@ -402,7 +398,6 @@ public class ShowController extends Application implements Initializable {
         roomLaboratory.setCellValueFactory(new PropertyValueFactory<>("laboratory"));
         roomC.setCellFactory(getCallback(FileType.editRoom));
         roomD.setCellFactory(getCallback(FileType.delete));
-        roomTable.setItems(rooms);
 
         List<String> campusList = new ArrayList<>();
         campusList.add(Help.getRessourceBundle().getString("all_campus"));
