@@ -43,22 +43,22 @@
         </AnchorPane>
     </Tab>
     <Tab style="-fx-background-color: rgba(0,0,0,0.5); -fx-text-base-color: white;" text="%docents">
-        <AnchorPane fx:id="lectureAnchor" maxWidth="1200.0" minHeight="0.0" minWidth="1200.0" prefHeight="600.0" prefWidth="1200.0">
-            <TableView fx:id="lectureTable" layoutY="50.0" prefHeight="521.0" prefWidth="1250.0" stylesheets="@css/application.css" tableMenuButtonVisible="true">
+        <AnchorPane fx:id="docentAnchor" maxWidth="1200.0" minHeight="0.0" minWidth="1200.0" prefHeight="600.0" prefWidth="1200.0">
+            <TableView fx:id="docentTable" layoutY="50.0" prefHeight="521.0" prefWidth="1250.0" stylesheets="@css/application.css" tableMenuButtonVisible="true">
                 <columns>
-                    <TableColumn fx:id="lectureNumber" prefWidth="75.0" text="%id" />
-                    <TableColumn fx:id="lectureFirstName" prefWidth="75.0" text="%forename" />
-                    <TableColumn fx:id="lectureLastName" prefWidth="75.0" text="%last_name" />
-                    <TableColumn fx:id="lectureBirth" prefWidth="75.0" text="%birthday" />
-                    <TableColumn fx:id="lectureEmail" prefWidth="150.0" text="%email" />
-                    <TableColumn fx:id="lectureAddress" prefWidth="200.0" text="%address" />
-                    <TableColumn fx:id="lectureC" editable="false" prefWidth="40.0" resizable="false" sortable="false" />
-                    <TableColumn fx:id="lectureD" editable="false" prefWidth="558.0" resizable="false" sortable="false" />
+                    <TableColumn fx:id="docentNumber" prefWidth="75.0" text="%id" />
+                    <TableColumn fx:id="docentFirstName" prefWidth="75.0" text="%forename" />
+                    <TableColumn fx:id="docentLastName" prefWidth="75.0" text="%last_name" />
+                    <TableColumn fx:id="docentBirth" prefWidth="75.0" text="%birthday" />
+                    <TableColumn fx:id="docentEmail" prefWidth="150.0" text="%email" />
+                    <TableColumn fx:id="docentAddress" prefWidth="200.0" text="%address" />
+                    <TableColumn fx:id="docentC" editable="false" prefWidth="40.0" resizable="false" sortable="false" />
+                    <TableColumn fx:id="docentD" editable="false" prefWidth="558.0" resizable="false" sortable="false" />
                 </columns>
             </TableView>
             <ToolBar prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
                 <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="%back" />
-                <TextField fx:id="searchBoxLecture" promptText="%search" stylesheets="@css/application.css" translateX="944.0" />
+                <TextField fx:id="searchBoxDocent" promptText="%search" stylesheets="@css/application.css" translateX="944.0" />
                 <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="%refresh" translateX="944.0" />
             </ToolBar>
         </AnchorPane>
@@ -76,7 +76,7 @@
                     <TableColumn fx:id="courseType" prefWidth="120.0" text="%study_type" />
                     <TableColumn fx:id="courseRoom" prefWidth="90.0" text="%room" />
                     <TableColumn fx:id="courseDate" prefWidth="123.0" text="%registration_date" />
-                    <TableColumn fx:id="courseLecture" prefWidth="200.0" text="%director" />
+                    <TableColumn fx:id="courseDocent" prefWidth="200.0" text="%director" />
                     <TableColumn fx:id="courseC" editable="false" prefWidth="40.0" resizable="false" sortable="false" />
                     <TableColumn fx:id="courseMail" editable="false" prefWidth="40.0" resizable="false" sortable="false" />
                     <TableColumn fx:id="courseD" editable="false" prefWidth="520.0" resizable="false" sortable="false" />
@@ -102,7 +102,7 @@
             </ToolBar>
         </AnchorPane>
     </Tab>
-    <Tab style="-fx-background-color: rgba(0,0,0,0.5); -fx-text-base-color: white;" text="%rooms">
+    <Tab style="-fx-background-color: rgba(0,0,0,0.7); -fx-text-base-color: white;" text="%rooms">
         <AnchorPane fx:id="roomAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
             <TableView fx:id="roomTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0" stylesheets="@css/application.css" tableMenuButtonVisible="true">
                 <columns>

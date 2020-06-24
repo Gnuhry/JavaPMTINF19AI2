@@ -229,6 +229,14 @@ public class StudentController {
     }
 
     /**
+     * set email student to standard
+     */
+    @FXML
+    private void setStudentEmail() {
+        studentEmail.setText(studentNumberField.getText() + Help.email_end_student);
+    }
+
+    /**
      * reading the textfield
      * checking validation of textfield and mark wrong entries
      * adding or editing the student to the database

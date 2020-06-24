@@ -28,6 +28,9 @@ public class Help {
 
     public static final String styleRight = "-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)";
     public static final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+    private static final String[] supportedLanguage = new String[]{"de", "en"};
+
+    public static final String email_end_student="@student.dhbw-mannheim.de", email_end_docent="@docent.dhbw-mannheim.de";
 
     private static Locale locale;
 
@@ -59,7 +62,7 @@ public class Help {
      * validate if date is after birth date
      *
      * @param date the date to validate
-     * @param p    the person with the birth date to cpmpare
+     * @param p    the person with the birth date to compare
      * @return {true} if date is before birth date, {false} if after or equal birth date
      */
     public static boolean validateAfterBirthday(Date date, Person p) {
@@ -317,14 +320,16 @@ public class Help {
     }
 
     /**
-     * toggle the language between de und en
+     * toggle the languages
      */
     public static void toggleLocal() {
-        if (locale.getLanguage().equals("de"))
-            locale = new Locale("en");
-        else
-            locale = new Locale("de");
-        setLanguageSetting();
+        for (int f = 0; f < supportedLanguage.length; f++) {
+            if (supportedLanguage[f].equals(locale.getLanguage())) {
+                locale = new Locale(supportedLanguage[(f + 1)%supportedLanguage.length]);
+                setLanguageSetting();
+                return;
+            }
+        }
     }
 
     //-------------------------Getter------------------------

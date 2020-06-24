@@ -92,6 +92,14 @@ public class DocentController {
     }
 
     /**
+     * set email docent to standard
+     */
+    @FXML
+    private void setDocentEmail() {
+        docentEmail.setText(docentNumberField.getText() + Help.email_end_docent);
+    }
+
+    /**
      * reading the textfield
      * checking validation of textfield and mark wrong entries
      * adding or editing the docent to the database

@@ -41,9 +41,10 @@
             <Label prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="%birthday" />
             <DatePicker fx:id="docentBirth" promptText="dd.mm.yyyy" stylesheets="@css/application.css" />
         </HBox>
-        <HBox spacing="170.0">
-            <Label prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="%email" />
-            <TextField fx:id="docentEmail" prefWidth="250.0" stylesheets="@css/application.css" />
+        <HBox spacing="100.0">
+            <Label prefHeight="25.6" prefWidth="95.0" stylesheets="@css/application.css" text="%email" />
+            <TextField fx:id="docentEmail" prefWidth="250.0" stylesheets="@css/application.css" translateX="75.0"/>
+            <Button mnemonicParsing="false" onAction="#setDocentEmail" stylesheets="@css/application.css" text="%set_to_uni_email" />
         </HBox>
         <HBox spacing="30.0">
             <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="%street_and_number" />

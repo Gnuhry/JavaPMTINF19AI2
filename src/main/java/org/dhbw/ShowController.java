@@ -58,9 +58,9 @@ public class ShowController extends Application implements Initializable {
     private final Course allCourse = new Course(Help.getRessourceBundle().getString("all_course"), null, null);
 
     @FXML
-    private AnchorPane studentAnchor, lectureAnchor, courseAnchor, companyAnchor, roomAnchor;
+    private AnchorPane studentAnchor, docentAnchor, courseAnchor, companyAnchor, roomAnchor;
     @FXML
-    private TextField searchBox, searchBoxLecture, searchBoxCourse, searchBoxCompany, searchBoxRoom;
+    private TextField searchBox, searchBoxDocent, searchBoxCourse, searchBoxCompany, searchBoxRoom;
     @FXML
     private ComboBox<Course> courseFilterBox;
     @FXML
@@ -85,17 +85,17 @@ public class ShowController extends Application implements Initializable {
     private TableColumn<DualStudent, Void> studentC, studentD;
 
     @FXML
-    private TableView<Docent> lectureTable;
+    private TableView<Docent> docentTable;
     @FXML
-    private TableColumn<Docent, Integer> lectureNumber;
+    private TableColumn<Docent, Integer> docentNumber;
     @FXML
-    private TableColumn<Docent, String> lectureFirstName, lectureLastName, lectureEmail;
+    private TableColumn<Docent, String> docentFirstName, docentLastName, docentEmail;
     @FXML
-    private TableColumn<Docent, Date> lectureBirth;
+    private TableColumn<Docent, Date> docentBirth;
     @FXML
-    private TableColumn<Docent, Address> lectureAddress;
+    private TableColumn<Docent, Address> docentAddress;
     @FXML
-    private TableColumn<Docent, Void> lectureC, lectureD;
+    private TableColumn<Docent, Void> docentC, docentD;
 
     @FXML
     private TableView<Course> courseTable;
@@ -108,7 +108,7 @@ public class ShowController extends Application implements Initializable {
     @FXML
     private TableColumn<Course, Date> courseDate;
     @FXML
-    private TableColumn<Course, Docent> courseLecture;
+    private TableColumn<Course, Docent> courseDocent;
     @FXML
     private TableColumn<Course, Void> courseC, courseD, courseMail;
 
@@ -254,10 +254,10 @@ public class ShowController extends Application implements Initializable {
         );
         addDeleteKey(studentAnchor, studentTable);
 
-        lectureNumber.setCellValueFactory(new PropertyValueFactory<>("docentNumber"));
-        lectureLastName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        lectureFirstName.setCellValueFactory(new PropertyValueFactory<>("forename"));
-        lectureBirth.setCellFactory(column -> new TableCell<>() {
+        docentNumber.setCellValueFactory(new PropertyValueFactory<>("docentNumber"));
+        docentLastName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        docentFirstName.setCellValueFactory(new PropertyValueFactory<>("forename"));
+        docentBirth.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(Date date, boolean b) {
                 super.updateItem(date, b);
@@ -267,10 +267,10 @@ public class ShowController extends Application implements Initializable {
                     this.setText(format.format(date));
             }
         });
-        lectureBirth.setCellValueFactory(new PropertyValueFactory<>("birthday"));
-        lectureEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        lectureAddress.setCellValueFactory(new PropertyValueFactory<>("Address"));
-        lectureEmail.setCellFactory(lectureVoidTableColumn -> {
+        docentBirth.setCellValueFactory(new PropertyValueFactory<>("birthday"));
+        docentEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        docentAddress.setCellValueFactory(new PropertyValueFactory<>("Address"));
+        docentEmail.setCellFactory(lectureVoidTableColumn -> {
             TableCell<Docent, String> cell = new TableCell<>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
@@ -284,25 +284,25 @@ public class ShowController extends Application implements Initializable {
             });
             return cell;
         });
-        lectureC.setCellFactory(getCallback(FileType.editDocents));
-        lectureD.setCellFactory(getCallback(FileType.delete));
+        docentC.setCellFactory(getCallback(FileType.editDocents));
+        docentD.setCellFactory(getCallback(FileType.delete));
 
-        lectureTable.setContextMenu(refreshMenu);
-        lectureTable.getSelectionModel().setSelectionMode(
+        docentTable.setContextMenu(refreshMenu);
+        docentTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addDeleteKey(lectureAnchor, lectureTable);
+        addDeleteKey(docentAnchor, docentTable);
 
         FilteredList<Docent> filteredLecture = new FilteredList<>(docents, p -> true);
-        searchBoxLecture.textProperty().addListener((observable, oldValue, newValue) -> filteredLecture.setPredicate(person -> {
+        searchBoxDocent.textProperty().addListener((observable, oldValue, newValue) -> filteredLecture.setPredicate(person -> {
             if (newValue == null || newValue.isEmpty())
                 return true;
             String lowerCaseFilter = newValue.toLowerCase();
             return person.getForename().toLowerCase().contains(lowerCaseFilter) || (person.getName().toLowerCase().contains(lowerCaseFilter) || String.valueOf(person.getDocentNumber()).toLowerCase().contains(lowerCaseFilter));
         }));
         SortedList<Docent> sortedLecture = new SortedList<>(filteredLecture);
-        sortedLecture.comparatorProperty().bind(lectureTable.comparatorProperty());
-        lectureTable.setItems(sortedLecture);
+        sortedLecture.comparatorProperty().bind(docentTable.comparatorProperty());
+        docentTable.setItems(sortedLecture);
 
         courseName.setCellValueFactory(new PropertyValueFactory<>("name"));
         courseType.setCellValueFactory(new PropertyValueFactory<>("studyCourse"));
@@ -318,7 +318,7 @@ public class ShowController extends Application implements Initializable {
             }
         });
         courseDate.setCellValueFactory(new PropertyValueFactory<>("registrationDate"));
-        courseLecture.setCellValueFactory(new PropertyValueFactory<>("studyDirector"));
+        courseDocent.setCellValueFactory(new PropertyValueFactory<>("studyDirector"));
         courseC.setCellFactory(getCallback(FileType.editCourse));
         courseD.setCellFactory(getCallback(FileType.delete));
         courseMail.setCellFactory(new Callback<>() {
