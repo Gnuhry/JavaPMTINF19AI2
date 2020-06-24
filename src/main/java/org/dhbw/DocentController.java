@@ -96,7 +96,7 @@ public class DocentController {
      */
     @FXML
     private void setDocentEmail() {
-        docentEmail.setText(docentNumberField.getText() + Help.email_end_docent);
+        docentEmail.setText(Help.getDocentUniversityEmail(docent_old));
     }
 
     /**

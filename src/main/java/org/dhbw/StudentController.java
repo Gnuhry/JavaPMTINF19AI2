@@ -233,7 +233,7 @@ public class StudentController {
      */
     @FXML
     private void setStudentEmail() {
-        studentEmail.setText(studentNumberField.getText() + Help.email_end_student);
+        studentEmail.setText(Help.getStudentUniversityEmail(student_old));
     }
 
     /**

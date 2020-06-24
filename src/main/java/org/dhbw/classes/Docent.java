@@ -10,6 +10,10 @@ public class Docent extends Person implements Comparable<Person>{
         super(name, forename, birthday, address, email);
         this.docentNumber = docentNumber;
     }
+    public Docent(Docent docent) {
+        super(docent);
+        this.docentNumber = docent.docentNumber;
+    }
 
     //----------------------Getter--------------------------------
     public int getDocentNumber() {

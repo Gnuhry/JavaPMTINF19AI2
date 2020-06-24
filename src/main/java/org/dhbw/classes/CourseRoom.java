@@ -29,6 +29,17 @@ public class CourseRoom implements Comparable<CourseRoom> {
         projector = documentCamera = laboratory = false;
     }
 
+    public CourseRoom(CourseRoom room) {
+        this.name = room.name;
+        this.campus = room.campus;
+        this.building = room.building;
+        this.floor = room.floor;
+        this.seats = room.seats;
+        this.projector = room.projector;
+        this.documentCamera = room.documentCamera;
+        this.laboratory = room.laboratory;
+    }
+
     //------------------Getter-----------------------
     public String getName() {
         return name;

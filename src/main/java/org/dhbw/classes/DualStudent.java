@@ -20,6 +20,14 @@ public class DualStudent extends Person implements Comparable<Person> {
         this.company = company;
     }
 
+    public DualStudent(DualStudent ds) {
+        super(ds);
+        this.company = ds.company;
+        this.matriculationNumber = ds.matriculationNumber;
+        this.studentNumber = ds.studentNumber;
+        this.course = ds.course;
+        this.javaKnowledge = ds.javaKnowledge;
+    }
 
     //--------------------------Setter------------------------
     public void setCourse(Course course) {

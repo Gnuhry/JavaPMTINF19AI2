@@ -252,7 +252,7 @@ public class ShowController extends Application implements Initializable {
         studentTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addDeleteKey(studentAnchor, studentTable);
+        addDeleteKey(studentAnchor, studentTable, true);
 
         docentNumber.setCellValueFactory(new PropertyValueFactory<>("docentNumber"));
         docentLastName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -291,7 +291,7 @@ public class ShowController extends Application implements Initializable {
         docentTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addDeleteKey(docentAnchor, docentTable);
+        addDeleteKey(docentAnchor, docentTable, true);
 
         FilteredList<Docent> filteredLecture = new FilteredList<>(docents, p -> true);
         searchBoxDocent.textProperty().addListener((observable, oldValue, newValue) -> filteredLecture.setPredicate(person -> {
@@ -352,7 +352,7 @@ public class ShowController extends Application implements Initializable {
         courseTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addDeleteKey(courseAnchor, courseTable);
+        addDeleteKey(courseAnchor, courseTable, false);
 
         FilteredList<Course> filteredCourse2 = new FilteredList<>(courses, p -> true);
         searchBoxCourse.textProperty().addListener((observable, oldValue, newValue) -> filteredCourse2.setPredicate(course -> {
@@ -387,7 +387,7 @@ public class ShowController extends Application implements Initializable {
         companyTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addDeleteKey(companyAnchor, companyTable);
+        addDeleteKey(companyAnchor, companyTable, false);
 
         roomName.setCellValueFactory(new PropertyValueFactory<>("name"));
         roomCampus.setCellValueFactory(new PropertyValueFactory<>("campus"));
@@ -416,7 +416,7 @@ public class ShowController extends Application implements Initializable {
         roomTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addDeleteKey(roomAnchor, roomTable);
+        addDeleteKey(roomAnchor, roomTable, false);
     }
 
     /**
@@ -445,10 +445,11 @@ public class ShowController extends Application implements Initializable {
      * @param anchorPane controller to bind the key
      * @param table      row to delete
      */
-    public void addDeleteKey(AnchorPane anchorPane, TableView<?> table) {
+    public void addDeleteKey(AnchorPane anchorPane, TableView<?> table, boolean u) {
+        if(u){
         anchorPane.setOnKeyPressed(keyEvent -> {
             final List<?> selectedItem = table.getSelectionModel().getSelectedItems();
-            if (selectedItem != null)
+            if (selectedItem != null){
                 if (keyEvent.getCode().equals(KeyCode.DELETE))
                     try {
                         this.file = FileType.delete;
@@ -457,7 +458,41 @@ public class ShowController extends Application implements Initializable {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                else if (keyEvent.getCode().equals(KeyCode.U) && keyEvent.isControlDown())
+                    try {
+                        System.out.println("Test");
+                        for(Object o : selectedItem){
+                            if(o instanceof DualStudent){
+                                DualStudent d=new DualStudent((DualStudent)o);
+                                d.setEmail(Help.getStudentUniversityEmail(d));
+                                Database.updateStudent(d, (DualStudent)o);
+                            }
+                            else if(o instanceof Docent){
+                                Docent d=new Docent((Docent)o);
+                                d.setEmail(Help.getDocentUniversityEmail(d));
+                                Database.updateDocent(d, (Docent) o);
+                            }
+                        }
+                        refresh();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+            }
         });
+        }        else{
+            anchorPane.setOnKeyPressed(keyEvent -> {
+                final List<?> selectedItem = table.getSelectionModel().getSelectedItems();
+                if (selectedItem != null)
+                    if (keyEvent.getCode().equals(KeyCode.DELETE))
+                        try {
+                            this.file = FileType.delete;
+                            this.object = new ArrayList<>(selectedItem);
+                            start(new Stage());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+            });
+        }
     }
 
     /**

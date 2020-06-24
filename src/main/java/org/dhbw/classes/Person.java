@@ -23,6 +23,13 @@ public class Person implements Comparable<Person> {
         this.address = address;
         this.email = email;
     }
+    public Person(Person person) {
+        this.name = person.name;
+        this.forename = person.forename;
+        this.birthday = new Date(person.birthday.getTime());
+        this.address = new Address(person.address);
+        this.email = person.email;
+    }
 
     //-----------------------------------Getter-------------------------------------------
     public String getName() {

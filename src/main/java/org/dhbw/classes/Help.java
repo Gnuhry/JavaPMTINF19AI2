@@ -30,7 +30,7 @@ public class Help {
     public static final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
     private static final String[] supportedLanguage = new String[]{"de", "en"};
 
-    public static final String email_end_student="@student.dhbw-mannheim.de", email_end_docent="@docent.dhbw-mannheim.de";
+    private static final String email_end_student="@student.dhbw-mannheim.de", email_end_docent="@docent.dhbw-mannheim.de";
 
     private static Locale locale;
 
@@ -330,6 +330,24 @@ public class Help {
                 return;
             }
         }
+    }
+
+    /**
+     * get the union student university email
+     * @param student student who's email to return
+     * @return conform email
+     */
+    public static String getStudentUniversityEmail(DualStudent student){
+        return "s"+student.getStudentNumber()+email_end_student;
+    }
+
+    /**
+     * get the union docent university email
+     * @param docent docent who's email to return
+     * @return conform email
+     */
+    public static String getDocentUniversityEmail(Docent docent){
+        return "d"+docent.getDocentNumber()+email_end_docent;
     }
 
     //-------------------------Getter------------------------

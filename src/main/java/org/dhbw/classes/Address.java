@@ -18,6 +18,14 @@ public class Address implements Comparable<Address> {
         this.country = country;
     }
 
+    public Address(Address address) {
+        this.street = address.street;
+        this.number = address.number;
+        this.postcode = address.postcode;
+        this.city = address.city;
+        this.country = address.country;
+    }
+
     //-----------------------------------------Getter------------------------------------------------
     public String getStreet() {
         return street;

@@ -13,6 +13,12 @@ public class Company implements Comparable<Company>{
         this.contactPerson = contactPerson;
     }
 
+    public Company(Company company) {
+        this.name = company.name;
+        this.address = new Address(company.address);
+        this.contactPerson = new Person(company.contactPerson);
+    }
+
     //-----------------------Getter-------------------------------
     public String getName() {
         return name;
