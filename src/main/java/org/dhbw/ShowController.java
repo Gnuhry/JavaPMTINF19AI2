@@ -2,7 +2,6 @@ package org.dhbw;
 
 import javafx.application.Application;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -33,22 +32,22 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class ShowController extends Application implements Initializable {
-    private ObservableList<DualStudent> students = FXCollections.observableArrayList(
+    private final ObservableList<DualStudent> students = FXCollections.observableArrayList(
             University.getStudents()
     );
-    private ObservableList<Docent> docents = FXCollections.observableArrayList(
+    private final ObservableList<Docent> docents = FXCollections.observableArrayList(
             University.getDocents()
     );
-    private ObservableList<Course> courses = FXCollections.observableArrayList(
+    private final ObservableList<Course> courses = FXCollections.observableArrayList(
             University.getCourses()
     );
-    private ObservableList<Company> companies = FXCollections.observableArrayList(
+    private final ObservableList<Company> companies = FXCollections.observableArrayList(
             University.getCompanies()
     );
-    private ObservableList<CourseRoom> rooms = FXCollections.observableArrayList(
+    private final ObservableList<CourseRoom> rooms = FXCollections.observableArrayList(
             University.getRooms()
     );
-    private ObservableList<Campus> campuses = FXCollections.observableArrayList(
+    private final ObservableList<Campus> campuses = FXCollections.observableArrayList(
             Campus.values()
     );
 
@@ -161,15 +160,15 @@ public class ShowController extends Application implements Initializable {
     @FXML
     public void refresh() {
         students.clear();
-        students.addAll( University.getStudents());
+        students.addAll(University.getStudents());
         docents.clear();
-        docents.addAll( University.getDocents());
+        docents.addAll(University.getDocents());
         courses.clear();
-        courses.addAll( University.getCourses());
+        courses.addAll(University.getCourses());
         companies.clear();
-        companies.addAll( University.getCompanies());
+        companies.addAll(University.getCompanies());
         rooms.clear();
-        rooms.addAll( University.getRooms());
+        rooms.addAll(University.getRooms());
     }
 
     /**
@@ -395,27 +394,9 @@ public class ShowController extends Application implements Initializable {
         roomBuilding.setCellValueFactory(new PropertyValueFactory<>("building"));
         roomFloor.setCellValueFactory(new PropertyValueFactory<>("floor"));
         roomSeats.setCellValueFactory(new PropertyValueFactory<>("seats"));
-        roomProjector.setCellValueFactory(cellData -> {
-            boolean projector = cellData.getValue().getProjector();
-            String printBoolean;
-            if(projector) printBoolean = "\u2713";
-            else printBoolean = "\u274c";
-            return new ReadOnlyStringWrapper(printBoolean);
-        });
-        roomDocumentCamera.setCellValueFactory(cellData -> {
-            boolean camera = cellData.getValue().getCamera();
-            String printBoolean;
-            if(camera) printBoolean = "\u2713";
-            else printBoolean = "\u274c";
-            return new ReadOnlyStringWrapper(printBoolean);
-        });
-        roomLaboratory.setCellValueFactory(cellData -> {
-            boolean lab = cellData.getValue().getLaboratory();
-            String printBoolean;
-            if(lab) printBoolean = "\u2713";
-            else printBoolean = "\u274c";
-            return new ReadOnlyStringWrapper(printBoolean);
-        });
+        roomProjector.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getProjector() ? "\u2713" : "\u274c"));
+        roomDocumentCamera.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getCamera() ? "\u2713" : "\u274c"));
+        roomLaboratory.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getLaboratory() ? "\u2713" : "\u274c"));
         roomC.setCellFactory(getCallback(FileType.editRoom));
         roomD.setCellFactory(getCallback(FileType.delete));
 
