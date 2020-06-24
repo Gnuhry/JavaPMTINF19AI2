@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<TabPane maxWidth="1250.0" minWidth="1250.0" prefHeight="600.0" prefWidth="1250.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.ShowController">
+<TabPane maxWidth="1250.0" minWidth="1250.0" prefHeight="600.0" prefWidth="1250.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.ShowController">
     <Tab style="-fx-background-color: rgba(0,0,0,0.7); -fx-text-base-color: white;" text="%students">
         <AnchorPane fx:id="studentAnchor" maxHeight="-Infinity" maxWidth="1250.0" minHeight="0.0" minWidth="1250.0" prefHeight="600.0" prefWidth="1250.0">
             <ToolBar prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
@@ -99,11 +108,11 @@
                 <columns>
                     <TableColumn fx:id="roomName" prefWidth="117.0" text="%name" />
                     <TableColumn fx:id="roomCampus" prefWidth="127.0" text="%campus" />
-                    <TableColumn fx:id="roomBuilding" prefWidth="199.0" text="%building" />
+                    <TableColumn fx:id="roomBuilding" prefWidth="100.0" text="%building" />
                     <TableColumn fx:id="roomFloor" prefWidth="50.0" text="%floor" />
                     <TableColumn fx:id="roomSeats" prefWidth="75.0" text="%seats" />
                     <TableColumn fx:id="roomProjector" prefWidth="75.0" text="%projector" />
-                    <TableColumn fx:id="roomDocumentCamera" prefWidth="70.0" text="%documentCamera" />
+                    <TableColumn fx:id="roomDocumentCamera" prefWidth="150.0" text="%documentCamera" />
                     <TableColumn fx:id="roomLaboratory" prefWidth="70.0" text="%laboratory" />
                     <TableColumn fx:id="roomC" editable="false" prefWidth="40.0" resizable="false" sortable="false" />
                     <TableColumn fx:id="roomD" editable="false" prefWidth="40.0" resizable="false" sortable="false" />

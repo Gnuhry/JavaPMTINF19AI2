@@ -1,6 +1,8 @@
 package org.dhbw;
 
 import javafx.application.Application;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -135,11 +137,11 @@ public class ShowController extends Application implements Initializable {
     @FXML
     private TableColumn<CourseRoom, Integer> roomSeats;
     @FXML
-    private TableColumn<CourseRoom, Boolean> roomProjector;
+    private TableColumn<CourseRoom, String> roomProjector;
     @FXML
-    private TableColumn<CourseRoom, Boolean> roomDocumentCamera;
+    private TableColumn<CourseRoom, String> roomDocumentCamera;
     @FXML
-    private TableColumn<CourseRoom, Boolean> roomLaboratory;
+    private TableColumn<CourseRoom, String> roomLaboratory;
     @FXML
     private TableColumn<CourseRoom, Void> roomC;
     @FXML
@@ -393,9 +395,27 @@ public class ShowController extends Application implements Initializable {
         roomBuilding.setCellValueFactory(new PropertyValueFactory<>("building"));
         roomFloor.setCellValueFactory(new PropertyValueFactory<>("floor"));
         roomSeats.setCellValueFactory(new PropertyValueFactory<>("seats"));
-        roomProjector.setCellValueFactory(new PropertyValueFactory<>("projector"));
-        roomDocumentCamera.setCellValueFactory(new PropertyValueFactory<>("camera"));
-        roomLaboratory.setCellValueFactory(new PropertyValueFactory<>("laboratory"));
+        roomProjector.setCellValueFactory(cellData -> {
+            boolean projector = cellData.getValue().getProjector();
+            String printBoolean;
+            if(projector) printBoolean = "\u2713";
+            else printBoolean = "\u274c";
+            return new ReadOnlyStringWrapper(printBoolean);
+        });
+        roomDocumentCamera.setCellValueFactory(cellData -> {
+            boolean camera = cellData.getValue().getCamera();
+            String printBoolean;
+            if(camera) printBoolean = "\u2713";
+            else printBoolean = "\u274c";
+            return new ReadOnlyStringWrapper(printBoolean);
+        });
+        roomLaboratory.setCellValueFactory(cellData -> {
+            boolean lab = cellData.getValue().getLaboratory();
+            String printBoolean;
+            if(lab) printBoolean = "\u2713";
+            else printBoolean = "\u274c";
+            return new ReadOnlyStringWrapper(printBoolean);
+        });
         roomC.setCellFactory(getCallback(FileType.editRoom));
         roomD.setCellFactory(getCallback(FileType.delete));
 
