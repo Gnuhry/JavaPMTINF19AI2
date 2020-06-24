@@ -2,8 +2,10 @@ package org.dhbw;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import org.dhbw.classes.*;
 
@@ -70,6 +72,28 @@ public class RoomController {
     @FXML
     private void initialize() {
         roomCampus.getItems().setAll(chooseTypeOptions);
+//        roomSeats.setOnKeyPressed(keyEvent -> {
+//            System.out.println(keyEvent.getCode().isDigitKey());
+//            if(!keyEvent.getCode().isDigitKey())
+//                keyEvent.consume();
+//        });
+        roomSeats.addEventFilter(KeyEvent.ANY, new EventHandler<>() {
+
+            private boolean willConsume = false;
+
+            @Override
+            public void handle(KeyEvent event) {
+                if (willConsume)
+                    event.consume();
+
+                if (!event.getCode().isKeypadKey() && !event.getCode().isDigitKey())
+                    if (event.getEventType() == KeyEvent.KEY_PRESSED)
+                        willConsume = true;
+                    else if (event.getEventType() == KeyEvent.KEY_RELEASED)
+                        willConsume = false;
+            }
+
+        });
     }
 
     /**

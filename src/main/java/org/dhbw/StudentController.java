@@ -199,13 +199,15 @@ public class StudentController {
     @FXML
     private void showCompany() {
         Company company = companyChoose.getValue();
-        if (company.equals(newCompany))
+        if (company.equals(newCompany)) {
             companyName.setText("");
-        else
+            Help.fillAddressesToTextField(new Address("", "", "", "", ""), companyStreet, companyHomeNumber, companyPostalCode, companyCity, companyCountry);
+            Help.fillPersonToTextField(new Person("", "", ""), companyPersonLastName, companyPersonFirstName, companyPersonEmail);
+        } else {
             companyName.setText(company.getName());
-        Help.fillAddressesToTextField(company.getAddress(), companyStreet, companyHomeNumber, companyPostalCode, companyCity, companyCountry);
-        Help.fillPersonToTextField(company.getContactPerson(), companyPersonLastName, companyPersonFirstName, companyPersonEmail);
-
+            Help.fillAddressesToTextField(company.getAddress(), companyStreet, companyHomeNumber, companyPostalCode, companyCity, companyCountry);
+            Help.fillPersonToTextField(company.getContactPerson(), companyPersonLastName, companyPersonFirstName, companyPersonEmail);
+        }
     }
 
 
