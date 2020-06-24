@@ -832,10 +832,11 @@ public class Database {
      */
     private static int countUsedRoom(CourseRoom room) {
         int counter = 0;
+        int id = getRoomID(room);
         try {
             initialize();
-            statement = connection.prepareStatement("SELECT COUNT(room_id) FROM room WHERE name = ?");
-            statement.setString(1, room.getName());
+            statement = connection.prepareStatement("SELECT COUNT(course_id) FROM course WHERE course.room_id=?");
+            statement.setInt(1, id);
             resultSet = statement.executeQuery();
             if (resultSet.next())
                 counter = resultSet.getInt(1);
@@ -1130,7 +1131,6 @@ public class Database {
                     statement.setInt(5, course.getStudyDirector().getDocentNumber());
                 else
                     statement.setInt(4, course.getStudyDirector().getDocentNumber());
-            System.out.println(statement.toString());
             resultSet = statement.executeQuery();
             if (resultSet.next())
                 return resultSet.getInt(1);
@@ -1231,7 +1231,6 @@ public class Database {
             statement.setString(2, room.getBuilding());
             statement.setString(3, room.getFloor());
             statement.setInt(4, getCampusID(room.getCampus()));
-            System.out.println(statement);
             resultSet = statement.executeQuery();
             if (resultSet.next())
                 return resultSet.getInt(1);
@@ -1328,7 +1327,6 @@ public class Database {
      * @return Integer.MinValue if course not exist. id if exists
      */
     private static int getCampusID(Campus campus) {
-        System.out.println(campus);
         if (campus == null) return Integer.MIN_VALUE;
         Campus[] campuses = Campus.values();
         for (int f = 0; f < campuses.length; f++)
