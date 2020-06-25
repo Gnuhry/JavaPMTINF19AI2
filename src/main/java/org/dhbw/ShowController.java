@@ -115,7 +115,7 @@ public class ShowController extends Application implements Initializable {
     @FXML
     private TableColumn<Company, Person> companyPerson;
     @FXML
-    private TableColumn<Company, Void> companyC, companyD;
+    private TableColumn<Company, Void> companyC, companyD, companyMail;
 
     @FXML
     private TableView<CourseRoom> roomTable;
@@ -355,6 +355,31 @@ public class ShowController extends Application implements Initializable {
         companyPerson.setCellValueFactory(new PropertyValueFactory<>("contactPerson"));
         companyC.setCellFactory(getCallback(FileType.editCompany));
         companyD.setCellFactory(getCallback(FileType.delete));
+        companyMail.setCellFactory(new Callback<>() {
+            @Override
+            public TableCell<Company, Void> call(TableColumn<Company, Void> companyVoidTableColumn) {
+                return new TableCell<>() {
+                    final Button btn = new Button();
+
+                    @Override
+                    protected void updateItem(Void aVoid, boolean b) {
+                        super.updateItem(aVoid, b);
+                        if (b)
+                            setGraphic(null);
+                        else {
+                            btn.setOnAction(actionEvent -> {
+                                Company company = getTableView().getItems().get(getIndex());
+                                if (company != null && company.getContactPerson() != null && company.getContactPerson().getEmail() != null && !company.getContactPerson().getEmail().isEmpty())
+                                    getHostServices().showDocument("mailto:" + company.getContactPerson().getEmail());
+
+                            });
+                            btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/mailButton.png"))));
+                            setGraphic(btn);
+                        }
+                    }
+                };
+            }
+        });
 
         FilteredList<Company> filteredCompany2 = new FilteredList<>(companies, p -> true);
         searchBoxCompany.textProperty().addListener((observable, oldValue, newValue) -> filteredCompany2.setPredicate(company -> {
@@ -467,7 +492,7 @@ public class ShowController extends Application implements Initializable {
                     contextMenu.getItems().remove(optional_menu[0]);
                 }
 
-                if (view.getItems() != null && view.getItems().get(0) != null && (view.getItems().get(0).getClass() == DualStudent.class || view.getItems().get(0).getClass() == Docent.class)) {
+                if (view.getItems() != null && view.getItems().get(0) != null && (view.getItems().get(0).getClass() == DualStudent.class || view.getItems().get(0).getClass() == Docent.class || view.getItems().get(0).getClass() == Company.class)) {
                     MenuItem mail = optional_menu[1];
                     mail.setOnAction(actionEvent -> {
                         StringBuilder sb = new StringBuilder("mailto:");
@@ -476,13 +501,16 @@ public class ShowController extends Application implements Initializable {
                                 sb.append(((DualStudent) o).getEmail()).append(", ");
                             else if (o instanceof Docent)
                                 sb.append(((Docent) o).getEmail()).append(", ");
+                            else if (o instanceof Company)
+                                sb.append(((Company) o).getContactPerson().getEmail()).append(", ");
                         }
                         if (!sb.toString().equals("mailto:"))
                             getHostServices().showDocument(sb.toString().substring(0, sb.toString().length() - 2));
                         view.getSelectionModel().clearSelection();
                     });
                     contextMenu.getItems().add(counter++, mail);
-
+                }
+                if (view.getItems() != null && view.getItems().get(0) != null && (view.getItems().get(0).getClass() == DualStudent.class || view.getItems().get(0).getClass() == Docent.class)) {
                     MenuItem setEmail = optional_menu[2];
                     setEmail.setOnAction(actionEvent -> {
                         for (Object o : view.getSelectionModel().getSelectedItems()) {

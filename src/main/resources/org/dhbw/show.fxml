@@ -116,6 +116,8 @@
                     <TableColumn fx:id="companyAddress" prefWidth="350.0" text="%address"/>
                     <TableColumn fx:id="companyPerson" prefWidth="350.0" text="%contact_person"/>
                     <TableColumn fx:id="companyC" editable="false" prefWidth="40.0" resizable="false" sortable="false"/>
+                    <TableColumn fx:id="companyMail" editable="false" prefWidth="40.0" resizable="false"
+                                 sortable="false"/>
                     <TableColumn fx:id="companyD" editable="false" prefWidth="558.0" resizable="false"
                                  sortable="false"/>
                 </columns>
