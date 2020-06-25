@@ -1,7 +1,18 @@
 package org.dhbw.classes;
 
 public enum StudyCourse {
-    AInfo("AInfo"), BWL("BWL"), WInfo("WInfo");
+    Info("Informatik"),
+    CTech("Chemische_Technik"),
+    ETect("Elektrotechnik"),
+    IntEng("Integrated_Engineering"),
+    MBau("Maschinenbau"),
+    Mecha("Mechatronik"),
+    WWI("Wirtschaftsingenieurwesen"),
+    GP("GP"),
+    BWL("BWL"),
+    Media("Medien"),
+    RSW("RSW"),
+    WInfo("WINFO");
 
     private final String name;
 
