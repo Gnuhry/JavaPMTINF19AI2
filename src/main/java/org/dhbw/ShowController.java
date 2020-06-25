@@ -16,6 +16,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -538,7 +539,8 @@ public class ShowController implements Initializable {
                     } else if (keyEvent.getCode().equals(KeyCode.M) && keyEvent.isControlDown()) {
                         sendMailToObject(selectedItem, keyEvent.isShiftDown());
                         table.getSelectionModel().clearSelection();
-                    }
+                    } else if (keyEvent.isShiftDown() && keyEvent.getCode().equals(KeyCode.R))
+                        refresh();
                 }
             });
         } else {
@@ -549,6 +551,8 @@ public class ShowController implements Initializable {
                         deleteObject(selectedItem);
                     else if (keyEvent.getCode().equals(KeyCode.ESCAPE))
                         table.getSelectionModel().clearSelection();
+                    else if (keyEvent.isShiftDown() && keyEvent.getCode().equals(KeyCode.R))
+                        refresh();
             });
         }
     }
