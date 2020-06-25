@@ -10,10 +10,7 @@ import javafx.stage.Stage;
 import org.dhbw.classes.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class StudentController {
 
@@ -233,7 +230,7 @@ public class StudentController {
      */
     @FXML
     private void setStudentEmail() {
-        studentEmail.setText(Help.getStudentUniversityEmail(student_old));
+        studentEmail.setText(Help.getStudentUniversityEmail(Objects.requireNonNullElseGet(student_old, () -> new DualStudent(Integer.parseInt(matriculationNumberField.getText()), Integer.parseInt(studentNumberField.getText().substring(1)), null, null, null, null, null, null, 0, null))));
     }
 
     /**

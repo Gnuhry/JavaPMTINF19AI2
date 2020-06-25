@@ -9,10 +9,7 @@ import javafx.stage.Stage;
 import org.dhbw.classes.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class DocentController {
 
@@ -96,7 +93,7 @@ public class DocentController {
      */
     @FXML
     private void setDocentEmail() {
-        docentEmail.setText(Help.getDocentUniversityEmail(docent_old));
+        docentEmail.setText(Help.getDocentUniversityEmail(Objects.requireNonNullElseGet(docent_old, () -> new Docent(null, null, null, null, null, Integer.parseInt(docentNumberField.getText().substring(1))))));
     }
 
     /**

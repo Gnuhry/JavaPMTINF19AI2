@@ -26,10 +26,7 @@ import org.dhbw.classes.*;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class ShowController extends Application implements Initializable {
     private final ObservableList<DualStudent> students = FXCollections.observableArrayList(
@@ -178,17 +175,6 @@ public class ShowController extends Application implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        ContextMenu refreshMenu = new ContextMenu();
-        MenuItem[] item = new MenuItem[]{new MenuItem(Help.getRessourceBundle().getString("refresh")), new MenuItem(Help.getRessourceBundle().getString("back"))};
-        item[0].setOnAction(actionEvent -> refresh());
-        item[1].setOnAction(actionEvent -> {
-            try {
-                backToOverview();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        refreshMenu.getItems().addAll(item);
 
         studentNumber.setCellValueFactory(new PropertyValueFactory<>("studentNumber"));
         studentName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -213,7 +199,7 @@ public class ShowController extends Application implements Initializable {
                 }
             };
             cell.setOnMouseClicked(e -> {
-                if (!cell.isEmpty())
+                if (e.isControlDown() && !cell.isEmpty())
                     getHostServices().showDocument("mailto:" + cell.getTableView().getItems().get(cell.getIndex()).getEmail());
             });
             return cell;
@@ -248,11 +234,11 @@ public class ShowController extends Application implements Initializable {
         sortedName.comparatorProperty().bind(studentTable.comparatorProperty());
 
         studentTable.setItems(sortedName);
-        studentTable.setContextMenu(refreshMenu);
+        addContextMenu(studentTable);
         studentTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addDeleteKey(studentAnchor, studentTable, true);
+        addKeyListener(studentAnchor, studentTable);
 
         docentNumber.setCellValueFactory(new PropertyValueFactory<>("docentNumber"));
         docentLastName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -279,7 +265,7 @@ public class ShowController extends Application implements Initializable {
                 }
             };
             cell.setOnMouseClicked(e -> {
-                if (!cell.isEmpty())
+                if (e.isControlDown() && !cell.isEmpty())
                     getHostServices().showDocument("mailto:" + cell.getTableView().getItems().get(cell.getIndex()).getEmail());
             });
             return cell;
@@ -287,11 +273,11 @@ public class ShowController extends Application implements Initializable {
         docentC.setCellFactory(getCallback(FileType.editDocents));
         docentD.setCellFactory(getCallback(FileType.delete));
 
-        docentTable.setContextMenu(refreshMenu);
+        addContextMenu(docentTable);
         docentTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addDeleteKey(docentAnchor, docentTable, true);
+        addKeyListener(docentAnchor, docentTable);
 
         FilteredList<Docent> filteredLecture = new FilteredList<>(docents, p -> true);
         searchBoxDocent.textProperty().addListener((observable, oldValue, newValue) -> filteredLecture.setPredicate(person -> {
@@ -348,11 +334,11 @@ public class ShowController extends Application implements Initializable {
                 };
             }
         });
-        courseTable.setContextMenu(refreshMenu);
+        addContextMenu(courseTable);
         courseTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addDeleteKey(courseAnchor, courseTable, false);
+        addKeyListener(courseAnchor, courseTable);
 
         FilteredList<Course> filteredCourse2 = new FilteredList<>(courses, p -> true);
         searchBoxCourse.textProperty().addListener((observable, oldValue, newValue) -> filteredCourse2.setPredicate(course -> {
@@ -383,11 +369,11 @@ public class ShowController extends Application implements Initializable {
         SortedList<Company> sortedCompany2 = new SortedList<>(filteredCompany2);
         sortedCompany2.comparatorProperty().bind(companyTable.comparatorProperty());
         companyTable.setItems(sortedCompany2);
-        companyTable.setContextMenu(refreshMenu);
+        addContextMenu(companyTable);
         companyTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addDeleteKey(companyAnchor, companyTable, false);
+        addKeyListener(companyAnchor, companyTable);
 
         roomName.setCellValueFactory(new PropertyValueFactory<>("name"));
         roomCampus.setCellValueFactory(new PropertyValueFactory<>("campus"));
@@ -412,11 +398,11 @@ public class ShowController extends Application implements Initializable {
         SortedList<CourseRoom> sortedRooms = new SortedList<>(filteredRoom);
         sortedRooms.comparatorProperty().bind(roomTable.comparatorProperty());
         roomTable.setItems(sortedRooms);
-        roomTable.setContextMenu(refreshMenu);
+        addContextMenu(roomTable);
         roomTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addDeleteKey(roomAnchor, roomTable, false);
+        addKeyListener(roomAnchor, roomTable);
     }
 
     /**
@@ -439,14 +425,110 @@ public class ShowController extends Application implements Initializable {
         });
     }
 
+    public void addContextMenu(TableView<?> view) {
+        MenuItem[] optional_menu = new MenuItem[]{new MenuItem(Help.getRessourceBundle().getString("edit")), new MenuItem(Help.getRessourceBundle().getString("send_email")), new MenuItem(Help.getRessourceBundle().getString("set_to_uni_email")), new MenuItem(Help.getRessourceBundle().getString("delete"))};
+        ContextMenu refreshMenu = new ContextMenu();
+        MenuItem[] item = new MenuItem[]{new MenuItem(Help.getRessourceBundle().getString("refresh")), new MenuItem(Help.getRessourceBundle().getString("back"))};
+        item[0].setOnAction(actionEvent -> refresh());
+        item[1].setOnAction(actionEvent -> {
+            try {
+                backToOverview();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        refreshMenu.getItems().addAll(item);
+
+        view.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                ContextMenu contextMenu = view.getContextMenu();
+                int counter = 0;
+                if (view.getSelectionModel().getSelectedItems().size() == 1) {
+                    MenuItem edit = optional_menu[0];
+                    edit.setOnAction(actionEvent -> {
+                        try {
+                            Object o = view.getSelectionModel().getSelectedItems().get(0);
+                            if (o instanceof DualStudent)
+                                this.file = FileType.editStudents;
+                            else if (o instanceof Docent)
+                                this.file = FileType.editDocents;
+                            else if (o instanceof Course)
+                                this.file = FileType.editCourse;
+                            else if (o instanceof Company)
+                                this.file = FileType.editCompany;
+                            else if (o instanceof CourseRoom)
+                                this.file = FileType.editRoom;
+                            this.object = Collections.singletonList(o);
+                            start(new Stage());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+                    contextMenu.getItems().add(counter++, edit);
+                } else {
+                    contextMenu.getItems().remove(optional_menu[0]);
+                }
+
+                if (view.getItems() != null && view.getItems().get(0) != null && (view.getItems().get(0).getClass() == DualStudent.class || view.getItems().get(0).getClass() == Docent.class)) {
+                    MenuItem mail = optional_menu[1];
+                    mail.setOnAction(actionEvent -> {
+                        StringBuilder sb = new StringBuilder("mailto:");
+                        for (Object o : view.getSelectionModel().getSelectedItems()) {
+                            if (o instanceof DualStudent)
+                                sb.append(((DualStudent) o).getEmail()).append(", ");
+                            else if (o instanceof Docent)
+                                sb.append(((Docent) o).getEmail()).append(", ");
+                        }
+                        if (!sb.toString().equals("mailto:"))
+                            getHostServices().showDocument(sb.toString().substring(0, sb.toString().length() - 2));
+                        view.getSelectionModel().clearSelection();
+                    });
+                    contextMenu.getItems().add(counter++, mail);
+
+                    MenuItem setEmail = optional_menu[2];
+                    setEmail.setOnAction(actionEvent -> {
+                        for (Object o : view.getSelectionModel().getSelectedItems()) {
+                            if (o instanceof DualStudent) {
+                                DualStudent d = new DualStudent((DualStudent) o);
+                                d.setEmail(Help.getStudentUniversityEmail(d));
+                                Database.updateStudent(d, (DualStudent) o);
+                            } else if (o instanceof Docent) {
+                                Docent d = new Docent((Docent) o);
+                                d.setEmail(Help.getDocentUniversityEmail(d));
+                                Database.updateDocent(d, (Docent) o);
+                            }
+                        }
+                        refresh();
+                    });
+                    contextMenu.getItems().add(counter++, setEmail);
+                }
+                MenuItem delete = optional_menu[3];
+                delete.setOnAction(actionEvent -> {
+                    try {
+                        this.file = FileType.delete;
+                        this.object = new ArrayList<>(view.getSelectionModel().getSelectedItems());
+                        start(new Stage());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+                contextMenu.getItems().add(counter, delete);
+                view.setContextMenu(contextMenu);
+            } else {
+                view.getContextMenu().getItems().removeAll(optional_menu);
+            }
+        });
+        view.setContextMenu(refreshMenu);
+    }
+
     /**
      * add the delete key to delete rows
      *
      * @param anchorPane controller to bind the key
      * @param table      row to delete
      */
-    public void addDeleteKey(AnchorPane anchorPane, TableView<?> table, boolean u) {
-        if (u) {
+    public void addKeyListener(AnchorPane anchorPane, TableView<?> table) {
+        if (table.getItems() != null && table.getItems().size() > 0 && table.getItems().get(0) != null && (table.getItems().get(0).getClass() == DualStudent.class || table.getItems().get(0).getClass() == Docent.class)) {
             anchorPane.setOnKeyPressed(keyEvent -> {
                 final List<?> selectedItem = table.getSelectionModel().getSelectedItems();
                 if (selectedItem != null) {
@@ -458,6 +540,8 @@ public class ShowController extends Application implements Initializable {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                    else if (keyEvent.getCode().equals(KeyCode.ESCAPE))
+                        table.getSelectionModel().clearSelection();
                     else if (keyEvent.getCode().equals(KeyCode.U) && keyEvent.isControlDown()) {
                         for (Object o : selectedItem) {
                             if (o instanceof DualStudent) {
@@ -488,7 +572,7 @@ public class ShowController extends Application implements Initializable {
         } else {
             anchorPane.setOnKeyPressed(keyEvent -> {
                 final List<?> selectedItem = table.getSelectionModel().getSelectedItems();
-                if (selectedItem != null)
+                if (selectedItem != null) {
                     if (keyEvent.getCode().equals(KeyCode.DELETE))
                         try {
                             this.file = FileType.delete;
@@ -497,6 +581,9 @@ public class ShowController extends Application implements Initializable {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                    else if (keyEvent.getCode().equals(KeyCode.ESCAPE))
+                        table.getSelectionModel().clearSelection();
+                }
             });
         }
     }
