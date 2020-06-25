@@ -59,11 +59,11 @@
                        stylesheets="@css/application.css" tableMenuButtonVisible="true">
                 <columns>
                     <TableColumn fx:id="docentNumber" prefWidth="75.0" text="%id"/>
-                    <TableColumn fx:id="docentFirstName" prefWidth="75.0" text="%forename"/>
-                    <TableColumn fx:id="docentLastName" prefWidth="75.0" text="%last_name"/>
+                    <TableColumn fx:id="docentFirstName" prefWidth="115.0" text="%forename"/>
+                    <TableColumn fx:id="docentLastName" prefWidth="115.0" text="%last_name"/>
                     <TableColumn fx:id="docentBirth" prefWidth="75.0" text="%birthday"/>
-                    <TableColumn fx:id="docentEmail" prefWidth="150.0" text="%email"/>
-                    <TableColumn fx:id="docentAddress" prefWidth="200.0" text="%address"/>
+                    <TableColumn fx:id="docentEmail" prefWidth="250.0" text="%email"/>
+                    <TableColumn fx:id="docentAddress" prefWidth="350.0" text="%address"/>
                     <TableColumn fx:id="docentC" editable="false" prefWidth="40.0" resizable="false" sortable="false"/>
                     <TableColumn fx:id="docentD" editable="false" prefWidth="558.0" resizable="false" sortable="false"/>
                 </columns>
@@ -93,10 +93,10 @@
                        stylesheets="@css/application.css" tableMenuButtonVisible="true">
                 <columns>
                     <TableColumn fx:id="courseName" prefWidth="115.0" text="%name"/>
-                    <TableColumn fx:id="courseType" prefWidth="120.0" text="%study_type"/>
-                    <TableColumn fx:id="courseRoom" prefWidth="90.0" text="%room"/>
+                    <TableColumn fx:id="courseType" prefWidth="170.0" text="%study_type"/>
+                    <TableColumn fx:id="courseRoom" prefWidth="135.0" text="%room"/>
                     <TableColumn fx:id="courseDate" prefWidth="123.0" text="%registration_date"/>
-                    <TableColumn fx:id="courseDocent" prefWidth="200.0" text="%director"/>
+                    <TableColumn fx:id="courseDocent" prefWidth="390.0" text="%director"/>
                     <TableColumn fx:id="courseC" editable="false" prefWidth="40.0" resizable="false" sortable="false"/>
                     <TableColumn fx:id="courseMail" editable="false" prefWidth="40.0" resizable="false"
                                  sortable="false"/>
@@ -111,8 +111,8 @@
                        stylesheets="@css/application.css" tableMenuButtonVisible="true">
                 <columns>
                     <TableColumn fx:id="companyName" prefWidth="200.0" text="%name"/>
-                    <TableColumn fx:id="companyAddress" prefWidth="200.0" text="%address"/>
-                    <TableColumn fx:id="companyPerson" prefWidth="250.0" text="%contact_person"/>
+                    <TableColumn fx:id="companyAddress" prefWidth="350.0" text="%address"/>
+                    <TableColumn fx:id="companyPerson" prefWidth="350.0" text="%contact_person"/>
                     <TableColumn fx:id="companyC" editable="false" prefWidth="40.0" resizable="false" sortable="false"/>
                     <TableColumn fx:id="companyD" editable="false" prefWidth="558.0" resizable="false"
                                  sortable="false"/>
