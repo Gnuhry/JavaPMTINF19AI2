@@ -31,7 +31,7 @@ public class Help {
     public static final String styleRight = "-fx-text-fill: -fx-text-base-color; -fx-border-color: rgba(0,0,0,0) rgba(0,0,0,0) rgb(0, 0, 0) rgba(0,0,0,0)";
     public static final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
     private static final String[] supportedLanguage = new String[]{"de", "en"};
-    
+
     private static Locale locale;
 
     private List<Integer> student_ids, docent_ids, matriculation_ids;
@@ -78,16 +78,6 @@ public class Help {
     public static boolean validatePostalCode(String postalCodeStr) {
         Matcher matcher = VALID_POSTAL_CODE_REGEX.matcher(postalCodeStr);
         return matcher.find();
-    }
-
-    /**
-     * validate if string is a room
-     *
-     * @param text string to validate
-     * @return {true} if is a room, {false} if not
-     */
-    public static boolean validateRoom(String text) {
-        return !text.contains(" ");
     }
 
     //----------------------------check if taken-------------------------
