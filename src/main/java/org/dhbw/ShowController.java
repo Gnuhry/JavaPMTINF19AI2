@@ -44,9 +44,6 @@ public class ShowController extends Application implements Initializable {
     private final ObservableList<CourseRoom> rooms = FXCollections.observableArrayList(
             University.getRooms()
     );
-    private final ObservableList<Campus> campuses = FXCollections.observableArrayList(
-            Campus.values()
-    );
 
     private FileType file;
     private List<Object> object;
@@ -63,7 +60,7 @@ public class ShowController extends Application implements Initializable {
     @FXML
     private ComboBox<Company> companyFilterBox;
     @FXML
-    private ComboBox<String> campusFilterBox;
+    private ComboBox<String> campusFilterBox, studyTypeFilterBox;
     @FXML
     public TableView<DualStudent> studentTable;
     @FXML
@@ -340,14 +337,15 @@ public class ShowController extends Application implements Initializable {
         );
         addKeyListener(courseAnchor, courseTable);
 
+        List<String> studyTypeList = new ArrayList<>();
+        studyTypeList.add(Help.getRessourceBundle().getString("all_study_types"));
+        for (StudyCourse course : StudyCourse.values())
+            studyTypeList.add(course.toString());
+        studyTypeFilterBox.getItems().setAll(studyTypeList);
+        studyTypeFilterBox.setValue(Help.getRessourceBundle().getString("all_study_types"));
         FilteredList<Course> filteredCourse2 = new FilteredList<>(courses, p -> true);
-        searchBoxCourse.textProperty().addListener((observable, oldValue, newValue) -> filteredCourse2.setPredicate(course -> {
-            if (newValue == null || newValue.isEmpty()) {
-                return true;
-            }
-            String lowerCaseFilter = newValue.toLowerCase();
-            return course.getName().toLowerCase().contains(lowerCaseFilter) || course.getStudyCourse().toString().toLowerCase().contains(lowerCaseFilter);
-        }));
+        searchBoxCourse.textProperty().addListener((observable, oldValue, newValue) -> filteredCourse2.setPredicate(this::checkFilterCourse));
+        studyTypeFilterBox.valueProperty().addListener((observable, oldValue, newValue) -> filteredCourse2.setPredicate(this::checkFilterCourse));
         SortedList<Course> sortedCourses = new SortedList<>(filteredCourse2);
         sortedCourses.comparatorProperty().bind(courseTable.comparatorProperty());
         courseTable.setItems(sortedCourses);
@@ -388,7 +386,7 @@ public class ShowController extends Application implements Initializable {
 
         List<String> campusList = new ArrayList<>();
         campusList.add(Help.getRessourceBundle().getString("all_campus"));
-        for (Campus campus : campuses)
+        for (Campus campus : Campus.values())
             campusList.add(campus.toString());
         campusFilterBox.getItems().setAll(campusList);
         campusFilterBox.setValue(Help.getRessourceBundle().getString("all_campus"));
@@ -675,7 +673,7 @@ public class ShowController extends Application implements Initializable {
      * filtering the room table with input text from search boxes and combo boxes
      *
      * @param room room of database table which gets checked on input
-     * @return {true} if person has the configure attributes from the filters, {false} if not
+     * @return {true} if room has the configure attributes from the filters, {false} if not
      */
     private boolean checkFilterRoom(CourseRoom room) {
         boolean erg = true;
@@ -683,8 +681,29 @@ public class ShowController extends Application implements Initializable {
         int id = campusFilterBox.getSelectionModel().getSelectedIndex() - 1;
         if (id > -1 && (id >= Campus.values().length ? null : Campus.values()[id]) != room.getCampus())
             return false;
-        if (!search.isEmpty())
+        if (search != null && !search.isEmpty()) {
+            search = search.trim().toLowerCase();
             erg = room.getName().toLowerCase().contains(search) || room.getCampus().toString().toLowerCase().contains(search);
+        }
+        return erg;
+    }
+
+    /**
+     * filtering the course table with input text from search boxes and combo boxes
+     *
+     * @param course course of database table which gets checked on input
+     * @return {true} if course has the configure attributes from the filters, {false} if not
+     */
+    private boolean checkFilterCourse(Course course) {
+        boolean erg = true;
+        String search = searchBoxCourse.getText();
+        int id = studyTypeFilterBox.getSelectionModel().getSelectedIndex() - 1;
+        if (id > -1 && (id >= StudyCourse.values().length ? null : StudyCourse.values()[id]) != course.getStudyCourse())
+            return false;
+        if (search != null && !search.isEmpty()) {
+            search = search.trim().toLowerCase();
+            erg = course.getName().toLowerCase().contains(search) || course.getRoom().getName().toLowerCase().contains(search);
+        }
         return erg;
     }
 

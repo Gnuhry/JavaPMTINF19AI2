@@ -85,9 +85,11 @@
                 <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css"
                         text="%back"/>
                 <TextField fx:id="searchBoxCourse" promptText="%search" stylesheets="@css/application.css"
-                           translateX="944.0"/>
+                           translateX="670.0"/>
+                <ComboBox fx:id="studyTypeFilterBox" layoutX="400.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0"
+                          prefWidth="204.0" stylesheets="@css/application.css" translateX="670.0"/>
                 <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="%refresh"
-                        translateX="944.0"/>
+                        translateX="670.0"/>
             </ToolBar>
             <TableView fx:id="courseTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0"
                        stylesheets="@css/application.css" tableMenuButtonVisible="true">
