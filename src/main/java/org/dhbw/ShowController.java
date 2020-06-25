@@ -629,7 +629,10 @@ public class ShowController extends Application implements Initializable {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setOnHidden(windowEvent -> refresh());
+        stage.setResizable(false);
         stage.initOwner(studentTable.getScene().getWindow());
+        stage.setX(studentTable.getScene().getWindow().getX());
+        stage.setY(studentTable.getScene().getWindow().getY());
         stage.initModality(Modality.WINDOW_MODAL);
         stage.setTitle(Help.getRessourceBundle().getString("title"));
         stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/dhbwLogoSquare.png")));
