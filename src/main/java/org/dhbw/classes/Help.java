@@ -59,17 +59,6 @@ public class Help {
     }
 
     /**
-     * validate if date is after birth date
-     *
-     * @param date the date to validate
-     * @param p    the person with the birth date to compare
-     * @return {true} if date is before birth date, {false} if after or equal birth date
-     */
-    public static boolean validateAfterBirthday(Date date, Person p) {
-        return p.getBirthday().before(date);
-    }
-
-    /**
      * validate if string is an email address
      *
      * @param emailStr string to validate
