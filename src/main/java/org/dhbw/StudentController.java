@@ -200,10 +200,28 @@ public class StudentController {
             companyName.setText("");
             Help.fillAddressesToTextField(new Address("", "", "", "", ""), companyStreet, companyHomeNumber, companyPostalCode, companyCity, companyCountry);
             Help.fillPersonToTextField(new Person("", "", ""), companyPersonLastName, companyPersonFirstName, companyPersonEmail);
+            companyName.setDisable(false);
+            companyStreet.setDisable(false);
+            companyHomeNumber.setDisable(false);
+            companyCity.setDisable(false);
+            companyCountry.setDisable(false);
+            companyPostalCode.setDisable(false);
+            companyPersonEmail.setDisable(false);
+            companyPersonFirstName.setDisable(false);
+            companyPersonLastName.setDisable(false);
         } else {
             companyName.setText(company.getName());
             Help.fillAddressesToTextField(company.getAddress(), companyStreet, companyHomeNumber, companyPostalCode, companyCity, companyCountry);
             Help.fillPersonToTextField(company.getContactPerson(), companyPersonLastName, companyPersonFirstName, companyPersonEmail);
+            companyName.setDisable(true);
+            companyStreet.setDisable(true);
+            companyHomeNumber.setDisable(true);
+            companyCity.setDisable(true);
+            companyCountry.setDisable(true);
+            companyPostalCode.setDisable(true);
+            companyPersonEmail.setDisable(true);
+            companyPersonFirstName.setDisable(true);
+            companyPersonLastName.setDisable(true);
         }
     }
 
@@ -591,6 +609,5 @@ public class StudentController {
             backToOverview();
         }
     }
-
 
 }
