@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -16,7 +17,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -140,6 +140,7 @@ public class ShowController implements Initializable {
      */
     @FXML
     public void refresh() {
+        studentTable.getScene().setCursor(Cursor.WAIT);
         students.clear();
         students.addAll(University.getStudents());
         docents.clear();
@@ -150,6 +151,14 @@ public class ShowController implements Initializable {
         companies.addAll(University.getCompanies());
         rooms.clear();
         rooms.addAll(University.getRooms());
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            studentTable.getScene().setCursor(Cursor.DEFAULT);
+        }).start();
     }
 
     /**
@@ -158,7 +167,6 @@ public class ShowController implements Initializable {
      * creating contextmenu and adding functions to buttons and adding delete key
      */
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         studentNumber.setCellValueFactory(new PropertyValueFactory<>("studentNumber"));
         studentName.setCellValueFactory(new PropertyValueFactory<>("name"));
         studentForename.setCellValueFactory(new PropertyValueFactory<>("forename"));
@@ -412,6 +420,14 @@ public class ShowController implements Initializable {
                 SelectionMode.MULTIPLE
         );
         addKeyListener(roomAnchor, roomTable);
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            studentTable.getScene().setCursor(Cursor.DEFAULT);
+        }).start();
     }
 
     /**
@@ -539,7 +555,7 @@ public class ShowController implements Initializable {
                     } else if (keyEvent.getCode().equals(KeyCode.M) && keyEvent.isControlDown()) {
                         sendMailToObject(selectedItem, keyEvent.isShiftDown());
                         table.getSelectionModel().clearSelection();
-                    } else if (keyEvent.isShiftDown() && keyEvent.getCode().equals(KeyCode.R))
+                    } else if (keyEvent.isControlDown() && keyEvent.getCode().equals(KeyCode.R))
                         refresh();
                 }
             });

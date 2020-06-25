@@ -2,6 +2,7 @@ package org.dhbw;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
@@ -25,7 +26,8 @@ public class PrimaryController implements Initializable {
      * changing the scene root in App
      */
     @FXML
-    private void showStudents() throws IOException {
+    private void show() throws IOException {
+        buttonLanguage.getScene().setCursor(Cursor.WAIT);
         App.setRoot("show");
     }
 
