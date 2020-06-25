@@ -61,6 +61,7 @@ public class ShowController extends Application implements Initializable {
     private ComboBox<Company> companyFilterBox;
     @FXML
     private ComboBox<String> campusFilterBox, studyTypeFilterBox;
+
     @FXML
     public TableView<DualStudent> studentTable;
     @FXML
@@ -120,25 +121,11 @@ public class ShowController extends Application implements Initializable {
     @FXML
     private TableView<CourseRoom> roomTable;
     @FXML
-    private TableColumn<CourseRoom, String> roomName;
-    @FXML
-    private TableColumn<CourseRoom, String> roomCampus;
-    @FXML
-    private TableColumn<CourseRoom, String> roomBuilding;
-    @FXML
-    private TableColumn<CourseRoom, String> roomFloor;
+    private TableColumn<CourseRoom, String> roomName, roomCampus, roomBuilding, roomFloor, roomProjector, roomDocumentCamera, roomLaboratory;
     @FXML
     private TableColumn<CourseRoom, Integer> roomSeats;
     @FXML
-    private TableColumn<CourseRoom, String> roomProjector;
-    @FXML
-    private TableColumn<CourseRoom, String> roomDocumentCamera;
-    @FXML
-    private TableColumn<CourseRoom, String> roomLaboratory;
-    @FXML
-    private TableColumn<CourseRoom, Void> roomC;
-    @FXML
-    private TableColumn<CourseRoom, Void> roomD;
+    private TableColumn<CourseRoom, Void> roomC, roomD;
 
     /**
      * changing the scene root in App to "primary.fxml"
@@ -449,9 +436,10 @@ public class ShowController extends Application implements Initializable {
     }
 
     public void addContextMenu(TableView<?> view) {
-        MenuItem[] optional_menu = new MenuItem[]{new MenuItem(Help.getResourcedBundle().getString("edit")), new MenuItem(Help.getResourcedBundle().getString("send_email")), new MenuItem(Help.getResourcedBundle().getString("set_to_uni_email")), new MenuItem(Help.getResourcedBundle().getString("delete"))};
         ContextMenu refreshMenu = new ContextMenu();
+        MenuItem[] optional_menu = new MenuItem[]{new MenuItem(Help.getResourcedBundle().getString("edit")), new MenuItem(Help.getResourcedBundle().getString("send_email")), new MenuItem(Help.getResourcedBundle().getString("set_to_uni_email")), new MenuItem(Help.getResourcedBundle().getString("delete")), new MenuItem(Help.getResourcedBundle().getString("send_email_with_docent"))};
         MenuItem[] item = new MenuItem[]{new MenuItem(Help.getResourcedBundle().getString("refresh")), new MenuItem(Help.getResourcedBundle().getString("back"))};
+
         item[0].setOnAction(actionEvent -> refresh());
         item[1].setOnAction(actionEvent -> {
             try {
@@ -466,6 +454,7 @@ public class ShowController extends Application implements Initializable {
             if (newSelection != null) {
                 ContextMenu contextMenu = view.getContextMenu();
                 int counter = 0;
+
                 if (view.getSelectionModel().getSelectedItems().size() == 1) {
                     MenuItem edit = optional_menu[0];
                     edit.setOnAction(actionEvent -> {
@@ -488,46 +477,76 @@ public class ShowController extends Application implements Initializable {
                         }
                     });
                     contextMenu.getItems().add(counter++, edit);
-                } else {
+                } else
                     contextMenu.getItems().remove(optional_menu[0]);
+
+                if (view.getItems() != null && view.getItems().get(0) != null) {
+                    Class<?> class_ = view.getItems().get(0).getClass();
+
+                    if (class_ == DualStudent.class || class_ == Docent.class || class_ == Company.class || class_ == Course.class) {
+                        MenuItem mail = optional_menu[1];
+                        mail.setOnAction(actionEvent -> {
+                            StringBuilder sb = new StringBuilder("mailto:");
+                            for (Object o : view.getSelectionModel().getSelectedItems()) {
+                                if (o instanceof DualStudent)
+                                    sb.append(((DualStudent) o).getEmail()).append(", ");
+                                else if (o instanceof Docent)
+                                    sb.append(((Docent) o).getEmail()).append(", ");
+                                else if (o instanceof Company && ((Company) o).getContactPerson() != null && ((Company) o).getContactPerson().getEmail() != null && !((Company) o).getContactPerson().getEmail().isEmpty())
+                                    sb.append(((Company) o).getContactPerson().getEmail()).append(", ");
+                                else if (o instanceof Course)
+                                    for (String email : Objects.requireNonNullElseGet(University.getAllEmailFromCourse((Course) o), () -> new String[0]))
+                                        sb.append(email).append(", ");
+                            }
+                            if (!sb.toString().equals("mailto:"))
+                                getHostServices().showDocument(sb.toString().substring(0, sb.toString().length() - 2));
+                            view.getSelectionModel().clearSelection();
+                        });
+                        contextMenu.getItems().add(counter++, mail);
+                    } else
+                        contextMenu.getItems().remove(optional_menu[1]);
+
+                    if (class_ == Course.class) {
+                        MenuItem setEmail2 = optional_menu[4];
+                        setEmail2.setOnAction(actionEvent -> {
+                            StringBuilder sb = new StringBuilder("mailto:");
+                            for (Object o : view.getSelectionModel().getSelectedItems())
+                                if (o instanceof Course) {
+                                    Course c = (Course) o;
+                                    if (c.getStudyDirector() != null && c.getStudyDirector().getEmail() != null && !c.getStudyDirector().getEmail().isEmpty())
+                                        sb.append(((Course) o).getStudyDirector().getEmail()).append(", ");
+                                    for (String email : Objects.requireNonNullElseGet(University.getAllEmailFromCourse((Course) o), () -> new String[0]))
+                                        sb.append(email).append(", ");
+                                }
+                            if (!sb.toString().equals("mailto:"))
+                                getHostServices().showDocument(sb.toString().substring(0, sb.toString().length() - 2));
+                            view.getSelectionModel().clearSelection();
+                        });
+                        contextMenu.getItems().add(counter++, setEmail2);
+                    } else
+                        contextMenu.getItems().remove(optional_menu[4]);
+
+                    if (class_ == DualStudent.class || class_ == Docent.class) {
+                        MenuItem setEmail = optional_menu[2];
+                        setEmail.setOnAction(actionEvent -> {
+                            for (Object o : view.getSelectionModel().getSelectedItems()) {
+                                if (o instanceof DualStudent) {
+                                    DualStudent d = new DualStudent((DualStudent) o);
+                                    d.setEmail(Help.getStudentUniversityEmail(d));
+                                    Database.updateStudent(d, (DualStudent) o);
+                                } else if (o instanceof Docent) {
+                                    Docent d = new Docent((Docent) o);
+                                    d.setEmail(Help.getDocentUniversityEmail(d));
+                                    Database.updateDocent(d, (Docent) o);
+                                }
+                            }
+                            refresh();
+                        });
+                        contextMenu.getItems().add(counter++, setEmail);
+                    } else
+                        contextMenu.getItems().remove(optional_menu[2]);
                 }
 
-                if (view.getItems() != null && view.getItems().get(0) != null && (view.getItems().get(0).getClass() == DualStudent.class || view.getItems().get(0).getClass() == Docent.class || view.getItems().get(0).getClass() == Company.class)) {
-                    MenuItem mail = optional_menu[1];
-                    mail.setOnAction(actionEvent -> {
-                        StringBuilder sb = new StringBuilder("mailto:");
-                        for (Object o : view.getSelectionModel().getSelectedItems()) {
-                            if (o instanceof DualStudent)
-                                sb.append(((DualStudent) o).getEmail()).append(", ");
-                            else if (o instanceof Docent)
-                                sb.append(((Docent) o).getEmail()).append(", ");
-                            else if (o instanceof Company)
-                                sb.append(((Company) o).getContactPerson().getEmail()).append(", ");
-                        }
-                        if (!sb.toString().equals("mailto:"))
-                            getHostServices().showDocument(sb.toString().substring(0, sb.toString().length() - 2));
-                        view.getSelectionModel().clearSelection();
-                    });
-                    contextMenu.getItems().add(counter++, mail);
-                }
-                if (view.getItems() != null && view.getItems().get(0) != null && (view.getItems().get(0).getClass() == DualStudent.class || view.getItems().get(0).getClass() == Docent.class)) {
-                    MenuItem setEmail = optional_menu[2];
-                    setEmail.setOnAction(actionEvent -> {
-                        for (Object o : view.getSelectionModel().getSelectedItems()) {
-                            if (o instanceof DualStudent) {
-                                DualStudent d = new DualStudent((DualStudent) o);
-                                d.setEmail(Help.getStudentUniversityEmail(d));
-                                Database.updateStudent(d, (DualStudent) o);
-                            } else if (o instanceof Docent) {
-                                Docent d = new Docent((Docent) o);
-                                d.setEmail(Help.getDocentUniversityEmail(d));
-                                Database.updateDocent(d, (Docent) o);
-                            }
-                        }
-                        refresh();
-                    });
-                    contextMenu.getItems().add(counter++, setEmail);
-                }
                 MenuItem delete = optional_menu[3];
                 delete.setOnAction(actionEvent -> {
                     try {
