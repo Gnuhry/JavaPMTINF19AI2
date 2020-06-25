@@ -27,8 +27,8 @@ public class CourseController {
 
     private Course course_old;
 
-    private final CourseRoom noRoom = new CourseRoom(Help.getRessourceBundle().getString("no_room"), null, null, null);
-    private final Docent noDocent = new Docent(Help.getRessourceBundle().getString("no_docent"), "", null, null, "", 0);
+    private final CourseRoom noRoom = new CourseRoom(Help.getResourcedBundle().getString("no_room"), null, null, null);
+    private final Docent noDocent = new Docent(Help.getResourcedBundle().getString("no_docent"), "", null, null, "", 0);
 
     @FXML
     private Label errorMessage, title;
@@ -80,8 +80,8 @@ public class CourseController {
     public void initVariables(Course course) {
         course_old = course;
         if (course != null) {
-            title.setText(Help.getRessourceBundle().getString("title_course_edit"));
-            buttonDone.setText(Help.getRessourceBundle().getString("save"));
+            title.setText(Help.getResourcedBundle().getString("title_course_edit"));
+            buttonDone.setText(Help.getResourcedBundle().getString("save"));
             courseName.setText(course.getName());
             if (course.getStudyCourse() != null) courseType.setValue(course.getStudyCourse());
             if (course.getRoom() != null && course.getRoom().getName() != null) courseRoom.setValue(course.getRoom());
@@ -108,11 +108,11 @@ public class CourseController {
         if (text.isEmpty()) {
             Help.markWrongField(false, courseName);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("name"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("name"));
         } else if (text.length() >= Database.maxString) {
             Help.markWrongField(false, courseName);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
         } else
             courseName.setStyle(Help.styleRight);
 
@@ -120,7 +120,7 @@ public class CourseController {
         if (course == null) {
             Help.markWrongField(focus, courseType);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("course_type"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("course_type"));
         } else
             courseType.setStyle(Help.styleRight);
 
@@ -128,7 +128,7 @@ public class CourseController {
         if (room == null) {
             Help.markWrongField(focus, courseRoom);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("room"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("room"));
         } else
             courseRoom.setStyle(Help.styleRight);
 
@@ -136,7 +136,7 @@ public class CourseController {
         if (date == null) {
             Help.markWrongField(focus, courseDate);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("day"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("day"));
         } else
             courseDate.setStyle(Help.styleRight);
 
@@ -144,7 +144,7 @@ public class CourseController {
         if (docent == null) {
             Help.markWrongField(focus, courseDirector);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("director"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("director"));
         } else
             courseDirector.setStyle(Help.styleRight);
 

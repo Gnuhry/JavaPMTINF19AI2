@@ -26,10 +26,7 @@ import org.dhbw.classes.*;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class ShowController extends Application implements Initializable {
     private final ObservableList<DualStudent> students = FXCollections.observableArrayList(
@@ -47,26 +44,24 @@ public class ShowController extends Application implements Initializable {
     private final ObservableList<CourseRoom> rooms = FXCollections.observableArrayList(
             University.getRooms()
     );
-    private final ObservableList<Campus> campuses = FXCollections.observableArrayList(
-            Campus.values()
-    );
 
     private FileType file;
     private List<Object> object;
     private final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-    private final Company allCompany = new Company(Help.getRessourceBundle().getString("all_company"), null, null);
-    private final Course allCourse = new Course(Help.getRessourceBundle().getString("all_course"), null, null);
+    private final Company allCompany = new Company(Help.getResourcedBundle().getString("all_company"), null, null);
+    private final Course allCourse = new Course(Help.getResourcedBundle().getString("all_course"), null, null);
 
     @FXML
-    private AnchorPane studentAnchor, lectureAnchor, courseAnchor, companyAnchor, roomAnchor;
+    private AnchorPane studentAnchor, docentAnchor, courseAnchor, companyAnchor, roomAnchor;
     @FXML
-    private TextField searchBox, searchBoxLecture, searchBoxCourse, searchBoxCompany, searchBoxRoom;
+    private TextField searchBox, searchBoxDocent, searchBoxCourse, searchBoxCompany, searchBoxRoom;
     @FXML
     private ComboBox<Course> courseFilterBox;
     @FXML
     private ComboBox<Company> companyFilterBox;
     @FXML
-    private ComboBox<String> campusFilterBox;
+    private ComboBox<String> campusFilterBox, studyTypeFilterBox;
+
     @FXML
     public TableView<DualStudent> studentTable;
     @FXML
@@ -85,17 +80,17 @@ public class ShowController extends Application implements Initializable {
     private TableColumn<DualStudent, Void> studentC, studentD;
 
     @FXML
-    private TableView<Docent> lectureTable;
+    private TableView<Docent> docentTable;
     @FXML
-    private TableColumn<Docent, Integer> lectureNumber;
+    private TableColumn<Docent, Integer> docentNumber;
     @FXML
-    private TableColumn<Docent, String> lectureFirstName, lectureLastName, lectureEmail;
+    private TableColumn<Docent, String> docentFirstName, docentLastName, docentEmail;
     @FXML
-    private TableColumn<Docent, Date> lectureBirth;
+    private TableColumn<Docent, Date> docentBirth;
     @FXML
-    private TableColumn<Docent, Address> lectureAddress;
+    private TableColumn<Docent, Address> docentAddress;
     @FXML
-    private TableColumn<Docent, Void> lectureC, lectureD;
+    private TableColumn<Docent, Void> docentC, docentD;
 
     @FXML
     private TableView<Course> courseTable;
@@ -108,7 +103,7 @@ public class ShowController extends Application implements Initializable {
     @FXML
     private TableColumn<Course, Date> courseDate;
     @FXML
-    private TableColumn<Course, Docent> courseLecture;
+    private TableColumn<Course, Docent> courseDocent;
     @FXML
     private TableColumn<Course, Void> courseC, courseD, courseMail;
 
@@ -121,30 +116,16 @@ public class ShowController extends Application implements Initializable {
     @FXML
     private TableColumn<Company, Person> companyPerson;
     @FXML
-    private TableColumn<Company, Void> companyC, companyD;
+    private TableColumn<Company, Void> companyC, companyD, companyMail;
 
     @FXML
     private TableView<CourseRoom> roomTable;
     @FXML
-    private TableColumn<CourseRoom, String> roomName;
-    @FXML
-    private TableColumn<CourseRoom, String> roomCampus;
-    @FXML
-    private TableColumn<CourseRoom, String> roomBuilding;
-    @FXML
-    private TableColumn<CourseRoom, String> roomFloor;
+    private TableColumn<CourseRoom, String> roomName, roomCampus, roomBuilding, roomFloor, roomProjector, roomDocumentCamera, roomLaboratory;
     @FXML
     private TableColumn<CourseRoom, Integer> roomSeats;
     @FXML
-    private TableColumn<CourseRoom, String> roomProjector;
-    @FXML
-    private TableColumn<CourseRoom, String> roomDocumentCamera;
-    @FXML
-    private TableColumn<CourseRoom, String> roomLaboratory;
-    @FXML
-    private TableColumn<CourseRoom, Void> roomC;
-    @FXML
-    private TableColumn<CourseRoom, Void> roomD;
+    private TableColumn<CourseRoom, Void> roomC, roomD;
 
     /**
      * changing the scene root in App to "primary.fxml"
@@ -178,17 +159,6 @@ public class ShowController extends Application implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        ContextMenu refreshMenu = new ContextMenu();
-        MenuItem[] item = new MenuItem[]{new MenuItem(Help.getRessourceBundle().getString("refresh")), new MenuItem(Help.getRessourceBundle().getString("back"))};
-        item[0].setOnAction(actionEvent -> refresh());
-        item[1].setOnAction(actionEvent -> {
-            try {
-                backToOverview();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        refreshMenu.getItems().addAll(item);
 
         studentNumber.setCellValueFactory(new PropertyValueFactory<>("studentNumber"));
         studentName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -213,7 +183,7 @@ public class ShowController extends Application implements Initializable {
                 }
             };
             cell.setOnMouseClicked(e -> {
-                if (!cell.isEmpty())
+                if (e.isControlDown() && !cell.isEmpty())
                     getHostServices().showDocument("mailto:" + cell.getTableView().getItems().get(cell.getIndex()).getEmail());
             });
             return cell;
@@ -248,16 +218,16 @@ public class ShowController extends Application implements Initializable {
         sortedName.comparatorProperty().bind(studentTable.comparatorProperty());
 
         studentTable.setItems(sortedName);
-        studentTable.setContextMenu(refreshMenu);
+        addContextMenu(studentTable);
         studentTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addDeleteKey(studentAnchor, studentTable);
+        addKeyListener(studentAnchor, studentTable);
 
-        lectureNumber.setCellValueFactory(new PropertyValueFactory<>("docentNumber"));
-        lectureLastName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        lectureFirstName.setCellValueFactory(new PropertyValueFactory<>("forename"));
-        lectureBirth.setCellFactory(column -> new TableCell<>() {
+        docentNumber.setCellValueFactory(new PropertyValueFactory<>("docentNumber"));
+        docentLastName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        docentFirstName.setCellValueFactory(new PropertyValueFactory<>("forename"));
+        docentBirth.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(Date date, boolean b) {
                 super.updateItem(date, b);
@@ -267,10 +237,10 @@ public class ShowController extends Application implements Initializable {
                     this.setText(format.format(date));
             }
         });
-        lectureBirth.setCellValueFactory(new PropertyValueFactory<>("birthday"));
-        lectureEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        lectureAddress.setCellValueFactory(new PropertyValueFactory<>("Address"));
-        lectureEmail.setCellFactory(lectureVoidTableColumn -> {
+        docentBirth.setCellValueFactory(new PropertyValueFactory<>("birthday"));
+        docentEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        docentAddress.setCellValueFactory(new PropertyValueFactory<>("Address"));
+        docentEmail.setCellFactory(lectureVoidTableColumn -> {
             TableCell<Docent, String> cell = new TableCell<>() {
                 @Override
                 protected void updateItem(String item, boolean empty) {
@@ -279,30 +249,30 @@ public class ShowController extends Application implements Initializable {
                 }
             };
             cell.setOnMouseClicked(e -> {
-                if (!cell.isEmpty())
+                if (e.isControlDown() && !cell.isEmpty())
                     getHostServices().showDocument("mailto:" + cell.getTableView().getItems().get(cell.getIndex()).getEmail());
             });
             return cell;
         });
-        lectureC.setCellFactory(getCallback(FileType.editDocents));
-        lectureD.setCellFactory(getCallback(FileType.delete));
+        docentC.setCellFactory(getCallback(FileType.editDocents));
+        docentD.setCellFactory(getCallback(FileType.delete));
 
-        lectureTable.setContextMenu(refreshMenu);
-        lectureTable.getSelectionModel().setSelectionMode(
+        addContextMenu(docentTable);
+        docentTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addDeleteKey(lectureAnchor, lectureTable);
+        addKeyListener(docentAnchor, docentTable);
 
         FilteredList<Docent> filteredLecture = new FilteredList<>(docents, p -> true);
-        searchBoxLecture.textProperty().addListener((observable, oldValue, newValue) -> filteredLecture.setPredicate(person -> {
+        searchBoxDocent.textProperty().addListener((observable, oldValue, newValue) -> filteredLecture.setPredicate(person -> {
             if (newValue == null || newValue.isEmpty())
                 return true;
             String lowerCaseFilter = newValue.toLowerCase();
             return person.getForename().toLowerCase().contains(lowerCaseFilter) || (person.getName().toLowerCase().contains(lowerCaseFilter) || String.valueOf(person.getDocentNumber()).toLowerCase().contains(lowerCaseFilter));
         }));
         SortedList<Docent> sortedLecture = new SortedList<>(filteredLecture);
-        sortedLecture.comparatorProperty().bind(lectureTable.comparatorProperty());
-        lectureTable.setItems(sortedLecture);
+        sortedLecture.comparatorProperty().bind(docentTable.comparatorProperty());
+        docentTable.setItems(sortedLecture);
 
         courseName.setCellValueFactory(new PropertyValueFactory<>("name"));
         courseType.setCellValueFactory(new PropertyValueFactory<>("studyCourse"));
@@ -318,7 +288,7 @@ public class ShowController extends Application implements Initializable {
             }
         });
         courseDate.setCellValueFactory(new PropertyValueFactory<>("registrationDate"));
-        courseLecture.setCellValueFactory(new PropertyValueFactory<>("studyDirector"));
+        courseDocent.setCellValueFactory(new PropertyValueFactory<>("studyDirector"));
         courseC.setCellFactory(getCallback(FileType.editCourse));
         courseD.setCellFactory(getCallback(FileType.delete));
         courseMail.setCellFactory(new Callback<>() {
@@ -348,20 +318,21 @@ public class ShowController extends Application implements Initializable {
                 };
             }
         });
-        courseTable.setContextMenu(refreshMenu);
+        addContextMenu(courseTable);
         courseTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addDeleteKey(courseAnchor, courseTable);
+        addKeyListener(courseAnchor, courseTable);
 
+        List<String> studyTypeList = new ArrayList<>();
+        studyTypeList.add(Help.getResourcedBundle().getString("all_study_types"));
+        for (StudyCourse course : StudyCourse.values())
+            studyTypeList.add(course.toString());
+        studyTypeFilterBox.getItems().setAll(studyTypeList);
+        studyTypeFilterBox.setValue(Help.getResourcedBundle().getString("all_study_types"));
         FilteredList<Course> filteredCourse2 = new FilteredList<>(courses, p -> true);
-        searchBoxCourse.textProperty().addListener((observable, oldValue, newValue) -> filteredCourse2.setPredicate(course -> {
-            if (newValue == null || newValue.isEmpty()) {
-                return true;
-            }
-            String lowerCaseFilter = newValue.toLowerCase();
-            return course.getName().toLowerCase().contains(lowerCaseFilter) || course.getStudyCourse().toString().toLowerCase().contains(lowerCaseFilter);
-        }));
+        searchBoxCourse.textProperty().addListener((observable, oldValue, newValue) -> filteredCourse2.setPredicate(this::checkFilterCourse));
+        studyTypeFilterBox.valueProperty().addListener((observable, oldValue, newValue) -> filteredCourse2.setPredicate(this::checkFilterCourse));
         SortedList<Course> sortedCourses = new SortedList<>(filteredCourse2);
         sortedCourses.comparatorProperty().bind(courseTable.comparatorProperty());
         courseTable.setItems(sortedCourses);
@@ -371,6 +342,31 @@ public class ShowController extends Application implements Initializable {
         companyPerson.setCellValueFactory(new PropertyValueFactory<>("contactPerson"));
         companyC.setCellFactory(getCallback(FileType.editCompany));
         companyD.setCellFactory(getCallback(FileType.delete));
+        companyMail.setCellFactory(new Callback<>() {
+            @Override
+            public TableCell<Company, Void> call(TableColumn<Company, Void> companyVoidTableColumn) {
+                return new TableCell<>() {
+                    final Button btn = new Button();
+
+                    @Override
+                    protected void updateItem(Void aVoid, boolean b) {
+                        super.updateItem(aVoid, b);
+                        if (b)
+                            setGraphic(null);
+                        else {
+                            btn.setOnAction(actionEvent -> {
+                                Company company = getTableView().getItems().get(getIndex());
+                                if (company != null && company.getContactPerson() != null && company.getContactPerson().getEmail() != null && !company.getContactPerson().getEmail().isEmpty())
+                                    getHostServices().showDocument("mailto:" + company.getContactPerson().getEmail());
+
+                            });
+                            btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/mailButton.png"))));
+                            setGraphic(btn);
+                        }
+                    }
+                };
+            }
+        });
 
         FilteredList<Company> filteredCompany2 = new FilteredList<>(companies, p -> true);
         searchBoxCompany.textProperty().addListener((observable, oldValue, newValue) -> filteredCompany2.setPredicate(company -> {
@@ -383,11 +379,11 @@ public class ShowController extends Application implements Initializable {
         SortedList<Company> sortedCompany2 = new SortedList<>(filteredCompany2);
         sortedCompany2.comparatorProperty().bind(companyTable.comparatorProperty());
         companyTable.setItems(sortedCompany2);
-        companyTable.setContextMenu(refreshMenu);
+        addContextMenu(companyTable);
         companyTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addDeleteKey(companyAnchor, companyTable);
+        addKeyListener(companyAnchor, companyTable);
 
         roomName.setCellValueFactory(new PropertyValueFactory<>("name"));
         roomCampus.setCellValueFactory(new PropertyValueFactory<>("campus"));
@@ -401,22 +397,22 @@ public class ShowController extends Application implements Initializable {
         roomD.setCellFactory(getCallback(FileType.delete));
 
         List<String> campusList = new ArrayList<>();
-        campusList.add(Help.getRessourceBundle().getString("all_campus"));
-        for (Campus campus : campuses)
+        campusList.add(Help.getResourcedBundle().getString("all_campus"));
+        for (Campus campus : Campus.values())
             campusList.add(campus.toString());
         campusFilterBox.getItems().setAll(campusList);
-        campusFilterBox.setValue(Help.getRessourceBundle().getString("all_campus"));
+        campusFilterBox.setValue(Help.getResourcedBundle().getString("all_campus"));
         FilteredList<CourseRoom> filteredRoom = new FilteredList<>(rooms, p -> true);
         searchBoxRoom.textProperty().addListener((observable, oldValue, newValue) -> filteredRoom.setPredicate(this::checkFilterRoom));
         campusFilterBox.valueProperty().addListener((observable, oldValue, newValue) -> filteredRoom.setPredicate(this::checkFilterRoom));
         SortedList<CourseRoom> sortedRooms = new SortedList<>(filteredRoom);
         sortedRooms.comparatorProperty().bind(roomTable.comparatorProperty());
         roomTable.setItems(sortedRooms);
-        roomTable.setContextMenu(refreshMenu);
+        addContextMenu(roomTable);
         roomTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addDeleteKey(roomAnchor, roomTable);
+        addKeyListener(roomAnchor, roomTable);
     }
 
     /**
@@ -439,25 +435,202 @@ public class ShowController extends Application implements Initializable {
         });
     }
 
+    public void addContextMenu(TableView<?> view) {
+        ContextMenu refreshMenu = new ContextMenu();
+        MenuItem[] optional_menu = new MenuItem[]{new MenuItem(Help.getResourcedBundle().getString("edit")), new MenuItem(Help.getResourcedBundle().getString("send_email")), new MenuItem(Help.getResourcedBundle().getString("set_to_uni_email")), new MenuItem(Help.getResourcedBundle().getString("delete")), new MenuItem(Help.getResourcedBundle().getString("send_email_with_docent"))};
+        MenuItem[] item = new MenuItem[]{new MenuItem(Help.getResourcedBundle().getString("refresh")), new MenuItem(Help.getResourcedBundle().getString("back"))};
+
+        item[0].setOnAction(actionEvent -> refresh());
+        item[1].setOnAction(actionEvent -> {
+            try {
+                backToOverview();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        refreshMenu.getItems().addAll(item);
+
+        view.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                ContextMenu contextMenu = view.getContextMenu();
+                int counter = 0;
+
+                if (view.getSelectionModel().getSelectedItems().size() == 1) {
+                    MenuItem edit = optional_menu[0];
+                    edit.setOnAction(actionEvent -> {
+                        try {
+                            Object o = view.getSelectionModel().getSelectedItems().get(0);
+                            if (o instanceof DualStudent)
+                                this.file = FileType.editStudents;
+                            else if (o instanceof Docent)
+                                this.file = FileType.editDocents;
+                            else if (o instanceof Course)
+                                this.file = FileType.editCourse;
+                            else if (o instanceof Company)
+                                this.file = FileType.editCompany;
+                            else if (o instanceof CourseRoom)
+                                this.file = FileType.editRoom;
+                            this.object = Collections.singletonList(o);
+                            start(new Stage());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+                    contextMenu.getItems().add(counter++, edit);
+                } else
+                    contextMenu.getItems().remove(optional_menu[0]);
+
+                if (view.getItems() != null && view.getItems().get(0) != null) {
+                    Class<?> class_ = view.getItems().get(0).getClass();
+
+                    if (class_ == DualStudent.class || class_ == Docent.class || class_ == Company.class || class_ == Course.class) {
+                        MenuItem mail = optional_menu[1];
+                        mail.setOnAction(actionEvent -> {
+                            StringBuilder sb = new StringBuilder("mailto:");
+                            for (Object o : view.getSelectionModel().getSelectedItems()) {
+                                if (o instanceof DualStudent)
+                                    sb.append(((DualStudent) o).getEmail()).append(", ");
+                                else if (o instanceof Docent)
+                                    sb.append(((Docent) o).getEmail()).append(", ");
+                                else if (o instanceof Company && ((Company) o).getContactPerson() != null && ((Company) o).getContactPerson().getEmail() != null && !((Company) o).getContactPerson().getEmail().isEmpty())
+                                    sb.append(((Company) o).getContactPerson().getEmail()).append(", ");
+                                else if (o instanceof Course)
+                                    for (String email : Objects.requireNonNullElseGet(University.getAllEmailFromCourse((Course) o), () -> new String[0]))
+                                        sb.append(email).append(", ");
+                            }
+                            if (!sb.toString().equals("mailto:"))
+                                getHostServices().showDocument(sb.toString().substring(0, sb.toString().length() - 2));
+                            view.getSelectionModel().clearSelection();
+                        });
+                        contextMenu.getItems().add(counter++, mail);
+                    } else
+                        contextMenu.getItems().remove(optional_menu[1]);
+
+                    if (class_ == Course.class) {
+                        MenuItem setEmail2 = optional_menu[4];
+                        setEmail2.setOnAction(actionEvent -> {
+                            StringBuilder sb = new StringBuilder("mailto:");
+                            for (Object o : view.getSelectionModel().getSelectedItems())
+                                if (o instanceof Course) {
+                                    Course c = (Course) o;
+                                    if (c.getStudyDirector() != null && c.getStudyDirector().getEmail() != null && !c.getStudyDirector().getEmail().isEmpty())
+                                        sb.append(((Course) o).getStudyDirector().getEmail()).append(", ");
+                                    for (String email : Objects.requireNonNullElseGet(University.getAllEmailFromCourse((Course) o), () -> new String[0]))
+                                        sb.append(email).append(", ");
+                                }
+                            if (!sb.toString().equals("mailto:"))
+                                getHostServices().showDocument(sb.toString().substring(0, sb.toString().length() - 2));
+                            view.getSelectionModel().clearSelection();
+                        });
+                        contextMenu.getItems().add(counter++, setEmail2);
+                    } else
+                        contextMenu.getItems().remove(optional_menu[4]);
+
+                    if (class_ == DualStudent.class || class_ == Docent.class) {
+                        MenuItem setEmail = optional_menu[2];
+                        setEmail.setOnAction(actionEvent -> {
+                            for (Object o : view.getSelectionModel().getSelectedItems()) {
+                                if (o instanceof DualStudent) {
+                                    DualStudent d = new DualStudent((DualStudent) o);
+                                    d.setEmail(Help.getStudentUniversityEmail(d));
+                                    Database.updateStudent(d, (DualStudent) o);
+                                } else if (o instanceof Docent) {
+                                    Docent d = new Docent((Docent) o);
+                                    d.setEmail(Help.getDocentUniversityEmail(d));
+                                    Database.updateDocent(d, (Docent) o);
+                                }
+                            }
+                            refresh();
+                        });
+                        contextMenu.getItems().add(counter++, setEmail);
+                    } else
+                        contextMenu.getItems().remove(optional_menu[2]);
+                }
+
+                MenuItem delete = optional_menu[3];
+                delete.setOnAction(actionEvent -> {
+                    try {
+                        this.file = FileType.delete;
+                        this.object = new ArrayList<>(view.getSelectionModel().getSelectedItems());
+                        start(new Stage());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+                contextMenu.getItems().add(counter, delete);
+                view.setContextMenu(contextMenu);
+            } else {
+                view.getContextMenu().getItems().removeAll(optional_menu);
+            }
+        });
+        view.setContextMenu(refreshMenu);
+    }
+
     /**
      * add the delete key to delete rows
      *
      * @param anchorPane controller to bind the key
      * @param table      row to delete
      */
-    public void addDeleteKey(AnchorPane anchorPane, TableView<?> table) {
-        anchorPane.setOnKeyPressed(keyEvent -> {
-            final List<?> selectedItem = table.getSelectionModel().getSelectedItems();
-            if (selectedItem != null)
-                if (keyEvent.getCode().equals(KeyCode.DELETE))
-                    try {
-                        this.file = FileType.delete;
-                        this.object = new ArrayList<>(selectedItem);
-                        start(new Stage());
-                    } catch (Exception e) {
-                        e.printStackTrace();
+    public void addKeyListener(AnchorPane anchorPane, TableView<?> table) {
+        if (table.getItems() != null && table.getItems().size() > 0 && table.getItems().get(0) != null && (table.getItems().get(0).getClass() == DualStudent.class || table.getItems().get(0).getClass() == Docent.class)) {
+            anchorPane.setOnKeyPressed(keyEvent -> {
+                final List<?> selectedItem = table.getSelectionModel().getSelectedItems();
+                if (selectedItem != null) {
+                    if (keyEvent.getCode().equals(KeyCode.DELETE))
+                        try {
+                            this.file = FileType.delete;
+                            this.object = new ArrayList<>(selectedItem);
+                            start(new Stage());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    else if (keyEvent.getCode().equals(KeyCode.ESCAPE))
+                        table.getSelectionModel().clearSelection();
+                    else if (keyEvent.getCode().equals(KeyCode.U) && keyEvent.isControlDown()) {
+                        for (Object o : selectedItem) {
+                            if (o instanceof DualStudent) {
+                                DualStudent d = new DualStudent((DualStudent) o);
+                                d.setEmail(Help.getStudentUniversityEmail(d));
+                                Database.updateStudent(d, (DualStudent) o);
+                            } else if (o instanceof Docent) {
+                                Docent d = new Docent((Docent) o);
+                                d.setEmail(Help.getDocentUniversityEmail(d));
+                                Database.updateDocent(d, (Docent) o);
+                            }
+                        }
+                        refresh();
+                    } else if (keyEvent.getCode().equals(KeyCode.M) && keyEvent.isControlDown()) {
+                        StringBuilder sb = new StringBuilder("mailto:");
+                        for (Object o : selectedItem) {
+                            if (o instanceof DualStudent)
+                                sb.append(((DualStudent) o).getEmail()).append(", ");
+                            else if (o instanceof Docent)
+                                sb.append(((Docent) o).getEmail()).append(", ");
+                        }
+                        if (!sb.toString().equals("mailto:"))
+                            getHostServices().showDocument(sb.toString().substring(0, sb.toString().length() - 2));
+                        table.getSelectionModel().clearSelection();
                     }
-        });
+                }
+            });
+        } else {
+            anchorPane.setOnKeyPressed(keyEvent -> {
+                final List<?> selectedItem = table.getSelectionModel().getSelectedItems();
+                if (selectedItem != null) {
+                    if (keyEvent.getCode().equals(KeyCode.DELETE))
+                        try {
+                            this.file = FileType.delete;
+                            this.object = new ArrayList<>(selectedItem);
+                            start(new Stage());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    else if (keyEvent.getCode().equals(KeyCode.ESCAPE))
+                        table.getSelectionModel().clearSelection();
+                }
+            });
+        }
     }
 
     /**
@@ -466,7 +639,7 @@ public class ShowController extends Application implements Initializable {
      * @param stage new stage show new window
      */
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(file.toString()), Help.getRessourceBundle());
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(file.toString()), Help.getResourcedBundle());
         Parent root = fxmlLoader.load();
         switch (file) {
             case editStudents: {
@@ -503,9 +676,12 @@ public class ShowController extends Application implements Initializable {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setOnHidden(windowEvent -> refresh());
+        stage.setResizable(false);
         stage.initOwner(studentTable.getScene().getWindow());
+        stage.setX(studentTable.getScene().getWindow().getX());
+        stage.setY(studentTable.getScene().getWindow().getY());
         stage.initModality(Modality.WINDOW_MODAL);
-        stage.setTitle(Help.getRessourceBundle().getString("title"));
+        stage.setTitle(Help.getResourcedBundle().getString("title"));
         stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/dhbwLogoSquare.png")));
         stage.show();
     }
@@ -547,7 +723,7 @@ public class ShowController extends Application implements Initializable {
      * filtering the room table with input text from search boxes and combo boxes
      *
      * @param room room of database table which gets checked on input
-     * @return {true} if person has the configure attributes from the filters, {false} if not
+     * @return {true} if room has the configure attributes from the filters, {false} if not
      */
     private boolean checkFilterRoom(CourseRoom room) {
         boolean erg = true;
@@ -555,8 +731,29 @@ public class ShowController extends Application implements Initializable {
         int id = campusFilterBox.getSelectionModel().getSelectedIndex() - 1;
         if (id > -1 && (id >= Campus.values().length ? null : Campus.values()[id]) != room.getCampus())
             return false;
-        if (!search.isEmpty())
+        if (search != null && !search.isEmpty()) {
+            search = search.trim().toLowerCase();
             erg = room.getName().toLowerCase().contains(search) || room.getCampus().toString().toLowerCase().contains(search);
+        }
+        return erg;
+    }
+
+    /**
+     * filtering the course table with input text from search boxes and combo boxes
+     *
+     * @param course course of database table which gets checked on input
+     * @return {true} if course has the configure attributes from the filters, {false} if not
+     */
+    private boolean checkFilterCourse(Course course) {
+        boolean erg = true;
+        String search = searchBoxCourse.getText();
+        int id = studyTypeFilterBox.getSelectionModel().getSelectedIndex() - 1;
+        if (id > -1 && (id >= StudyCourse.values().length ? null : StudyCourse.values()[id]) != course.getStudyCourse())
+            return false;
+        if (search != null && !search.isEmpty()) {
+            search = search.trim().toLowerCase();
+            erg = course.getName().toLowerCase().contains(search) || course.getRoom().getName().toLowerCase().contains(search);
+        }
         return erg;
     }
 

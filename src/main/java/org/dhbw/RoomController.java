@@ -56,8 +56,8 @@ public class RoomController {
     public void initVariables(CourseRoom room) {
         room_old = room;
         if (room != null) {
-            title.setText(Help.getRessourceBundle().getString("title_room_edit"));
-            buttonDone.setText(Help.getRessourceBundle().getString("save"));
+            title.setText(Help.getResourcedBundle().getString("title_room_edit"));
+            buttonDone.setText(Help.getResourcedBundle().getString("save"));
             roomName.setText(room.getName());
             roomBuilding.setText(room.getBuilding());
             roomCampus.setValue(room.getCampus());
@@ -118,22 +118,22 @@ public class RoomController {
         if (text.isEmpty()) {
             Help.markWrongField(false, roomName);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("name"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("name"));
         } else if (text.length() >= Database.maxString) {
             Help.markWrongField(false, roomName);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
         } else
             roomName.setStyle(Help.styleRight);
         Campus campus = roomCampus.getValue();
         if (campus == null) {
             Help.markWrongField(focus, roomCampus);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("campus"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("campus"));
         } else if (text.length() >= Database.maxString) {
             Help.markWrongField(false, roomCampus);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
         } else
             roomCampus.setStyle(Help.styleRight);
 
@@ -141,11 +141,11 @@ public class RoomController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, roomBuilding);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("building"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("building"));
         } else if (text.length() >= Database.maxString) {
             Help.markWrongField(false, roomBuilding);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
         } else
             roomBuilding.setStyle(Help.styleRight);
 
@@ -153,11 +153,11 @@ public class RoomController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, roomFloor);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("floor"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("floor"));
         } else if (text.length() >= Database.maxString) {
             Help.markWrongField(false, roomFloor);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
         } else
             roomFloor.setStyle(Help.styleRight);
 
@@ -165,20 +165,20 @@ public class RoomController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, roomSeats);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("seats"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("seats"));
         } else {
             try {
                 int x = Integer.parseInt(text);
                 if (x <= 0) {
                     Help.markWrongField(focus, roomSeats);
                     focus = true;
-                    errorMessageL.add(Help.getRessourceBundleError().getString("seats3"));
+                    errorMessageL.add(Help.getResourcedBundleError().getString("seats3"));
                 }
                 roomSeats.setStyle(Help.styleRight);
             } catch (NumberFormatException ex) {
                 Help.markWrongField(focus, roomSeats);
                 focus = true;
-                errorMessageL.add(Help.getRessourceBundleError().getString("seats2"));
+                errorMessageL.add(Help.getResourcedBundleError().getString("seats2"));
             }
         }
 

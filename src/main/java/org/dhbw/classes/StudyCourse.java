@@ -12,6 +12,6 @@ public enum StudyCourse {
 
     @Override
     public String toString() {
-        return Help.getRessourceBundle().getString(name);
+        return Help.getResourcedBundle().getString(name);
     }
 }

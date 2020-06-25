@@ -24,6 +24,14 @@ public class Person implements Comparable<Person> {
         this.email = email;
     }
 
+    public Person(Person person) {
+        this.name = person.name;
+        this.forename = person.forename;
+        this.birthday = new Date(person.birthday.getTime());
+        this.address = new Address(person.address);
+        this.email = person.email;
+    }
+
     //-----------------------------------Getter-------------------------------------------
     public String getName() {
         return name;
@@ -86,7 +94,7 @@ public class Person implements Comparable<Person> {
     public String toString() {
         if (forename == null || email == null || forename.equals("") && email.equals(""))
             return name;
-        return name + ", " + forename + " , " + email;
+        return name + " " + forename + ", " + email;
     }
 
     @Override

@@ -9,10 +9,7 @@ import javafx.stage.Stage;
 import org.dhbw.classes.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class DocentController {
 
@@ -54,8 +51,8 @@ public class DocentController {
             docentNumberField.setText("d" + docent.getDocentNumber());
             buttonLN.setDisable(true);
             docentBirth.setDisable(true);
-            title.setText(Help.getRessourceBundle().getString("title_docent_edit"));
-            buttonDone.setText(Help.getRessourceBundle().getString("save"));
+            title.setText(Help.getResourcedBundle().getString("title_docent_edit"));
+            buttonDone.setText(Help.getResourcedBundle().getString("save"));
         }
     }
 
@@ -92,6 +89,14 @@ public class DocentController {
     }
 
     /**
+     * set email docent to standard
+     */
+    @FXML
+    private void setDocentEmail() {
+        docentEmail.setText(Help.getDocentUniversityEmail(Objects.requireNonNullElseGet(docent_old, () -> new Docent(null, null, null, null, null, Integer.parseInt(docentNumberField.getText().substring(1))))));
+    }
+
+    /**
      * reading the textfield
      * checking validation of textfield and mark wrong entries
      * adding or editing the docent to the database
@@ -105,11 +110,11 @@ public class DocentController {
         if (text.isEmpty()) {
             Help.markWrongField(false, docentFirstName);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("forename"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("forename"));
         } else if (text.length() >= Database.maxString) {
             Help.markWrongField(false, docentFirstName);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
         } else
             docentFirstName.setStyle(Help.styleRight);
 
@@ -117,11 +122,11 @@ public class DocentController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, docentLastName);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("last_name"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("last_name"));
         } else if (text.length() >= Database.maxString) {
             Help.markWrongField(false, docentLastName);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
         } else
             docentLastName.setStyle(Help.styleRight);
 
@@ -129,11 +134,11 @@ public class DocentController {
         if (date == null) {
             Help.markWrongField(focus, docentBirth);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("birthday"));
-        } else if (!Help.validateBirthdate(date)) {
+            errorMessageL.add(Help.getResourcedBundleError().getString("birthday"));
+        } else if (!Help.validateBirthday(date)) {
             Help.markWrongField(focus, docentBirth);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("birthday2"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("birthday2"));
         } else
             docentBirth.setStyle(Help.styleRight);
 
@@ -141,15 +146,15 @@ public class DocentController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, docentEmail);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("email"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("email"));
         } else if (!Help.validateEmail(text)) {
             Help.markWrongField(focus, docentEmail);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("email2"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("email2"));
         } else if (text.length() >= Database.maxString) {
             Help.markWrongField(false, docentEmail);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
         } else
             docentEmail.setStyle(Help.styleRight);
 
@@ -157,11 +162,11 @@ public class DocentController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, docentStreet);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("street"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("street"));
         } else if (text.length() >= Database.maxString) {
             Help.markWrongField(false, docentStreet);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
         } else
             docentStreet.setStyle(Help.styleRight);
 
@@ -169,11 +174,11 @@ public class DocentController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, docentHomeNumber);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("number"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("number"));
         } else if (text.length() >= Database.maxString) {
             Help.markWrongField(false, docentHomeNumber);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
         } else
             docentHomeNumber.setStyle(Help.styleRight);
 
@@ -181,15 +186,15 @@ public class DocentController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, docentPostalCode);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("postcode"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("postcode"));
         } else if (!Help.validatePostalCode(text)) {
             Help.markWrongField(focus, docentPostalCode);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("postcode2"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("postcode2"));
         } else if (text.length() >= Database.maxString) {
             Help.markWrongField(false, docentPostalCode);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
         } else
             docentPostalCode.setStyle(Help.styleRight);
 
@@ -197,11 +202,11 @@ public class DocentController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, docentCity);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("city"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("city"));
         } else if (text.length() >= Database.maxString) {
             Help.markWrongField(false, docentCity);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
         } else
             docentCity.setStyle(Help.styleRight);
 
@@ -209,11 +214,11 @@ public class DocentController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, docentCountry);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("country"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("country"));
         } else if (text.length() >= Database.maxString) {
             Help.markWrongField(false, docentCountry);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
         } else
             docentCountry.setStyle(Help.styleRight);
 

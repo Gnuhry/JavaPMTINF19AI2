@@ -158,7 +158,7 @@ public class Database {
      * @return id of course if success, Integer.Min_Value if not
      */
     public static int addCourse(Course course) {
-        if (course == null) return Integer.MIN_VALUE;
+        if (course == null || course.getName() == null) return Integer.MIN_VALUE;
         int id = getCourseId(course);
         if (id >= 0) return id;
         int docent_id = addDocent(course.getStudyDirector());
