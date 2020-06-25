@@ -48,8 +48,8 @@ public class ShowController extends Application implements Initializable {
     private FileType file;
     private List<Object> object;
     private final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-    private final Company allCompany = new Company(Help.getRessourceBundle().getString("all_company"), null, null);
-    private final Course allCourse = new Course(Help.getRessourceBundle().getString("all_course"), null, null);
+    private final Company allCompany = new Company(Help.getResourcedBundle().getString("all_company"), null, null);
+    private final Course allCourse = new Course(Help.getResourcedBundle().getString("all_course"), null, null);
 
     @FXML
     private AnchorPane studentAnchor, docentAnchor, courseAnchor, companyAnchor, roomAnchor;
@@ -338,11 +338,11 @@ public class ShowController extends Application implements Initializable {
         addKeyListener(courseAnchor, courseTable);
 
         List<String> studyTypeList = new ArrayList<>();
-        studyTypeList.add(Help.getRessourceBundle().getString("all_study_types"));
+        studyTypeList.add(Help.getResourcedBundle().getString("all_study_types"));
         for (StudyCourse course : StudyCourse.values())
             studyTypeList.add(course.toString());
         studyTypeFilterBox.getItems().setAll(studyTypeList);
-        studyTypeFilterBox.setValue(Help.getRessourceBundle().getString("all_study_types"));
+        studyTypeFilterBox.setValue(Help.getResourcedBundle().getString("all_study_types"));
         FilteredList<Course> filteredCourse2 = new FilteredList<>(courses, p -> true);
         searchBoxCourse.textProperty().addListener((observable, oldValue, newValue) -> filteredCourse2.setPredicate(this::checkFilterCourse));
         studyTypeFilterBox.valueProperty().addListener((observable, oldValue, newValue) -> filteredCourse2.setPredicate(this::checkFilterCourse));
@@ -385,11 +385,11 @@ public class ShowController extends Application implements Initializable {
         roomD.setCellFactory(getCallback(FileType.delete));
 
         List<String> campusList = new ArrayList<>();
-        campusList.add(Help.getRessourceBundle().getString("all_campus"));
+        campusList.add(Help.getResourcedBundle().getString("all_campus"));
         for (Campus campus : Campus.values())
             campusList.add(campus.toString());
         campusFilterBox.getItems().setAll(campusList);
-        campusFilterBox.setValue(Help.getRessourceBundle().getString("all_campus"));
+        campusFilterBox.setValue(Help.getResourcedBundle().getString("all_campus"));
         FilteredList<CourseRoom> filteredRoom = new FilteredList<>(rooms, p -> true);
         searchBoxRoom.textProperty().addListener((observable, oldValue, newValue) -> filteredRoom.setPredicate(this::checkFilterRoom));
         campusFilterBox.valueProperty().addListener((observable, oldValue, newValue) -> filteredRoom.setPredicate(this::checkFilterRoom));
@@ -424,9 +424,9 @@ public class ShowController extends Application implements Initializable {
     }
 
     public void addContextMenu(TableView<?> view) {
-        MenuItem[] optional_menu = new MenuItem[]{new MenuItem(Help.getRessourceBundle().getString("edit")), new MenuItem(Help.getRessourceBundle().getString("send_email")), new MenuItem(Help.getRessourceBundle().getString("set_to_uni_email")), new MenuItem(Help.getRessourceBundle().getString("delete"))};
+        MenuItem[] optional_menu = new MenuItem[]{new MenuItem(Help.getResourcedBundle().getString("edit")), new MenuItem(Help.getResourcedBundle().getString("send_email")), new MenuItem(Help.getResourcedBundle().getString("set_to_uni_email")), new MenuItem(Help.getResourcedBundle().getString("delete"))};
         ContextMenu refreshMenu = new ContextMenu();
-        MenuItem[] item = new MenuItem[]{new MenuItem(Help.getRessourceBundle().getString("refresh")), new MenuItem(Help.getRessourceBundle().getString("back"))};
+        MenuItem[] item = new MenuItem[]{new MenuItem(Help.getResourcedBundle().getString("refresh")), new MenuItem(Help.getResourcedBundle().getString("back"))};
         item[0].setOnAction(actionEvent -> refresh());
         item[1].setOnAction(actionEvent -> {
             try {
@@ -592,7 +592,7 @@ public class ShowController extends Application implements Initializable {
      * @param stage new stage show new window
      */
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(file.toString()), Help.getRessourceBundle());
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(file.toString()), Help.getResourcedBundle());
         Parent root = fxmlLoader.load();
         switch (file) {
             case editStudents: {
@@ -634,7 +634,7 @@ public class ShowController extends Application implements Initializable {
         stage.setX(studentTable.getScene().getWindow().getX());
         stage.setY(studentTable.getScene().getWindow().getY());
         stage.initModality(Modality.WINDOW_MODAL);
-        stage.setTitle(Help.getRessourceBundle().getString("title"));
+        stage.setTitle(Help.getResourcedBundle().getString("title"));
         stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/dhbwLogoSquare.png")));
         stage.show();
     }

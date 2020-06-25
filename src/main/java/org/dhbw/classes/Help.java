@@ -54,8 +54,8 @@ public class Help {
      * @param date the date to validate
      * @return {true} if date can be a birth date, {false} if not
      */
-    public static boolean validateBirthdate(Date date) {
-        return Help.validateDateBefore(date) && Calendar.getInstance().getTime().getTime() - date.getTime() < 11826000000000L; //150 Jahre in Millisekunden
+    public static boolean validateBirthday(Date date) {
+        return Help.validateDateBefore(date) && Calendar.getInstance().getTime().getTime() - date.getTime() < 11826000000000L; //150 years in milli second
     }
 
     /**
@@ -270,16 +270,16 @@ public class Help {
      * @param person    person to insert
      * @param name      's text box
      * @param forename  's text box
-     * @param birthdate 's text box
+     * @param birthday 's text box
      * @param email     's text box
      */
-    public static void fillPersonToTextField(Person person, TextField name, TextField forename, DatePicker birthdate, TextField email) {
+    public static void fillPersonToTextField(Person person, TextField name, TextField forename, DatePicker birthday, TextField email) {
         if (person != null) {
             name.setText(person.getName());
             forename.setText(person.getForename());
             email.setText(person.getEmail());
             if (person.getBirthday() != null)
-                birthdate.setValue(convertLocalDateDate(person.getBirthday()));
+                birthday.setValue(convertLocalDateDate(person.getBirthday()));
         }
     }
 
@@ -304,7 +304,7 @@ public class Help {
      *
      * @return resource bundle
      */
-    public static ResourceBundle getRessourceBundle() {
+    public static ResourceBundle getResourcedBundle() {
         if (locale == null) readLanguageSetting();
         return ResourceBundle.getBundle(lang_file_path, locale);
     }
@@ -314,7 +314,7 @@ public class Help {
      *
      * @return resource bundle
      */
-    public static ResourceBundle getRessourceBundleError() {
+    public static ResourceBundle getResourcedBundleError() {
         if (locale == null) readLanguageSetting();
         return ResourceBundle.getBundle(lang_file_path_error, locale);
     }

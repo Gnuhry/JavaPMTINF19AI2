@@ -43,8 +43,8 @@ public class CompanyController {
     public void initVariables(Company company) {
         company_old = company;
         if (company != null) {
-            title.setText(Help.getRessourceBundle().getString("title_company_edit"));
-            buttonDone.setText(Help.getRessourceBundle().getString("save"));
+            title.setText(Help.getResourcedBundle().getString("title_company_edit"));
+            buttonDone.setText(Help.getResourcedBundle().getString("save"));
             companyName.setText(company.getName());
             Help.fillAddressesToTextField(company.getAddress(), companyStreet, companyHomeNumber, companyPostalCode, companyCity, companyCountry);
             Help.fillPersonToTextField(company.getContactPerson(), companyContactPersonLastName, companyContactPersonFirstName, companyContactPersonEmail);
@@ -64,11 +64,11 @@ public class CompanyController {
         if (text.isEmpty()) {
             Help.markWrongField(false, companyName);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("company_name"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("company_name"));
         } else if (text.length() >= Database.maxString) {
             Help.markWrongField(false, companyName);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
         } else
             companyName.setStyle(Help.styleRight);
 
@@ -76,11 +76,11 @@ public class CompanyController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, companyStreet);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("company_street"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("company_street"));
         } else if (text.length() >= Database.maxString) {
             Help.markWrongField(false, companyStreet);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
         } else
             companyStreet.setStyle(Help.styleRight);
 
@@ -88,11 +88,11 @@ public class CompanyController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, companyHomeNumber);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("company_number"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("company_number"));
         } else if (text.length() >= Database.maxString) {
             Help.markWrongField(false, companyHomeNumber);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
         } else
             companyHomeNumber.setStyle(Help.styleRight);
 
@@ -100,15 +100,15 @@ public class CompanyController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, companyPostalCode);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("company_postcode"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("company_postcode"));
         } else if (!Help.validatePostalCode(text)) {
             Help.markWrongField(focus, companyPostalCode);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("company_postcode2"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("company_postcode2"));
         } else if (text.length() >= Database.maxString) {
             Help.markWrongField(false, companyPostalCode);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
         } else
             companyPostalCode.setStyle(Help.styleRight);
 
@@ -116,11 +116,11 @@ public class CompanyController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, companyCity);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("company_city"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("company_city"));
         } else if (text.length() >= Database.maxString) {
             Help.markWrongField(false, companyCity);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
         } else
             companyCity.setStyle(Help.styleRight);
 
@@ -128,11 +128,11 @@ public class CompanyController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, companyCountry);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("company_country"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("company_country"));
         } else if (text.length() >= Database.maxString) {
             Help.markWrongField(false, companyCountry);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
         } else
             companyCountry.setStyle(Help.styleRight);
 
@@ -140,11 +140,11 @@ public class CompanyController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, companyContactPersonFirstName);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("forename"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("forename"));
         } else if (text.length() >= Database.maxString) {
             Help.markWrongField(false, companyContactPersonFirstName);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
         } else
             companyContactPersonFirstName.setStyle(Help.styleRight);
 
@@ -152,11 +152,11 @@ public class CompanyController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, companyContactPersonLastName);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("last_name"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("last_name"));
         } else if (text.length() >= Database.maxString) {
             Help.markWrongField(false, companyContactPersonLastName);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
         } else
             companyContactPersonLastName.setStyle(Help.styleRight);
 
@@ -164,15 +164,15 @@ public class CompanyController {
         if (text.isEmpty()) {
             Help.markWrongField(focus, companyContactPersonEmail);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("email"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("email"));
         } else if (!Help.validateEmail(text)) {
             Help.markWrongField(focus, companyContactPersonEmail);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("email2"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("email2"));
         } else if (text.length() >= Database.maxString) {
             Help.markWrongField(false, companyContactPersonEmail);
             focus = true;
-            errorMessageL.add(Help.getRessourceBundleError().getString("string_to_long"));
+            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
         } else
             companyContactPersonEmail.setStyle(Help.styleRight);
 

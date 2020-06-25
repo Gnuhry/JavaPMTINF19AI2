@@ -30,7 +30,7 @@ public class App extends Application {
         scene = new Scene(loadFXML("primary"));
         stage.setScene(scene);
         stage.setResizable(false);
-        stage.setTitle(Help.getRessourceBundle().getString("title"));
+        stage.setTitle(Help.getResourcedBundle().getString("title"));
         stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/dhbwLogoSquare.png")));
         stage.show();
         stage.setOnCloseRequest(windowEvent -> Database.closeConnection());
@@ -52,7 +52,7 @@ public class App extends Application {
      * @return parent object of the new file
      */
     private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"), Help.getRessourceBundle());
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"), Help.getResourcedBundle());
         return fxmlLoader.load();
     }
 
