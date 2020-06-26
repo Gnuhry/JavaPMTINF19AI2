@@ -12,9 +12,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<TabPane maxWidth="1250.0" minWidth="1250.0" prefHeight="600.0" prefWidth="1250.0" stylesheets="@css/application.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.ShowController">
+<TabPane fx:id="tabPaneShow" maxWidth="1250.0" minWidth="1250.0" prefHeight="600.0" prefWidth="1250.0" stylesheets="@css/application.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.ShowController">
     <Tab id="studentTab" text="%students">
-        <AnchorPane fx:id="studentAnchor" maxHeight="-Infinity" maxWidth="1250.0" minHeight="0.0" minWidth="1250.0" prefHeight="600.0" prefWidth="1250.0">
+        <AnchorPane fx:id="studentAnchor" maxHeight="-Infinity" maxWidth="1250.0" minHeight="0.0" minWidth="-1250.0" prefHeight="600.0" prefWidth="1250.0">
             <TableView fx:id="studentTable" layoutY="50.0" prefHeight="521.0" prefWidth="1250.0" stylesheets="@css/application.css" tableMenuButtonVisible="true">
                 <columns>
                     <TableColumn fx:id="studentNumber" prefWidth="75.0" text="%id" />
@@ -31,7 +31,7 @@
                     <TableColumn fx:id="studentD" editable="false" prefWidth="54.0" resizable="false" sortable="false" />
                 </columns>
             </TableView>
-            <ToolBar prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
+            <ToolBar fx:id="barStudent" prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
                 <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="%back" />
                 <VBox translateX="50.0" />
                 <HBox />
@@ -56,7 +56,7 @@
                     <TableColumn fx:id="docentD" editable="false" prefWidth="558.0" resizable="false" sortable="false" />
                 </columns>
             </TableView>
-            <ToolBar prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
+            <ToolBar fx:id="barDocent" prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
                 <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="%back" />
                 <TextField fx:id="searchBoxDocent" promptText="%search" stylesheets="@css/application.css" translateX="944.0" />
                 <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="%refresh" translateX="944.0" />
@@ -65,12 +65,6 @@
     </Tab>
     <Tab id="courseTab" text="%courses">
         <AnchorPane fx:id="courseAnchor" maxWidth="1200.0" minHeight="0.0" minWidth="1200.0" prefHeight="600.0" prefWidth="1200.0">
-            <ToolBar prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
-                <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="%back" />
-                <TextField fx:id="searchBoxCourse" promptText="%search" stylesheets="@css/application.css" translateX="670.0" />
-                <ComboBox fx:id="studyTypeFilterBox" layoutX="400.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" stylesheets="@css/application.css" translateX="670.0" />
-                <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="%refresh" translateX="670.0" />
-            </ToolBar>
             <TableView fx:id="courseTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0" stylesheets="@css/application.css" tableMenuButtonVisible="true">
                 <columns>
                     <TableColumn fx:id="courseName" prefWidth="115.0" text="%name" />
@@ -83,6 +77,12 @@
                     <TableColumn fx:id="courseD" editable="false" prefWidth="520.0" resizable="false" sortable="false" />
                 </columns>
             </TableView>
+            <ToolBar fx:id="barCourse" prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
+                <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="%back" />
+                <TextField fx:id="searchBoxCourse" promptText="%search" stylesheets="@css/application.css" translateX="670.0" />
+                <ComboBox fx:id="studyTypeFilterBox" layoutX="400.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" stylesheets="@css/application.css" translateX="670.0" />
+                <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="%refresh" translateX="670.0" />
+            </ToolBar>
         </AnchorPane>
     </Tab>
     <Tab id="companyTab" text="%companies">
@@ -97,7 +97,7 @@
                     <TableColumn fx:id="companyD" editable="false" prefWidth="558.0" resizable="false" sortable="false" />
                 </columns>
             </TableView>
-            <ToolBar prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
+            <ToolBar fx:id="barCompany" prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
                 <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="%back" />
                 <TextField fx:id="searchBoxCompany" promptText="%search" stylesheets="@css/application.css" translateX="944.0" />
                 <Button mnemonicParsing="false" onAction="#refresh" stylesheets="@css/application.css" text="%refresh" translateX="944.0" />
@@ -120,7 +120,7 @@
                     <TableColumn fx:id="roomD" editable="false" prefWidth="40.0" resizable="false" sortable="false" />
                 </columns>
             </TableView>
-            <ToolBar prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
+            <ToolBar fx:id="barRoom" prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
                 <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="%back" />
                 <TextField fx:id="searchBoxRoom" promptText="%search" stylesheets="@css/application.css" translateX="670.0" />
                 <ComboBox fx:id="campusFilterBox" layoutX="400.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="204.0" stylesheets="@css/application.css" translateX="670.0" />

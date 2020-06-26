@@ -61,6 +61,10 @@ public class ShowController implements Initializable {
     private ComboBox<Company> companyFilterBox;
     @FXML
     private ComboBox<String> campusFilterBox, studyTypeFilterBox;
+    @FXML
+    private TabPane tabPaneShow;
+    @FXML
+    private ToolBar barStudent, barDocent, barCourse, barCompany, barRoom;
 
     @FXML
     public TableView<DualStudent> studentTable;
@@ -238,7 +242,7 @@ public class ShowController implements Initializable {
         studentTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addKeyListener(studentAnchor, studentTable);
+        addKeyListener(studentAnchor, studentTable, barStudent);
 
         docentNumber.setCellValueFactory(new PropertyValueFactory<>("docentNumber"));
         docentLastName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -277,7 +281,7 @@ public class ShowController implements Initializable {
         docentTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addKeyListener(docentAnchor, docentTable);
+        addKeyListener(docentAnchor, docentTable, barDocent);
 
         FilteredList<Docent> filteredLecture = new FilteredList<>(docents, p -> true);
         searchBoxDocent.textProperty().addListener((observable, oldValue, newValue) -> filteredLecture.setPredicate(person -> {
@@ -338,7 +342,7 @@ public class ShowController implements Initializable {
         courseTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addKeyListener(courseAnchor, courseTable);
+        addKeyListener(courseAnchor, courseTable, barCourse);
 
         List<String> studyTypeList = new ArrayList<>();
         studyTypeList.add(Help.getResourcedBundle().getString("all_study_types"));
@@ -399,7 +403,7 @@ public class ShowController implements Initializable {
         companyTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addKeyListener(companyAnchor, companyTable);
+        addKeyListener(companyAnchor, companyTable, barCompany);
 
         roomName.setCellValueFactory(new PropertyValueFactory<>("name"));
         roomCampus.setCellValueFactory(new PropertyValueFactory<>("campus"));
@@ -428,7 +432,7 @@ public class ShowController implements Initializable {
         roomTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addKeyListener(roomAnchor, roomTable);
+        addKeyListener(roomAnchor, roomTable, barRoom);
     }
 
     /**
@@ -470,9 +474,8 @@ public class ShowController implements Initializable {
             }
         });
         refreshMenu.getItems().addAll(item);
-
-        view.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
+        refreshMenu.setOnShown(show -> {
+            if (view.getSelectionModel().getSelectedItems() != null && view.getSelectionModel().getSelectedItems().size() > 0) {
                 ContextMenu contextMenu = view.getContextMenu();
                 int counter = 0;
 
@@ -539,7 +542,7 @@ public class ShowController implements Initializable {
      * @param anchorPane controller to bind the key
      * @param table      row to delete
      */
-    public void addKeyListener(AnchorPane anchorPane, TableView<?> table) {
+    public void addKeyListener(AnchorPane anchorPane, TableView<?> table, ToolBar bar) {
         if (table.getItems() != null && table.getItems().size() > 0 && table.getItems().get(0) != null && (table.getItems().get(0).getClass() == DualStudent.class || table.getItems().get(0).getClass() == Docent.class)) {
             anchorPane.setOnKeyPressed(keyEvent -> {
                 final List<?> selectedItem = table.getSelectionModel().getSelectedItems();
@@ -572,6 +575,22 @@ public class ShowController implements Initializable {
                         refresh(true);
             });
         }
+        table.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.isControlDown())
+                if (keyEvent.getCode().equals(KeyCode.LEFT)) {
+                    tabPaneShow.getSelectionModel().select(tabPaneShow.getSelectionModel().getSelectedIndex() == 0 ? tabPaneShow.getTabs().size() - 1 : tabPaneShow.getSelectionModel().getSelectedIndex() - 1);
+                } else if (keyEvent.getCode().equals(KeyCode.RIGHT)) {
+                    tabPaneShow.getSelectionModel().select((tabPaneShow.getSelectionModel().getSelectedIndex() + 1) % tabPaneShow.getTabs().size());
+                }
+        });
+        bar.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.isControlDown())
+                if (keyEvent.getCode().equals(KeyCode.LEFT)) {
+                    tabPaneShow.getSelectionModel().select(tabPaneShow.getSelectionModel().getSelectedIndex() == 0 ? tabPaneShow.getTabs().size() - 1 : tabPaneShow.getSelectionModel().getSelectedIndex() - 1);
+                } else if (keyEvent.getCode().equals(KeyCode.RIGHT)) {
+                    tabPaneShow.getSelectionModel().select((tabPaneShow.getSelectionModel().getSelectedIndex() + 1) % tabPaneShow.getTabs().size());
+                }
+        });
     }
 
     /**
