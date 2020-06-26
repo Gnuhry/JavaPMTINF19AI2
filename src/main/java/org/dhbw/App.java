@@ -1,6 +1,7 @@
 package org.dhbw;
 
 import javafx.application.Application;
+import javafx.application.HostServices;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,6 +19,7 @@ import java.sql.SQLException;
 public class App extends Application {
 
     private static Scene scene;
+    private static HostServices hostServices;
 
     /**
      * opening the app stage with parameters
@@ -27,6 +29,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException, SQLException, ClassNotFoundException {
         Database.initialize();
+        hostServices = getHostServices();
         scene = new Scene(loadFXML("primary"));
         stage.setScene(scene);
         stage.setResizable(false);
@@ -63,4 +66,8 @@ public class App extends Application {
         launch();
     }
 
+    //--------------------------Getter----------------------
+    public static HostServices getHostService() {
+        return hostServices;
+    }
 }

@@ -49,7 +49,7 @@
     <VBox alignment="CENTER" layoutY="26.899999618530273" spacing="30.0" AnchorPane.leftAnchor="0.0"
           AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="120.0">
         <Button id="gui_button" fx:id="showTable" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
-                onAction="#showStudents" prefHeight="40.0" prefWidth="250.0" stylesheets="@css/application.css"
+                onAction="#show" prefHeight="40.0" prefWidth="250.0" stylesheets="@css/application.css"
                 text="%show_overview" translateY="20.0">
             <font>
                 <Font name="Comic Sans MS" size="14.0"/>

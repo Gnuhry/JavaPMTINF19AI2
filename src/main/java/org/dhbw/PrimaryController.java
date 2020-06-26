@@ -25,7 +25,7 @@ public class PrimaryController implements Initializable {
      * changing the scene root in App
      */
     @FXML
-    private void showStudents() throws IOException {
+    private void show() throws IOException {
         App.setRoot("show");
     }
 
