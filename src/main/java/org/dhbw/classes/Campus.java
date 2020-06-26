@@ -1,13 +1,17 @@
 package org.dhbw.classes;
 
 public enum Campus {
-    Coblitzalle("Coblitzallee"), Kaefertal("Käfertal"), Eppelheim("Eppelheim");
+    Neuostheim("Coblitzalle Neuostheim"), Kaefertal("Käfertaler Straße"), Eppelheim("Eppelheim");
 
     private final String name;
 
-    Campus(String name) {this.name = name;}
+    Campus(String name) {
+        this.name = name;
+    }
 
 
     @Override
-    public String toString() {return name;}
+    public String toString() {
+        return name;
+    }
 }

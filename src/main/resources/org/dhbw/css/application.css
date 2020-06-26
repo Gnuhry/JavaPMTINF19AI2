@@ -25,11 +25,6 @@
     -fx-background-color: rgba(57, 74, 134, 0.3);
 }
 
-#backToOverview {
-    -fx-border-radius: 40px 5px 5px 40px;
-    -fx-background-radius: 40px 5px 5px 40px;
-}
-
 .text-field
 {
     -fx-background-color: rgba(0,0,0,0.3);
@@ -129,8 +124,20 @@
     -fx-text-fill: #96b946;
 }
 
-.transparent .viewport,
-.transparent
+.transparent .viewport, .transparent
 {
     -fx-background-color: transparent;
+}
+
+#studentTab, #courseTab, #roomTab{
+    -fx-background-color: rgba(0,0,0,0.7);
+}
+
+#docentTab, #companyTab{
+    -fx-background-color: rgba(0,0,0,0.5);
+}
+
+#backToOverview {
+    -fx-border-radius: 40px 5px 5px 40px;
+    -fx-background-radius: 40px 5px 5px 40px;
 }

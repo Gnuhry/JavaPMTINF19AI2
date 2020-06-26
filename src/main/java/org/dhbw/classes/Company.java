@@ -2,7 +2,7 @@ package org.dhbw.classes;
 
 import java.util.Objects;
 
-public class Company implements Comparable<Company>{
+public class Company implements Comparable<Company> {
     private String name;
     private Address address;
     private Person contactPerson;

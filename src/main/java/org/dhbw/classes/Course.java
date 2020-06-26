@@ -27,7 +27,7 @@ public class Course implements Comparable<Course> {
 
     public Course(Course course) {
         this.name = course.name;
-        this.studyCourse =  course.studyCourse;
+        this.studyCourse = course.studyCourse;
         this.studyDirector = new Docent(course.studyDirector);
         this.registrationDate = new Date(course.registrationDate.getTime());
         this.room = new CourseRoom(course.room);

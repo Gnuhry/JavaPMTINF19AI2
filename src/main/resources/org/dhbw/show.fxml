@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <TabPane maxWidth="1250.0" minWidth="1250.0" prefHeight="600.0" prefWidth="1250.0" stylesheets="@css/application.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.ShowController">
-    <Tab style="-fx-background-color: rgba(0,0,0,0.7); -fx-text-base-color: white;" text="%students">
+    <Tab id="studentTab" text="%students">
         <AnchorPane fx:id="studentAnchor" maxHeight="-Infinity" maxWidth="1250.0" minHeight="0.0" minWidth="1250.0" prefHeight="600.0" prefWidth="1250.0">
             <TableView fx:id="studentTable" layoutY="50.0" prefHeight="521.0" prefWidth="1250.0" stylesheets="@css/application.css" tableMenuButtonVisible="true">
                 <columns>
@@ -42,7 +42,7 @@
             </ToolBar>
         </AnchorPane>
     </Tab>
-    <Tab style="-fx-background-color: rgba(0,0,0,0.5); -fx-text-base-color: white;" text="%docents">
+    <Tab id="docentTab" text="%docents">
         <AnchorPane fx:id="docentAnchor" maxWidth="1200.0" minHeight="0.0" minWidth="1200.0" prefHeight="600.0" prefWidth="1200.0">
             <TableView fx:id="docentTable" layoutY="50.0" prefHeight="521.0" prefWidth="1250.0" stylesheets="@css/application.css" tableMenuButtonVisible="true">
                 <columns>
@@ -63,7 +63,7 @@
             </ToolBar>
         </AnchorPane>
     </Tab>
-    <Tab style="-fx-background-color: rgba(0,0,0,0.7); -fx-text-base-color: white;" text="%courses">
+    <Tab id="courseTab" text="%courses">
         <AnchorPane fx:id="courseAnchor" maxWidth="1200.0" minHeight="0.0" minWidth="1200.0" prefHeight="600.0" prefWidth="1200.0">
             <ToolBar prefHeight="50.0" prefWidth="1250.0" stylesheets="@css/application.css">
                 <Button mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="%back" />
@@ -85,7 +85,7 @@
             </TableView>
         </AnchorPane>
     </Tab>
-    <Tab style="-fx-background-color: rgba(0,0,0,0.5); -fx-text-base-color: white;" text="%companies">
+    <Tab id="companyTab" text="%companies">
         <AnchorPane fx:id="companyAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
             <TableView fx:id="companyTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0" stylesheets="@css/application.css" tableMenuButtonVisible="true">
                 <columns>
@@ -104,7 +104,7 @@
             </ToolBar>
         </AnchorPane>
     </Tab>
-    <Tab style="-fx-background-color: rgba(0,0,0,0.7); -fx-text-base-color: white;" text="%rooms">
+    <Tab id="roomTab" text="%rooms">
         <AnchorPane fx:id="roomAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
             <TableView fx:id="roomTable" layoutY="50.0" prefHeight="512.0" prefWidth="1250.0" stylesheets="@css/application.css" tableMenuButtonVisible="true">
                 <columns>
