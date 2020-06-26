@@ -136,11 +136,19 @@ public class ShowController implements Initializable {
     }
 
     /**
-     * refreshing all tables
+     * action on refresh button
      */
     @FXML
     public void refresh() {
-        studentTable.getScene().setCursor(Cursor.WAIT);
+        refresh(true);
+    }
+
+    /**
+     * refreshing all tables
+     */
+    public void refresh(boolean show) {
+        if (show)
+            studentTable.getScene().setCursor(Cursor.WAIT);
         students.clear();
         students.addAll(University.getStudents());
         docents.clear();
@@ -151,14 +159,15 @@ public class ShowController implements Initializable {
         companies.addAll(University.getCompanies());
         rooms.clear();
         rooms.addAll(University.getRooms());
-        new Thread(() -> {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            studentTable.getScene().setCursor(Cursor.DEFAULT);
-        }).start();
+        if (show)
+            new Thread(() -> {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                studentTable.getScene().setCursor(Cursor.DEFAULT);
+            }).start();
     }
 
     /**
@@ -420,14 +429,6 @@ public class ShowController implements Initializable {
                 SelectionMode.MULTIPLE
         );
         addKeyListener(roomAnchor, roomTable);
-        new Thread(() -> {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            studentTable.getScene().setCursor(Cursor.DEFAULT);
-        }).start();
     }
 
     /**
@@ -460,7 +461,7 @@ public class ShowController implements Initializable {
         MenuItem[] optional_menu = new MenuItem[]{new MenuItem(Help.getResourcedBundle().getString("edit")), new MenuItem(Help.getResourcedBundle().getString("send_email")), new MenuItem(Help.getResourcedBundle().getString("set_to_uni_email")), new MenuItem(Help.getResourcedBundle().getString("delete")), new MenuItem(Help.getResourcedBundle().getString("send_email_with_docent")), new MenuItem(Help.getResourcedBundle().getString("clear_selection"))};
         MenuItem[] item = new MenuItem[]{new MenuItem(Help.getResourcedBundle().getString("refresh")), new MenuItem(Help.getResourcedBundle().getString("back"))};
 
-        item[0].setOnAction(actionEvent -> refresh());
+        item[0].setOnAction(actionEvent -> refresh(true));
         item[1].setOnAction(actionEvent -> {
             try {
                 backToOverview();
@@ -509,7 +510,7 @@ public class ShowController implements Initializable {
                         MenuItem setEmail = optional_menu[2];
                         setEmail.setOnAction(actionEvent -> {
                             setToUniversityMail(view.getSelectionModel().getSelectedItems());
-                            refresh();
+                            refresh(false);
                         });
                         contextMenu.getItems().add(counter++, setEmail);
                     } else
@@ -551,12 +552,12 @@ public class ShowController implements Initializable {
                         editObject(selectedItem.get(0));
                     else if (keyEvent.getCode().equals(KeyCode.U) && keyEvent.isControlDown()) {
                         setToUniversityMail(selectedItem);
-                        refresh();
+                        refresh(false);
                     } else if (keyEvent.getCode().equals(KeyCode.M) && keyEvent.isControlDown()) {
                         sendMailToObject(selectedItem, keyEvent.isShiftDown());
                         table.getSelectionModel().clearSelection();
                     } else if (keyEvent.isControlDown() && keyEvent.getCode().equals(KeyCode.R))
-                        refresh();
+                        refresh(true);
                 }
             });
         } else {
@@ -568,7 +569,7 @@ public class ShowController implements Initializable {
                     else if (keyEvent.getCode().equals(KeyCode.ESCAPE))
                         table.getSelectionModel().clearSelection();
                     else if (keyEvent.isShiftDown() && keyEvent.getCode().equals(KeyCode.R))
-                        refresh();
+                        refresh(true);
             });
         }
     }
@@ -702,7 +703,7 @@ public class ShowController implements Initializable {
         }
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setOnHidden(windowEvent -> refresh());
+        stage.setOnHidden(windowEvent -> refresh(false));
         stage.setResizable(false);
         stage.initOwner(studentTable.getScene().getWindow());
         stage.setX(studentTable.getScene().getWindow().getX());
