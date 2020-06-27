@@ -1,4 +1,4 @@
-package org.dhbw;
+package org.dhbw.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,7 +9,10 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import org.dhbw.Database;
 import org.dhbw.classes.*;
+import org.dhbw.help.GuiHelp;
+import org.dhbw.help.Language;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -56,8 +59,8 @@ public class RoomController {
     public void initVariables(CourseRoom room) {
         room_old = room;
         if (room != null) {
-            title.setText(Help.getResourcedBundle().getString("title_room_edit"));
-            buttonDone.setText(Help.getResourcedBundle().getString("save"));
+            title.setText(Language.getResourcedBundle().getString("title_room_edit"));
+            buttonDone.setText(Language.getResourcedBundle().getString("save"));
             roomName.setText(room.getName());
             roomBuilding.setText(room.getBuilding());
             roomCampus.setValue(room.getCampus());
@@ -116,74 +119,74 @@ public class RoomController {
         String text = roomName.getText().trim();
         boolean focus = false;
         if (text.isEmpty()) {
-            Help.markWrongField(false, roomName);
+            GuiHelp.markWrongField(false, roomName);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("name"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("name"));
         } else if (text.length() >= Database.maxString) {
-            Help.markWrongField(false, roomName);
+            GuiHelp.markWrongField(false, roomName);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("string_to_long"));
         } else
-            roomName.setStyle(Help.styleRight);
+            roomName.setStyle(GuiHelp.styleRight);
         Campus campus = roomCampus.getValue();
         if (campus == null) {
-            Help.markWrongField(focus, roomCampus);
+            GuiHelp.markWrongField(focus, roomCampus);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("campus"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("campus"));
         } else if (text.length() >= Database.maxString) {
-            Help.markWrongField(false, roomCampus);
+            GuiHelp.markWrongField(false, roomCampus);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("string_to_long"));
         } else
-            roomCampus.setStyle(Help.styleRight);
+            roomCampus.setStyle(GuiHelp.styleRight);
 
         text = roomBuilding.getText().trim();
         if (text.isEmpty()) {
-            Help.markWrongField(focus, roomBuilding);
+            GuiHelp.markWrongField(focus, roomBuilding);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("building"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("building"));
         } else if (text.length() >= Database.maxString) {
-            Help.markWrongField(false, roomBuilding);
+            GuiHelp.markWrongField(false, roomBuilding);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("string_to_long"));
         } else
-            roomBuilding.setStyle(Help.styleRight);
+            roomBuilding.setStyle(GuiHelp.styleRight);
 
         text = roomFloor.getText().trim();
         if (text.isEmpty()) {
-            Help.markWrongField(focus, roomFloor);
+            GuiHelp.markWrongField(focus, roomFloor);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("floor"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("floor"));
         } else if (text.length() >= Database.maxString) {
-            Help.markWrongField(false, roomFloor);
+            GuiHelp.markWrongField(false, roomFloor);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("string_to_long"));
         } else
-            roomFloor.setStyle(Help.styleRight);
+            roomFloor.setStyle(GuiHelp.styleRight);
 
         text = roomSeats.getText().trim();
         if (text.isEmpty()) {
-            Help.markWrongField(focus, roomSeats);
+            GuiHelp.markWrongField(focus, roomSeats);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("seats"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("seats"));
         } else {
             try {
                 int x = Integer.parseInt(text);
                 if (x <= 0) {
-                    Help.markWrongField(focus, roomSeats);
+                    GuiHelp.markWrongField(focus, roomSeats);
                     focus = true;
-                    errorMessageL.add(Help.getResourcedBundleError().getString("seats3"));
+                    errorMessageL.add(Language.getResourcedBundleError().getString("seats3"));
                 }
-                roomSeats.setStyle(Help.styleRight);
+                roomSeats.setStyle(GuiHelp.styleRight);
             } catch (NumberFormatException ex) {
-                Help.markWrongField(focus, roomSeats);
+                GuiHelp.markWrongField(focus, roomSeats);
                 focus = true;
-                errorMessageL.add(Help.getResourcedBundleError().getString("seats2"));
+                errorMessageL.add(Language.getResourcedBundleError().getString("seats2"));
             }
         }
 
         if (focus)
-            Help.setErrorMessage(errorMessageL, errorMessage);
+            GuiHelp.setErrorMessage(errorMessageL, errorMessage);
         else {
             errorMessage.setVisible(false);
             if (room_old != null)

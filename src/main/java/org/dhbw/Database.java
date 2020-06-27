@@ -1,7 +1,13 @@
-package org.dhbw.classes;
+package org.dhbw;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+import org.dhbw.classes.*;
+import org.dhbw.controller.App;
+import org.dhbw.help.GuiHelp;
+import org.dhbw.help.Language;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -11,6 +17,7 @@ import java.util.List;
 
 public class Database {
     public static final int maxString = 45;
+    private static boolean alert = true;
 
     private static Connection connection;
     private static PreparedStatement statement;
@@ -120,7 +127,7 @@ public class Database {
             statement.setInt(5, course_id);
             statement.setInt(6, company_id);
             statement.execute();
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -144,7 +151,7 @@ public class Database {
             statement.setInt(2, person_id);
             statement.execute();
             return docent.getDocentNumber();
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -176,7 +183,7 @@ public class Database {
             resultSet = statement.getGeneratedKeys();
             if (resultSet.next())
                 return resultSet.getInt(1);
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -203,7 +210,7 @@ public class Database {
             resultSet = statement.getGeneratedKeys();
             if (resultSet.next())
                 return resultSet.getInt(1);
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -233,7 +240,7 @@ public class Database {
             resultSet = statement.getGeneratedKeys();
             if (resultSet.next())
                 return resultSet.getInt(1);
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -259,7 +266,7 @@ public class Database {
             resultSet = statement.getGeneratedKeys();
             if (resultSet.next())
                 return resultSet.getInt(1);
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -292,7 +299,7 @@ public class Database {
             resultSet = statement.getGeneratedKeys();
             if (resultSet.next())
                 return resultSet.getInt(1);
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -323,7 +330,7 @@ public class Database {
             statement.setInt(4, company_id);
             statement.setInt(5, student.getStudentNumber());
             statement.execute();
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -346,7 +353,7 @@ public class Database {
             statement.setInt(1, person_id);
             statement.setInt(2, docent.getDocentNumber());
             statement.execute();
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -380,7 +387,7 @@ public class Database {
                     statement.setInt(3, Integer.MIN_VALUE);
                 statement.setInt(4, id);
                 statement.execute();
-            } catch (SQLException | ClassNotFoundException exception) {
+            } catch (SQLException exception) {
                 setAlert();
             } finally {
                 closeStatement();
@@ -409,7 +416,7 @@ public class Database {
                 statement.setInt(6, id);
                 statement.execute();
                 return id;
-            } catch (SQLException | ClassNotFoundException exception) {
+            } catch (SQLException exception) {
                 setAlert();
             } finally {
                 closeStatement();
@@ -442,7 +449,7 @@ public class Database {
                 statement.setInt(4, id);
                 statement.execute();
                 return id;
-            } catch (SQLException | ClassNotFoundException exception) {
+            } catch (SQLException exception) {
                 setAlert();
             } finally {
                 closeStatement();
@@ -471,7 +478,7 @@ public class Database {
                 statement.setInt(6, id);
                 statement.execute();
                 return id;
-            } catch (SQLException | ClassNotFoundException exception) {
+            } catch (SQLException exception) {
                 setAlert();
             } finally {
                 closeStatement();
@@ -503,7 +510,7 @@ public class Database {
                 statement.setInt(4, id);
                 statement.execute();
                 return id;
-            } catch (SQLException | ClassNotFoundException exception) {
+            } catch (SQLException exception) {
                 setAlert();
             } finally {
                 closeStatement();
@@ -525,7 +532,7 @@ public class Database {
             statement = connection.prepareStatement("DELETE FROM student WHERE student_id = ?");
             statement.setInt(1, student.getStudentNumber());
             statement.execute();
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -544,7 +551,7 @@ public class Database {
             statement = connection.prepareStatement("DELETE FROM docent WHERE docent_id = ?");
             statement.setInt(1, docent.getDocentNumber());
             statement.execute();
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -564,7 +571,7 @@ public class Database {
             statement = connection.prepareStatement("DELETE FROM course WHERE course_id = ?");
             statement.setInt(1, course_id);
             statement.execute();
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -583,7 +590,7 @@ public class Database {
             statement = connection.prepareStatement("DELETE FROM company WHERE company_id = ?");
             statement.setInt(1, id);
             statement.execute();
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -606,7 +613,7 @@ public class Database {
             statement = connection.prepareStatement("DELETE FROM person WHERE email = ?");
             statement.setString(1, person.getEmail());
             statement.execute();
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -628,7 +635,7 @@ public class Database {
             statement = connection.prepareStatement("DELETE FROM address WHERE street = ? AND number = ? AND postal_code = ? AND city = ? AND country = ?");
             addAddressToStatement(address);
             statement.execute();
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -649,7 +656,7 @@ public class Database {
             statement = connection.prepareStatement("DELETE FROM room WHERE room_id=?");
             statement.setInt(1, room_id);
             statement.execute();
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -672,7 +679,7 @@ public class Database {
             while (resultSet.next())
                 erg.add(resultSet.getInt("student_id"));
             return erg;
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -694,7 +701,7 @@ public class Database {
             while (resultSet.next())
                 erg.add(resultSet.getInt("matriculation_number"));
             return erg;
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -716,7 +723,7 @@ public class Database {
             while (resultSet.next())
                 erg.add(resultSet.getInt("docent_id"));
             return erg;
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -724,38 +731,53 @@ public class Database {
         return new ArrayList<>();
     }
 
-    public static void setAlert() {
-        Alert a = new Alert(Alert.AlertType.NONE, "SQL Connection error", ButtonType.OK);
-        a.setTitle("Error");
-        a.show();
+    /**
+     * set a ellert for the user
+     */
+    private static void setAlert() {
+        if (alert) {
+            alert = false;
+            Alert a = new Alert(Alert.AlertType.NONE, Language.getResourcedBundleError().getString("connection_error"), ButtonType.OK);
+            a.setTitle(Language.getResourcedBundleError().getString("error"));
+            Stage stage = ((Stage) a.getDialogPane().getScene().getWindow());
+            stage.getIcons().add(new Image(App.getClass_().getResourceAsStream(GuiHelp.logoPath)));
+            stage.setOnCloseRequest(windowEvent -> App.closeApp());
+            a.showAndWait();
+            alert = true;
+        }
     }
-
 
     /**
      * initialize to use the database connection
      */
-    public static void initialize() throws ClassNotFoundException, SQLException {
-        if (connection == null || connection.isClosed()) {
-            Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/dhbw?allowPublicKeyRetrieval=true&useSSL=false", System.getenv("DHBW_USER"), System.getenv("DHBW_PW"));
+    public static void initialize() {
+        try {
+            if (dateFormat == null)
+                dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            if (dualStudents == null)
+                dualStudents = new ArrayList<>();
+            if (courses == null)
+                courses = new ArrayList<>();
+            if (docents == null)
+                docents = new ArrayList<>();
+            if (addresses == null)
+                addresses = new ArrayList<>();
+            if (companies == null)
+                companies = new ArrayList<>();
+            if (persons == null)
+                persons = new ArrayList<>();
+            if (rooms == null)
+                rooms = new ArrayList<>();
+            if (connection == null || connection.isClosed()) {
+                Class.forName("com.mysql.jdbc.Driver");
+                connection = DriverManager.getConnection(
+                        "jdbc:mysql://85.214.247.101:3306/dhbw?useSSL=false", "mlg_dhbw", "Reisebus1!");
+
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            setAlert();
+            initialize();
         }
-        if (dateFormat == null)
-            dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if (dualStudents == null)
-            dualStudents = new ArrayList<>();
-        if (courses == null)
-            courses = new ArrayList<>();
-        if (docents == null)
-            docents = new ArrayList<>();
-        if (addresses == null)
-            addresses = new ArrayList<>();
-        if (companies == null)
-            companies = new ArrayList<>();
-        if (persons == null)
-            persons = new ArrayList<>();
-        if (rooms == null)
-            rooms = new ArrayList<>();
     }
 
     public static String[] getAllEmailsFromCourse(Course course) {
@@ -771,7 +793,7 @@ public class Database {
                 erg.add(resultSet.getString("email"));
             return erg.toArray(new String[0]);
 
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -798,7 +820,7 @@ public class Database {
                 if (resultSet.getInt("company_id") > 0 || resultSet.getInt("person_id") > 0)
                     counter++;
             }
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
 
         } finally {
@@ -823,7 +845,7 @@ public class Database {
             while (resultSet.next())
                 if (resultSet.getInt("company_id") > 0 || resultSet.getInt("student_id") > 0 || resultSet.getInt("company_id") > 0)
                     counter++;
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -847,7 +869,7 @@ public class Database {
             resultSet = statement.executeQuery();
             if (resultSet.next())
                 counter = resultSet.getInt(1);
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -884,7 +906,7 @@ public class Database {
 //                else
                 dualStudents.add(dualStudent);
             }
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -915,7 +937,7 @@ public class Database {
 //                else
                 docents.add(docent);
             }
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -944,7 +966,7 @@ public class Database {
 //                else
                 courses.add(course);
             }
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -973,7 +995,7 @@ public class Database {
 //                else
                 addresses.add(address);
             }
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -1000,7 +1022,7 @@ public class Database {
 //                else
                 companies.add(company);
             }
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -1028,7 +1050,7 @@ public class Database {
 //                else
                 persons.add(person);
             }
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -1050,7 +1072,7 @@ public class Database {
                         new CourseRoom(resultSet.getString("name"), getCampusById(resultSet.getInt("campus")), resultSet.getString("building"), resultSet.getString("floor"), resultSet.getInt("seats"), resultSet.getBoolean("projector"), resultSet.getBoolean("camera"), resultSet.getBoolean("laboratory"));
                 rooms.add(room);
             }
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -1067,7 +1089,7 @@ public class Database {
 //                student_ids.add(resultSet.getInt("student_id"));
 //            if (!student_ids.isEmpty())
 //                dualStudents.removeIf(student -> !student_ids.contains(student.getStudentNumber()));
-//        } catch (SQLException | ClassNotFoundException exception) { exception.printStackTrace();
+//        } catch (SQLException exception) { setAlert();
 //
 //        } finally {
 //            closeConnection();
@@ -1084,7 +1106,7 @@ public class Database {
 //                docent_ids.add(resultSet.getInt("docent_id"));
 //            if (!docent_ids.isEmpty())
 //                docents.removeIf(docent -> !docent_ids.contains(docent.getDocentNumber()));
-//        } catch (SQLException | ClassNotFoundException exception) { exception.printStackTrace();
+//        } catch (SQLException exception) { setAlert();
 //
 //        } finally {
 //            closeConnection();
@@ -1101,7 +1123,7 @@ public class Database {
 //                emails.add(resultSet.getString("email"));
 //            if (!emails.isEmpty())
 //                persons.removeIf(person -> !emails.contains(person.getEmail()));
-//        } catch (SQLException | ClassNotFoundException exception) { exception.printStackTrace();
+//        } catch (SQLException exception) { setAlert();
 //
 //        } finally {
 //            closeConnection();
@@ -1141,8 +1163,9 @@ public class Database {
             resultSet = statement.executeQuery();
             if (resultSet.next())
                 return resultSet.getInt(1);
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
+
         } finally {
             closeStatement();
         }
@@ -1168,7 +1191,7 @@ public class Database {
             resultSet = statement.executeQuery();
             if (resultSet.next())
                 return resultSet.getInt(1);
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -1191,7 +1214,7 @@ public class Database {
             resultSet = statement.executeQuery();
             if (resultSet.next())
                 return resultSet.getInt(1);
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -1214,7 +1237,7 @@ public class Database {
             resultSet = statement.executeQuery();
             if (resultSet.next())
                 return resultSet.getInt(1);
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -1240,7 +1263,7 @@ public class Database {
             resultSet = statement.executeQuery();
             if (resultSet.next())
                 return resultSet.getInt(1);
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -1263,7 +1286,7 @@ public class Database {
             statement.setInt(1, id);
             resultSet = statement.executeQuery();
             return resultSet.next() && resultSet.getInt(1) == 1;
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
@@ -1279,13 +1302,13 @@ public class Database {
             try {
                 resultSet.close();
             } catch (SQLException exception) {
-                exception.printStackTrace();
+                setAlert();
             }
         if (statement != null)
             try {
                 statement.close();
             } catch (SQLException exception) {
-                exception.printStackTrace();
+                setAlert();
             }
     }
 
@@ -1297,7 +1320,7 @@ public class Database {
             try {
                 connection.close();
             } catch (SQLException exception) {
-                exception.printStackTrace();
+                setAlert();
             }
     }
 
@@ -1395,7 +1418,7 @@ public class Database {
                         resultSet.getString("city"),
                         resultSet.getString("country")));
             }
-        } catch (SQLException | ClassNotFoundException exception) {
+        } catch (SQLException exception) {
             setAlert();
         } finally {
             closeStatement();
