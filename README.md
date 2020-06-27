@@ -13,14 +13,15 @@ Im folgenden finden Sie eine Erklärung zur Installation der Applikation und des
 
 
 ### Tastenkombinationen im Überblick Fenster:
--  delete/entf                                                       löschen
--  escape                                                            auswahl entfernen
--  enter                                                                bearbeiten (nur wenn eine zeiele ausgewählt ist)
--  control u                                                          mail zu uni mail ändern
--  control m                                                         mail senden
-   + control                                                          mail mit direkot beim kurs senden
--  control r                                                          refresh
--  control left                                                       zum linken Tab wechseln
--  control right                                                    zum rechtenTab wechseln
-
--  control und klick auf email addresse            Mail zur addresse                          
+Tastenkombination|Erklärung
+-----------------|-------------------
+|delete/entf|löschen|
+|escape|auswahl entfernen|
+|enter|bearbeiten (nur wenn eine zeiele ausgewählt ist)|
+|control u|mail zu uni mail ändern|
+|control m|mail senden|
+|control shift m|mail mit direkot beim kurs senden|
+|control r|refresh|
+|control left|zum linken Tab wechseln|
+|control right|zum rechtenTab wechseln|
+|control und klick auf email addresse|Mail zur addresse|                          
