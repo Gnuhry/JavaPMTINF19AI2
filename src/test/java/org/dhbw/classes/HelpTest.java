@@ -12,29 +12,17 @@ public class HelpTest {
 
     @Test
     public void validateDateBefore() {
-        var cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance();
         cal.set(1989, Calendar.NOVEMBER, 9);
-        var date = cal.getTime();
-        assertTrue(Help.validateDateBefore(date));
+        assertTrue(Help.validateDateBefore(cal.getTime()));
 
     }
 
     @Test
     public void validateBirthdate() {
-        var cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance();
         cal.set(1989, Calendar.NOVEMBER, 9);
-        var date = cal.getTime();
-        assertTrue(Help.validateBirthdate(date));
-    }
-
-    @Test
-    public void validateAfterBirthday() {
-        var p = new Person("Mustermann", "Max", new Date(), null, null);
-        var cal = Calendar.getInstance();
-        cal.set(1989, Calendar.NOVEMBER, 9);
-        var date = cal.getTime();
-        assertFalse(Help.validateAfterBirthday(date, p));
-        assertTrue(Help.validateAfterBirthday(new Date(), p));
+        assertTrue(Help.validateBirthday(cal.getTime()));
     }
 
     @Test
@@ -54,63 +42,14 @@ public class HelpTest {
         assertFalse(Help.validatePostalCode("6992"));
     }
 
-//    @Test
-//    void validateRoom() {
-//        // TODO: Implement test when room class is done
-//    }
-
-//    @Test
-//    void checkSNContains() {
-//        // TODO: Make sure, there are some test cases available
-//        // -> Prepare database
-//    }
-
-//    @Test
-//    void checkMNContains() {
-//        // TODO: Make sure, there are some test cases available
-//        // -> Prepare database
-//    }
-//
-//    @Test
-//    void checkDNContains() {
-//        // TODO: Make sure, there are some test cases available
-//        // -> Prepare database
-//    }
-
-
-    // TODO: Discuss automatic testing of UI components
-//    @Test
-//    void markWrongField() {
-//    }
-//
-//    @Test
-//    void setErrorMessage() {
-//    }
-//
-//    @Test
-//    void addKeyEventDatePicker() {
-//    }
-//
-//    @Test
-//    void fillAddressesToTextField() {
-//    }
-//
-//    @Test
-//    void fillPersonToTextField() {
-//    }
-//
-//    @Test
-//    void testFillPersonToTextField() {
-//    }
-//
     @Test
     public void getRessourceBundle() {
-        assertNotNull(Help.getRessourceBundle());
+        assertNotNull(Help.getResourcedBundle());
     }
 
     @Test
     public void getRessourceBundleError() {
-        assertNotNull(Help.getRessourceBundleError());
+        assertNotNull(Help.getResourcedBundleError());
     }
 
     @Test
