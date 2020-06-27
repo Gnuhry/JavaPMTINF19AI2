@@ -63,11 +63,17 @@ public class App extends Application {
         return (new FXMLLoader(App.class.getResource(fxml + ".fxml"), Language.getResourcedBundle())).load();
     }
 
+    /**
+     * closing Application
+     */
     public static void closeApp(){
         Platform.exit();
         System.exit(0);
     }
 
+    public static void main(String[] args) {
+        App.launch();
+    }
     //--------------------------Getter----------------------
     public static HostServices getHostService() {
         return hostServices;
