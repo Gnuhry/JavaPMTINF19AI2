@@ -94,7 +94,7 @@ public class Person implements Comparable<Person> {
     public String toString() {
         if (forename == null || email == null || forename.equals("") && email.equals(""))
             return name;
-        return name + " " + forename + ", " + email;
+        return name + ", " + forename + " - " + email;
     }
 
     @Override

@@ -143,9 +143,7 @@ public class Database {
             statement.setInt(1, docent.getDocentNumber());
             statement.setInt(2, person_id);
             statement.execute();
-            resultSet = statement.getGeneratedKeys();
-            if (resultSet.next())
-                return resultSet.getInt(1);
+            return docent.getDocentNumber();
         } catch (SQLException | ClassNotFoundException exception) {
             setAlert();
         } finally {
