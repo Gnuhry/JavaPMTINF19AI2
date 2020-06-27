@@ -2,21 +2,31 @@ package org.dhbw.classes;
 
 import org.junit.jupiter.api.*;
 
-import java.util.Date;
 import java.sql.SQLException;
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class DatabaseTest {
 
-    Address demoAddress = new Address("Coblitzallee", "1-9", "68163", "Mannheim", "Deutschland");
+    Date demoDate = new Date(1577833200000L);
+    Address demoAddress = new Address("Testallee", "1-9", "68163", "Mannheim", "Deutschland");
     Person demoPerson = new Person("Stoll", "Axel", "axel.stoll@web.de");
-    Docent demoDocent = new Docent("Stroetmann", "Karl", new Date(), demoAddress, "karl.stroetmann@mannheim.dhbw.de", 1337);
-    CourseRoom demoRoom = new CourseRoom("161C", Campus.Coblitzalle, "C", "1", 40, true, true, false);
-    Course demoCourse = new Course("Algorithmen", StudyCourse.AInfo, demoDocent, new Date(), demoRoom);
+    Docent demoDocent = new Docent("Stroetmeister", "Karl", demoDate, demoAddress, "karl.stroetmann@mannheim.dhbw.de", 1337);
+    CourseRoom demoRoom = new CourseRoom("Testraum", Campus.Neuostheim, "C", "1", 40, true, true, false);
+    Course demoCourse = new Course("Testkurs", StudyCourse.Info, demoDocent, demoDate, demoRoom);
     Company demoCompany = new Company("BRD GmbH", demoAddress, demoPerson);
-    DualStudent demoStudent = new DualStudent(420420, 696969, "Schmommartz", "Robby", new Date(), demoAddress, "robbybubbles@gmail.com", demoCourse, 3,demoCompany );
+    DualStudent demoStudent = new DualStudent(420420, 696969, "Schmommartz", "Robby", demoDate, demoAddress, "robbybubbles@gmail.com", demoCourse, 3, demoCompany);
+
+    DualStudent newStudent = new DualStudent(420420, 696969, "Martzschomm", "Byrob", demoDate, demoAddress, "bobbyrubbles@gmail.com", demoCourse, 100, demoCompany);
+    Docent newDocent = new Docent("Kruse", "Ecki", demoDate, demoAddress, "mail@eckhardkruse.net", 1337);
+    Course newCourse = new Course("Kurs für Ehrenmänner", StudyCourse.Info, demoDocent, demoDate, demoRoom);
+    Person newPerson = new Person("Stoll", "Axel", "axel.stoll@government.ru");
+    Address newAddress = new Address("Die neue Allee", "1-9", "53121", "Bonn", "Deutschland");
+    Company newCompany = new Company("Neue Weltwordnung e.V.", newAddress, newPerson);
+    CourseRoom newRoom = new CourseRoom("Testraum", Campus.Neuostheim, "C", "1", 60, false, false, true);
+
 
     @BeforeAll
     public static void setUp() throws SQLException, ClassNotFoundException {
@@ -28,156 +38,101 @@ public class DatabaseTest {
         Database.closeConnection();
     }
 
-
-    @Test
-    public  void addStudent() {
-        Database.addStudent(demoStudent);
-    }
-
-    @Test
-    public void addDocent() {
-        Database.addDocent(demoDocent);
-    }
-
-    @Test
-    public  void addCourse() {
-        Database.addCourse(demoCourse);
-    }
-
-    @Test
-    public  void addPerson() {
-        Database.addPerson(demoPerson);
-    }
-
-    @Test
-    public  void addCompany() {
-        Database.addCompany(demoCompany);
-    }
-
-    @Test
-    public  void addAddress() {
+    @Test @Order(0)
+    public void addressTests() {
         Database.addAddress(demoAddress);
+        assertTrue(Database.getAddresses().contains(demoAddress));
+
+        Database.updateAddress(newAddress, demoAddress);
+        assertTrue(Database.getAddresses().contains(newAddress));
+
+        Database.deleteAddress(newAddress);
+        assertFalse(Database.getAddresses().contains(newAddress));
     }
 
-    @Test
-    public  void addRoom() {
+    @Test @Order(1)
+    public void personTests() {
+        Database.addPerson(demoPerson);
+        assertTrue(Database.getPersons().contains(demoPerson));
+
+        Database.updatePerson(newPerson, demoPerson);
+        assertTrue(Database.getPersons().contains(newPerson));
+
+        Database.deletePerson(newPerson);
+        assertFalse(Database.getPersons().contains(newPerson));
+    }
+
+    @Test @Order(2)
+    public void docentTests() {
+        Database.addDocent(demoDocent);
+        assertTrue(Database.getDocents().contains(demoDocent));
+        assertTrue(Database.getDocentIDs().contains(demoDocent.getDocentNumber()));
+
+        Database.updateDocent(newDocent, demoDocent);
+        assertTrue(Database.getDocents().contains(newDocent));
+
+        Database.deleteDocent(newDocent);
+        assertFalse(Database.getDocents().contains(newDocent));
+        assertFalse(Database.getDocentIDs().contains(newDocent.getDocentNumber()));
+    }
+
+    @Test @Order(3)
+    public void roomTests() {
         Database.addRoom(demoRoom);
+        assertTrue(Database.getRooms().contains(demoRoom));
+
+        Database.updateRoom(newRoom, demoRoom);
+        assertTrue(Database.getRooms().contains(newRoom));
+
+        Database.deleteRoom(newRoom);
+        assertFalse(Database.getRooms().contains(newRoom));
     }
 
-    @Test
-    public  void getCourses() {
-        //assertTrue(Database.getCourses().contains(demoCourse));
-        assertNotEquals(Database.getCourses(), 0);
-    }
+    @Test @Order(4)
+    public void courseTests() {
+        Database.addCourse(demoCourse);
+        assertTrue(Database.getCourses().contains(demoCourse));
 
-    @Test
-    public  void getDocents() {
-        assertNotEquals(Database.getDocents(), 0);
-    }
+        Database.updateCourse(newCourse, demoCourse);
+        assertTrue(Database.getCourses().contains(newCourse));
 
-    @Test
-    public  void getAddresses() {
-        assertNotEquals(Database.getAddresses(), 0);
-    }
+        Database.deleteCourse(newCourse);
+        assertFalse(Database.getCourses().contains(newCourse));
 
-    @Test
-    public  void getCompanies() {
-        assertNotEquals(Database.getCompanies(), 0);
-    }
-
-    @Test
-    public  void getPersons() {
-        assertNotEquals(Database.getPersons(), 0);
-    }
-
-    @Test
-    public  void getStudents() {
-        assertNotEquals(Database.getStudents(), 0);
-    }
-
-    @Test
-    public  void getRooms() {
-        assertNotEquals(Database.getRooms(), 0);
-    }
-
-    @Test
-    public  void getStudentIDs() {
-        assertNotEquals(Database.getStudentIDs().size(), 0);
-    }
-
-    @Test
-    public  void getMatriculationNumbers() {
-    }
-
-    @Test
-    public  void getDocentIDs() {
-    }
-
-    @Test
-    public  void getAllEmailsFromCourse() {
-    }
-
-
-    @Test
-    public  void updateStudent() {
-    }
-
-    @Test
-    public  void updateDocent() {
-    }
-
-    @Test
-    public  void updateCourse() {
-    }
-
-    @Test
-    public  void updatePerson() {
-    }
-
-    @Test
-    public  void updateCompany() {
-    }
-
-    @Test
-    public  void updateAddress() {
-    }
-
-    @Test
-    public  void updateRoom() {
-    }
-
-    @Test
-    public  void deleteStudent() {
-        Database.deleteStudent(demoStudent);
-    }
-
-    @Test
-    public  void deleteDocent() {
         Database.deleteDocent(demoDocent);
+        Database.deleteRoom(demoRoom);
     }
 
-    @Test
-    public  void deleteCourse() {
+    @Test @Order(5)
+    public void companyTests() {
+        Database.addCompany(demoCompany);
+        assertTrue(Database.getCompanies().contains(demoCompany));
+
+        Database.updateCompany(newCompany, demoCompany);
+        assertTrue(Database.getCompanies().contains(newCompany));
+
+        Database.deleteCompany(newCompany);
+        assertFalse(Database.getCompanies().contains(newCompany));
+    }
+
+    @Test @Order(6)
+    public void studentTests() {
+        Database.addStudent(demoStudent);
+        assertTrue(Database.getStudents().contains(demoStudent));
+        assertTrue(Database.getStudentIDs().contains(demoStudent.getStudentNumber()));
+        assertTrue(Database.getMatriculationNumbers().contains(demoStudent.getMatriculationNumber()));
+
+        Database.updateStudent(newStudent, demoStudent);
+        assertTrue(Database.getStudents().contains(newStudent));
+
+        Database.deleteStudent(newStudent);
+        assertFalse(Database.getStudents().contains(newStudent));
+        assertFalse(Database.getStudentIDs().contains(newStudent.getStudentNumber()));
+        assertFalse(Database.getMatriculationNumbers().contains(newStudent.getMatriculationNumber()));
+
         Database.deleteCourse(demoCourse);
-    }
-
-    @Test
-    public  void deleteCompany() {
         Database.deleteCompany(demoCompany);
-    }
-
-    @Test
-    public  void deletePerson() {
-        Database.deletePerson(demoPerson);
-    }
-
-    @Test
-    public  void deleteAddress() {
-        Database.deleteAddress(demoAddress);
-    }
-
-    @Test
-    public  void deleteRoom() {
+        Database.deleteDocent(demoDocent);
         Database.deleteRoom(demoRoom);
     }
 }
