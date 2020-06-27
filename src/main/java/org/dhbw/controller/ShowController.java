@@ -1,4 +1,4 @@
-package org.dhbw;
+package org.dhbw.controller;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
@@ -21,7 +21,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.dhbw.Database;
 import org.dhbw.classes.*;
+import org.dhbw.help.GuiHelp;
+import org.dhbw.help.Language;
 
 import java.io.IOException;
 import java.net.URL;
@@ -48,8 +51,8 @@ public class ShowController implements Initializable {
     private FileType file;
     private List<Object> object;
     private final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-    private final Company allCompany = new Company(Help.getResourcedBundle().getString("all_company"), null, null);
-    private final Course allCourse = new Course(Help.getResourcedBundle().getString("all_course"), null, null);
+    private final Company allCompany = new Company(Language.getResourcedBundle().getString("all_company"), null, null);
+    private final Course allCourse = new Course(Language.getResourcedBundle().getString("all_course"), null, null);
 
     @FXML
     private AnchorPane studentAnchor, docentAnchor, courseAnchor, companyAnchor, roomAnchor;
@@ -331,7 +334,7 @@ public class ShowController implements Initializable {
                                     sb.append(s).append(", ");
                                 App.getHostService().showDocument(sb.toString().substring(0, sb.toString().length() - 2));
                             });
-                            btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/mailButton.png"))));
+                            btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/controller/images/mailButton.png"))));
                             setGraphic(btn);
                         }
                     }
@@ -345,11 +348,11 @@ public class ShowController implements Initializable {
         addKeyListener(courseAnchor, courseTable, barCourse);
 
         List<String> studyTypeList = new ArrayList<>();
-        studyTypeList.add(Help.getResourcedBundle().getString("all_study_types"));
+        studyTypeList.add(Language.getResourcedBundle().getString("all_study_types"));
         for (StudyCourse course : StudyCourse.values())
             studyTypeList.add(course.toString());
         studyTypeFilterBox.getItems().setAll(studyTypeList);
-        studyTypeFilterBox.setValue(Help.getResourcedBundle().getString("all_study_types"));
+        studyTypeFilterBox.setValue(Language.getResourcedBundle().getString("all_study_types"));
         FilteredList<Course> filteredCourse2 = new FilteredList<>(courses, p -> true);
         searchBoxCourse.textProperty().addListener((observable, oldValue, newValue) -> filteredCourse2.setPredicate(this::checkFilterCourse));
         studyTypeFilterBox.valueProperty().addListener((observable, oldValue, newValue) -> filteredCourse2.setPredicate(this::checkFilterCourse));
@@ -380,7 +383,7 @@ public class ShowController implements Initializable {
                                     App.getHostService().showDocument("mailto:" + company.getContactPerson().getEmail());
 
                             });
-                            btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/mailButton.png"))));
+                            btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/controller/images/mailButton.png"))));
                             setGraphic(btn);
                         }
                     }
@@ -417,11 +420,11 @@ public class ShowController implements Initializable {
         roomD.setCellFactory(getCallback(FileType.delete));
 
         List<String> campusList = new ArrayList<>();
-        campusList.add(Help.getResourcedBundle().getString("all_campus"));
+        campusList.add(Language.getResourcedBundle().getString("all_campus"));
         for (Campus campus : Campus.values())
             campusList.add(campus.toString());
         campusFilterBox.getItems().setAll(campusList);
-        campusFilterBox.setValue(Help.getResourcedBundle().getString("all_campus"));
+        campusFilterBox.setValue(Language.getResourcedBundle().getString("all_campus"));
         FilteredList<CourseRoom> filteredRoom = new FilteredList<>(rooms, p -> true);
         searchBoxRoom.textProperty().addListener((observable, oldValue, newValue) -> filteredRoom.setPredicate(this::checkFilterRoom));
         campusFilterBox.valueProperty().addListener((observable, oldValue, newValue) -> filteredRoom.setPredicate(this::checkFilterRoom));
@@ -462,8 +465,8 @@ public class ShowController implements Initializable {
      */
     public void addContextMenu(TableView<?> view) {
         ContextMenu refreshMenu = new ContextMenu();
-        MenuItem[] optional_menu = new MenuItem[]{new MenuItem(Help.getResourcedBundle().getString("edit")), new MenuItem(Help.getResourcedBundle().getString("send_email")), new MenuItem(Help.getResourcedBundle().getString("set_to_uni_email")), new MenuItem(Help.getResourcedBundle().getString("delete")), new MenuItem(Help.getResourcedBundle().getString("send_email_with_docent")), new MenuItem(Help.getResourcedBundle().getString("clear_selection"))};
-        MenuItem[] item = new MenuItem[]{new MenuItem(Help.getResourcedBundle().getString("refresh")), new MenuItem(Help.getResourcedBundle().getString("back"))};
+        MenuItem[] optional_menu = new MenuItem[]{new MenuItem(Language.getResourcedBundle().getString("edit")), new MenuItem(Language.getResourcedBundle().getString("send_email")), new MenuItem(Language.getResourcedBundle().getString("set_to_uni_email")), new MenuItem(Language.getResourcedBundle().getString("delete")), new MenuItem(Language.getResourcedBundle().getString("send_email_with_docent")), new MenuItem(Language.getResourcedBundle().getString("clear_selection"))};
+        MenuItem[] item = new MenuItem[]{new MenuItem(Language.getResourcedBundle().getString("refresh")), new MenuItem(Language.getResourcedBundle().getString("back"))};
 
         item[0].setOnAction(actionEvent -> refresh(true));
         item[1].setOnAction(actionEvent -> {
@@ -631,11 +634,11 @@ public class ShowController implements Initializable {
         for (Object o : objects) {
             if (o instanceof DualStudent) {
                 DualStudent d = new DualStudent((DualStudent) o);
-                d.setEmail(Help.getStudentUniversityEmail(d));
+                d.setEmail(GuiHelp.getStudentUniversityEmail(d));
                 Database.updateStudent(d, (DualStudent) o);
             } else if (o instanceof Docent) {
                 Docent d = new Docent((Docent) o);
-                d.setEmail(Help.getDocentUniversityEmail(d));
+                d.setEmail(GuiHelp.getDocentUniversityEmail(d));
                 Database.updateDocent(d, (Docent) o);
             }
         }
@@ -686,7 +689,7 @@ public class ShowController implements Initializable {
      * @param stage new stage show new window
      */
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(file.toString()), Help.getResourcedBundle());
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(file.toString()), Language.getResourcedBundle());
         Parent root = fxmlLoader.load();
         switch (file) {
             case editStudents: {
@@ -728,8 +731,8 @@ public class ShowController implements Initializable {
         stage.setX(studentTable.getScene().getWindow().getX());
         stage.setY(studentTable.getScene().getWindow().getY());
         stage.initModality(Modality.WINDOW_MODAL);
-        stage.setTitle(Help.getResourcedBundle().getString("title"));
-        stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/dhbwLogoSquare.png")));
+        stage.setTitle(Language.getResourcedBundle().getString("title"));
+        stage.getIcons().add(new Image(this.getClass().getResourceAsStream(GuiHelp.logoPath)));
         stage.show();
     }
 
@@ -755,9 +758,9 @@ public class ShowController implements Initializable {
                             a.add(getTableView().getItems().get(getIndex()));
                             addFunction(btn, a, fileType);
                             if (fileType.equals(FileType.delete))
-                                btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/deleteButton.png"))));
+                                btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/controller/images/deleteButton.png"))));
                             else
-                                btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/editButton.png"))));
+                                btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/controller/images/editButton.png"))));
                             setGraphic(btn);
                         }
                     }

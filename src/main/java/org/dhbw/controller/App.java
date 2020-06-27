@@ -1,4 +1,4 @@
-package org.dhbw;
+package org.dhbw.controller;
 
 import javafx.application.Application;
 import javafx.application.HostServices;
@@ -7,11 +7,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.dhbw.classes.Database;
-import org.dhbw.classes.Help;
+import org.dhbw.Database;
+import org.dhbw.help.GuiHelp;
+import org.dhbw.help.Language;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 /**
  * JavaFX App
@@ -20,6 +20,7 @@ public class App extends Application {
 
     private static Scene scene;
     private static HostServices hostServices;
+    private static Class<?> class_;
 
     /**
      * opening the app stage with parameters
@@ -27,14 +28,16 @@ public class App extends Application {
      * @param stage new stage show new window
      */
     @Override
-    public void start(Stage stage) throws IOException, SQLException, ClassNotFoundException {
+    public void start(Stage stage) throws IOException {
+        class_ =this.getClass();
+        System.out.println(System.getenv("DHBW_USER") + "," + System.getenv("DHBW_PW"));
         Database.initialize();
         hostServices = getHostServices();
         scene = new Scene(loadFXML("primary"));
         stage.setScene(scene);
         stage.setResizable(false);
-        stage.setTitle(Help.getResourcedBundle().getString("title"));
-        stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/dhbwLogoSquare.png")));
+        stage.setTitle(Language.getResourcedBundle().getString("title"));
+        stage.getIcons().add(new Image(this.getClass().getResourceAsStream(GuiHelp.logoPath)));
         stage.show();
         stage.setOnCloseRequest(windowEvent -> Database.closeConnection());
     }
@@ -44,7 +47,7 @@ public class App extends Application {
      *
      * @param fxml filename to switch to
      */
-    static void setRoot(String fxml) throws IOException {
+    public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
 
@@ -55,19 +58,15 @@ public class App extends Application {
      * @return parent object of the new file
      */
     private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"), Help.getResourcedBundle());
-        return fxmlLoader.load();
-    }
-
-    /**
-     * starting the application
-     */
-    public static void main(String[] args) {
-        launch();
+        return (new FXMLLoader(App.class.getResource(fxml + ".fxml"), Language.getResourcedBundle())).load();
     }
 
     //--------------------------Getter----------------------
     public static HostServices getHostService() {
         return hostServices;
+    }
+
+    public static Class<?> getClass_() {
+        return class_;
     }
 }
