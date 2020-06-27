@@ -1,5 +1,7 @@
 package org.dhbw.classes;
 
+import org.dhbw.help.Language;
+
 public enum StudyCourse {
     Info("computer_science"),
     CTech("chemical_eng"),
@@ -23,6 +25,6 @@ public enum StudyCourse {
 
     @Override
     public String toString() {
-        return Help.getResourcedBundle().getString(name);
+        return Language.getResourcedBundle().getString(name);
     }
 }

@@ -1,5 +1,7 @@
 package org.dhbw.classes;
 
+import org.dhbw.Database;
+
 import java.util.List;
 
 public class University {

@@ -1,4 +1,4 @@
-package org.dhbw;
+package org.dhbw.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
