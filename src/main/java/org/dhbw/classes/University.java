@@ -23,6 +23,13 @@ public class University {
         return Database.getCompanies();
     }
 
+    public static List<CourseRoom> getRooms() {
+        return Database.getRooms();
+    }
+
+    public static String[] getAllEmailFromCourse(Course course) {
+        return Database.getAllEmailsFromCourse(course);
+    }
 
     //-------------------------------AddObject------------------------
 
@@ -42,6 +49,10 @@ public class University {
         Database.addCompany(c);
     }
 
+    public static void addRoom(CourseRoom r) {
+        Database.addRoom(r);
+    }
+
     //-----------------------------RemoveObject----------------------
     public static void removeDocent(Docent d) {
         Database.deleteDocent(d);
@@ -59,6 +70,10 @@ public class University {
         Database.deleteCompany(c);
     }
 
+    public static void removeRoom(CourseRoom c) {
+        Database.deleteRoom(c);
+    }
+
     //------------------------------UpdateObject-----------------
     public static void updateDocent(Docent d, Docent old) {
         Database.updateDocent(d, old);
@@ -74,5 +89,9 @@ public class University {
 
     public static void updateCompany(Company c, Company old) {
         Database.updateCompany(c, old);
+    }
+
+    public static void updateRoom(CourseRoom r, CourseRoom old) {
+        Database.updateRoom(r, old);
     }
 }

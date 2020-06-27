@@ -7,102 +7,102 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
+import org.dhbw.classes.Help;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class PrimaryController implements Initializable {
 
-    Class<?> clazz = this.getClass();
-    InputStream addStudentStream = clazz.getResourceAsStream("/org/dhbw/images/addStudentHat.png");
-    Image addStudentImage = new Image(addStudentStream);
-    ImageView addStudentImageView = new ImageView(addStudentImage);
-    InputStream addLectureStream = clazz.getResourceAsStream("/org/dhbw/images/addLecture.png");
-    Image addLectureImage = new Image(addLectureStream);
-    ImageView addLectureImageView = new ImageView(addLectureImage);
-    InputStream addCourseStream = clazz.getResourceAsStream("/org/dhbw/images/addCourse.png");
-    Image addCourseImage = new Image(addCourseStream);
-    ImageView addCourseImageView = new ImageView(addCourseImage);
-    InputStream addCompanyStream = clazz.getResourceAsStream("/org/dhbw/images/addCompany.png");
-    Image addCompanyImage = new Image(addCompanyStream);
-    ImageView addCompanyImageView = new ImageView(addCompanyImage);
-    InputStream showTableStream = clazz.getResourceAsStream("/org/dhbw/images/showTable.png");
-    Image showTableImage = new Image(showTableStream);
-    ImageView showTableImageView = new ImageView(showTableImage);
-
     @FXML
-    private Button showTable;
+    public Button buttonLanguage, showTable, addStudent, addLecture, addCourse, addCompany, addRoom;
     @FXML
-    private Button addStudent;
-    @FXML
-    private Button addLecture;
-    @FXML
-    private Button addCourse;
-    @FXML
-    private Button addCompany;
-    @FXML
-    private Tooltip tooltipStudent;
-    @FXML
-    private Tooltip tooltipLecture;
-    @FXML
-    private Tooltip tooltipCourse;
-    @FXML
-    private Tooltip tooltipCompany;
+    private Tooltip tooltipStudent, tooltipLecture, tooltipCourse, tooltipCompany, tooltipRoom;
 
 
-
+    /**
+     * changing the scene root in App
+     */
     @FXML
-    private void showStudents() throws  IOException {
-        App.setRoot("showStudents");
+    private void show() throws IOException {
+        App.setRoot("show");
     }
 
     @FXML
     private void insertStudent() throws IOException {
-        App.setRoot("insertStudent");
+        App.setRoot("student");
     }
 
     @FXML
     private void insertLecture() throws IOException {
-        App.setRoot("insertLecture");
+        App.setRoot("docent");
     }
 
     @FXML
     private void insertCompany() throws IOException {
-        App.setRoot("insertCompany");
+        App.setRoot("company");
     }
 
     @FXML
     private void insertCourse() throws IOException {
-        App.setRoot("insertCourse");
+        App.setRoot("course");
     }
 
     @FXML
-    private void editStudent() throws IOException{
-        App.setRoot("editStudent");
+    private void insertRoom() throws IOException {
+        App.setRoot("room");
     }
 
+    @FXML
+    private void toggleLanguage() throws IOException {
+        Help.toggleLocal();
+        App.setRoot("primary");
+    }
+
+    /**
+     * initializing each menu-button with an image and tooltip
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        showTableImageView.setFitHeight(30);
-        showTableImageView.setFitWidth(30);
-        showTable.setGraphic(showTableImageView);
+        Class<?> clazz = this.getClass();
+        ImageView addStudentImageView = new ImageView(new Image(clazz.getResourceAsStream("/org/dhbw/images/addStudentHat.png")));
         addStudentImageView.setFitHeight(50);
         addStudentImageView.setFitWidth(50);
         addStudent.setGraphic(addStudentImageView);
+
+        ImageView addLectureImageView = new ImageView(new Image(clazz.getResourceAsStream("/org/dhbw/images/addDocent.png")));
         addLectureImageView.setFitWidth(50);
         addLectureImageView.setFitHeight(50);
         addLecture.setGraphic(addLectureImageView);
+
+        ImageView addCourseImageView = new ImageView(new Image(clazz.getResourceAsStream("/org/dhbw/images/addCourse.png")));
         addCourseImageView.setFitHeight(50);
         addCourseImageView.setFitWidth(50);
         addCourse.setGraphic(addCourseImageView);
+
+        ImageView addCompanyImageView = new ImageView(new Image(clazz.getResourceAsStream("/org/dhbw/images/addCompany.png")));
         addCompanyImageView.setFitWidth(50);
         addCompanyImageView.setFitHeight(50);
         addCompany.setGraphic(addCompanyImageView);
+
+        ImageView addRoomImageView = new ImageView(new Image(clazz.getResourceAsStream("/org/dhbw/images/addRoom.png")));
+        addRoomImageView.setFitWidth(50);
+        addRoomImageView.setFitHeight(50);
+        addRoom.setGraphic(addRoomImageView);
+
+        ImageView showTableImageView = new ImageView(new Image(clazz.getResourceAsStream("/org/dhbw/images/showTable.png")));
+        showTableImageView.setFitHeight(30);
+        showTableImageView.setFitWidth(30);
+        showTable.setGraphic(showTableImageView);
+
         tooltipStudent.setShowDelay(new Duration(300));
         tooltipLecture.setShowDelay(new Duration(300));
         tooltipCourse.setShowDelay(new Duration(300));
         tooltipCompany.setShowDelay(new Duration(300));
+        tooltipRoom.setShowDelay(new Duration(300));
+        buttonLanguage.setText(Help.getLocale().getLanguage());
+
+        showTable.requestFocus();
     }
 }

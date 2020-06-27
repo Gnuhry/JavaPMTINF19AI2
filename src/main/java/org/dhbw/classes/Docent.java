@@ -3,12 +3,17 @@ package org.dhbw.classes;
 import java.util.Date;
 import java.util.Objects;
 
-public class Docent extends Person {
+public class Docent extends Person implements Comparable<Person> {
     private final int docentNumber;
 
     public Docent(String name, String forename, Date birthday, Address address, String email, int docentNumber) {
         super(name, forename, birthday, address, email);
         this.docentNumber = docentNumber;
+    }
+
+    public Docent(Docent docent) {
+        super(docent);
+        this.docentNumber = docent.docentNumber;
     }
 
     //----------------------Getter--------------------------------
@@ -30,9 +35,8 @@ public class Docent extends Person {
         return Objects.hash(docentNumber);
     }
 
-
     @Override
-    public String toString() {
-        return super.toString();
+    public int compareTo(Person o) {
+        return super.compareTo(o);
     }
 }

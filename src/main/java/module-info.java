@@ -1,7 +1,7 @@
 module org.dhbw {
-    requires kotlin.stdlib;
-    requires javafx.controls;
+    requires javafx.base;
     requires javafx.fxml;
+    requires javafx.controls;
     requires java.sql;
     requires mysql.connector.java;
     opens org.dhbw to javafx.fxml;

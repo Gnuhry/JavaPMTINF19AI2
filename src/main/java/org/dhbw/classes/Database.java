@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Database {
+    public static final int maxString = 45;
 
     private static Connection connection;
     private static PreparedStatement statement;
@@ -19,6 +20,7 @@ public class Database {
     private static List<Address> addresses;
     private static List<Company> companies;
     private static List<Person> persons;
+    private static List<CourseRoom> rooms;
 
     //----------------------------------------GetObjects----------------------------
 
@@ -82,6 +84,16 @@ public class Database {
         return dualStudents;
     }
 
+    /**
+     * get all rooms
+     *
+     * @return List of all rooms
+     */
+    public static List<CourseRoom> getRooms() {
+        updateRoom();
+        return rooms;
+    }
+
     //--------------------------------------------AddObject-----------------------------------------------------------------
 
     /**
@@ -128,9 +140,7 @@ public class Database {
             statement.setInt(1, docent.getDocentNumber());
             statement.setInt(2, person_id);
             statement.execute();
-            resultSet = statement.getGeneratedKeys();
-            if (resultSet.next())
-                return resultSet.getInt(1);
+            return docent.getDocentNumber();
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
@@ -146,19 +156,19 @@ public class Database {
      * @return id of course if success, Integer.Min_Value if not
      */
     public static int addCourse(Course course) {
-        if (course == null) return Integer.MIN_VALUE;
+        if (course == null || course.getName() == null) return Integer.MIN_VALUE;
         int id = getCourseId(course);
         if (id >= 0) return id;
         int docent_id = addDocent(course.getStudyDirector());
+        int room_id = addRoom(course.getRoom());
         try {
             initialize();
-            statement = connection.prepareStatement("INSERT INTO course (room, name, registry_date, course_type, study_director_id, representative_student_id) VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-            statement.setInt(1, getRoomID(course.getRoom()));
+            statement = connection.prepareStatement("INSERT INTO course (room_id, name, registry_date, course_type, study_director_id) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            statement.setInt(1, room_id);
             statement.setString(2, course.getName());
             statement.setDate(3, convertDate(course.getRegistrationDate()));
             statement.setInt(4, getCourseTypeID(course.getStudyCourse()));
             statement.setInt(5, docent_id);
-            statement.setInt(6, -1);
             statement.execute();
             resultSet = statement.getGeneratedKeys();
             if (resultSet.next())
@@ -185,7 +195,7 @@ public class Database {
         try {
             initialize();
             statement = connection.prepareStatement("INSERT INTO person (first_name, last_name, birthdate, email, address_id) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-            addPersonToStatment(person, address_id);
+            addPersonToStatement(person, address_id);
             statement.execute();
             resultSet = statement.getGeneratedKeys();
             if (resultSet.next())
@@ -254,6 +264,39 @@ public class Database {
         return Integer.MIN_VALUE;
     }
 
+    /**
+     * add a room to the database
+     *
+     * @param room the adding room
+     * @return id of room if success, Integer.Min_Value if not
+     */
+    public static int addRoom(CourseRoom room) {
+        if (room == null || room.getName() == null) return Integer.MIN_VALUE;
+        int id = getRoomID(room);
+        if (id >= 0) return id;
+        try {
+            initialize();
+            statement = connection.prepareStatement("INSERT INTO room (name, building, campus, floor, seats,projector, camera, laboratory) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, room.getName());
+            statement.setString(2, room.getBuilding());
+            statement.setInt(3, getCampusID(room.getCampus()));
+            statement.setString(4, room.getFloor());
+            statement.setInt(5, room.getSeats());
+            statement.setBoolean(6, room.getProjector());
+            statement.setBoolean(7, room.getCamera());
+            statement.setBoolean(8, room.getLaboratory());
+            statement.execute();
+            resultSet = statement.getGeneratedKeys();
+            if (resultSet.next())
+                return resultSet.getInt(1);
+        } catch (SQLException | ClassNotFoundException exception) {
+            exception.printStackTrace();
+        } finally {
+            closeStatement();
+        }
+        return Integer.MIN_VALUE;
+    }
+
     //-------------------------------------updateObject-------------------------------------------------------
 
     /**
@@ -264,8 +307,9 @@ public class Database {
      */
     public static void updateStudent(DualStudent student, DualStudent old) {
         if (student == null) return;
+        if (student == old) return;
         int person_id = updatePerson(student, old);
-        int course_id = updateCourse(student.getCourse(), old.getCourse());
+        int course_id = getCourseId(student.getCourse());
         int company_id = updateCompany(student.getCompany(), old.getCompany());
         try {
             initialize();
@@ -288,10 +332,10 @@ public class Database {
      *
      * @param docent docent with the new data
      * @param old    docent with the old data
-     * @return id if exists, Integer.Min_Value if not
      */
-    public static int updateDocent(Docent docent, Docent old) {
-        if (docent == null) return Integer.MIN_VALUE;
+    public static void updateDocent(Docent docent, Docent old) {
+        if (docent == null) return;
+        if (docent == old) return;
         int person_id = updatePerson(docent, old);
         try {
             initialize();
@@ -299,13 +343,11 @@ public class Database {
             statement.setInt(1, person_id);
             statement.setInt(2, docent.getDocentNumber());
             statement.execute();
-            return docent.getDocentNumber();
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
         } finally {
             closeStatement();
         }
-        return Integer.MIN_VALUE;
     }
 
     /**
@@ -313,29 +355,34 @@ public class Database {
      *
      * @param course course with the new data
      * @param old    course with the old data
-     * @return id if exists, Integer.Min_Value if not
      */
-    public static int updateCourse(Course course, Course old) {
-        if (course == null) return Integer.MIN_VALUE;
+    public static void updateCourse(Course course, Course old) {
+        if (course == null) return;
         int id = getCourseId(old);
+        if (id < 0 && (old == null || old.getRegistrationDate() == null)) {
+            addCourse(course);
+            return;
+        }
+        if (course == old) return;
         if (id >= 0) {
-            int docent_id = updateDocent(course.getStudyDirector(), old.getStudyDirector());
+            int room_id = updateRoom(course.getRoom(), old.getRoom());
             try {
                 initialize();
-                statement = connection.prepareStatement("UPDATE course SET room=?, name=?, study_director_id=? WHERE course_id=?", Statement.RETURN_GENERATED_KEYS);
-                statement.setInt(1, getRoomID(course.getRoom()));
+                statement = connection.prepareStatement("UPDATE course SET room_id=?, name=?, study_director_id=? WHERE course_id=?", Statement.RETURN_GENERATED_KEYS);
+                statement.setInt(1, room_id);
                 statement.setString(2, course.getName());
-                statement.setInt(3, docent_id);
+                if (course.getStudyDirector() != null)
+                    statement.setInt(3, course.getStudyDirector().getDocentNumber());
+                else
+                    statement.setInt(3, Integer.MIN_VALUE);
                 statement.setInt(4, id);
                 statement.execute();
-                return id;
             } catch (SQLException | ClassNotFoundException exception) {
                 exception.printStackTrace();
             } finally {
                 closeStatement();
             }
         }
-        return Integer.MIN_VALUE;
     }
 
     /**
@@ -347,14 +394,15 @@ public class Database {
      */
     public static int updatePerson(Person person, Person old) {
         if (person == null) return Integer.MIN_VALUE;
-        if (countUsedPerson(person) > 1) return addPerson(person);
         int id = getPersonId(old);
+        if (person == old) return id;
+        if (countUsedPerson(old) > 1) return addPerson(person);
         if (id >= 0) {
             int address_id = updateAddress(person.getAddress(), old.getAddress());
             try {
                 initialize();
                 statement = connection.prepareStatement("UPDATE person SET first_name=?, last_name=?, birthdate=?, email=?, address_id=? WHERE person_id=?", Statement.RETURN_GENERATED_KEYS);
-                addPersonToStatment(person, address_id);
+                addPersonToStatement(person, address_id);
                 statement.setInt(6, id);
                 statement.execute();
                 return id;
@@ -377,6 +425,8 @@ public class Database {
     public static int updateCompany(Company company, Company old) {
         if (company == null) return Integer.MIN_VALUE;
         int id = getCompanyId(old);
+        if (id < 0 && (old == null || old.getName() == null)) return addCompany(company);
+        if (company == old) return id;
         if (id >= 0) {
             int address_id = updateAddress(company.getAddress(), old.getAddress());
             int person_id = updatePerson(company.getContactPerson(), old.getContactPerson());
@@ -407,14 +457,47 @@ public class Database {
      */
     public static int updateAddress(Address address, Address old) {
         if (address == null) return Integer.MIN_VALUE;
-        if (countUsedAddress(address) > 1) return addAddress(address);
         int id = getAddressId(old);
+        if (address == old) return id;
+        if (countUsedAddress(old) > 1) return addAddress(address);
         if (id >= 0) {
             try {
                 initialize();
                 statement = connection.prepareStatement("UPDATE address SET street=?, number=?, postal_code=?, city=?, country=? WHERE address_id=?", Statement.RETURN_GENERATED_KEYS);
                 addAddressToStatement(address);
                 statement.setInt(6, id);
+                statement.execute();
+                return id;
+            } catch (SQLException | ClassNotFoundException exception) {
+                exception.printStackTrace();
+            } finally {
+                closeStatement();
+            }
+        }
+        return Integer.MIN_VALUE;
+    }
+
+    /**
+     * update room in the database
+     *
+     * @param room room with the new data
+     * @param old  room with the old data
+     * @return id if exists, Integer.Min_Value if not
+     */
+    public static int updateRoom(CourseRoom room, CourseRoom old) {
+        if (room == null) return Integer.MIN_VALUE;
+        int id = getRoomID(old);
+        if (room == old) return id;
+        if (id < 0 && (old == null || old.getName() == null)) return addRoom(room);
+        if (countUsedRoom(old) > 1) return addRoom(room);
+        if (id >= 0) {
+            try {
+                initialize();
+                statement = connection.prepareStatement("UPDATE room SET seats=?,camera=?,laboratory=?  WHERE room_id=?", Statement.RETURN_GENERATED_KEYS);
+                statement.setInt(1, room.getSeats());
+                statement.setBoolean(2, room.getCamera());
+                statement.setBoolean(3, room.getLaboratory());
+                statement.setInt(4, id);
                 statement.execute();
                 return id;
             } catch (SQLException | ClassNotFoundException exception) {
@@ -472,14 +555,11 @@ public class Database {
      * @param course the course to delete
      */
     public static void deleteCourse(Course course) {
+        int course_id = getCourseId(course);
         try {
             initialize();
-            statement = connection.prepareStatement("DELETE FROM course WHERE room = ? AND name = ? AND registry_date = ? AND course_type = ? AND study_director_id = ?");
-            statement.setInt(1, getRoomID(course.getRoom()));
-            statement.setString(2, course.getName());
-            statement.setDate(3, convertDate(course.getRegistrationDate()));
-            statement.setInt(4, getCourseTypeID(course.getStudyCourse()));
-            statement.setInt(5, course.getStudyDirector().getDocentNumber());
+            statement = connection.prepareStatement("DELETE FROM course WHERE course_id = ?");
+            statement.setInt(1, course_id);
             statement.execute();
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
@@ -552,6 +632,27 @@ public class Database {
         }
     }
 
+    /**
+     * delete a room from the database
+     *
+     * @param courseRoom the room to delete
+     */
+    public static void deleteRoom(CourseRoom courseRoom) {
+        if (countUsedRoom(courseRoom) > 0)
+            return;
+        int room_id = getRoomID(courseRoom);
+        try {
+            initialize();
+            statement = connection.prepareStatement("DELETE FROM room WHERE room_id=?");
+            statement.setInt(1, room_id);
+            statement.execute();
+        } catch (SQLException | ClassNotFoundException exception) {
+            exception.printStackTrace();
+        } finally {
+            closeStatement();
+        }
+    }
+
     //------------------------------------------getIDS---------------------------------------------------
 
     /**
@@ -577,9 +678,9 @@ public class Database {
     }
 
     /**
-     * get all student marticulationnumbers
+     * get all student matriculation numbers
      *
-     * @return int list of all marticulationnumbers
+     * @return int list of all matriculation numbers
      */
     public static List<Integer> getMatriculationNumbers() {
         try {
@@ -618,6 +719,55 @@ public class Database {
             closeStatement();
         }
         return new ArrayList<>();
+    }
+
+    /**
+     * initialize to use the database connection
+     */
+    public static void initialize() throws ClassNotFoundException, SQLException {
+        if (connection == null || connection.isClosed()) {
+            Class.forName("com.mysql.jdbc.Driver");
+            //TODO store in file
+            connection = DriverManager.getConnection(
+                    "jdbc:mysql://85.214.247.101:3306/dhbw?useSSL=false", "mlg_dhbw", "Reisebus1!");
+        }
+        if (dateFormat == null)
+            dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (dualStudents == null)
+            dualStudents = new ArrayList<>();
+        if (courses == null)
+            courses = new ArrayList<>();
+        if (docents == null)
+            docents = new ArrayList<>();
+        if (addresses == null)
+            addresses = new ArrayList<>();
+        if (companies == null)
+            companies = new ArrayList<>();
+        if (persons == null)
+            persons = new ArrayList<>();
+        if (rooms == null)
+            rooms = new ArrayList<>();
+    }
+
+    public static String[] getAllEmailsFromCourse(Course course) {
+        int course_id = getCourseId(course);
+        if (course_id <= 0) return null;
+        try {
+            List<String> erg = new ArrayList<>();
+            initialize();
+            statement = connection.prepareStatement("SELECT email FROM person LEFT JOIN student s ON s.person_id=person.person_id WHERE s.course_id=?");
+            statement.setInt(1, course_id);
+            resultSet = statement.executeQuery();
+            while (resultSet.next())
+                erg.add(resultSet.getString("email"));
+            return erg.toArray(new String[0]);
+
+        } catch (SQLException | ClassNotFoundException exception) {
+            exception.printStackTrace();
+        } finally {
+            closeStatement();
+        }
+        return null;
     }
 
     //---------------------------------------private...........................................
@@ -673,28 +823,27 @@ public class Database {
     }
 
     /**
-     * initialize to use the database connection
+     * get amount of connection to the room
+     *
+     * @param room where the amount of connection is going to count
+     * @return amount of connection
      */
-    private static void initialize() throws ClassNotFoundException, SQLException {
-        if (connection == null || connection.isClosed()) {
-            Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection(
-                    "jdbc:mysql://85.214.247.101:3306/dhbw?useSSL=false", "mlg_dhbw", "Reisebus1!");
+    private static int countUsedRoom(CourseRoom room) {
+        int counter = 0;
+        int id = getRoomID(room);
+        try {
+            initialize();
+            statement = connection.prepareStatement("SELECT COUNT(course_id) FROM course WHERE course.room_id=?");
+            statement.setInt(1, id);
+            resultSet = statement.executeQuery();
+            if (resultSet.next())
+                counter = resultSet.getInt(1);
+        } catch (SQLException | ClassNotFoundException exception) {
+            exception.printStackTrace();
+        } finally {
+            closeStatement();
         }
-        if (dateFormat == null)
-            dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if (dualStudents == null)
-            dualStudents = new ArrayList<>();
-        if (courses == null)
-            courses = new ArrayList<>();
-        if (docents == null)
-            docents = new ArrayList<>();
-        if (addresses == null)
-            addresses = new ArrayList<>();
-        if (companies == null)
-            companies = new ArrayList<>();
-        if (persons == null)
-            persons = new ArrayList<>();
+        return counter;
     }
 
     /**
@@ -717,7 +866,7 @@ public class Database {
                                 convertDate(resultSet.getDate("birthdate")),
                                 new Address(resultSet.getString("student_street"), resultSet.getString("student_number"), resultSet.getString("student_postal_code"), resultSet.getString("student_city"), resultSet.getString("student_country")),
                                 resultSet.getString("student_email"),
-                                new Course(resultSet.getString("name"), getCourseTypeById(resultSet.getInt("course_type")), new Docent(resultSet.getString("docent_last_name"), resultSet.getString("docent_first_name"), convertDate(resultSet.getDate("docent_birthdate")), new Address(resultSet.getString("docent_street"), resultSet.getString("docent_number"), resultSet.getString("docent_postal_code"), resultSet.getString("docent_city"), resultSet.getString("docent_country")), resultSet.getString("docent_email"), resultSet.getInt("study_director_id")), convertDate(resultSet.getDate("registry_date")), getRoomById(resultSet.getInt("room"))),
+                                new Course(resultSet.getString("name"), getCourseTypeById(resultSet.getInt("course_type")), new Docent(resultSet.getString("docent_last_name"), resultSet.getString("docent_first_name"), convertDate(resultSet.getDate("docent_birthdate")), new Address(resultSet.getString("docent_street"), resultSet.getString("docent_number"), resultSet.getString("docent_postal_code"), resultSet.getString("docent_city"), resultSet.getString("docent_country")), resultSet.getString("docent_email"), resultSet.getInt("study_director_id")), convertDate(resultSet.getDate("registry_date")), new CourseRoom(resultSet.getString("room"), getCampusById(resultSet.getInt("campus")), resultSet.getString("building"), resultSet.getString("floor"), resultSet.getInt("seats"), resultSet.getBoolean("projector"), resultSet.getBoolean("camera"), resultSet.getBoolean("laboratory"))),
                                 resultSet.getInt("java_knowlage"),
                                 new Company(resultSet.getString("company_name"), new Address(resultSet.getString("street"), resultSet.getString("number"), resultSet.getString("postal_code"), resultSet.getString("city"), resultSet.getString("country")), new Person(resultSet.getString("last_name"), resultSet.getString("first_name"), resultSet.getString("email"))));
 //                int id = dualStudents.indexOf(dualStudent);
@@ -775,11 +924,11 @@ public class Database {
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Course course =
-                        new Course(resultSet.getString("name"),
+                        new Course(resultSet.getString("course_name"),
                                 getCourseTypeById(resultSet.getInt("course_type")),
                                 new Docent(resultSet.getString("last_name"), resultSet.getString("first_name"), convertDate(resultSet.getDate("birthdate")), new Address(resultSet.getString("street"), resultSet.getString("number"), resultSet.getString("postal_code"), resultSet.getString("city"), resultSet.getString("country")), resultSet.getString("email"), resultSet.getInt("docent_id")),
                                 convertDate(resultSet.getDate("registry_date")),
-                                getRoomById(resultSet.getInt("room")));
+                                new CourseRoom(resultSet.getString("room"), getCampusById(resultSet.getInt("campus")), resultSet.getString("building"), resultSet.getString("floor"), resultSet.getInt("seats"), resultSet.getBoolean("projector"), resultSet.getBoolean("camera"), resultSet.getBoolean("laboratory")));
 //                int id = courses.indexOf(course);
 //                if (id >= 0)
 //                    courses.set(id, course);
@@ -862,13 +1011,35 @@ public class Database {
             while (resultSet.next()) {
                 Person person =
                         new Person(resultSet.getString("last_name"),
-                                resultSet.getString("fore_name"),
+                                resultSet.getString("first_name"),
                                 resultSet.getString("email"));
 //                int id = persons.indexOf(person);
 //                if (id >= 0)
 //                    persons.set(id, person);
 //                else
                 persons.add(person);
+            }
+        } catch (SQLException | ClassNotFoundException exception) {
+            exception.printStackTrace();
+        } finally {
+            closeStatement();
+        }
+    }
+
+    /**
+     * compare room list with database and updating the list
+     */
+    private static void updateRoom() {
+//        checkListPerson();
+        try {
+            initialize();
+            rooms.clear();
+            statement = connection.prepareStatement("SELECT * FROM room");
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                CourseRoom room =
+                        new CourseRoom(resultSet.getString("name"), getCampusById(resultSet.getInt("campus")), resultSet.getString("building"), resultSet.getString("floor"), resultSet.getInt("seats"), resultSet.getBoolean("projector"), resultSet.getBoolean("camera"), resultSet.getBoolean("laboratory"));
+                rooms.add(room);
             }
         } catch (SQLException | ClassNotFoundException exception) {
             exception.printStackTrace();
@@ -935,17 +1106,29 @@ public class Database {
      * @return id if exist, Integer.Minvalue if not
      */
     private static int getCourseId(Course course) {
+        if (course == null) return Integer.MIN_VALUE;
+        int room_id = getRoomID(course.getRoom());
         try {
             initialize();
-            statement = connection.prepareStatement("SELECT course_id FROM course WHERE room = ? AND name = ? AND registry_date = ? AND course_type = ? AND study_director_id = ?");
-            statement.setInt(1, getRoomID(course.getRoom()));
-            statement.setString(2, course.getName());
-            statement.setDate(3, convertDate(course.getRegistrationDate()));
-            statement.setInt(4, getCourseTypeID(course.getStudyCourse()));
-            if (course.getStudyCourse() == null || course.getStudyDirector().getDocentNumber() == 0)
-                statement.setInt(5, Integer.MIN_VALUE);
-            else
-                statement.setInt(5, course.getStudyDirector().getDocentNumber());
+            boolean director_b = course.getStudyDirector() != null && course.getStudyDirector().getDocentNumber() != 0;
+            String room = " AND room_id = ?";
+            String director = " AND study_director_id = ?";
+            String command = "SELECT course_id FROM course WHERE name = ? AND registry_date = ? AND course_type = ?";
+            if (course.getRoom() != null && room_id > 0)
+                command += room;
+            if (director_b)
+                command += director;
+            statement = connection.prepareStatement(command);
+            statement.setString(1, course.getName());
+            statement.setDate(2, convertDate(course.getRegistrationDate()));
+            statement.setInt(3, getCourseTypeID(course.getStudyCourse()));
+            if (course.getRoom() != null && room_id > 0)
+                statement.setInt(4, room_id);
+            if (director_b)
+                if (course.getRoom() != null && room_id > 0)
+                    statement.setInt(5, course.getStudyDirector().getDocentNumber());
+                else
+                    statement.setInt(4, course.getStudyDirector().getDocentNumber());
             resultSet = statement.executeQuery();
             if (resultSet.next())
                 return resultSet.getInt(1);
@@ -965,6 +1148,7 @@ public class Database {
      * @return id if exist, Integer.Minvalue if not
      */
     private static int getCompanyId(Company company) {
+        if (company == null) return Integer.MIN_VALUE;
         int address_id = getAddressId(company.getAddress());
         int person_id = getPersonId(company.getContactPerson());
         try {
@@ -991,6 +1175,7 @@ public class Database {
      * @return id if exist, Integer.Minvalue if not
      */
     private static int getPersonId(Person person) {
+        if (person == null) return Integer.MIN_VALUE;
         try {
             initialize();
             statement = connection.prepareStatement("SELECT person_id FROM person WHERE email = ?");
@@ -1013,10 +1198,37 @@ public class Database {
      * @return id if exist, Integer.Minvalue if not
      */
     private static int getAddressId(Address address) {
+        if (address == null) return Integer.MIN_VALUE;
         try {
             initialize();
             statement = connection.prepareStatement("SELECT address_id FROM address WHERE street = ? AND number = ? AND postal_code = ? AND city = ? AND country = ?");
             addAddressToStatement(address);
+            resultSet = statement.executeQuery();
+            if (resultSet.next())
+                return resultSet.getInt(1);
+        } catch (SQLException | ClassNotFoundException exception) {
+            exception.printStackTrace();
+        } finally {
+            closeStatement();
+        }
+        return Integer.MIN_VALUE;
+    }
+
+    /**
+     * get the database id from room
+     *
+     * @param room the data from the id row
+     * @return id if exist, Integer.Minvalue if not
+     */
+    private static int getRoomID(CourseRoom room) {
+        if (room == null) return Integer.MIN_VALUE;
+        try {
+            initialize();
+            statement = connection.prepareStatement("SELECT room_id FROM room WHERE name = ? AND building = ? AND floor = ? AND campus = ?");
+            statement.setString(1, room.getName());
+            statement.setString(2, room.getBuilding());
+            statement.setString(3, room.getFloor());
+            statement.setInt(4, getCampusID(room.getCampus()));
             resultSet = statement.executeQuery();
             if (resultSet.next())
                 return resultSet.getInt(1);
@@ -1072,7 +1284,7 @@ public class Database {
     /**
      * function to close java conform the connection to the database
      */
-    public static void closeConnection(){
+    public static void closeConnection() {
         if (connection != null)
             try {
                 connection.close();
@@ -1081,25 +1293,12 @@ public class Database {
             }
     }
 
-    /**
-     * get the id from the enum CourseRoom
-     *
-     * @param room the CourseRoom you need the id
-     * @return Integer.MinValue if room not exist. id if exists
-     */
-    private static int getRoomID(CourseRoom room) {
-        CourseRoom[] rooms = CourseRoom.values();
-        for (int f = 0; f < rooms.length; f++)
-            if (rooms[f].equals(room))
-                return f;
-        return Integer.MIN_VALUE;
-    }
 
     /**
      * get the id from the enum StudyCourse
      *
      * @param course the StudyCourse you need the id
-     * @return Integer.MinValue if room not exist. id if exists
+     * @return Integer.MinValue if course not exist. id if exists
      */
     private static int getCourseTypeID(StudyCourse course) {
         StudyCourse[] courses = StudyCourse.values();
@@ -1110,16 +1309,6 @@ public class Database {
     }
 
     /**
-     * get the CoureRoom from the id
-     *
-     * @param id from the CourseRoom
-     * @return CourseRoom if exists, null if not
-     */
-    private static CourseRoom getRoomById(int id) {
-        return id < 0 || id >= CourseRoom.values().length ? null : CourseRoom.values()[id];
-    }
-
-    /**
      * get the StudyCourse from the id
      *
      * @param id from the StudyCourse
@@ -1127,6 +1316,32 @@ public class Database {
      */
     private static StudyCourse getCourseTypeById(int id) {
         return id < 0 || id >= StudyCourse.values().length ? null : StudyCourse.values()[id];
+    }
+
+    /**
+     * get the id from the enum campus
+     *
+     * @param campus the campus you need the id
+     * @return Integer.MinValue if course not exist. id if exists
+     */
+    private static int getCampusID(Campus campus) {
+        if (campus == null) return Integer.MIN_VALUE;
+        Campus[] campuses = Campus.values();
+        for (int f = 0; f < campuses.length; f++)
+            if (campuses[f].toString().equals(campus.toString()))
+                return f + 1;
+        return Integer.MIN_VALUE;
+    }
+
+    /**
+     * get the campus from the id
+     *
+     * @param id from the campus
+     * @return campus if exists, null if not
+     */
+    private static Campus getCampusById(int id) {
+        id--;
+        return id < 0 || id >= Campus.values().length ? null : Campus.values()[id];
     }
 
     /**
@@ -1199,7 +1414,7 @@ public class Database {
      *
      * @param person person object with the attributes
      */
-    private static void addPersonToStatment(Person person, int address_id) throws SQLException {
+    private static void addPersonToStatement(Person person, int address_id) throws SQLException {
         statement.setString(1, person.getForename());
         statement.setString(2, person.getName());
         if (person.getBirthday() == null)

@@ -2,7 +2,7 @@ package org.dhbw.classes;
 
 import java.util.Objects;
 
-public class Address {
+public class Address implements Comparable<Address> {
 
     private String street;
     private String number;
@@ -16,6 +16,14 @@ public class Address {
         this.postcode = postcode;
         this.city = city;
         this.country = country;
+    }
+
+    public Address(Address address) {
+        this.street = address.street;
+        this.number = address.number;
+        this.postcode = address.postcode;
+        this.city = address.city;
+        this.country = address.country;
     }
 
     //-----------------------------------------Getter------------------------------------------------
@@ -85,5 +93,27 @@ public class Address {
     }
 
 
+    @Override
+    public int compareTo(Address o) {
+        if (country == null)
+            return -1;
+        if (o.getCountry() == null)
+            return 1;
+        int compare = country.toLowerCase().compareTo(o.getCountry().toLowerCase());
+        if (compare != 0) return compare;
 
+        if (city == null)
+            return -1;
+        if (o.getCity() == null)
+            return 1;
+        compare = city.toLowerCase().compareTo(o.getCity().toLowerCase());
+        if (compare != 0) return compare;
+
+        if (street == null)
+            return -1;
+        if (o.getStreet() == null)
+            return 1;
+        compare = street.toLowerCase().compareTo(o.getStreet().toLowerCase());
+        return compare != 0 ? compare : number == null ? -1 : o.getNumber() == null ? 1 : number.toLowerCase().compareTo(o.getNumber().toLowerCase());
+    }
 }
