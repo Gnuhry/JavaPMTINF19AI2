@@ -1,3 +1,4 @@
+### Installationsanweisung
 Im folgenden finden Sie eine Erklärung zur Installation der Applikation und des Docker-Containers für die Datenbank:
 
 1. Docker-Desktop installieren ([Docker-Desktop](https://www.docker.com/products/docker-desktop))
@@ -9,3 +10,17 @@ Im folgenden finden Sie eine Erklärung zur Installation der Applikation und des
 6. Die .exe per Doppelklick starten oder die JAR über die Batch-Datei starten
 7. Datenbank kann über den Befehl `docker stop dhbw` gestoppt werden
 8. Zum erneuten Starten kann `docker start dhbw` genutzt werden
+
+
+### Tastenkombinationen im Überblick Fenster:
+-  delete/entf                                                       löschen
+-  escape                                                            auswahl entfernen
+-  enter                                                                bearbeiten (nur wenn eine zeiele ausgewählt ist)
+-  control u                                                          mail zu uni mail ändern
+-  control m                                                         mail senden
+   + control                                                          mail mit direkot beim kurs senden
+-  control r                                                          refresh
+-  control left                                                       zum linken Tab wechseln
+-  control right                                                    zum rechtenTab wechseln
+
+-  control und klick auf email addresse            Mail zur addresse                          
