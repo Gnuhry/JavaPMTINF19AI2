@@ -737,9 +737,8 @@ public class Database {
     public static void initialize() throws ClassNotFoundException, SQLException {
         if (connection == null || connection.isClosed()) {
             Class.forName("com.mysql.jdbc.Driver");
-            //TODO store in file
             connection = DriverManager.getConnection(
-                    "jdbc:mysql://shadowcomplexgaming.de:3306/dhbw?allowPublicKeyRetrival=true&useSSL=false", System.getenv("DHBW_USER"), System.getenv("DHBW_PW"));
+                    "jdbc:mysql://localhost:3306/dhbw?allowPublicKeyRetrieval=true&useSSL=false", System.getenv("DHBW_USER"), System.getenv("DHBW_PW"));
         }
         if (dateFormat == null)
             dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
