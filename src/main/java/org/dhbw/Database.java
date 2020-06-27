@@ -771,7 +771,7 @@ public class Database {
             if (connection == null || connection.isClosed()) {
                 Class.forName("com.mysql.jdbc.Driver");
                 connection = DriverManager.getConnection(
-                        "jdbc:mysql://85.214.247.101:3306/dhbw?useSSL=false", "mlg_dhbw", "Reisebus1!");
+                        "jdbc:mysql://localhost:3306/dhbw?allowPublicKeyRetrieval=true&useSSL=false", System.getenv("DHBW_USER"), System.getenv("DHBW_PW"));
 
             }
         } catch (ClassNotFoundException | SQLException e) {
