@@ -9,12 +9,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class LanguageTest {
 
     @Test
-    public void getRessourceBundle() {
+    public void getResourceBundle() {
         assertNotNull(Language.getResourcedBundle());
     }
 
     @Test
-    public void getRessourceBundleError() {
+    public void getResourceBundleError() {
         assertNotNull(Language.getResourcedBundleError());
     }
 

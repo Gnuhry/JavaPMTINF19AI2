@@ -456,7 +456,7 @@ public class ShowController implements Initializable {
     }
 
     /**
-     * set a ellert for the user
+     * set a alert for the user
      */
     private static void setAlert() {
         if (alert) {
