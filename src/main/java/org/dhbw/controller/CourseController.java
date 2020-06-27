@@ -1,11 +1,15 @@
-package org.dhbw;
+package org.dhbw.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.dhbw.Database;
 import org.dhbw.classes.*;
+import org.dhbw.help.DateConverter;
+import org.dhbw.help.GuiHelp;
+import org.dhbw.help.Language;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,8 +31,8 @@ public class CourseController {
 
     private Course course_old;
 
-    private final CourseRoom noRoom = new CourseRoom(Help.getResourcedBundle().getString("no_room"), null, null, null);
-    private final Docent noDocent = new Docent(Help.getResourcedBundle().getString("no_docent"), "", null, null, "", 0);
+    private final CourseRoom noRoom = new CourseRoom(Language.getResourcedBundle().getString("no_room"), null, null, null);
+    private final Docent noDocent = new Docent(Language.getResourcedBundle().getString("no_docent"), "", null, null, "", 0);
 
     @FXML
     private Label errorMessage, title;
@@ -69,7 +73,7 @@ public class CourseController {
         courseRoom.getItems().setAll(chooseRoomOptions);
         chooseCourseDirectorOptions.add(0, noDocent);
         courseDirector.getItems().setAll(chooseCourseDirectorOptions);
-        Help.addKeyEventDatePicker(courseDate);
+        GuiHelp.addKeyEventDatePicker(courseDate);
     }
 
     /**
@@ -80,13 +84,13 @@ public class CourseController {
     public void initVariables(Course course) {
         course_old = course;
         if (course != null) {
-            title.setText(Help.getResourcedBundle().getString("title_course_edit"));
-            buttonDone.setText(Help.getResourcedBundle().getString("save"));
+            title.setText(Language.getResourcedBundle().getString("title_course_edit"));
+            buttonDone.setText(Language.getResourcedBundle().getString("save"));
             courseName.setText(course.getName());
             if (course.getStudyCourse() != null) courseType.setValue(course.getStudyCourse());
             if (course.getRoom() != null && course.getRoom().getName() != null) courseRoom.setValue(course.getRoom());
             if (course.getRegistrationDate() != null)
-                courseDate.setValue(Help.convertLocalDateDate(course.getRegistrationDate()));
+                courseDate.setValue(DateConverter.convertLocalDateDate(course.getRegistrationDate()));
             if (course.getStudyDirector() != null) courseDirector.setValue(course.getStudyDirector());
             courseDate.setDisable(true);
             courseType.setDisable(true);
@@ -106,50 +110,50 @@ public class CourseController {
         Date date;
         boolean focus = false;
         if (text.isEmpty()) {
-            Help.markWrongField(false, courseName);
+            GuiHelp.markWrongField(false, courseName);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("name"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("name"));
         } else if (text.length() >= Database.maxString) {
-            Help.markWrongField(false, courseName);
+            GuiHelp.markWrongField(false, courseName);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("string_to_long"));
         } else
-            courseName.setStyle(Help.styleRight);
+            courseName.setStyle(GuiHelp.styleRight);
 
         StudyCourse course = courseType.getValue();
         if (course == null) {
-            Help.markWrongField(focus, courseType);
+            GuiHelp.markWrongField(focus, courseType);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("course_type"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("course_type"));
         } else
-            courseType.setStyle(Help.styleRight);
+            courseType.setStyle(GuiHelp.styleRight);
 
         CourseRoom room = courseRoom.getValue();
         if (room == null) {
-            Help.markWrongField(focus, courseRoom);
+            GuiHelp.markWrongField(focus, courseRoom);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("room"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("room"));
         } else
-            courseRoom.setStyle(Help.styleRight);
+            courseRoom.setStyle(GuiHelp.styleRight);
 
-        date = Help.convertLocalDateDate(courseDate.getValue());
+        date = DateConverter.convertLocalDateDate(courseDate.getValue());
         if (date == null) {
-            Help.markWrongField(focus, courseDate);
+            GuiHelp.markWrongField(focus, courseDate);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("day"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("day"));
         } else
-            courseDate.setStyle(Help.styleRight);
+            courseDate.setStyle(GuiHelp.styleRight);
 
         Docent docent = courseDirector.getValue();
         if (docent == null) {
-            Help.markWrongField(focus, courseDirector);
+            GuiHelp.markWrongField(focus, courseDirector);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("director"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("director"));
         } else
-            courseDirector.setStyle(Help.styleRight);
+            courseDirector.setStyle(GuiHelp.styleRight);
 
         if (focus)
-            Help.setErrorMessage(errorMessageL, errorMessage);
+            GuiHelp.setErrorMessage(errorMessageL, errorMessage);
         else {
             errorMessage.setVisible(false);
             room = courseRoom.getValue();

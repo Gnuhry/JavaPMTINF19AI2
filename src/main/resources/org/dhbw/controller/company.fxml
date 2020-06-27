@@ -8,7 +8,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="600.0" maxWidth="1250.0" minHeight="600.0" minWidth="1250.0" prefHeight="600.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.CompanyController">
+<AnchorPane maxHeight="600.0" maxWidth="1250.0" minHeight="600.0" minWidth="1250.0" prefHeight="600.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.controller.CompanyController">
     <ImageView fitHeight="600.0" fitWidth="1250.0" focusTraversable="true" layoutX="10.0" layoutY="10.0" opacity="0.28" pickOnBounds="true" smooth="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <effect>
             <BoxBlur height="3.0" width="3.0" />
@@ -19,7 +19,7 @@
         <Image url="@images/dhbwBuilding.jpg" />
     </ImageView>
     <Circle fill="#aebcca" layoutX="88.0" layoutY="123.0" radius="58.0" stroke="BLACK" strokeType="INSIDE" />
-    <Button id="backToOverview" fx:id="backToOverview" focusTraversable="false" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="%back_to_overview" />
+    <Button id="backToOverview" fx:id="backToOverview" focusTraversable="false" layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@../css/application.css" text="%back_to_overview" />
     <ImageView fitHeight="67.0" fitWidth="82.0" layoutX="54.0" layoutY="90.0" pickOnBounds="true" preserveRatio="true">
         <Image url="@images/addCompany.png" />
     </ImageView>
@@ -30,29 +30,29 @@
     </Label>
     <VBox layoutX="197.0" layoutY="142.0" prefHeight="425.0" prefWidth="718.0" spacing="20.0" AnchorPane.bottomAnchor="934.0" AnchorPane.leftAnchor="197.0" AnchorPane.rightAnchor="166.0" AnchorPane.topAnchor="142.0">
         <HBox spacing="170.0">
-            <Label alignment="BASELINE_LEFT" prefHeight="25.6" prefWidth="100.0" stylesheets="@css/application.css" text="%name" />
-            <TextField fx:id="companyName" prefWidth="250.0" stylesheets="@css/application.css" />
+            <Label alignment="BASELINE_LEFT" prefHeight="25.6" prefWidth="100.0" stylesheets="@../css/application.css" text="%name" />
+            <TextField fx:id="companyName" prefWidth="250.0" stylesheets="@../css/application.css" />
         </HBox>
         <HBox spacing="30.0">
-            <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="%street_and_number" />
-            <TextField fx:id="companyStreet" prefWidth="250.0" stylesheets="@css/application.css" translateX="125.0" />
-            <TextField fx:id="companyHomeNumber" prefWidth="50.0" stylesheets="@css/application.css" translateX="125.0" />
+            <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@../css/application.css" text="%street_and_number" />
+            <TextField fx:id="companyStreet" prefWidth="250.0" stylesheets="@../css/application.css" translateX="125.0" />
+            <TextField fx:id="companyHomeNumber" prefWidth="50.0" stylesheets="@../css/application.css" translateX="125.0" />
         </HBox>
         <HBox prefHeight="26.0" prefWidth="746.0" spacing="30.0">
-            <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@css/application.css" text="%city_and_country" />
-            <TextField fx:id="companyPostalCode" prefWidth="100.0" stylesheets="@css/application.css" translateX="126.0" />
-            <TextField fx:id="companyCity" prefWidth="200.0" stylesheets="@css/application.css" translateX="125.0" />
-            <TextField fx:id="companyCountry" prefWidth="200.0" stylesheets="@css/application.css" text="Deutschland" translateX="125.0" />
+            <Label prefHeight="25.6" prefWidth="115.0" stylesheets="@../css/application.css" text="%city_and_country" />
+            <TextField fx:id="companyPostalCode" prefWidth="100.0" stylesheets="@../css/application.css" translateX="126.0" />
+            <TextField fx:id="companyCity" prefWidth="200.0" stylesheets="@../css/application.css" translateX="125.0" />
+            <TextField fx:id="companyCountry" prefWidth="200.0" stylesheets="@../css/application.css" text="Deutschland" translateX="125.0" />
         </HBox>
         <HBox prefHeight="23.0" prefWidth="955.0" spacing="20.0">
-            <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@css/application.css" text="%contact_person" />
+            <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@../css/application.css" text="%contact_person" />
             <Label prefHeight="28.0" prefWidth="111.0" text="%full_name" />
-            <TextField fx:id="companyContactPersonFirstName" prefWidth="200.0" stylesheets="@css/application.css" />
-            <TextField fx:id="companyContactPersonLastName" prefWidth="200.0" stylesheets="@css/application.css" />
+            <TextField fx:id="companyContactPersonFirstName" prefWidth="200.0" stylesheets="@../css/application.css" />
+            <TextField fx:id="companyContactPersonLastName" prefWidth="200.0" stylesheets="@../css/application.css" />
         </HBox>
         <HBox prefHeight="23.0" prefWidth="955.0" spacing="100.0">
-            <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@css/application.css" text="%email" translateX="140.0" />
-            <TextField fx:id="companyContactPersonEmail" prefHeight="23.0" prefWidth="170.0" stylesheets="@css/application.css" translateX="50.0" />
+            <Label prefHeight="25.6" prefWidth="120.0" stylesheets="@../css/application.css" text="%email" translateX="140.0" />
+            <TextField fx:id="companyContactPersonEmail" prefHeight="23.0" prefWidth="170.0" stylesheets="@../css/application.css" translateX="50.0" />
         </HBox>
     </VBox>
     <Label ellipsisString="" layoutX="197.0" layoutY="110.0" prefHeight="26.0" prefWidth="278.0" text="%company_info" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" AnchorPane.leftAnchor="197.0" AnchorPane.rightAnchor="606.0">
@@ -62,8 +62,8 @@
     </Label>
     <ButtonBar layoutX="-28.0" layoutY="530.0" prefHeight="52.0" prefWidth="1080.0" AnchorPane.leftAnchor="-28.0" AnchorPane.rightAnchor="28.0">
         <buttons>
-            <Button fx:id="buttonDone" alignment="CENTER" mnemonicParsing="false" onAction="#submit" stylesheets="@css/application.css" text="%add" />
-            <Button fx:id="buttonCancel" alignment="CENTER" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@css/application.css" text="%cancel" />
+            <Button fx:id="buttonDone" alignment="CENTER" mnemonicParsing="false" onAction="#submit" stylesheets="@../css/application.css" text="%add" />
+            <Button fx:id="buttonCancel" alignment="CENTER" mnemonicParsing="false" onAction="#backToOverview" stylesheets="@../css/application.css" text="%cancel" />
         </buttons>
         <padding>
             <Insets right="50.0" />

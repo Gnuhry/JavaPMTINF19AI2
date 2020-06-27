@@ -75,7 +75,7 @@
 
 .tool-bar
 {
-    -fx-background-color: rgba(0,0,0,0.2);
+    -fx-background-color: rgba(167,163,163,0.3);
 }
 
 .table-view:focused .table-row-cell:filled:focused:selected {
@@ -84,16 +84,12 @@
 
 .tab-pane
 {
-    -fx-background-color: rgba(0,0,0,0.4);
+    -fx-background-color: rgba(188,178,178,0.3);
+    -fx-tab-min-width:150px;
 }
 
 .tab-pane .tab-header-area .tab-header-background {
     -fx-opacity: 0;
-}
-
-.tab-pane
-{
-    -fx-tab-min-width:150px;
 }
 
 .tab{
@@ -114,15 +110,16 @@
 
 .tab .tab-label {
     -fx-alignment: CENTER;
-    -fx-text-fill: #828282;
+    -fx-text-fill: #fffcfc;
     -fx-font-size: 12px;
     -fx-font-weight: bold;
 }
 
-.tab:selected .tab-label {
+.tab:selected .tab-label{
     -fx-alignment: CENTER;
-    -fx-text-fill: #96b946;
+    -fx-text-fill: #780f00;
 }
+
 
 .transparent .viewport, .transparent
 {
@@ -130,14 +127,18 @@
 }
 
 #studentTab, #courseTab, #roomTab{
-    -fx-background-color: rgba(0,0,0,0.7);
+    -fx-background-color: rgba(70,70,70,0.6);
 }
 
 #docentTab, #companyTab{
-    -fx-background-color: rgba(0,0,0,0.5);
+    -fx-background-color: rgba(30,30,30,0.6);
 }
 
 #backToOverview {
     -fx-border-radius: 40px 5px 5px 40px;
     -fx-background-radius: 40px 5px 5px 40px;
+}
+
+#acceptDelete {
+    -fx-background-color: rgba(0,0,0,0.2);
 }

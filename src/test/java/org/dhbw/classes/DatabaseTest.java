@@ -1,11 +1,12 @@
 package org.dhbw.classes;
 
+import org.dhbw.Database;
 import org.junit.jupiter.api.*;
 
-import java.sql.SQLException;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class DatabaseTest {
@@ -29,7 +30,7 @@ public class DatabaseTest {
 
 
     @BeforeAll
-    public static void setUp() throws SQLException, ClassNotFoundException {
+    public static void setUp() {
         Database.initialize();
     }
 
@@ -38,7 +39,8 @@ public class DatabaseTest {
         Database.closeConnection();
     }
 
-    @Test @Order(0)
+    @Test
+    @Order(0)
     public void addressTests() {
         Database.addAddress(demoAddress);
         assertTrue(Database.getAddresses().contains(demoAddress));
@@ -50,7 +52,8 @@ public class DatabaseTest {
         assertFalse(Database.getAddresses().contains(newAddress));
     }
 
-    @Test @Order(1)
+    @Test
+    @Order(1)
     public void personTests() {
         Database.addPerson(demoPerson);
         assertTrue(Database.getPersons().contains(demoPerson));
@@ -62,7 +65,8 @@ public class DatabaseTest {
         assertFalse(Database.getPersons().contains(newPerson));
     }
 
-    @Test @Order(2)
+    @Test
+    @Order(2)
     public void docentTests() {
         Database.addDocent(demoDocent);
         assertTrue(Database.getDocents().contains(demoDocent));
@@ -76,7 +80,8 @@ public class DatabaseTest {
         assertFalse(Database.getDocentIDs().contains(newDocent.getDocentNumber()));
     }
 
-    @Test @Order(3)
+    @Test
+    @Order(3)
     public void roomTests() {
         Database.addRoom(demoRoom);
         assertTrue(Database.getRooms().contains(demoRoom));
@@ -88,7 +93,8 @@ public class DatabaseTest {
         assertFalse(Database.getRooms().contains(newRoom));
     }
 
-    @Test @Order(4)
+    @Test
+    @Order(4)
     public void courseTests() {
         Database.addCourse(demoCourse);
         assertTrue(Database.getCourses().contains(demoCourse));
@@ -103,7 +109,8 @@ public class DatabaseTest {
         Database.deleteRoom(demoRoom);
     }
 
-    @Test @Order(5)
+    @Test
+    @Order(5)
     public void companyTests() {
         Database.addCompany(demoCompany);
         assertTrue(Database.getCompanies().contains(demoCompany));
@@ -115,7 +122,8 @@ public class DatabaseTest {
         assertFalse(Database.getCompanies().contains(newCompany));
     }
 
-    @Test @Order(6)
+    @Test
+    @Order(6)
     public void studentTests() {
         Database.addStudent(demoStudent);
         assertTrue(Database.getStudents().contains(demoStudent));

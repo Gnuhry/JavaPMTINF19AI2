@@ -1,4 +1,4 @@
-package org.dhbw;
+package org.dhbw.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -7,7 +7,12 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import org.dhbw.Database;
 import org.dhbw.classes.*;
+import org.dhbw.help.DateConverter;
+import org.dhbw.help.GuiHelp;
+import org.dhbw.help.Language;
+import org.dhbw.help.Validation;
 
 import java.io.IOException;
 import java.util.*;
@@ -22,8 +27,8 @@ public class StudentController {
             University.getCourses()
     );
 
-    private final Company newCompany = new Company(Help.getResourcedBundle().getString("new_company"), null, null);
-    private final Course noCourse = new Course(Help.getResourcedBundle().getString("no_course"), null, null, null, null);
+    private final Company newCompany = new Company(Language.getResourcedBundle().getString("new_company"), null, null);
+    private final Course noCourse = new Course(Language.getResourcedBundle().getString("no_course"), null, null, null, null);
     private DualStudent student_old;
 
     @FXML
@@ -67,23 +72,23 @@ public class StudentController {
         this.student_old = student;
         if (student_old != null) {
             image.setImage(new Image(getClass().getResourceAsStream("images/addStudentHat.png")));
-            title.setText(Help.getResourcedBundle().getString("title_student_edit"));
-            buttonDone.setText(Help.getResourcedBundle().getString("save"));
-            Help.fillPersonToTextField(student, studentLastName, studentFirstName, studentBirth, studentEmail);
-            Help.fillAddressesToTextField(student.getAddress(), studentStreet, studentHomeNumber, studentPostalCode, studentCity, studentCountry);
+            title.setText(Language.getResourcedBundle().getString("title_student_edit"));
+            buttonDone.setText(Language.getResourcedBundle().getString("save"));
+            GuiHelp.fillPersonToTextField(student, studentLastName, studentFirstName, studentBirth, studentEmail);
+            GuiHelp.fillAddressesToTextField(student.getAddress(), studentStreet, studentHomeNumber, studentPostalCode, studentCity, studentCountry);
             studentNumberField.setText("s" + student_old.getStudentNumber());
             matriculationNumberField.setText(String.valueOf(student_old.getMatriculationNumber()));
             if (student_old.getCompany() != null) {
                 companyChoose.setValue(student_old.getCompany());
                 companyName.setText(student_old.getCompany().getName());
-                Help.fillAddressesToTextField(student_old.getCompany().getAddress(), companyStreet, companyHomeNumber, companyPostalCode, companyCity, companyCountry);
-                Help.fillPersonToTextField(student_old.getCompany().getContactPerson(), companyPersonLastName, companyPersonFirstName, companyPersonEmail);
+                GuiHelp.fillAddressesToTextField(student_old.getCompany().getAddress(), companyStreet, companyHomeNumber, companyPostalCode, companyCity, companyCountry);
+                GuiHelp.fillPersonToTextField(student_old.getCompany().getContactPerson(), companyPersonLastName, companyPersonFirstName, companyPersonEmail);
             }
             if (student_old.getCourse() != null && student_old.getCourse().getRegistrationDate() != null) {
                 courseName.setValue(student_old.getCourse());
                 Course course = student_old.getCourse();
                 courseType.setText(course.getStudyCourse().toString());
-                courseDate.setText(Help.format.format(new Date(course.getRegistrationDate().getTime())));
+                courseDate.setText(GuiHelp.format.format(new Date(course.getRegistrationDate().getTime())));
                 courseRoom.setText(course.getRoom().getName());
             }
             javaKnowledgeLabel.setText(String.valueOf(student_old.getJavaKnowledge()));
@@ -114,7 +119,7 @@ public class StudentController {
         companyChoose.setItems(chooseCompanyOptions);
         chooseCourseOptions.add(0, noCourse);
         courseName.setItems(chooseCourseOptions);
-        Help.addKeyEventDatePicker(studentBirth);
+        GuiHelp.addKeyEventDatePicker(studentBirth);
         generateSN();
         generateMN();
     }
@@ -126,17 +131,17 @@ public class StudentController {
     private void generateSN() {
         int max_iteration = 100000;
         Random random = new Random();
-        Help help = new Help();
+        Validation val = new Validation();
         while (--max_iteration > 0) {
             int studentNumber = random.nextInt(900000) + 100000;
-            if (help.checkSNContains(studentNumber)) {
+            if (val.validateStudentNumber(studentNumber)) {
                 studentNumberField.setText("s" + studentNumber);
                 return;
             }
         }
         int number = 100000;
         while (number < 10000000)
-            if (help.checkSNContains(number++)) {
+            if (val.validateStudentNumber(number++)) {
                 studentNumberField.setText("s" + number);
                 break;
             }
@@ -149,17 +154,17 @@ public class StudentController {
     private void generateMN() {
         int max_iteration = 100000;
         Random random = new Random();
-        Help help = new Help();
+        Validation val = new Validation();
         while (--max_iteration > 0) {
             int matriculation_number = random.nextInt(9000000) + 1000000;
-            if (help.checkMNContains(matriculation_number)) {
+            if (val.validateMatriculationNumber(matriculation_number)) {
                 matriculationNumberField.setText("" + matriculation_number);
                 return;
             }
         }
         int number = 100000;
         while (number < 10000000)
-            if (help.checkMNContains(number++)) {
+            if (val.validateMatriculationNumber(number++)) {
                 matriculationNumberField.setText("" + number);
                 break;
             }
@@ -184,7 +189,7 @@ public class StudentController {
             courseType.setText("");
             courseRoom.setText("");
         } else {
-            courseDate.setText(Help.format.format(new Date(course.getRegistrationDate().getTime())));
+            courseDate.setText(GuiHelp.format.format(new Date(course.getRegistrationDate().getTime())));
             courseType.setText(course.getStudyCourse().toString());
             courseRoom.setText(course.getRoom().getName());
         }
@@ -198,8 +203,8 @@ public class StudentController {
         Company company = companyChoose.getValue();
         if (company.equals(newCompany)) {
             companyName.setText("");
-            Help.fillAddressesToTextField(new Address("", "", "", "", ""), companyStreet, companyHomeNumber, companyPostalCode, companyCity, companyCountry);
-            Help.fillPersonToTextField(new Person("", "", ""), companyPersonLastName, companyPersonFirstName, companyPersonEmail);
+            GuiHelp.fillAddressesToTextField(new Address("", "", "", "", ""), companyStreet, companyHomeNumber, companyPostalCode, companyCity, companyCountry);
+            GuiHelp.fillPersonToTextField(new Person("", "", ""), companyPersonLastName, companyPersonFirstName, companyPersonEmail);
             companyName.setDisable(false);
             companyStreet.setDisable(false);
             companyHomeNumber.setDisable(false);
@@ -211,8 +216,8 @@ public class StudentController {
             companyPersonLastName.setDisable(false);
         } else {
             companyName.setText(company.getName());
-            Help.fillAddressesToTextField(company.getAddress(), companyStreet, companyHomeNumber, companyPostalCode, companyCity, companyCountry);
-            Help.fillPersonToTextField(company.getContactPerson(), companyPersonLastName, companyPersonFirstName, companyPersonEmail);
+            GuiHelp.fillAddressesToTextField(company.getAddress(), companyStreet, companyHomeNumber, companyPostalCode, companyCity, companyCountry);
+            GuiHelp.fillPersonToTextField(company.getContactPerson(), companyPersonLastName, companyPersonFirstName, companyPersonEmail);
             companyName.setDisable(true);
             companyStreet.setDisable(true);
             companyHomeNumber.setDisable(true);
@@ -248,7 +253,7 @@ public class StudentController {
      */
     @FXML
     private void setStudentEmail() {
-        studentEmail.setText(Help.getStudentUniversityEmail(Objects.requireNonNullElseGet(student_old, () -> new DualStudent(Integer.parseInt(matriculationNumberField.getText()), Integer.parseInt(studentNumberField.getText().substring(1)), null, null, null, null, null, null, 0, null))));
+        studentEmail.setText(GuiHelp.getStudentUniversityEmail(Objects.requireNonNullElseGet(student_old, () -> new DualStudent(Integer.parseInt(matriculationNumberField.getText()), Integer.parseInt(studentNumberField.getText().substring(1)), null, null, null, null, null, null, 0, null))));
     }
 
     /**
@@ -263,328 +268,328 @@ public class StudentController {
         Date date;
         boolean focus = false;
         if (text.isEmpty()) {
-            Help.markWrongField(false, studentFirstName);
+            GuiHelp.markWrongField(false, studentFirstName);
             scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("forename"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("forename"));
         } else if (text.length() >= Database.maxString) {
-            Help.markWrongField(false, studentFirstName);
+            GuiHelp.markWrongField(false, studentFirstName);
             scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("string_to_long"));
         } else
-            studentFirstName.setStyle(Help.styleRight);
+            studentFirstName.setStyle(GuiHelp.styleRight);
 
         text = studentLastName.getText().trim();
         if (text.isEmpty()) {
-            Help.markWrongField(focus, studentLastName);
+            GuiHelp.markWrongField(focus, studentLastName);
             if (!focus)
                 scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("last_name"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("last_name"));
         } else if (text.length() >= Database.maxString) {
-            Help.markWrongField(false, studentLastName);
+            GuiHelp.markWrongField(false, studentLastName);
             scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("string_to_long"));
         } else
-            studentLastName.setStyle(Help.styleRight);
+            studentLastName.setStyle(GuiHelp.styleRight);
 
-        date = Help.convertLocalDateDate(studentBirth.getValue());
+        date = DateConverter.convertLocalDateDate(studentBirth.getValue());
         if (date == null) {
-            Help.markWrongField(focus, studentBirth);
+            GuiHelp.markWrongField(focus, studentBirth);
             if (!focus)
                 scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("birthday"));
-        } else if (!Help.validateBirthday(date)) {
-            Help.markWrongField(focus, studentBirth);
+            errorMessageL.add(Language.getResourcedBundleError().getString("birthday"));
+        } else if (!Validation.validateBirthday(date)) {
+            GuiHelp.markWrongField(focus, studentBirth);
             if (!focus)
                 scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("birthday2"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("birthday2"));
         } else
-            studentBirth.setStyle(Help.styleRight);
+            studentBirth.setStyle(GuiHelp.styleRight);
 
         text = studentEmail.getText().trim();
         if (text.isEmpty()) {
-            Help.markWrongField(focus, studentEmail);
+            GuiHelp.markWrongField(focus, studentEmail);
             if (!focus)
                 scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("email"));
-        } else if (!Help.validateEmail(text)) {
-            Help.markWrongField(focus, studentEmail);
+            errorMessageL.add(Language.getResourcedBundleError().getString("email"));
+        } else if (!Validation.validateEmail(text)) {
+            GuiHelp.markWrongField(focus, studentEmail);
             if (!focus)
                 scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("email2"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("email2"));
         } else if (text.length() >= Database.maxString) {
-            Help.markWrongField(false, studentEmail);
+            GuiHelp.markWrongField(false, studentEmail);
             scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("string_to_long"));
         } else
-            studentEmail.setStyle(Help.styleRight);
+            studentEmail.setStyle(GuiHelp.styleRight);
 
         text = studentStreet.getText().trim();
         if (text.isEmpty()) {
-            Help.markWrongField(focus, studentStreet);
+            GuiHelp.markWrongField(focus, studentStreet);
             if (!focus)
                 scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("street"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("street"));
         } else if (text.length() >= Database.maxString) {
-            Help.markWrongField(false, studentStreet);
+            GuiHelp.markWrongField(false, studentStreet);
             scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("string_to_long"));
         } else
-            studentStreet.setStyle(Help.styleRight);
+            studentStreet.setStyle(GuiHelp.styleRight);
 
         text = studentHomeNumber.getText().trim();
         if (text.isEmpty()) {
-            Help.markWrongField(focus, studentHomeNumber);
+            GuiHelp.markWrongField(focus, studentHomeNumber);
             if (!focus)
                 scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("number"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("number"));
         } else if (text.length() >= Database.maxString) {
-            Help.markWrongField(false, studentHomeNumber);
+            GuiHelp.markWrongField(false, studentHomeNumber);
             scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("string_to_long"));
         } else
-            studentHomeNumber.setStyle(Help.styleRight);
+            studentHomeNumber.setStyle(GuiHelp.styleRight);
 
         text = studentPostalCode.getText().trim();
         if (text.isEmpty()) {
-            Help.markWrongField(focus, studentPostalCode);
+            GuiHelp.markWrongField(focus, studentPostalCode);
             if (!focus)
                 scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("postcode"));
-        } else if (!Help.validatePostalCode(text)) {
-            Help.markWrongField(focus, studentPostalCode);
+            errorMessageL.add(Language.getResourcedBundleError().getString("postcode"));
+        } else if (!Validation.validatePostalCode(text)) {
+            GuiHelp.markWrongField(focus, studentPostalCode);
             if (!focus)
                 scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("postcode2"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("postcode2"));
         } else if (text.length() >= Database.maxString) {
-            Help.markWrongField(false, studentPostalCode);
+            GuiHelp.markWrongField(false, studentPostalCode);
             scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("string_to_long"));
         } else
-            studentPostalCode.setStyle(Help.styleRight);
+            studentPostalCode.setStyle(GuiHelp.styleRight);
 
         text = studentCity.getText().trim();
         if (text.isEmpty()) {
-            Help.markWrongField(focus, studentCity);
+            GuiHelp.markWrongField(focus, studentCity);
             if (!focus)
                 scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("city"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("city"));
         } else if (text.length() >= Database.maxString) {
-            Help.markWrongField(false, studentCity);
+            GuiHelp.markWrongField(false, studentCity);
             scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("string_to_long"));
         } else
-            studentCity.setStyle(Help.styleRight);
+            studentCity.setStyle(GuiHelp.styleRight);
 
         text = studentCountry.getText().trim();
         if (text.isEmpty()) {
-            Help.markWrongField(focus, studentCountry);
+            GuiHelp.markWrongField(focus, studentCountry);
             if (!focus)
                 scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("country"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("country"));
         } else if (text.length() >= Database.maxString) {
-            Help.markWrongField(false, studentCountry);
+            GuiHelp.markWrongField(false, studentCountry);
             scrollPane.setVvalue(0);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("string_to_long"));
         } else
-            studentCountry.setStyle(Help.styleRight);
+            studentCountry.setStyle(GuiHelp.styleRight);
 
         text = companyName.getText().trim();
         if (text.isEmpty()) {
-            Help.markWrongField(focus, companyName);
+            GuiHelp.markWrongField(focus, companyName);
             if (!focus)
                 scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("company_name"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("company_name"));
         } else if (text.length() >= Database.maxString) {
-            Help.markWrongField(false, companyName);
+            GuiHelp.markWrongField(false, companyName);
             scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("string_to_long"));
         } else
-            companyName.setStyle(Help.styleRight);
+            companyName.setStyle(GuiHelp.styleRight);
 
         text = companyStreet.getText().trim();
         if (text.isEmpty()) {
-            Help.markWrongField(focus, companyStreet);
+            GuiHelp.markWrongField(focus, companyStreet);
             if (!focus)
                 scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("company_street"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("company_street"));
         } else if (text.length() >= Database.maxString) {
-            Help.markWrongField(false, companyStreet);
+            GuiHelp.markWrongField(false, companyStreet);
             scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("string_to_long"));
         } else
-            companyStreet.setStyle(Help.styleRight);
+            companyStreet.setStyle(GuiHelp.styleRight);
 
         text = companyHomeNumber.getText().trim();
         if (text.isEmpty()) {
-            Help.markWrongField(focus, companyHomeNumber);
+            GuiHelp.markWrongField(focus, companyHomeNumber);
             if (!focus)
                 scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("company_number"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("company_number"));
         } else if (text.length() >= Database.maxString) {
-            Help.markWrongField(false, companyHomeNumber);
+            GuiHelp.markWrongField(false, companyHomeNumber);
             scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("string_to_long"));
         } else
-            companyHomeNumber.setStyle(Help.styleRight);
+            companyHomeNumber.setStyle(GuiHelp.styleRight);
 
         text = companyPostalCode.getText().trim();
         if (text.isEmpty()) {
-            Help.markWrongField(focus, companyPostalCode);
+            GuiHelp.markWrongField(focus, companyPostalCode);
             if (!focus)
                 scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("company_postcode"));
-        } else if (!Help.validatePostalCode(text)) {
-            Help.markWrongField(focus, companyPostalCode);
+            errorMessageL.add(Language.getResourcedBundleError().getString("company_postcode"));
+        } else if (!Validation.validatePostalCode(text)) {
+            GuiHelp.markWrongField(focus, companyPostalCode);
             if (!focus)
                 scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("company_postcode2"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("company_postcode2"));
         } else if (text.length() >= Database.maxString) {
-            Help.markWrongField(false, companyPostalCode);
+            GuiHelp.markWrongField(false, companyPostalCode);
             scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("string_to_long"));
         } else
-            companyPostalCode.setStyle(Help.styleRight);
+            companyPostalCode.setStyle(GuiHelp.styleRight);
 
         text = companyCity.getText().trim();
         if (text.isEmpty()) {
-            Help.markWrongField(focus, companyCity);
+            GuiHelp.markWrongField(focus, companyCity);
             if (!focus)
                 scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("company_city"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("company_city"));
         } else if (text.length() >= Database.maxString) {
-            Help.markWrongField(false, companyCity);
+            GuiHelp.markWrongField(false, companyCity);
             scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("string_to_long"));
         } else
-            companyCity.setStyle(Help.styleRight);
+            companyCity.setStyle(GuiHelp.styleRight);
 
         text = companyCountry.getText().trim();
         if (text.isEmpty()) {
-            Help.markWrongField(focus, companyCountry);
+            GuiHelp.markWrongField(focus, companyCountry);
             if (!focus)
                 scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("company_country"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("company_country"));
         } else if (text.length() >= Database.maxString) {
-            Help.markWrongField(false, companyCountry);
+            GuiHelp.markWrongField(false, companyCountry);
             scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("string_to_long"));
         } else
-            companyCountry.setStyle(Help.styleRight);
+            companyCountry.setStyle(GuiHelp.styleRight);
 
         text = companyPersonFirstName.getText().trim();
         if (text.isEmpty()) {
-            Help.markWrongField(focus, companyPersonFirstName);
+            GuiHelp.markWrongField(focus, companyPersonFirstName);
             if (!focus)
                 scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("contact_person_forename"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("contact_person_forename"));
         } else if (text.length() >= Database.maxString) {
-            Help.markWrongField(false, companyPersonFirstName);
+            GuiHelp.markWrongField(false, companyPersonFirstName);
             scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("string_to_long"));
         } else
-            companyPersonFirstName.setStyle(Help.styleRight);
+            companyPersonFirstName.setStyle(GuiHelp.styleRight);
 
         text = companyPersonLastName.getText().trim();
         if (text.isEmpty()) {
-            Help.markWrongField(focus, companyPersonLastName);
+            GuiHelp.markWrongField(focus, companyPersonLastName);
             if (!focus)
                 scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("contact_person_last_name"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("contact_person_last_name"));
         } else if (text.length() >= Database.maxString) {
-            Help.markWrongField(false, companyPersonLastName);
+            GuiHelp.markWrongField(false, companyPersonLastName);
             scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("string_to_long"));
         } else
-            companyPersonLastName.setStyle(Help.styleRight);
+            companyPersonLastName.setStyle(GuiHelp.styleRight);
 
         text = companyPersonEmail.getText().trim();
         if (text.isEmpty()) {
-            Help.markWrongField(focus, companyPersonEmail);
+            GuiHelp.markWrongField(focus, companyPersonEmail);
             if (!focus)
                 scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("contact_person_email"));
-        } else if (!Help.validateEmail(text)) {
-            Help.markWrongField(focus, companyPersonEmail);
+            errorMessageL.add(Language.getResourcedBundleError().getString("contact_person_email"));
+        } else if (!Validation.validateEmail(text)) {
+            GuiHelp.markWrongField(focus, companyPersonEmail);
             if (!focus)
                 scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("contact_person_email2"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("contact_person_email2"));
         } else if (text.length() >= Database.maxString) {
-            Help.markWrongField(false, companyPersonEmail);
+            GuiHelp.markWrongField(false, companyPersonEmail);
             scrollPane.setVvalue(70);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("string_to_long"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("string_to_long"));
         } else
-            companyPersonEmail.setStyle(Help.styleRight);
+            companyPersonEmail.setStyle(GuiHelp.styleRight);
 
         Course course = courseName.getValue();
         if (course == null) {
-            Help.markWrongField(focus, courseName);
+            GuiHelp.markWrongField(focus, courseName);
             if (!focus)
                 scrollPane.setVvalue(100);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("course"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("course"));
         } else
-            courseName.setStyle(Help.styleRight);
+            courseName.setStyle(GuiHelp.styleRight);
 
         text = javaKnowledgeLabel.getText().trim();
         try {
             int number = Integer.parseInt(text);
             if (number < 0 || number > 100) {
-                Help.markWrongField(focus, javaKnowledgeLabel);
+                GuiHelp.markWrongField(focus, javaKnowledgeLabel);
                 if (!focus)
                     scrollPane.setVvalue(100);
                 focus = true;
-                errorMessageL.add(Help.getResourcedBundleError().getString("java"));
+                errorMessageL.add(Language.getResourcedBundleError().getString("java"));
             }
         } catch (NumberFormatException ignored) {
-            Help.markWrongField(focus, javaKnowledgeLabel);
+            GuiHelp.markWrongField(focus, javaKnowledgeLabel);
             if (!focus)
                 scrollPane.setVvalue(100);
             focus = true;
-            errorMessageL.add(Help.getResourcedBundleError().getString("java"));
+            errorMessageL.add(Language.getResourcedBundleError().getString("java"));
         }
 
         if (focus)
-            Help.setErrorMessage(errorMessageL, errorMessage);
+            GuiHelp.setErrorMessage(errorMessageL, errorMessage);
         else {
             errorMessage.setVisible(false);
             course = courseName.getValue();
@@ -595,7 +600,7 @@ public class StudentController {
                     Integer.parseInt(studentNumberField.getText().substring(1)),
                     studentLastName.getText(),
                     studentFirstName.getText(),
-                    Help.convertLocalDateDate(studentBirth.getValue()),
+                    DateConverter.convertLocalDateDate(studentBirth.getValue()),
                     new Address(studentStreet.getText(), studentHomeNumber.getText(), studentPostalCode.getText(), studentCity.getText(), studentCountry.getText()),
                     studentEmail.getText(),
                     course,

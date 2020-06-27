@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane focusTraversable="true" prefHeight="600.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/11.0.1"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.PrimaryController">
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dhbw.controller.PrimaryController">
     <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="600.0" prefWidth="1080.0" AnchorPane.leftAnchor="0.0"
           AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <ImageView fitHeight="600.0" fitWidth="1250.0" opacity="0.75" pickOnBounds="true" smooth="false">
@@ -36,7 +36,7 @@
     <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="500.0"
           AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <Button id="gui_button" fx:id="buttonLanguage" alignment="CENTER" mnemonicParsing="false"
-                onAction="#toggleLanguage" prefHeight="20.0" prefWidth="35.0" stylesheets="@css/application.css"
+                onAction="#toggleLanguage" prefHeight="20.0" prefWidth="35.0" stylesheets="@../css/application.css"
                 text="DE" translateY="20.0">
             <font>
                 <Font name="Comic Sans MS Bold" size="11.0"/>
@@ -49,7 +49,7 @@
     <VBox alignment="CENTER" layoutY="26.899999618530273" spacing="30.0" AnchorPane.leftAnchor="0.0"
           AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="120.0">
         <Button id="gui_button" fx:id="showTable" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
-                onAction="#show" prefHeight="40.0" prefWidth="250.0" stylesheets="@css/application.css"
+                onAction="#show" prefHeight="40.0" prefWidth="250.0" stylesheets="@../css/application.css"
                 text="%show_overview" translateY="20.0">
             <font>
                 <Font name="Comic Sans MS" size="14.0"/>
@@ -71,7 +71,7 @@
         </Label>
         <HBox alignment="TOP_CENTER" spacing="30.0">
             <Button id="gui_button" fx:id="addStudent" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
-                    onAction="#insertStudent" prefHeight="50.0" prefWidth="110.0" stylesheets="@css/application.css">
+                    onAction="#insertStudent" prefHeight="50.0" prefWidth="110.0" stylesheets="@../css/application.css">
                 <font>
                     <Font name="Comic Sans MS" size="14.0"/>
                 </font>
@@ -83,7 +83,7 @@
                 </tooltip>
             </Button>
             <Button id="gui_button" fx:id="addLecture" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
-                    onAction="#insertLecture" prefHeight="50.0" prefWidth="110.0" stylesheets="@css/application.css">
+                    onAction="#insertLecture" prefHeight="50.0" prefWidth="110.0" stylesheets="@../css/application.css">
                 <font>
                     <Font name="Comic Sans MS" size="14.0"/>
                 </font>
@@ -97,7 +97,7 @@
         </HBox>
         <HBox alignment="TOP_CENTER" spacing="30.0">
             <Button id="gui_button" fx:id="addCourse" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
-                    onAction="#insertCourse" prefHeight="50.0" prefWidth="110.0" stylesheets="@css/application.css">
+                    onAction="#insertCourse" prefHeight="50.0" prefWidth="110.0" stylesheets="@../css/application.css">
                 <font>
                     <Font name="Comic Sans MS" size="14.0"/>
                 </font>
@@ -109,7 +109,7 @@
                 </tooltip>
             </Button>
             <Button id="gui_button" fx:id="addCompany" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
-                    onAction="#insertCompany" prefHeight="50.0" prefWidth="110.0" stylesheets="@css/application.css">
+                    onAction="#insertCompany" prefHeight="50.0" prefWidth="110.0" stylesheets="@../css/application.css">
                 <font>
                     <Font name="Comic Sans MS" size="14.0"/>
                 </font>
@@ -123,7 +123,7 @@
         </HBox>
         <HBox alignment="TOP_CENTER" spacing="30.0">
             <Button id="gui_button" fx:id="addRoom" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false"
-                    onAction="#insertRoom" prefHeight="50.0" prefWidth="110.0" stylesheets="@css/application.css">
+                    onAction="#insertRoom" prefHeight="50.0" prefWidth="110.0" stylesheets="@../css/application.css">
                 <font>
                     <Font name="Comic Sans MS" size="14.0"/>
                 </font>

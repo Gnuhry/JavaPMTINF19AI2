@@ -1,4 +1,4 @@
-package org.dhbw;
+package org.dhbw.controller;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
@@ -21,7 +21,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.dhbw.Database;
 import org.dhbw.classes.*;
+import org.dhbw.help.GuiHelp;
+import org.dhbw.help.Language;
 
 import java.io.IOException;
 import java.net.URL;
@@ -45,11 +48,12 @@ public class ShowController implements Initializable {
             University.getRooms()
     );
 
+    private static boolean alert;
     private FileType file;
     private List<Object> object;
     private final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-    private final Company allCompany = new Company(Help.getResourcedBundle().getString("all_company"), null, null);
-    private final Course allCourse = new Course(Help.getResourcedBundle().getString("all_course"), null, null);
+    private final Company allCompany = new Company(Language.getResourcedBundle().getString("all_company"), null, null);
+    private final Course allCourse = new Course(Language.getResourcedBundle().getString("all_course"), null, null);
 
     @FXML
     private AnchorPane studentAnchor, docentAnchor, courseAnchor, companyAnchor, roomAnchor;
@@ -61,6 +65,10 @@ public class ShowController implements Initializable {
     private ComboBox<Company> companyFilterBox;
     @FXML
     private ComboBox<String> campusFilterBox, studyTypeFilterBox;
+    @FXML
+    private TabPane tabPaneShow;
+    @FXML
+    private ToolBar barStudent, barDocent, barCourse, barCompany, barRoom;
 
     @FXML
     public TableView<DualStudent> studentTable;
@@ -238,7 +246,7 @@ public class ShowController implements Initializable {
         studentTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addKeyListener(studentAnchor, studentTable);
+        addKeyListener(studentAnchor, studentTable, barStudent);
 
         docentNumber.setCellValueFactory(new PropertyValueFactory<>("docentNumber"));
         docentLastName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -277,7 +285,7 @@ public class ShowController implements Initializable {
         docentTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addKeyListener(docentAnchor, docentTable);
+        addKeyListener(docentAnchor, docentTable, barDocent);
 
         FilteredList<Docent> filteredLecture = new FilteredList<>(docents, p -> true);
         searchBoxDocent.textProperty().addListener((observable, oldValue, newValue) -> filteredLecture.setPredicate(person -> {
@@ -327,7 +335,7 @@ public class ShowController implements Initializable {
                                     sb.append(s).append(", ");
                                 App.getHostService().showDocument(sb.toString().substring(0, sb.toString().length() - 2));
                             });
-                            btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/mailButton.png"))));
+                            btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/controller/images/mailButton.png"))));
                             setGraphic(btn);
                         }
                     }
@@ -338,14 +346,14 @@ public class ShowController implements Initializable {
         courseTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addKeyListener(courseAnchor, courseTable);
+        addKeyListener(courseAnchor, courseTable, barCourse);
 
         List<String> studyTypeList = new ArrayList<>();
-        studyTypeList.add(Help.getResourcedBundle().getString("all_study_types"));
+        studyTypeList.add(Language.getResourcedBundle().getString("all_study_types"));
         for (StudyCourse course : StudyCourse.values())
             studyTypeList.add(course.toString());
         studyTypeFilterBox.getItems().setAll(studyTypeList);
-        studyTypeFilterBox.setValue(Help.getResourcedBundle().getString("all_study_types"));
+        studyTypeFilterBox.setValue(Language.getResourcedBundle().getString("all_study_types"));
         FilteredList<Course> filteredCourse2 = new FilteredList<>(courses, p -> true);
         searchBoxCourse.textProperty().addListener((observable, oldValue, newValue) -> filteredCourse2.setPredicate(this::checkFilterCourse));
         studyTypeFilterBox.valueProperty().addListener((observable, oldValue, newValue) -> filteredCourse2.setPredicate(this::checkFilterCourse));
@@ -376,7 +384,7 @@ public class ShowController implements Initializable {
                                     App.getHostService().showDocument("mailto:" + company.getContactPerson().getEmail());
 
                             });
-                            btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/mailButton.png"))));
+                            btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/controller/images/mailButton.png"))));
                             setGraphic(btn);
                         }
                     }
@@ -399,7 +407,7 @@ public class ShowController implements Initializable {
         companyTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addKeyListener(companyAnchor, companyTable);
+        addKeyListener(companyAnchor, companyTable, barCompany);
 
         roomName.setCellValueFactory(new PropertyValueFactory<>("name"));
         roomCampus.setCellValueFactory(new PropertyValueFactory<>("campus"));
@@ -413,11 +421,11 @@ public class ShowController implements Initializable {
         roomD.setCellFactory(getCallback(FileType.delete));
 
         List<String> campusList = new ArrayList<>();
-        campusList.add(Help.getResourcedBundle().getString("all_campus"));
+        campusList.add(Language.getResourcedBundle().getString("all_campus"));
         for (Campus campus : Campus.values())
             campusList.add(campus.toString());
         campusFilterBox.getItems().setAll(campusList);
-        campusFilterBox.setValue(Help.getResourcedBundle().getString("all_campus"));
+        campusFilterBox.setValue(Language.getResourcedBundle().getString("all_campus"));
         FilteredList<CourseRoom> filteredRoom = new FilteredList<>(rooms, p -> true);
         searchBoxRoom.textProperty().addListener((observable, oldValue, newValue) -> filteredRoom.setPredicate(this::checkFilterRoom));
         campusFilterBox.valueProperty().addListener((observable, oldValue, newValue) -> filteredRoom.setPredicate(this::checkFilterRoom));
@@ -428,7 +436,7 @@ public class ShowController implements Initializable {
         roomTable.getSelectionModel().setSelectionMode(
                 SelectionMode.MULTIPLE
         );
-        addKeyListener(roomAnchor, roomTable);
+        addKeyListener(roomAnchor, roomTable, barRoom);
     }
 
     /**
@@ -441,14 +449,25 @@ public class ShowController implements Initializable {
     @FXML
     public void addFunction(Button button, List<Object> object, ShowController.FileType file) {
         button.setOnAction((ActionEvent event) -> {
-            try {
-                this.file = file;
-                this.object = object;
-                start(new Stage());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            this.file = file;
+            this.object = object;
+            start(new Stage());
         });
+    }
+
+    /**
+     * set a alert for the user
+     */
+    private static void setAlert() {
+        if (alert) {
+            alert = false;
+            Alert a = new Alert(Alert.AlertType.NONE, Language.getResourcedBundleError().getString("fxml_error"), ButtonType.OK);
+            a.setTitle(Language.getResourcedBundleError().getString("error"));
+            Stage stage = ((Stage) a.getDialogPane().getScene().getWindow());
+            stage.getIcons().add(new Image(App.getClass_().getResourceAsStream(GuiHelp.logoPath)));
+            a.showAndWait();
+            alert = true;
+        }
     }
 
     /**
@@ -458,21 +477,20 @@ public class ShowController implements Initializable {
      */
     public void addContextMenu(TableView<?> view) {
         ContextMenu refreshMenu = new ContextMenu();
-        MenuItem[] optional_menu = new MenuItem[]{new MenuItem(Help.getResourcedBundle().getString("edit")), new MenuItem(Help.getResourcedBundle().getString("send_email")), new MenuItem(Help.getResourcedBundle().getString("set_to_uni_email")), new MenuItem(Help.getResourcedBundle().getString("delete")), new MenuItem(Help.getResourcedBundle().getString("send_email_with_docent")), new MenuItem(Help.getResourcedBundle().getString("clear_selection"))};
-        MenuItem[] item = new MenuItem[]{new MenuItem(Help.getResourcedBundle().getString("refresh")), new MenuItem(Help.getResourcedBundle().getString("back"))};
+        MenuItem[] optional_menu = new MenuItem[]{new MenuItem(Language.getResourcedBundle().getString("edit")), new MenuItem(Language.getResourcedBundle().getString("send_email")), new MenuItem(Language.getResourcedBundle().getString("set_to_uni_email")), new MenuItem(Language.getResourcedBundle().getString("delete")), new MenuItem(Language.getResourcedBundle().getString("send_email_with_docent")), new MenuItem(Language.getResourcedBundle().getString("clear_selection"))};
+        MenuItem[] item = new MenuItem[]{new MenuItem(Language.getResourcedBundle().getString("refresh")), new MenuItem(Language.getResourcedBundle().getString("back"))};
 
         item[0].setOnAction(actionEvent -> refresh(true));
         item[1].setOnAction(actionEvent -> {
             try {
                 backToOverview();
             } catch (IOException e) {
-                e.printStackTrace();
+                setAlert();
             }
         });
         refreshMenu.getItems().addAll(item);
-
-        view.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
+        refreshMenu.setOnShown(show -> {
+            if (view.getSelectionModel().getSelectedItems() != null && view.getSelectionModel().getSelectedItems().size() > 0) {
                 ContextMenu contextMenu = view.getContextMenu();
                 int counter = 0;
 
@@ -539,7 +557,7 @@ public class ShowController implements Initializable {
      * @param anchorPane controller to bind the key
      * @param table      row to delete
      */
-    public void addKeyListener(AnchorPane anchorPane, TableView<?> table) {
+    public void addKeyListener(AnchorPane anchorPane, TableView<?> table, ToolBar bar) {
         if (table.getItems() != null && table.getItems().size() > 0 && table.getItems().get(0) != null && (table.getItems().get(0).getClass() == DualStudent.class || table.getItems().get(0).getClass() == Docent.class)) {
             anchorPane.setOnKeyPressed(keyEvent -> {
                 final List<?> selectedItem = table.getSelectionModel().getSelectedItems();
@@ -572,6 +590,22 @@ public class ShowController implements Initializable {
                         refresh(true);
             });
         }
+        table.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.isControlDown())
+                if (keyEvent.getCode().equals(KeyCode.LEFT)) {
+                    tabPaneShow.getSelectionModel().select(tabPaneShow.getSelectionModel().getSelectedIndex() == 0 ? tabPaneShow.getTabs().size() - 1 : tabPaneShow.getSelectionModel().getSelectedIndex() - 1);
+                } else if (keyEvent.getCode().equals(KeyCode.RIGHT)) {
+                    tabPaneShow.getSelectionModel().select((tabPaneShow.getSelectionModel().getSelectedIndex() + 1) % tabPaneShow.getTabs().size());
+                }
+        });
+        bar.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.isControlDown())
+                if (keyEvent.getCode().equals(KeyCode.LEFT)) {
+                    tabPaneShow.getSelectionModel().select(tabPaneShow.getSelectionModel().getSelectedIndex() == 0 ? tabPaneShow.getTabs().size() - 1 : tabPaneShow.getSelectionModel().getSelectedIndex() - 1);
+                } else if (keyEvent.getCode().equals(KeyCode.RIGHT)) {
+                    tabPaneShow.getSelectionModel().select((tabPaneShow.getSelectionModel().getSelectedIndex() + 1) % tabPaneShow.getTabs().size());
+                }
+        });
     }
 
     /**
@@ -612,11 +646,11 @@ public class ShowController implements Initializable {
         for (Object o : objects) {
             if (o instanceof DualStudent) {
                 DualStudent d = new DualStudent((DualStudent) o);
-                d.setEmail(Help.getStudentUniversityEmail(d));
+                d.setEmail(GuiHelp.getStudentUniversityEmail(d));
                 Database.updateStudent(d, (DualStudent) o);
             } else if (o instanceof Docent) {
                 Docent d = new Docent((Docent) o);
-                d.setEmail(Help.getDocentUniversityEmail(d));
+                d.setEmail(GuiHelp.getDocentUniversityEmail(d));
                 Database.updateDocent(d, (Docent) o);
             }
         }
@@ -628,13 +662,9 @@ public class ShowController implements Initializable {
      * @param objects object to delete
      */
     private void deleteObject(List<?> objects) {
-        try {
-            this.file = FileType.delete;
-            this.object = new ArrayList<>(objects);
-            start(new Stage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.file = FileType.delete;
+        this.object = new ArrayList<>(objects);
+        start(new Stage());
     }
 
     /**
@@ -643,22 +673,18 @@ public class ShowController implements Initializable {
      * @param object object to edit
      */
     private void editObject(Object object) {
-        try {
-            if (object instanceof DualStudent)
-                this.file = FileType.editStudents;
-            else if (object instanceof Docent)
-                this.file = FileType.editDocents;
-            else if (object instanceof Course)
-                this.file = FileType.editCourse;
-            else if (object instanceof Company)
-                this.file = FileType.editCompany;
-            else if (object instanceof CourseRoom)
-                this.file = FileType.editRoom;
-            this.object = Collections.singletonList(object);
-            start(new Stage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        if (object instanceof DualStudent)
+            this.file = FileType.editStudents;
+        else if (object instanceof Docent)
+            this.file = FileType.editDocents;
+        else if (object instanceof Course)
+            this.file = FileType.editCourse;
+        else if (object instanceof Company)
+            this.file = FileType.editCompany;
+        else if (object instanceof CourseRoom)
+            this.file = FileType.editRoom;
+        this.object = Collections.singletonList(object);
+        start(new Stage());
     }
 
     /**
@@ -666,9 +692,15 @@ public class ShowController implements Initializable {
      *
      * @param stage new stage show new window
      */
-    public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(file.toString()), Help.getResourcedBundle());
-        Parent root = fxmlLoader.load();
+    public void start(Stage stage) {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(file.toString()), Language.getResourcedBundle());
+        Parent root;
+        try {
+            root = fxmlLoader.load();
+        } catch (IOException e) {
+            setAlert();
+            return;
+        }
         switch (file) {
             case editStudents: {
                 StudentController controller = fxmlLoader.getController();
@@ -709,8 +741,8 @@ public class ShowController implements Initializable {
         stage.setX(studentTable.getScene().getWindow().getX());
         stage.setY(studentTable.getScene().getWindow().getY());
         stage.initModality(Modality.WINDOW_MODAL);
-        stage.setTitle(Help.getResourcedBundle().getString("title"));
-        stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/dhbwLogoSquare.png")));
+        stage.setTitle(Language.getResourcedBundle().getString("title"));
+        stage.getIcons().add(new Image(this.getClass().getResourceAsStream(GuiHelp.logoPath)));
         stage.show();
     }
 
@@ -736,9 +768,9 @@ public class ShowController implements Initializable {
                             a.add(getTableView().getItems().get(getIndex()));
                             addFunction(btn, a, fileType);
                             if (fileType.equals(FileType.delete))
-                                btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/deleteButton.png"))));
+                                btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/controller/images/deleteButton.png"))));
                             else
-                                btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/editButton.png"))));
+                                btn.setGraphic(new ImageView(new Image(this.getClass().getResourceAsStream("/org/dhbw/controller/images/editButton.png"))));
                             setGraphic(btn);
                         }
                     }
