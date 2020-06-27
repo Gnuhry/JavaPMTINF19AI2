@@ -33,7 +33,6 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         app=this;
         class_ =this.getClass();
-        System.out.println(System.getenv("DHBW_USER") + "," + System.getenv("DHBW_PW"));
         Database.initialize();
         hostServices = getHostServices();
         scene = new Scene(loadFXML("primary"));
