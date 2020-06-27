@@ -731,18 +731,20 @@ public class Database {
         return new ArrayList<>();
     }
 
+    /**
+     * set a ellert for the user
+     */
     private static void setAlert() {
         if (alert) {
             alert = false;
-
             Alert a = new Alert(Alert.AlertType.NONE, Language.getResourcedBundleError().getString("connection_error"), ButtonType.OK);
             a.setTitle(Language.getResourcedBundleError().getString("error"));
             Stage stage = ((Stage) a.getDialogPane().getScene().getWindow());
             stage.getIcons().add(new Image(App.getClass_().getResourceAsStream(GuiHelp.logoPath)));
+            stage.setOnCloseRequest(windowEvent -> App.closeApp());
             a.showAndWait();
             alert = true;
         }
-
     }
 
     /**
@@ -750,12 +752,6 @@ public class Database {
      */
     public static void initialize() {
         try {
-            if (connection == null || connection.isClosed()) {
-                Class.forName("com.mysql.jdbc.Driver");
-                connection = DriverManager.getConnection(
-                        "jdbc:mysql://85.214.247.101:3306/dhbw?useSSL=false", "mlg_dhbw", "Reisebus1!");
-
-            }
             if (dateFormat == null)
                 dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             if (dualStudents == null)
@@ -772,9 +768,15 @@ public class Database {
                 persons = new ArrayList<>();
             if (rooms == null)
                 rooms = new ArrayList<>();
+            if (connection == null || connection.isClosed()) {
+                Class.forName("com.mysql.jdbc.Driver");
+                connection = DriverManager.getConnection(
+                        "jdbc:mysql://85.214.247.101:3306/dhbw?useSSL=false", "mlg_dhbw", "Reisebus1!");
+
+            }
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
             setAlert();
+            initialize();
         }
     }
 

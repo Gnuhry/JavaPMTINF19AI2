@@ -2,6 +2,7 @@ package org.dhbw.controller;
 
 import javafx.application.Application;
 import javafx.application.HostServices;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -21,6 +22,7 @@ public class App extends Application {
     private static Scene scene;
     private static HostServices hostServices;
     private static Class<?> class_;
+    public static App app;
 
     /**
      * opening the app stage with parameters
@@ -29,6 +31,7 @@ public class App extends Application {
      */
     @Override
     public void start(Stage stage) throws IOException {
+        app=this;
         class_ =this.getClass();
         System.out.println(System.getenv("DHBW_USER") + "," + System.getenv("DHBW_PW"));
         Database.initialize();
@@ -59,6 +62,11 @@ public class App extends Application {
      */
     private static Parent loadFXML(String fxml) throws IOException {
         return (new FXMLLoader(App.class.getResource(fxml + ".fxml"), Language.getResourcedBundle())).load();
+    }
+
+    public static void closeApp(){
+        Platform.exit();
+        System.exit(0);
     }
 
     //--------------------------Getter----------------------

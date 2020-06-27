@@ -48,6 +48,7 @@ public class ShowController implements Initializable {
             University.getRooms()
     );
 
+    private static boolean alert;
     private FileType file;
     private List<Object> object;
     private final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
@@ -448,14 +449,25 @@ public class ShowController implements Initializable {
     @FXML
     public void addFunction(Button button, List<Object> object, ShowController.FileType file) {
         button.setOnAction((ActionEvent event) -> {
-            try {
-                this.file = file;
-                this.object = object;
-                start(new Stage());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            this.file = file;
+            this.object = object;
+            start(new Stage());
         });
+    }
+
+    /**
+     * set a ellert for the user
+     */
+    private static void setAlert() {
+        if (alert) {
+            alert = false;
+            Alert a = new Alert(Alert.AlertType.NONE, Language.getResourcedBundleError().getString("fxml_error"), ButtonType.OK);
+            a.setTitle(Language.getResourcedBundleError().getString("error"));
+            Stage stage = ((Stage) a.getDialogPane().getScene().getWindow());
+            stage.getIcons().add(new Image(App.getClass_().getResourceAsStream(GuiHelp.logoPath)));
+            a.showAndWait();
+            alert = true;
+        }
     }
 
     /**
@@ -473,7 +485,7 @@ public class ShowController implements Initializable {
             try {
                 backToOverview();
             } catch (IOException e) {
-                e.printStackTrace();
+                setAlert();
             }
         });
         refreshMenu.getItems().addAll(item);
@@ -650,13 +662,9 @@ public class ShowController implements Initializable {
      * @param objects object to delete
      */
     private void deleteObject(List<?> objects) {
-        try {
-            this.file = FileType.delete;
-            this.object = new ArrayList<>(objects);
-            start(new Stage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.file = FileType.delete;
+        this.object = new ArrayList<>(objects);
+        start(new Stage());
     }
 
     /**
@@ -665,22 +673,18 @@ public class ShowController implements Initializable {
      * @param object object to edit
      */
     private void editObject(Object object) {
-        try {
-            if (object instanceof DualStudent)
-                this.file = FileType.editStudents;
-            else if (object instanceof Docent)
-                this.file = FileType.editDocents;
-            else if (object instanceof Course)
-                this.file = FileType.editCourse;
-            else if (object instanceof Company)
-                this.file = FileType.editCompany;
-            else if (object instanceof CourseRoom)
-                this.file = FileType.editRoom;
-            this.object = Collections.singletonList(object);
-            start(new Stage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        if (object instanceof DualStudent)
+            this.file = FileType.editStudents;
+        else if (object instanceof Docent)
+            this.file = FileType.editDocents;
+        else if (object instanceof Course)
+            this.file = FileType.editCourse;
+        else if (object instanceof Company)
+            this.file = FileType.editCompany;
+        else if (object instanceof CourseRoom)
+            this.file = FileType.editRoom;
+        this.object = Collections.singletonList(object);
+        start(new Stage());
     }
 
     /**
@@ -688,9 +692,15 @@ public class ShowController implements Initializable {
      *
      * @param stage new stage show new window
      */
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(file.toString()), Language.getResourcedBundle());
-        Parent root = fxmlLoader.load();
+        Parent root;
+        try {
+            root = fxmlLoader.load();
+        } catch (IOException e) {
+            setAlert();
+            return;
+        }
         switch (file) {
             case editStudents: {
                 StudentController controller = fxmlLoader.getController();
