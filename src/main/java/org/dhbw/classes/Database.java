@@ -1,5 +1,8 @@
 package org.dhbw.classes;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -118,7 +121,7 @@ public class Database {
             statement.setInt(6, company_id);
             statement.execute();
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -144,7 +147,7 @@ public class Database {
             if (resultSet.next())
                 return resultSet.getInt(1);
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -176,7 +179,7 @@ public class Database {
             if (resultSet.next())
                 return resultSet.getInt(1);
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -203,7 +206,7 @@ public class Database {
             if (resultSet.next())
                 return resultSet.getInt(1);
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -233,7 +236,7 @@ public class Database {
             if (resultSet.next())
                 return resultSet.getInt(1);
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -259,7 +262,7 @@ public class Database {
             if (resultSet.next())
                 return resultSet.getInt(1);
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -292,7 +295,7 @@ public class Database {
             if (resultSet.next())
                 return resultSet.getInt(1);
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -323,7 +326,7 @@ public class Database {
             statement.setInt(5, student.getStudentNumber());
             statement.execute();
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -346,7 +349,7 @@ public class Database {
             statement.setInt(2, docent.getDocentNumber());
             statement.execute();
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -380,7 +383,7 @@ public class Database {
                 statement.setInt(4, id);
                 statement.execute();
             } catch (SQLException | ClassNotFoundException exception) {
-                exception.printStackTrace();
+                setAlert();
             } finally {
                 closeStatement();
             }
@@ -409,7 +412,7 @@ public class Database {
                 statement.execute();
                 return id;
             } catch (SQLException | ClassNotFoundException exception) {
-                exception.printStackTrace();
+                setAlert();
             } finally {
                 closeStatement();
             }
@@ -442,7 +445,7 @@ public class Database {
                 statement.execute();
                 return id;
             } catch (SQLException | ClassNotFoundException exception) {
-                exception.printStackTrace();
+                setAlert();
             } finally {
                 closeStatement();
             }
@@ -471,7 +474,7 @@ public class Database {
                 statement.execute();
                 return id;
             } catch (SQLException | ClassNotFoundException exception) {
-                exception.printStackTrace();
+                setAlert();
             } finally {
                 closeStatement();
             }
@@ -503,7 +506,7 @@ public class Database {
                 statement.execute();
                 return id;
             } catch (SQLException | ClassNotFoundException exception) {
-                exception.printStackTrace();
+                setAlert();
             } finally {
                 closeStatement();
             }
@@ -525,7 +528,7 @@ public class Database {
             statement.setInt(1, student.getStudentNumber());
             statement.execute();
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -544,7 +547,7 @@ public class Database {
             statement.setInt(1, docent.getDocentNumber());
             statement.execute();
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -564,7 +567,7 @@ public class Database {
             statement.setInt(1, course_id);
             statement.execute();
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -583,7 +586,7 @@ public class Database {
             statement.setInt(1, id);
             statement.execute();
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -606,7 +609,7 @@ public class Database {
             statement.setString(1, person.getEmail());
             statement.execute();
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -628,7 +631,7 @@ public class Database {
             addAddressToStatement(address);
             statement.execute();
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -649,7 +652,7 @@ public class Database {
             statement.setInt(1, room_id);
             statement.execute();
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -672,7 +675,7 @@ public class Database {
                 erg.add(resultSet.getInt("student_id"));
             return erg;
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -694,7 +697,7 @@ public class Database {
                 erg.add(resultSet.getInt("matriculation_number"));
             return erg;
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -716,12 +719,19 @@ public class Database {
                 erg.add(resultSet.getInt("docent_id"));
             return erg;
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
         return new ArrayList<>();
     }
+
+    public static void setAlert() {
+        Alert a = new Alert(Alert.AlertType.NONE, "SQL Connection error", ButtonType.OK);
+        a.setTitle("Error");
+        a.show();
+    }
+
 
     /**
      * initialize to use the database connection
@@ -731,7 +741,7 @@ public class Database {
             Class.forName("com.mysql.jdbc.Driver");
             //TODO store in file
             connection = DriverManager.getConnection(
-                    "jdbc:mysql://85.214.247.101:3306/dhbw?useSSL=false", "mlg_dhbw", "Reisebus1!");
+                    "jdbc:mysql://shadowcomplexgaming.de:3306/dhbw?allowPublicKeyRetrival=true&useSSL=false", System.getenv("DHBW_USER"), System.getenv("DHBW_PW"));
         }
         if (dateFormat == null)
             dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -765,7 +775,7 @@ public class Database {
             return erg.toArray(new String[0]);
 
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -792,7 +802,7 @@ public class Database {
                     counter++;
             }
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
 
         } finally {
             closeStatement();
@@ -817,7 +827,7 @@ public class Database {
                 if (resultSet.getInt("company_id") > 0 || resultSet.getInt("student_id") > 0 || resultSet.getInt("company_id") > 0)
                     counter++;
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -841,7 +851,7 @@ public class Database {
             if (resultSet.next())
                 counter = resultSet.getInt(1);
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -878,7 +888,7 @@ public class Database {
                 dualStudents.add(dualStudent);
             }
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -909,7 +919,7 @@ public class Database {
                 docents.add(docent);
             }
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -938,7 +948,7 @@ public class Database {
                 courses.add(course);
             }
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -967,7 +977,7 @@ public class Database {
                 addresses.add(address);
             }
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -994,7 +1004,7 @@ public class Database {
                 companies.add(company);
             }
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -1022,7 +1032,7 @@ public class Database {
                 persons.add(person);
             }
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -1044,7 +1054,7 @@ public class Database {
                 rooms.add(room);
             }
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -1135,8 +1145,7 @@ public class Database {
             if (resultSet.next())
                 return resultSet.getInt(1);
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
-
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -1163,7 +1172,7 @@ public class Database {
             if (resultSet.next())
                 return resultSet.getInt(1);
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -1186,7 +1195,7 @@ public class Database {
             if (resultSet.next())
                 return resultSet.getInt(1);
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -1209,7 +1218,7 @@ public class Database {
             if (resultSet.next())
                 return resultSet.getInt(1);
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -1235,7 +1244,7 @@ public class Database {
             if (resultSet.next())
                 return resultSet.getInt(1);
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -1258,7 +1267,7 @@ public class Database {
             resultSet = statement.executeQuery();
             return resultSet.next() && resultSet.getInt(1) == 1;
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }
@@ -1390,7 +1399,7 @@ public class Database {
                         resultSet.getString("country")));
             }
         } catch (SQLException | ClassNotFoundException exception) {
-            exception.printStackTrace();
+            setAlert();
         } finally {
             closeStatement();
         }

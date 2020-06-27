@@ -27,16 +27,20 @@ public class App extends Application {
      * @param stage new stage show new window
      */
     @Override
-    public void start(Stage stage) throws IOException, SQLException, ClassNotFoundException {
-        Database.initialize();
-        hostServices = getHostServices();
-        scene = new Scene(loadFXML("primary"));
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.setTitle(Help.getResourcedBundle().getString("title"));
-        stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/dhbwLogoSquare.png")));
-        stage.show();
-        stage.setOnCloseRequest(windowEvent -> Database.closeConnection());
+    public void start(Stage stage) throws IOException {
+        try {
+            Database.initialize();
+            hostServices = getHostServices();
+            scene = new Scene(loadFXML("primary"));
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.setTitle(Help.getResourcedBundle().getString("title"));
+            stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/org/dhbw/images/dhbwLogoSquare.png")));
+            stage.show();
+            stage.setOnCloseRequest(windowEvent -> Database.closeConnection());
+        } catch (SQLException | ClassNotFoundException e) {
+            Database.setAlert();
+        }
     }
 
     /**
